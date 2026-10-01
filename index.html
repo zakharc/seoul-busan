@@ -242,6 +242,22 @@ dialog::backdrop{background:rgba(17,22,40,.35);backdrop-filter:blur(6px)}
 .rv.bump{animation:bump .5s var(--ease)}
 @keyframes bump{30%{transform:scale(1.08)}}
 .whos{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.prop{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin:10px 0 0;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--c) 9%,var(--surface));border:1px solid color-mix(in srgb,var(--c) 28%,transparent)}
+.prop.her{background:color-mix(in srgb,var(--rose) 9%,var(--surface));border-color:color-mix(in srgb,var(--rose) 30%,transparent)}
+.prop.both{background:linear-gradient(135deg,color-mix(in srgb,var(--rose) 12%,var(--surface)),color-mix(in srgb,var(--c) 12%,var(--surface)));border-color:color-mix(in srgb,var(--rose) 35%,transparent)}
+.prop .av{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--c);color:#fff;flex:0 0 auto}
+.prop.her .av{background:var(--rose)}
+.prop .av svg{width:14px;height:14px;fill:#fff}
+.prop .tx{display:flex;gap:10px;align-items:center;min-width:0;font-size:13.5px}
+.prop .tx b{display:block;font:700 13.5px var(--display)}
+.prop .tx small{display:block;color:var(--muted);font-size:12px;margin-top:1px}
+.prop .agree{height:38px;padding:0 13px;border-radius:12px;background:var(--rose);color:#fff;font:700 13px var(--body);display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:transform .25s var(--ease)}
+.prop .agree svg{width:14px;height:14px;fill:#fff}
+.prop .agree:active{transform:scale(.95)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin:0 0 14px;font:600 12px var(--body);color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;font-size:10px;font-style:normal;color:#fff;background:var(--rose)}
+.legend i.me{background:var(--seoul)}.legend i.skip{background:transparent;box-shadow:inset 0 0 0 1.5px var(--muted);color:var(--muted)}
 .who{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px 0 7px;border-radius:999px;font:700 12px var(--body);background:color-mix(in srgb,var(--rose) 12%,var(--surface));color:var(--rose)}
 .who svg{width:13px;height:13px;fill:currentColor}
 .who.skip{background:var(--soft);color:var(--muted)}
@@ -278,9 +294,9 @@ dialog::backdrop{background:rgba(17,22,40,.35);backdrop-filter:blur(6px)}
 .mi .st.live{color:#1f9a5a}
 .roles.inmenu{margin:0 0 14px;max-width:none}
 .sumhead{display:grid;grid-template-columns:84px 1fr;gap:16px;align-items:center;margin:4px 0 16px}
-.ring{width:84px;height:84px;border-radius:50%;background:conic-gradient(var(--rose) calc(var(--p,0)*1%),var(--soft) 0);display:grid;place-items:center;transition:background .6s}
-.ring i{width:66px;height:66px;border-radius:50%;background:var(--surface);display:grid;place-items:center;font:800 18px var(--display);font-style:normal}
-.ring i small{display:block;font:600 10px var(--body);color:var(--muted);letter-spacing:.1em;text-transform:uppercase;text-align:center}
+.sring{width:84px;height:84px;border-radius:50%;background:conic-gradient(var(--rose) calc(var(--p,0)*1%),var(--soft) 0);display:grid;place-items:center;transition:background .6s}
+.sring i{width:66px;height:66px;border-radius:50%;background:var(--surface);display:grid;place-items:center;font:800 18px var(--display);font-style:normal}
+.sring i small{display:block;font:600 10px var(--body);color:var(--muted);letter-spacing:.1em;text-transform:uppercase;text-align:center}
 .sumhead p{margin:0;color:var(--muted);font-size:14px}
 .sumhead h3{margin:0 0 4px;font:800 22px/1.1 var(--display);letter-spacing:-.02em}
 .sumday{margin:0 0 10px;border:1px solid var(--line);border-radius:16px;overflow:hidden}
@@ -814,20 +830,28 @@ function whoBadges(it,curOptId){
     else h+=`<span class="who skip">${SKIP}${esc(names[w])} skips this</span>`; });
   return h?`<div class="whos">${h}</div>`:"";
 }
+function proposalHtml(it,curOpt){
+  if(!role) return ""; const o=other(role), x=rv(it,o), my=rv(it,role), opts=optionsOf(it); if(!x||x.s!=="heart") return "";
+  const pick=opts&&x.pick?opts.find(z=>z.id===x.pick):null, title=pick?pick.title:(placeOf(it).title||it.title);
+  const same=my&&my.s==="heart"&&(!opts||my.pick===x.pick);
+  if(same) return `<div class="prop both"><div class="tx"><span class="av">${HEARTF}</span><span><b>You both picked this 💞</b><small>${esc(names.her)} and ${esc(names.me)} agree on ${esc(title)}.</small></span></div></div>`;
+  return `<div class="prop ${o}"><div class="tx"><span class="av">${HEARTF}</span><span><b>${esc(names[o])}'s pick: ${esc(title)}</b><small>${opts?(pick&&curOpt&&pick.id!==curOpt.id?"A different option than the one shown — tap Agree to go with it.":"Tap Agree if you like it too, or heart another option."):"Tap Agree to make it a shared favourite."}</small></span></div><button class="agree" data-pick="${esc(x.pick||"")}">${HEARTF}Agree</button></div>`;
+}
 function reviewHtml(it,curOpt){
   const my=rv(it,role), opts=optionsOf(it);
   const heartOn=!!(my&&my.s==="heart"&&(!opts||my.pick===(curOpt&&curOpt.id))), skipOn=!!(my&&my.s==="skip");
   const nm=role?names[role]:"My";
-  return `<div class="review"><button class="rv heart" aria-pressed="${heartOn}">${heartOn?HEARTF.replace("<svg",'<svg fill="currentColor"'):HEART}<span>${esc(nm)}'s pick${heartOn?" ✓":""}</span><i class="fl" aria-hidden="true">💗</i><i class="fl" aria-hidden="true">💗</i><i class="fl" aria-hidden="true">💗</i></button><button class="rv skip" aria-pressed="${skipOn}">${SKIP}<span>${skipOn?"Skipped":"Skip"}</span></button></div>`+whoBadges(it,curOpt&&curOpt.id)+(effSkip(it)?`<p class="skipnote">${SKIP}<span>${esc(names[eff(it)===rv(it,"her")?"her":"me"])} would rather skip this — the plan carries on from the previous stop.</span></p>`:"");
+  return `<div class="review"><button class="rv heart" aria-pressed="${heartOn}">${heartOn?HEARTF.replace("<svg",'<svg fill="currentColor"'):HEART}<span>${esc(nm)}'s pick${heartOn?" ✓":""}</span><i class="fl" aria-hidden="true">💗</i><i class="fl" aria-hidden="true">💗</i><i class="fl" aria-hidden="true">💗</i></button><button class="rv skip" aria-pressed="${skipOn}">${SKIP}<span>${skipOn?"Skipped":"Skip"}</span></button></div>`+proposalHtml(it,curOpt)+whoBadges(it,curOpt&&curOpt.id)+(effSkip(it)?`<p class="skipnote">${SKIP}<span>${esc(names[eff(it)===rv(it,"her")?"her":"me"])} would rather skip this — the plan carries on from the previous stop.</span></p>`:"");
 }
 function bindReview(scope,it,i,k,curOpt){
   const hb=scope.querySelector(".rv.heart"), sb=scope.querySelector(".rv.skip"); if(!hb) return;
   hb.onclick=()=>{ const on=setReview(it,"heart",curOpt&&curOpt.id); if(on===false) return; renderStop(i,k); renderBar(); APP.emit("choice",{day:i,stop:k}); if(on){ buzz(14); const b=sheetScroll.querySelector(".rv.heart"); if(b){ b.classList.add("pop","bump"); } if(window.APP.sound&&APP.sound.on) APP.sound.pop(1.2); toast(role==="her"?"Marked as Киця's pick 💗":"Marked as your pick 💗"); } };
+  const ag=scope.querySelector(".prop .agree"); if(ag) ag.onclick=()=>{ const o=other(role), x=rv(it,o); if(!x) return; const r=review[it.id]=review[it.id]||{}; r[role]={s:"heart",pick:x.pick||null,ts:Date.now()}; syncSet(["review",it.id,role],r[role]); delete choice[it.id]; saveK("sbtrip-choice-v1",choice); saveK("sbtrip-review-v1",review); updateSum(); APP.emit("review",{item:it,state:"heart",who:role}); renderStop(i,k); renderBar(); APP.emit("choice",{day:i,stop:k}); buzz([10,30,10]); toast("You both picked this 💞"); };
   sb.onclick=()=>{ const on=setReview(it,"skip"); if(on===false) return; renderStop(i,k); renderBar(); if(on){ buzz(8); const b=sheetScroll.querySelector(".rv.skip"); if(b) b.classList.add("bump"); } };
 }
 const roleBtns=`<button class="her" data-r="her">💗 Киця</button><button data-r="me">Mykola</button>`;
 function renderRoles(){ ["roles","roles2"].forEach(id=>{ const el=$(id); if(!el) return; el.innerHTML=roleBtns; el.querySelectorAll("button").forEach(b=>{ b.setAttribute("aria-pressed",b.dataset.r===role); b.onclick=()=>{ role=b.dataset.r; saveK("sbtrip-role",role); renderRoles(); rerender(); buzz(6); toast(role==="her"?"Привіт, Киця 💗":"Hi Mykola"); }; }); });
-  const h=$("hello"); if(h) h.innerHTML=role==="her"?`Привіт, <b>Киця</b> 💗 — tap <b>♥ Киця's pick</b> on the places and dishes you love, and <b>Skip</b> what you don't. Everything you choose is saved and appears on Mykola's phone.`:(role==="me"?`You're walking as <b>Mykola</b>. Send Киця her link from ⋯ → Share so her picks land here.`:`Who's walking? Tap your name — hearts and skips are saved under it.`); }
+  const h=$("hello"), mh=ALL_ITEMS.filter(([it])=>{ const x=rv(it,"me"); return x&&x.s==="heart"; }).length; if(h) h.innerHTML=role==="her"?`Привіт, <b>Киця</b> 💗 — tap <b>♥ Киця's pick</b> on the places and dishes you love, and <b>Skip</b> what you don't. ${mh?`Mykola has already hearted <b>${mh}</b> thing${mh===1?"":"s"} — look for his blue badge and tap <b>Agree</b> if you like them too.`:"Everything you choose is saved and appears on Mykola's phone."}`:(role==="me"?`You're walking as <b>Mykola</b>. Send Киця her link from ⋯ → Share so her picks land here.`:`Who's walking? Tap your name — hearts and skips are saved under it.`); }
 function rerender(){ const s=APP.state; renderRoles(); updateSum(); if(s.mode==="day") renderDay(s.day); else if(s.mode==="stop"||s.mode==="travel"){ const st=sheetScroll.scrollTop; renderStop(s.day,s.stop); sheetScroll.scrollTop=st; } if(s.mode!=="start") renderBar(); if($("sumdlg").open) renderSum(); if($("bookdlg").open) renderBook(); }
 function updateSum(){ const tot=ALL_ITEMS.length, her=ALL_ITEMS.filter(([it])=>rv(it,"her")).length, pct=Math.round(her/tot*100); $("sum-ring").style.setProperty("--p",pct); $("btn-sum").title=`Киця has looked at ${her} of ${tot} stops`; }
 
@@ -840,7 +864,7 @@ $("moredlg").addEventListener("click",e=>{ if(e.target===$("moredlg")) $("moredl
 function sumItem(it,i,k){
   const d=DAYS[i], o=optionsOf(it), p=placeOf(it), r=review[it.id]||{}, sk=effSkip(it);
   const ic=["her","me"].map(w=>r[w]?`<i class="${r[w].s==="heart"?"love":"skip"} ${w}" title="${esc(names[w])}">${r[w].s==="heart"?"♥":"⤼"}</i>`:"").join("");
-  return `<li class="${sk?"skip":""}" data-i="${i}" data-k="${k}"><span class="t">${esc(it.t)}</span><span class="tt">${esc(o?p.title:it.title)}${o?`<small>${esc(it.title)} · ${heartPick(it)?"picked":"default option"}</small>`:""}</span><span class="ic">${ic}</span></li>`;
+  return `<li class="${sk?"skip":""}" data-i="${i}" data-k="${k}"><span class="t">${esc(it.t)}</span><span class="tt">${esc(o?p.title:it.title)}${o?`<small>${esc(it.title)} · ${heartPick(it)?"picked":"default option"}</small>`:""}${(()=>{ const m=r.me; if(!m||m.s!=="heart") return ""; const po=o&&m.pick?o.find(z=>z.id===m.pick):null; const h=r.her; if(h&&h.s==="heart"&&h.pick===m.pick) return `<small style="color:var(--rose)">💞 both agree</small>`; return `<small style="color:var(--dc)">♥ ${esc(names.me)}: ${esc(po?po.title:(p.title||it.title))}</small>`; })()}</span><span class="ic">${ic}</span></li>`;
 }
 function renderSum(){
   const tot=ALL_ITEMS.length, her=ALL_ITEMS.filter(([it])=>rv(it,"her")).length, me=ALL_ITEMS.filter(([it])=>rv(it,"me")).length, pct=Math.round(her/tot*100);
@@ -848,7 +872,8 @@ function renderSum(){
   const done100=her===tot;
   $("sumdlg-in").innerHTML=`<button class="close" id="sum-close" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     <p class="eyebrow" style="color:var(--rose)">Our picks</p>
-    <div class="sumhead"><div class="ring" style="--p:${pct}"><i>${pct}%<small>Киця</small></i></div><div><h3>${approved?"The plan is approved 💗":(done100?"Every stop has Киця's answer":`${tot-her} stop${tot-her===1?"":"s"} still waiting for Киця`)}</h3><p>${hearts} heart${hearts===1?"":"s"} · ${skips} skipped · Mykola reacted to ${me}. Tap a stop to jump there.</p></div></div>
+    <div class="sumhead"><div class="sring" style="--p:${pct}"><i>${pct}%<small>Киця</small></i></div><div><h3>${approved?"The plan is approved 💗":(done100?"Every stop has Киця's answer":`${tot-her} stop${tot-her===1?"":"s"} still waiting for Киця`)}</h3><p>${hearts} heart${hearts===1?"":"s"} from ${esc(names.her)} · ${ALL_ITEMS.filter(([it])=>{ const x=rv(it,"me"); return x&&x.s==="heart"; }).length} from ${esc(names.me)} · ${skips} skipped · ${ALL_ITEMS.filter(([it])=>{ const a=rv(it,"her"), b=rv(it,"me"); return a&&b&&a.s==="heart"&&b.s==="heart"&&a.pick===b.pick; }).length} agreed 💞. Tap a stop to jump there.</p></div></div>
+    <div class="legend"><span><i>♥</i>${esc(names.her)}'s pick</span><span><i class="me">♥</i>${esc(names.me)}'s pick</span><span><i class="skip">⤼</i>skipped</span></div>
     ${approved?`<div class="approved"><b>Approved by ${esc(approved.name||names[approved.by]||"")} 💗</b><span>${new Date(approved.ts).toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})} · The map and the itinerary below follow the picks.</span></div>`:""}
     ${DAYS.map((d,i)=>{ const items=d.items; const cnt=items.map(it=>{ const x=rv(it,"her"); return `<i class="${x?(x.s==="heart"?"love":"skip"):(heartPick(it)?"pick":"")}"></i>`; }).join("");
       return `<details class="sumday" style="--dc:${CITYC[d.city]}"${i===APP.state.day?" open":""}><summary><span class="n">${i+1}</span><span><b>${esc(d.title)}</b><small>${fmtDay(d.date)} · ${d.city} · ${items.length} stops</small></span><span class="cnt">${cnt}</span></summary><ul>${items.map((it,k)=>sumItem(it,i,k)).join("")}</ul></details>`; }).join("")}
