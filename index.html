@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f5f6fa">
-<meta name="build" content="20261001-110233">
+<meta name="build" content="20261001-111203">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Seoul ⇄ Busan · a journey for two</title>
@@ -82,7 +82,27 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:poin
 .pick-sub{margin:0;color:#7a6473;font-size:14px}
 .pick-bottom{display:grid;gap:12px;max-width:560px;width:100%;margin:0 auto;transform:translateY(24px);transition:transform .7s var(--ease)}
 .cpick.show .pick-bottom{transform:none}
-.pick-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pick-nav{display:grid;grid-template-columns:56px 1fr 56px;gap:10px;align-items:center}
+.parrow{width:56px;height:56px;border-radius:18px;background:rgba(255,255,255,.72);border:1.5px solid rgba(255,255,255,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:inline-flex;align-items:center;justify-content:center;box-shadow:0 14px 30px -20px rgba(90,40,70,.5);transition:transform .25s var(--ease),background .25s}
+.parrow svg{width:22px;height:22px}
+.parrow:hover{transform:translateY(-2px)}.parrow:active{transform:scale(.92)}
+.pname{position:relative;display:grid;justify-items:center;gap:2px;padding:14px 12px 12px;border-radius:22px;background:rgba(255,255,255,.78);border:1.5px solid rgba(255,255,255,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 18px 40px -22px rgba(90,40,70,.5);animation:hover 3.6s ease-in-out infinite;transition:box-shadow .4s,border-color .4s}
+@keyframes hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.pname.her{border-color:rgba(232,85,122,.55);box-shadow:0 18px 40px -20px rgba(232,85,122,.6)}
+.pname.me{border-color:rgba(79,95,230,.5);box-shadow:0 18px 40px -20px rgba(79,95,230,.6)}
+.pname .pav{font-size:26px;line-height:1}
+.pname b{font:800 26px/1.05 var(--display);letter-spacing:-.02em}
+.pname small{font:600 11.5px var(--body);letter-spacing:.08em;text-transform:uppercase;color:#8a7380}
+.pname .pdots{display:flex;gap:5px;margin-top:8px}
+.pname .pdots i{width:6px;height:6px;border-radius:50%;background:rgba(17,22,40,.18);transition:.3s}
+.pname .pdots i.on{background:var(--ink);transform:scale(1.25)}
+.pname.her .pdots i.on{background:var(--rose)}.pname.me .pdots i.on{background:var(--seoul)}
+.pname.out-l{animation:pout-l .18s var(--ease) forwards}.pname.out-r{animation:pout-r .18s var(--ease) forwards}
+.pname.in-l{animation:pin-l .42s var(--ease)}.pname.in-r{animation:pin-r .42s var(--ease)}
+@keyframes pout-l{to{opacity:0;transform:translateX(-26px) scale(.96)}}@keyframes pout-r{to{opacity:0;transform:translateX(26px) scale(.96)}}
+@keyframes pin-l{from{opacity:0;transform:translateX(26px) scale(.96)}}@keyframes pin-r{from{opacity:0;transform:translateX(-26px) scale(.96)}}
+:root[data-theme="dark"] .pname,:root[data-theme="dark"] .parrow{background:rgba(30,22,40,.72);border-color:rgba(255,255,255,.12)}
+:root[data-theme="dark"] .pname small{color:#c9b8c2}
 .pcard{position:relative;display:grid;justify-items:center;gap:4px;padding:16px 12px 14px;border-radius:22px;background:rgba(255,255,255,.72);border:1.5px solid rgba(255,255,255,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 18px 40px -24px rgba(90,40,70,.45);transition:transform .35s var(--ease),box-shadow .35s,border-color .35s,background .35s}
 .pcard .pav{font-size:26px;line-height:1}
 .pcard .pn{font:800 20px/1.1 var(--display);letter-spacing:-.01em}
@@ -138,6 +158,27 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:poin
 .daycard .k b{color:var(--c)}
 .daycard .k .ans{color:var(--rose)}
 .swap-in{animation:swapin .5s var(--ease) both}
+dialog::backdrop{animation:fadein .35s ease-out}
+@keyframes fadein{from{opacity:0}}
+.ibtn:active,.nbtn:not(:disabled):active,.chip:active,.btn:active,.parrow:active{transform:scale(.94)!important}
+.ibtn,.nbtn,.chip,.btn,.rv,.ocard,.pcard{-webkit-tap-highlight-color:transparent}
+.ocards .ocard{animation:swapin .5s var(--ease) both;animation-delay:calc(var(--i,0)*60ms)}
+.ocards,.photo .gal{scroll-behavior:smooth}
+.rbar{animation:rbar-in .5s var(--ease) both}
+@keyframes rbar-in{from{transform:translateY(16px);opacity:0}}
+.sheet.still .rbar,.sheet.still .ocards .ocard{animation:none}
+.tick[aria-pressed="true"]{animation:bump .45s var(--ease)}
+.sumday ul{animation:swapin .4s var(--ease)}
+.facts .fact,.tips,.commute{transition:transform .25s var(--ease),box-shadow .25s}
+.facts .fact:hover,.commute:hover{transform:translateY(-1px)}
+.mid .dots i{transition:background .35s,transform .35s var(--ease)}
+.daycard .plan li,.who,.hb{animation:popin .35s var(--ease) both}
+.toast{transition:opacity .35s,transform .45s var(--ease)}
+.photo .why,.photo .meta{animation:swapin .7s var(--ease) both;animation-delay:.1s}
+.sheet.still .photo .why,.sheet.still .photo .meta{animation:none}
+.cpick .pick-top .eyebrow,.cpick .pick-top h2,.cpick .pick-sub{animation:rise .8s var(--ease) both}
+.cpick .pick-top h2{animation-delay:.1s}.cpick .pick-sub{animation-delay:.2s}
+.cpick .pick-nav{animation:rise .8s var(--ease) both;animation-delay:.25s}.cpick .pick-go{animation:rise .8s var(--ease) both;animation-delay:.35s}
 @keyframes swapin{from{opacity:0;transform:translateY(10px)}}
 .daycard .tl li{animation:swapin .5s var(--ease) both;animation-delay:calc(var(--i,0)*45ms)}
 .mid .b.flip{animation:flip .35s var(--ease)}
@@ -631,11 +672,12 @@ dialog::backdrop{background:rgba(17,22,40,.35);backdrop-filter:blur(6px)}
 </section>
 
 <section class="cpick" id="pick" hidden aria-label="Pick your character">
-  <div class="pick-top"><p class="eyebrow">Player select</p><h2>Pick your character</h2><p class="pick-sub">Tap a figure or a card. Your hearts and skips are saved under that name.</p></div>
+  <div class="pick-top"><p class="eyebrow">Player select</p><h2>Pick your character</h2><p class="pick-sub">Use the arrows, swipe, or tap a figure. Hearts and skips are saved under that name.</p></div>
   <div class="pick-bottom">
-    <div class="pick-cards">
-      <button class="pcard her" data-r="her" aria-pressed="false"><span class="pav">💗</span><span class="pn">Киця</span><span class="pt">picks the favourites</span></button>
-      <button class="pcard me" data-r="me" aria-pressed="false"><span class="pav">🧭</span><span class="pn">Mykola</span><span class="pt">plans the trail</span></button>
+    <div class="pick-nav">
+      <button class="parrow" id="pick-prev" aria-label="Previous character"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <div class="pname" id="pname"><span class="pav">💗</span><b>Киця</b><small>picks the favourites</small><span class="pdots"><i class="on"></i><i></i></span></div>
+      <button class="parrow" id="pick-next" aria-label="Next character"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     </div>
     <div class="pick-go"><button class="btn primary" id="pick-go" disabled>Pick one to continue</button><button class="btn ghost" id="pick-back">Back</button></div>
   </div>
@@ -842,7 +884,7 @@ function renderStop(i,k){
   if(p.name){ const from=prevPlaceOf(i,k); acts+=(from&&from.name!==p.name?`<a class="go" href="${dirUrl(from,p)}" target="_blank" rel="noopener">Route here</a>`:"")+`<a href="${placeUrl(p)}" target="_blank" rel="noopener">Google Maps</a><a href="${naverUrl(p)}" target="_blank" rel="noopener">Naver Map</a><a href="${kakaoUrl(p)}" target="_blank" rel="noopener">Kakao Map</a>`; }
   acts+=`<button class="snap">📷 Take a photo</button><button class="tick" data-id="${id}" aria-pressed="${isDone}">${isDone?"✓ Done":"Mark done"}</button>`;
   const extract=w&&w.extract?w.extract.split(/(?<=\.)\s/).slice(0,2).join(" "):"";
-  const seg=opts?`<div class="pick"><div class="pick-h">${food?'<i class="gdot"></i>':""}Pick one · ${esc(it.title)}</div><div class="ocards" role="tablist">${opts.map((o,j)=>{ const r=resolve(o), ww=r.wiki&&wiki[r.wiki]; return `<button role="tab" class="ocard" aria-selected="${j===si}" data-j="${j}" data-wiki="${esc(r.wiki||"")}"><span class="oimg"${ww&&ww.img?` style="background-image:url('${esc(ww.img)}')"`:""}></span><span class="otit">${esc(o.title)}</span><span class="osub">${esc([r.type,r.price&&!(r.type||"").toLowerCase().includes((r.price||"").toLowerCase())?r.price:null].filter(Boolean).join(" · "))}</span>${r.cool?`<span class="ocool">${esc(r.cool)}</span>`:(r.about?`<span class="ocool">${esc(r.about)}</span>`:"")}${hb(o)}</button>`; }).join("")}</div><p class="pick-hint">Tap a card to explore it · press ♥ below to make it ${role==="her"?"Киця's":role==="me"?"Mykola's":"your"} pick</p>${food?`<p class="budget">${esc(T.budgetLine)}</p>`:""}</div>`:"";
+  const seg=opts?`<div class="pick"><div class="pick-h">${food?'<i class="gdot"></i>':""}Pick one · ${esc(it.title)}</div><div class="ocards" role="tablist">${opts.map((o,j)=>{ const r=resolve(o), ww=r.wiki&&wiki[r.wiki]; return `<button role="tab" class="ocard" style="--i:${j}" aria-selected="${j===si}" data-j="${j}" data-wiki="${esc(r.wiki||"")}"><span class="oimg"${ww&&ww.img?` style="background-image:url('${esc(ww.img)}')"`:""}></span><span class="otit">${esc(o.title)}</span><span class="osub">${esc([r.type,r.price&&!(r.type||"").toLowerCase().includes((r.price||"").toLowerCase())?r.price:null].filter(Boolean).join(" · "))}</span>${r.cool?`<span class="ocool">${esc(r.cool)}</span>`:(r.about?`<span class="ocool">${esc(r.about)}</span>`:"")}${hb(o)}</button>`; }).join("")}</div><p class="pick-hint">Tap a card to explore it · press ♥ below to make it ${role==="her"?"Киця's":role==="me"?"Mykola's":"your"} pick</p>${food?`<p class="budget">${esc(T.budgetLine)}</p>`:""}</div>`:"";
   const tags=`<div class="tags"><span class="tag">${d.city}</span>${p.type?`<span class="tag type">${food?'<i class="gdot"></i>':""}${esc(p.type)}</span>`:""}${(it.book||p.book)?'<span class="tag gold">Book ahead</span>':""}${(it.long||p.long)?'<span class="tag">Train ride</span>':""}</div>`;
   sheetScroll.innerHTML=`<figure class="photo" id="photo" data-wiki="${esc(p.wiki||"")}">${photoBlock(p,d)}<div class="grad"></div>${whyOf(p)}
       <div class="meta"><span class="tm">${esc(it.t)}</span><span class="idx">Stop ${pad2(k+1)} / ${pad2(d.items.length)} · Day ${i+1} · ${wxOf(d).split(" ")[0]}</span></div></figure>
@@ -1216,10 +1258,16 @@ renderRoles(); updateSum(); setSync(fb.cfg?"wait":"off"); if(fb.cfg) syncStart()
 /* ---------- character pick ---------- */
 const pickEl=$("pick"); let pickSel=null;
 function closePick(){ if(pickEl.hidden) return; pickEl.classList.remove("show"); setTimeout(()=>{ if(!pickEl.classList.contains("show")) pickEl.hidden=true; },600); }
-function setPickSel(r,silent){ pickSel=r; pickEl.querySelectorAll(".pcard").forEach(b=>b.setAttribute("aria-pressed",b.dataset.r===r)); const g=$("pick-go"); g.disabled=!r; g.innerHTML=r?`Continue as ${esc(names[r])} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`:"Pick one to continue"; pickEl.classList.toggle("has",!!r); if(!silent){ buzz(10); if(APP.sound&&APP.sound.on) APP.sound.pop(1.3); } APP.emit("pick",r,!!silent); }
-function openPick(){ startEl.hidden=true; APP.state.mode="pick"; pickEl.hidden=false; requestAnimationFrame(()=>requestAnimationFrame(()=>pickEl.classList.add("show"))); setPickSel(role,true); APP.emit("move",{kind:"pick",day:-1,stop:-1,prev:APP.state}); }
-pickEl.querySelectorAll(".pcard").forEach(b=>b.onclick=()=>setPickSel(b.dataset.r,false));
-APP.pickSelect=r=>setPickSel(r,false);
+const PICK_META={her:{av:"💗",sub:"picks the favourites"},me:{av:"🧭",sub:"plans the trail"}}; const PICK_ORDER=["her","me"];
+function setPickSel(r,silent,dir){ r=r||"her"; const changed=r!==pickSel; pickSel=r; const nm=$("pname"); if(nm){ const paint=()=>{ nm.className="pname "+r; nm.querySelector(".pav").textContent=PICK_META[r].av; nm.querySelector("b").textContent=names[r]; nm.querySelector("small").textContent=PICK_META[r].sub; nm.querySelectorAll(".pdots i").forEach((d,i)=>d.classList.toggle("on",PICK_ORDER[i]===r)); };
+    if(changed&&!silent){ nm.classList.add(dir<0?"out-r":"out-l"); setTimeout(()=>{ paint(); nm.classList.remove("out-l","out-r"); nm.classList.add(dir<0?"in-l":"in-r"); setTimeout(()=>nm.classList.remove("in-l","in-r"),420); },180); } else paint(); }
+  const g=$("pick-go"); g.disabled=false; g.innerHTML=`Continue as ${esc(names[r])} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`; pickEl.classList.add("has"); if(!silent&&changed){ buzz(10); if(APP.sound&&APP.sound.on) APP.sound.pop(1.3); } APP.emit("pick",r,!!silent||!changed); }
+function cyclePick(dir){ const i=PICK_ORDER.indexOf(pickSel||"her"); setPickSel(PICK_ORDER[(i+dir+PICK_ORDER.length)%PICK_ORDER.length],false,dir); }
+function openPick(){ startEl.hidden=true; APP.state.mode="pick"; pickEl.hidden=false; requestAnimationFrame(()=>requestAnimationFrame(()=>pickEl.classList.add("show"))); setPickSel(role||"her",true); APP.emit("move",{kind:"pick",day:-1,stop:-1,prev:APP.state}); }
+$("pick-prev").onclick=()=>cyclePick(-1); $("pick-next").onclick=()=>cyclePick(1);
+addEventListener("keydown",e=>{ if(APP.state.mode!=="pick") return; if(e.key==="ArrowLeft") cyclePick(-1); else if(e.key==="ArrowRight") cyclePick(1); else if(e.key==="Enter") $("pick-go").click(); });
+(function(){ let sx=0,st=0; pickEl.addEventListener("touchstart",e=>{ sx=e.touches[0].clientX; st=Date.now(); },{passive:true}); pickEl.addEventListener("touchend",e=>{ const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>50&&Date.now()-st<700) cyclePick(dx<0?1:-1); },{passive:true}); })();
+APP.pickSelect=r=>setPickSel(r,false,PICK_ORDER.indexOf(r)>PICK_ORDER.indexOf(pickSel||"her")?1:-1);
 $("pick-go").onclick=()=>{ if(!pickSel) return; role=pickSel; saveK("sbtrip-role",role); renderRoles(); toast(role==="her"?"Привіт, Киця 💗":"Hi Mykola"); const u=undecided().length, tot=ALL_ITEMS.length; if(u>0&&u<tot) continueReview(); else go(0,-1); };
 $("pick-back").onclick=()=>{ closePick(); startEl.hidden=false; APP.state.mode="start"; APP.emit("move",{kind:"start",day:-1,stop:-1,prev:APP.state}); };
 
@@ -1489,21 +1537,21 @@ const G={
   idle:    {},
   glance:  {yawA:.55,yawB:-.55,tiltA:.08,tiltB:-.1,gap:.96,hold:3.2},
   pose:    {tiltA:.16,tiltB:-.2,gap:.9,AL:{x:-.4,z:-1.1},BR:{x:-2.4,z:.3},leanA:.04,leanB:.04,close:.35,hold:4},
-  hands:   {faceA:1.5,faceB:-1.5,gap:1.0,AR:{x:-1.0,z:.15},AL:{x:-1.0,z:-.15},BL:{x:-1.0,z:-.15},BR:{x:-1.0,z:.15},nodA:.3,nodB:.3,tiltA:.06,tiltB:-.06,close:.3,hold:5.5},
-  forehead:{faceA:1.3,faceB:-1.3,leanA:.18,leanB:.16,nodA:.28,nodB:.26,gap:1.0,AR:{x:-.95,z:.25},AL:{x:-.5,z:-.1},BL:{x:-.95,z:-.25},BR:{x:-.5,z:.1},close:.35,hold:5.5},
+  hands:   {faceA:1.5,faceB:-1.5,gap:1.22,AR:{x:-1.0,z:.15},AL:{x:-1.0,z:-.15},BL:{x:-1.0,z:-.15},BR:{x:-1.0,z:.15},nodA:.3,nodB:.3,tiltA:.06,tiltB:-.06,close:.3,hold:5.5},
+  forehead:{faceA:1.3,faceB:-1.3,leanA:.18,leanB:.16,nodA:.28,nodB:.26,gap:1.18,AR:{x:-.95,z:.25},AL:{x:-.5,z:-.1},BL:{x:-.95,z:-.25},BR:{x:-.5,z:.1},close:.35,hold:5.5},
   backhug: {faceA:Math.PI,faceB:Math.PI,gap:.5,offAx:.6,offAz:.6,AR:{x:-1.25,z:-.55},AL:{x:-1.25,z:.55},BL:{x:-.85,z:-.2},BR:{x:-.85,z:.2},tiltB:.14,nodA:.12,yawB:.15,close:.2,hold:6},
   tuck:    {faceA:1.2,faceB:-1.2,AR:{x:-1.95,z:.35},AL:{x:-.3,z:-.1},BL:{x:-.6,z:-.2},tiltB:.18,nodB:.08,yawB:-.1,gap:.92,close:.3,hold:3.6},
-  whisper: {faceA:1.0,faceB:-.25,leanA:.2,yawA:.3,nodA:.08,tiltB:-.16,yawB:.1,gap:.9,AR:{x:-.6,z:.3},close:.25,hold:4},
-  sway:    {faceA:1.45,faceB:-1.45,gap:.9,AR:{x:-1.0,z:.5},AL:{x:-1.0,z:-.45},BL:{x:-1.65,z:-.3},BR:{x:-1.65,z:.3},tiltA:.1,tiltB:-.12,sway:1,close:.2,hold:6.5},
+  whisper: {faceA:1.0,faceB:-.25,leanA:.2,yawA:.3,nodA:.08,tiltB:-.16,yawB:.1,gap:1.02,AR:{x:-.6,z:.3},close:.25,hold:4},
+  sway:    {faceA:1.45,faceB:-1.45,gap:1.08,AR:{x:-1.0,z:.5},AL:{x:-1.0,z:-.45},BL:{x:-1.65,z:-.3},BR:{x:-1.65,z:.3},tiltA:.1,tiltB:-.12,sway:1,close:.2,hold:6.5},
   lean:    {faceB:-.55,sideB:.16,tiltB:.38,yawB:.2,gap:.84,AR:{x:-.5,z:1.0},close:.15,hold:5},
   lantern: {faceA:.55,faceB:-.75,AR:{x:-1.55,z:-.12},AL:{x:.1,z:-.1},gap:.9,BL:{x:-1.35,z:-.28},BR:{x:-1.35,z:.28},bounce:1,tiltB:.16,nodB:.12,leanB:.06,yawB:.1,close:.3,hold:5.5},
   umbrella:{faceA:.3,faceB:-.55,gap:.78,AR:{x:-2.05,z:-.25},AL:{x:.05,z:-.1},BL:{x:-.95,z:-.1},BR:{x:-.3,z:.2},tiltB:.14,tiltA:-.06,leanB:.08,close:.25,hold:6},
-  kiss:    {faceA:1.15,faceB:-1.15,leanA:.22,leanB:.2,tiltA:.22,tiltB:-.2,gap:.95,AR:{x:-1.1,z:.2},AL:{x:-.9,z:-.2},BL:{x:-1.1,z:-.2},BR:{x:-.9,z:.2},close:.3,hold:4.5},
-  hug:     {faceA:1.4,faceB:-1.4,leanA:.16,leanB:.16,tiltA:.12,tiltB:-.12,gap:.86,AR:{x:-1.5,z:.45},AL:{x:-1.45,z:-.35},BL:{x:-1.5,z:-.45},BR:{x:-1.45,z:.35},close:.25,hold:4.5},
+  kiss:    {faceA:1.15,faceB:-1.15,leanA:.22,leanB:.2,tiltA:.22,tiltB:-.2,gap:1.12,AR:{x:-1.1,z:.2},AL:{x:-.9,z:-.2},BL:{x:-1.1,z:-.2},BR:{x:-.9,z:.2},close:.3,hold:4.5},
+  hug:     {faceA:1.4,faceB:-1.4,leanA:.16,leanB:.16,tiltA:.12,tiltB:-.12,gap:1.0,AR:{x:-1.5,z:.45},AL:{x:-1.45,z:-.35},BL:{x:-1.5,z:-.45},BR:{x:-1.45,z:.35},close:.25,hold:4.5},
   twirl:   {spinB:1,AR:{x:-.4,z:2.4},BL:{x:-.3,z:-2.5},gap:1.02,hold:3.2},
   selfie:  {faceA:.45,faceB:-.45,AR:{x:-2.25,z:-.45},BR:{x:-.5,z:.6},tiltA:.14,tiltB:-.16,yawA:.15,yawB:-.15,gap:.9,phone:1,hold:3.8},
   admire:  {faceA:Math.PI,faceB:Math.PI,AL:{x:-1.55,z:-.2},yawA:-.2,tiltB:.1,gap:1,hold:3.6},
-  dip:     {faceA:1.25,faceB:-1.25,leanA:.3,leanB:-.5,tiltB:-.25,gap:.88,AR:{x:-1.35,z:.3},AL:{x:-.9,z:-.2},BR:{x:-.6,z:2.3},BL:{x:-1.2,z:-.3},hold:4},
+  dip:     {faceA:1.25,faceB:-1.25,leanA:.3,leanB:-.5,tiltB:-.25,gap:1.02,AR:{x:-1.35,z:.3},AL:{x:-.9,z:-.2},BR:{x:-.6,z:2.3},BL:{x:-1.2,z:-.3},hold:4},
   cheer:   {AR:{x:-.9,z:-1.0},BL:{x:-.9,z:1.0},bounce:1,gap:1,cups:1,tiltA:.1,tiltB:-.1,hold:3.2},
   wave:    {BR:{x:-.3,z:2.3},tiltB:-.1,yawA:.3,gap:1,waveB:1,hold:3}
 };
@@ -1521,7 +1569,7 @@ function setGesture(name){ const g=G[name]||G.idle; gest=name; gestT=0; const a=
   Object.assign(Pto,{faceA:g.faceA||0,faceB:g.faceB||0,leanA:g.leanA||0,leanB:g.leanB||0,sideA:g.sideA||0,sideB:g.sideB||0,tiltA:g.tiltA||0,tiltB:g.tiltB||0,yawA:g.yawA||0,yawB:g.yawB||0,nodA:g.nodA||0,nodB:g.nodB||0,
     ALx:a(g.AL,'x'),ALz:a(g.AL,'z'),ARx:a(g.AR,'x'),ARz:a(g.AR,'z'),BLx:a(g.BL,'x'),BLz:a(g.BL,'z'),BRx:a(g.BR,'x'),BRz:a(g.BR,'z'),gap:g.gap||1,bounce:g.bounce||0,phone:g.phone||0,cups:g.cups||0,waveB:g.waveB||0,
     offAx:g.offAx||0,offAz:g.offAz||0,offBx:g.offBx||0,offBz:g.offBz||0,sway:g.sway||0,close:g.close||0});
-  gestNext=g.hold||3; if(name==='twirl'){ spin.active=true; spin.t=0; } if(name==='lantern'){ lanternPulse=1; if(A.sound&&A.sound.on&&A.sound.pop) A.sound.pop(1.25); } }
+  if(camMode==='start') Pto.gap*=1.2; gestNext=g.hold||3; if(name==='twirl'){ spin.active=true; spin.t=0; } if(name==='lantern'){ lanternPulse=1; if(A.sound&&A.sound.on&&A.sound.pop) A.sound.pop(1.25); } }
 function pickGesture(){ let g;
   if(gestQueue.length) g=gestQueue.shift();
   else { const pool=fxActive?FX_GESTURES:(Math.random()<.68?QUIET:(LIVELY_BY_KIND[gestKind]||LIVELY_BY_KIND.sight)); g=pool[Math.floor(Math.random()*pool.length)]; if(g===lastGest) g=pool[(pool.indexOf(g)+1)%pool.length];
@@ -1986,7 +2034,7 @@ function updatePetals(dt,t){ petalMat.uniforms.uT.value=t; const gust=1+Math.sin
   petalGeo.attributes.position.needsUpdate=true; petalGeo.attributes.aPh.needsUpdate=true; petalGeo.attributes.aSz.needsUpdate=true; petalGeo.attributes.aCol.needsUpdate=true; }
 const WCAM=A.wcam={mob:{x:30,y:5,z:0,lx:-200,ly:-7,lz:-6},desk:{x:21,y:8.5,z:14,lx:-80,ly:1.5,lz:1}}; A.dbg=()=>({gest,night:envCur.night,wx:Object.assign({},wx),lanA,lanternVisible:lantern.visible,ly:lantern.position.y,fx:fxActive,arrived,camMode}); A.dbgCouple=()=>{ const v=couple.position.clone(); v.y+=1.5; v.project(cam); return [(v.x+1)/2,(1-v.y)/2]; };
 /* character pick: stage state + cute moves */
-const PCAM=A.pcam={mob:{x:13,y:2.4,z:.3,lx:0,ly:4.6,lz:0},desk:{x:12.5,y:2.2,z:.7,lx:0,ly:.75,lz:3.4}};
+const PCAM=A.pcam={mob:{x:13,y:2.4,z:.3,lx:0,ly:4.6,lz:0},desk:{x:13.6,y:2.3,z:.8,lx:0,ly:.55,lz:3.6}};
 let pickSelI=-1, pickMove={name:'idle',t:0,fired:false}, pickHold=2.4, pickSpin=0, pickSpinT=1; const pk=[{x:-1.15,z:0,s:1},{x:1.15,z:0,s:1}]; const _wp=new THREE.Vector3();
 const PICK_MOVES=['wave','kiss','hop','pose','heart','twirl'];
 function pickReset(){ fA.scale.setScalar(1); fB.scale.setScalar(1); pk[0].x=-1.15; pk[1].x=1.15; pk[0].z=pk[1].z=0; pk[0].s=pk[1].s=1; pickMove={name:'idle',t:0,fired:false}; pickSpin=0; pickSpinT=1; }
@@ -1995,13 +2043,13 @@ function nextPickMove(){ let m=PICK_MOVES[Math.floor(Math.random()*PICK_MOVES.le
 function applyPickMove(f,u,i,dt,t){ pickMove.t+=dt; const m=pickMove.name, mt=pickMove.t, R=u.armR, L=u.armL;
   const elbow=a=>{ const e=a.userData.elbow; if(e) e.rotation.x=-(.18+Math.min(1.6,Math.max(0,-a.rotation.x))*.42); };
   u.body.rotation.x=0; u.body.rotation.z=0; u.headP.rotation.y=Math.sin(t*.7)*.05; u.headP.rotation.x=0;
-  if(m==='twirl'){ R.rotation.x=-1; R.rotation.z=-1.1; L.rotation.x=-1; L.rotation.z=1.1; if(u.skirt){ const fl=Math.sin(Math.min(1,mt/1.1)*Math.PI)*.55; u.skirt.scale.set(1+fl,1,1+fl); } if(u.mouth) u.mouth.scale.setScalar(1.5); }
-  else if(m==='wave'){ R.rotation.x=-2.75+Math.sin(t*11)*.18; R.rotation.z=-.45+Math.sin(t*11)*.32; u.headP.rotation.z=.14; if(u.mouth) u.mouth.scale.setScalar(1.5); }
-  else if(m==='kiss'){ const out=mt>.9?Math.min(1,(mt-.9)*3.5):0; R.rotation.x=-2.05+out*.7; R.rotation.z=-.12-out*1.1; u.headP.rotation.z=.1-out*.06; if(u.blushes) u.blushes.forEach(b=>b.visible=true); if(!pickMove.fired&&mt>=.9){ pickMove.fired=true; f.getWorldPosition(_wp); _wp.y-=1.1; sparkleBurst(_wp,[[1,.55,.7],[1,.8,.88],[1,1,1]],22,2.6); if(A.sound.on) A.sound.pop(1.6); } }
-  else if(m==='hop'){ f.position.y+=Math.abs(Math.sin(mt*9))*.3*Math.max(0,1-mt/1.5); R.rotation.x=-.7; L.rotation.x=-.7; R.rotation.z=-.55; L.rotation.z=.55; u.headP.rotation.z=Math.sin(mt*9)*.08; if(u.mouth) u.mouth.scale.setScalar(1.5); }
-  else if(m==='pose'){ R.rotation.x=.35; R.rotation.z=-.95; L.rotation.x=.35; L.rotation.z=.95; u.legs[0].rotation.x=.28; u.headP.rotation.z=-.17; u.body.rotation.z=.06; }
+  if(m==='twirl'){ R.rotation.x=-1; R.rotation.z=1.1; L.rotation.x=-1; L.rotation.z=-1.1; if(u.skirt){ const fl=Math.sin(Math.min(1,mt/1.1)*Math.PI)*.55; u.skirt.scale.set(1+fl,1,1+fl); } if(u.mouth) u.mouth.scale.setScalar(1.5); }
+  else if(m==='wave'){ R.rotation.x=-2.75+Math.sin(t*11)*.18; R.rotation.z=.45+Math.sin(t*11)*.32; L.rotation.x=.1; L.rotation.z=-.16; u.headP.rotation.z=.14; if(u.mouth) u.mouth.scale.setScalar(1.5); }
+  else if(m==='kiss'){ const out=mt>.9?Math.min(1,(mt-.9)*3.5):0; R.rotation.x=-2.05+out*.7; R.rotation.z=-.1+out*1.2; L.rotation.x=.1; L.rotation.z=-.16; u.headP.rotation.z=.1-out*.06; if(u.blushes) u.blushes.forEach(b=>b.visible=true); if(!pickMove.fired&&mt>=.9){ pickMove.fired=true; f.getWorldPosition(_wp); _wp.y-=1.1; sparkleBurst(_wp,[[1,.55,.7],[1,.8,.88],[1,1,1]],22,2.6); if(A.sound.on) A.sound.pop(1.6); } }
+  else if(m==='hop'){ f.position.y+=Math.abs(Math.sin(mt*9))*.3*Math.max(0,1-mt/1.5); R.rotation.x=-.7; L.rotation.x=-.7; R.rotation.z=.6; L.rotation.z=-.6; u.headP.rotation.z=Math.sin(mt*9)*.08; if(u.mouth) u.mouth.scale.setScalar(1.5); }
+  else if(m==='pose'){ R.rotation.x=.35; R.rotation.z=.95; L.rotation.x=.35; L.rotation.z=-.95; u.legs[0].rotation.x=.28; u.headP.rotation.z=-.17; u.body.rotation.z=.06; }
   else if(m==='heart'){ R.rotation.x=-2.55; R.rotation.z=-.7; L.rotation.x=-2.55; L.rotation.z=.7; u.headP.rotation.z=.08; if(u.mouth) u.mouth.scale.setScalar(1.4); if(u.blushes) u.blushes.forEach(b=>b.visible=true); if(!pickMove.fired&&mt>.6){ pickMove.fired=true; f.getWorldPosition(_wp); _wp.y+=.2; sparkleBurst(_wp,[[1,.55,.7],[1,.75,.85],[1,1,1]],26,2.2); } }
-  else { R.rotation.x=Math.sin(t*1.2)*.05; L.rotation.x=-Math.sin(t*1.2)*.05; }
+  else { R.rotation.x=Math.sin(t*1.2)*.05; L.rotation.x=-Math.sin(t*1.2)*.05; R.rotation.z=.16; L.rotation.z=-.16; }
   elbow(R); elbow(L); if(mt>pickHold) nextPickMove(); }
 const WELCOME_GESTS=['lean','hands','forehead','whisper','sway','kiss','glance','hug'];
 
@@ -2142,6 +2190,8 @@ function frame(){
     const ox=i?P.BRx:P.ALx, oz=i?P.BRz:P.ALz, ix=i?P.BLx:P.ARx, iz=i?P.BLz:P.ARz;
     outer.rotation.x=-swing*(i?-1:1)+ox+(i?Math.sin(t*9)*.25*P.waveB:0); outer.rotation.z=s*.12+oz;
     inner.rotation.x=swing*(i?-1:1)*.5+ix-.18*hold; inner.rotation.z=-s*.12+iz+(i?-.36:.36)*hold;
+    // keep hanging / half-raised arms outside the torso (armR outward = +z, armL outward = -z)
+    [u.armR,u.armL].forEach((a,ai)=>{ if(a.rotation.x>-1.05){ const lim=.04+Math.max(0,-a.rotation.x)*.25; if(ai===0) a.rotation.z=Math.max(a.rotation.z,-lim); else a.rotation.z=Math.min(a.rotation.z,lim); } });
     [outer,inner].forEach(a=>{ const el=a.userData.elbow; if(el){ const raise=Math.min(1.6,Math.max(0,-a.rotation.x)); el.rotation.x=-(.18+raise*.42+Math.max(0,a.rotation.x)*.25); } });
     if(u.tail) u.tail.rotation.x=Math.sin(t*2.6+phase)*.1*(walk+.3)+(spin.active?.7:0)-swayA*.6;
     if(u.skirt){ const fl=(spin.active?Math.sin(Math.min(1,spin.t)*Math.PI)*.45:0)+walk*.1+Math.abs(swayA)*.6; u.skirt.scale.set(1+fl,1,1+fl); }
@@ -2154,7 +2204,7 @@ function frame(){
     [fA,fB].forEach((f,i)=>{ const u=f.userData, isSel=i===sel, side=i?1:-1, q=pk[i]; const tx=sel<0?side*1.15:(isSel?0:side*1.8), tz=sel<0?0:(isSel?.75:-1.25), ts=sel<0?1:(isSel?1.12:.82); const k=Math.min(1,dt*4.5);
       q.x+=(tx-q.x)*k; q.z+=(tz-q.z)*k; q.s+=(ts-q.s)*k; f.position.x=q.x; f.position.z=q.z; f.scale.setScalar(q.s);
       f.rotation.y=(sel<0||isSel?0:-side*.4)+(isSel?pickSpin:0); u.body.rotation.z=0; u.body.rotation.x=0;
-      if(isSel) applyPickMove(f,u,i,dt,t); else { u.headP.rotation.y=sel<0?Math.sin(t*.7+i)*.08:-side*.32; u.headP.rotation.z=sel<0?0:side*.07; u.armR.rotation.x=Math.sin(t*1.1+i)*.05; u.armL.rotation.x=-Math.sin(t*1.1+i)*.05; } });
+      if(isSel) applyPickMove(f,u,i,dt,t); else { u.headP.rotation.y=sel<0?Math.sin(t*.7+i)*.08:-side*.32; u.headP.rotation.z=sel<0?0:side*.07; u.armR.rotation.x=Math.sin(t*1.1+i)*.05; u.armL.rotation.x=-Math.sin(t*1.1+i)*.05; u.armR.rotation.z=.16; u.armL.rotation.z=-.16; [u.armR,u.armL].forEach(a=>{ const e=a.userData.elbow; if(e) e.rotation.x=-.2; }); } });
     handGlow.visible=false; }
   else handGlow.visible=hold>.6&&!spin.active; handGlow.position.set(0,1.42+Math.sin(t*1.4)*.03*(1-walk),.12); handGlow.material.emissiveIntensity=.4+.3*Math.sin(t*2.5);
   if(pin.visible){ pin.position.y=Math.sin(t*2.2)*.25+.2; pin.rotation.y=t*.8; const ps=activeStop>=0&&arrived?1:.001; pin.scale.setScalar(pin.scale.x+(ps-pin.scale.x)*Math.min(1,dt*6)); }
