@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f5f6fa">
-<meta name="build" content="20261001-185221">
+<meta name="build" content="20261001-190841">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
@@ -1006,6 +1006,11 @@ html{background:var(--bg)}
 .toast.xp-up{z-index:90;bottom:calc(var(--sab) + 96px)}
 </style>
 
+<style>
+html.visual-preview body > :not(#stage):not(script):not(style){display:none!important}
+html.visual-preview #stage{position:fixed;inset:0;width:100%;height:100%;opacity:1!important}
+html.visual-preview body{margin:0;overflow:hidden}
+</style>
 </head>
 <body>
 <div id="stage"></div>
@@ -1311,7 +1316,7 @@ APP.on("wiki",()=>{ const s=APP.state; if(s.mode!=="stop"&&s.mode!=="travel") re
 
 /* ---------- polaroids ---------- */
 APP.photos=[]; try{ const sp=JSON.parse(sessionStorage.getItem("sbtrip-photos-v1")||"null"); if(sp) APP.photos=sp; }catch(e){}
-APP.addPhoto=ph=>{ APP.photos.unshift(ph); APP.photos=APP.photos.slice(0,12); try{ sessionStorage.setItem("sbtrip-photos-v1",JSON.stringify(APP.photos)); }catch(e){} renderPolaroids(); toast("Saved to your photo strip"); };
+APP.addPhoto=ph=>{ if(new URLSearchParams(location.search).has('visual-preview'))return;APP.photos.unshift(ph); APP.photos=APP.photos.slice(0,12); try{ sessionStorage.setItem("sbtrip-photos-v1",JSON.stringify(APP.photos)); }catch(e){} renderPolaroids(); toast("Saved to your photo strip"); };
 function renderPolaroids(){ let el=sheetScroll.querySelector(".polaroids"); const body=sheetScroll.querySelector(".body"); if(!body) return; if(!APP.photos.length){ if(el) el.remove(); return; }
   if(!el){ el=document.createElement("div"); el.className="polaroids"; const acts=body.querySelector(".acts"); body.insertBefore(el,acts); }
   el.innerHTML=`<h4>Your photos</h4><div class="strip">${APP.photos.map((p,i)=>`<figure style="--r:${((i*37)%9-4)}deg"><img src="${p.src}" alt=""><figcaption>${esc(p.title)}<small>${esc(p.sub)}</small></figcaption><button data-i="${i}" aria-label="Remove">×</button></figure>`).join("")}</div>`;
@@ -1410,7 +1415,7 @@ function playMoment(i,k,manual,quiet){ const s=APP.state; if(s.mode!=="stop"||s.
   const first=!momentSeen[m.id]; momentSeen[m.id]=Date.now(); try{ sessionStorage.setItem("sbtrip-moments",JSON.stringify(momentSeen)); }catch(e){}
   if(first||manual) showMomentCard(m);  if(!quiet) buzz(manual?[8,30,8]:[10,30,10]); APP.emit("moment",Object.assign({},m,{first,quiet:!!quiet}));
   clearTimeout(momentRepeat); momentRepeat=setTimeout(()=>playMoment(i,k,false,true),26000+Math.random()*18000); }
-function scheduleMoment(){ clearTimeout(momentTimer); clearTimeout(momentRepeat); const s=APP.state; if(s.mode!=="stop") return; const it=DAYS[s.day].items[s.stop], opts=optionsOf(it), m=momentFor(it,opts?opts[selIdx(it)]:null); if(!m) return; const d=s.day, k=s.stop; momentTimer=setTimeout(()=>playMoment(d,k,false),1000); }
+function scheduleMoment(){ clearTimeout(momentTimer); clearTimeout(momentRepeat); if(visualPreview) return; const s=APP.state; if(s.mode!=="stop") return; const it=DAYS[s.day].items[s.stop], opts=optionsOf(it), m=momentFor(it,opts?opts[selIdx(it)]:null); if(!m) return; const d=s.day, k=s.stop; momentTimer=setTimeout(()=>playMoment(d,k,false),1000); }
 function momentHtml(){ return ""; }
 APP.momentFor=momentFor; APP.playMoment=()=>playMoment(APP.state.day,APP.state.stop,true); APP.hasMoment=()=>{ const s=APP.state; if(s.mode!=="stop") return false; const it=DAYS[s.day].items[s.stop], opts=optionsOf(it); return !!momentFor(it,opts?opts[selIdx(it)]:null); };
 APP.on("arrive",scheduleMoment); APP.on("move",()=>{ clearTimeout(momentTimer); clearTimeout(momentRepeat); if(momentEl) momentEl.classList.remove("show"); });
@@ -1450,7 +1455,7 @@ function renderPeek(){ if(!PHONE||!peekEl) return; const s=APP.state; let html="
   const changed=html!==peekEl.dataset.html; if(!html){ peekEl.classList.remove("show","pop"); peekEl.dataset.html=""; return; }
   if(changed){ peekEl.innerHTML=html; peekEl.dataset.html=html; const pl=$("peek-plan"), pg=$("peek-go"), pi=$("peek-info"), pf=$("peek-fin"); if(pf) pf.onclick=()=>{ buzz(6); startFinale(); }; if(pl) pl.onclick=()=>{ daycard.classList.add("show"); buzz(4); }; if(pg) pg.onclick=()=>{ buzz(6); go(s.day,0); }; if(pi) pi.onclick=openSheet; peekEl.classList.remove("pop"); void peekEl.offsetWidth; peekEl.classList.add("pop"); }
   peekEl.classList.add("show"); }
-if(PHONE){ new MutationObserver(()=>renderPeek()).observe(sheet,{attributes:true,attributeFilter:["class"]}); new MutationObserver(()=>renderPeek()).observe(daycard,{attributes:true,attributeFilter:["class"]}); }
+if(PHONE&&!new URLSearchParams(location.search).has('visual-preview')){ new MutationObserver(()=>renderPeek()).observe(sheet,{attributes:true,attributeFilter:["class"]}); new MutationObserver(()=>renderPeek()).observe(daycard,{attributes:true,attributeFilter:["class"]}); }
 APP.openSheet=openSheet; APP.putDown=putDown;
 if(PHONE){ const stg=$("stage"); let sd=null; stg.addEventListener("pointerdown",e=>{ sd={x:e.clientX,y:e.clientY,t:performance.now()}; },{passive:true}); stg.addEventListener("pointerup",e=>{ if(!sd) return; const ok=Math.hypot(e.clientX-sd.x,e.clientY-sd.y)<8&&performance.now()-sd.t<400; sd=null; if(ok&&APP.state.mode==="stop"&&sheet.classList.contains("show")) putDown(); },{passive:true}); }
 /* ---------- navigation ---------- */
@@ -1460,7 +1465,7 @@ function go(day,stop,kind){
   const s=APP.state, prev={mode:s.mode,day:s.day,stop:s.stop}; const seq=++moveSeq;
   startEl.hidden=true; clearTimeout(arriveTimer); closePick();
   if(stop>=0){ const tgtB=isBusanPlace(placeOf(DAYS[day].items[stop])); if(tgtB&&!busanEntered&&!interSeen&&prev.mode!=="interlude"){ startInterlude({day,stop,kind}); return; } busanEntered=tgtB; }
-  const fromHill=prev.mode==="start"||prev.mode==="pick"||prev.mode==="finale"||prev.mode==="interlude"; APP.lastKind=kind||null; if(prev.mode==="finale") endFinale(); if(prev.mode==="interlude") endInterlude();
+  const leavingScene=prev.mode==="stop"&&APP.isSceneStop&&APP.isSceneStop(prev.day,prev.stop); const fromHill=prev.mode==="start"||prev.mode==="pick"||prev.mode==="finale"||prev.mode==="interlude"||leavingScene; APP.lastKind=kind||null; if(prev.mode==="finale") endFinale(); if(prev.mode==="interlude") endInterlude();
   if(stop<0){ if(prev.mode==="finale"&&typeof renderPeek==="function"){ /* fall through */ } s.mode="day"; s.day=day; s.stop=-1; setEvening(false); renderDay(day); sheet.classList.remove("show"); travelEl.classList.remove("show");
     requestAnimationFrame(()=>{ if(!PHONE) daycard.classList.add("show"); renderPeek(); }); renderBar(); setHash(); emitMove(fromHill,{kind:"intro",day,stop:-1,prev}); return; }
   const it=DAYS[day].items[stop], p=placeOf(it);
@@ -1473,13 +1478,25 @@ function go(day,stop,kind){
   renderBar(); setHash();
   const dur=APP.travelDuration?APP.travelDuration(day,prev,stop,k):1400; renderPeek();
   emitMove(fromHill,{kind:k,day,stop,prev,dur,vehicle:cm.vehicle});
-  arriveTimer=setTimeout(()=>{ if(seq===moveSeq) APP.arrive(); },dur+300+(fromHill?360:0));
+  const intoScene=APP.isSceneStop&&APP.isSceneStop(day,stop); arriveTimer=setTimeout(()=>{ if(seq!==moveSeq) return; if(intoScene){ const st=$("stage"); st.classList.add("fade"); setTimeout(()=>{ if(seq!==moveSeq) return; APP.arrive(); setTimeout(()=>st.classList.remove("fade"),160); },340); } else APP.arrive(); },dur+300+(fromHill?360:0)-(intoScene?300:0));
 }
 /* leaving the welcome hill: fade the scene out, let the 3D camera cut to the city, fade back in */
 function emitMove(fade,m){ if(!fade){ APP.emit("move",m); return; } const st=$("stage"); st.classList.add("fade"); setTimeout(()=>{ APP.emit("move",m); setTimeout(()=>st.classList.remove("fade"),140); },340); }
 APP.arrive=function(){ const s=APP.state; if(s.mode!=="travel") return; clearTimeout(arriveTimer); s.mode="stop"; const autoOpen=!PHONE||APP.quick; APP.quick=false; APP.arrivals=(APP.arrivals||0)+1; travelEl.classList.remove("show"); progEl.style.width="0"; renderBar(); if(autoOpen){ sheet.classList.add("show"); firstHints(); } renderPeek(); APP.emit("arrive",s); };
 APP.progress=p=>{ progEl.style.width=(p*100).toFixed(1)+"%"; };
 APP.go=go;
+APP.previewSelect=id=>{
+  if(!new URLSearchParams(location.search).has('visual-preview')) return false;
+  for(let day=0;day<DAYS.length;day++) for(let stop=0;stop<DAYS[day].items.length;stop++){
+    const it=DAYS[day].items[stop];
+    if(it.id===id||(it.options||[]).some(p=>p.id===id)){
+      if(it.options) choice[it.id]=id;
+      interSeen=true; APP.state.mode='stop';
+      APP.emit('choice',{day,stop}); go(day,stop,'jump'); return true;
+    }
+  }
+  return false;
+};
 function next(){ const s=APP.state; if(s.mode==="interlude"){ $("i-go").onclick(); return; } if(s.mode==="travel"||s.mode==="start"||s.mode==="finale") return; const d=DAYS[s.day]; if(s.mode==="day") return go(s.day,0); if(s.stop<d.items.length-1) return go(s.day,s.stop+1); if(s.day<DAYS.length-1){ const nd=s.day+1; if(xpGate(s.day,()=>go(nd,-1))) return; go(nd,-1); } else startFinale(); }
 function prev(){ const s=APP.state; if(s.mode==="interlude"){ interPending=null; go(5,1,"jump"); return; } if(s.mode==="travel"||s.mode==="start") return; if(s.mode==="finale"){ go(DAYS.length-1,DAYS[DAYS.length-1].items.length-1,"jump"); return; } if(s.mode==="day"){ if(s.day>0) go(s.day-1,DAYS[s.day-1].items.length-1,"jump"); return; } if(s.stop>0) go(s.day,s.stop-1); else go(s.day,-1); }
 btnNext.onclick=next; btnPrev.onclick=prev;
@@ -1521,6 +1538,8 @@ $("btn-share").onclick=()=>{ $("moredlg").close(); share(); }; const _cs=$("cta-
 /* ---------- review: who is here, hearts & skips ---------- */
 let review=store("sbtrip-review-v1",{}), names=Object.assign({me:"Mykola",her:"Киця"},store("sbtrip-names-v1",{})), approved=store("sbtrip-approved-v1",null);
 const qs=new URLSearchParams(location.search);
+const visualPreview=qs.has('visual-preview');
+if(visualPreview) document.documentElement.classList.add('visual-preview');
 let role=qs.get("as")==="her"?"her":(qs.get("as")==="me"?"me":store("sbtrip-role",null)); if(qs.get("as")) saveK("sbtrip-role",role);
 const other=r=>r==="her"?"me":"her";
 const IDX={}; DAYS.forEach((d,i)=>d.items.forEach((it,k)=>IDX[it.id]=[i,k]));
@@ -1825,10 +1844,10 @@ $("syncdlg").addEventListener("click",e=>{ if(e.target===$("syncdlg")) $("syncdl
   [grab,sheetScroll].forEach(el=>{ el.addEventListener("pointerdown",down); el.addEventListener("pointermove",move); el.addEventListener("pointerup",up); el.addEventListener("pointercancel",up); });
   const st=document.createElement("style"); st.textContent=".sheet .photo{touch-action:pan-x}"; document.head.appendChild(st); })();
 APP.on("move",()=>sheet.classList.remove("full"));
-if(PHONE) new MutationObserver(()=>renderBar()).observe(sheet,{attributes:true,attributeFilter:["class"]});
+if(PHONE&&!visualPreview) new MutationObserver(()=>renderBar()).observe(sheet,{attributes:true,attributeFilter:["class"]});
 
 APP.buildKml=buildKml; APP.paperHtml=paperHtml; APP.syncStatus=()=>fb.status; importPicks();
-renderRoles(); updateSum(); setSync(fb.cfg?"wait":"off"); if(fb.cfg) syncStart();
+renderRoles(); updateSum(); setSync(fb.cfg&&!visualPreview?"wait":"off"); if(fb.cfg&&!visualPreview) syncStart();
 
 /* ---------- place quiz ---------- */
 const QUIZ=T.quiz||[]; let quizDone=store("sbtrip-quiz-v1",{});
@@ -2056,7 +2075,7 @@ APP.explore=xpOpen;
 
 /* ---------- deep link / boot ---------- */
 /* deep links are intentionally ignored: the trail always opens on the welcome screen; picks, hearts and quiz scores are restored from storage/sync */
-APP.boot=function(){ APP.booted=true; applyTheme(theme); wikiFetchAll(); setHash(); APP.emit("move",{kind:"start",day:-1,stop:-1,prev:APP.state}); };
+APP.boot=function(){ APP.booted=true; applyTheme(theme); if(!visualPreview) wikiFetchAll(); setHash(); APP.emit("move",{kind:"start",day:-1,stop:-1,prev:APP.state}); };
 setTimeout(()=>{ if(!APP.driven) APP.boot(); },1500); setTimeout(()=>{ if(!APP.driven) root.classList.add("no3d"); },7000);
 })();
 </script>
@@ -2154,8 +2173,11 @@ A.sound={step,pop,shutter,bell,boom,select,heart,fanfare,rain:rainSound,get on()
 </script>
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import {createPlaceScenes} from './place-scenes.js';
 try{
 const A=window.APP, DAYS=A.days, stage=document.getElementById('stage');
+const VISUAL_REVIEW=new URLSearchParams(location.search).has('visual-preview');
+let visualAfter=VISUAL_REVIEW||!new URLSearchParams(location.search).has('visual-before');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches, mobileQ=matchMedia('(max-width: 899px)');
 const lowEnd=mobileQ.matches||(navigator.hardwareConcurrency||8)<=4;
 let renderer; try{ renderer=new THREE.WebGLRenderer({antialias:!lowEnd,powerPreference:lowEnd?'default':'high-performance',stencil:false,alpha:false,failIfMajorPerformanceCaveat:false}); }catch(e){ document.documentElement.classList.add('no3d'); A.dbgLog&&A.dbgLog('WebGL unavailable: '+e.message); throw e; }
@@ -2628,20 +2650,24 @@ const LANDMARK2={
 };
 Object.assign(LANDMARK,LANDMARK2);
 for(const k in SHOP) LANDMARK['shop:'+k]=SHOP[k];
-function makeLandmark(type){ const g=new THREE.Group(); (LANDMARK[type]||LANDMARK.food)(g); g.userData.type=type; if(DETAIL[type]) DETAIL[type](g); return castAll(g); }
+const PLACE_SCENES=createPlaceScenes(THREE,{box,cyl,reg,lowEnd,reduced});
+A.isSceneStop=(day,stop)=>{ if(!visualAfter||day<0||stop<0||!DAYS[day]||!DAYS[day].items[stop]) return false; const p=A.placeOf(DAYS[day].items[stop]); return !!(p&&PLACE_SCENES[p.id]); };
+function makeLandmark(type,place){ const g=new THREE.Group(); const custom=visualAfter&&place&&PLACE_SCENES[place.id];
+  if(custom) custom(g); else { (LANDMARK[type]||LANDMARK.food)(g); if(DETAIL[type]) DETAIL[type](g); }
+  g.userData.type=type;castAll(g);if(custom)g.traverse(o=>{if(o.userData.noShadow||o.geometry?.type==='PlaneGeometry')o.castShadow=false;});return g; }
 const props=[]; // props[day][stop]
 const LM_DEPTH={palace:17,folkmuseum:16,temple:13,seatemple:16,tower:16,skyscraper:14,observatory:14,xsky:14,station:14,airport:16,bridge:14,waterfront:12,marina:12,river:9,bike:9,lake:14,beach:9,island:14,cliff:14,village:15,jongmyo:14,square:12,cantilever:16,garden:13,hanok:13,teahouse:13,pottery:12,forest:14,park:12,lonetree:14,fishmarket:13,'shop:fishtown':13,'shop:foodhall':15,'shop:containers':14,'shop:pocha':8,'shop:chicken':8,'shop:convenience':10,plaza:10,spa:13,spa2:14,dome:14,capsule:12,skywalk:12,cablecar:13,wall:12,hotel:12,market:10,theatre:12,perfume:11,pond:14};
 const camAngle=(day,k)=>-.7+trails[day].stopU[k]*1.1;
-function buildProps(day){ const d=DAYS[day], t=trails[day]; return d.items.map((it,k)=>{ const p=A.placeOf(it), type=p.landmark||(it.kind==='food'?'shop:noodle':'hotel'), g=makeLandmark(type);
-  const pos=t.stops[k], a0=camAngle(day,k), D=LM_DEPTH[type]||11; g.position.set(pos.x-Math.sin(a0)*D,0,pos.z-Math.cos(a0)*D); g.rotation.y=a0;
+function buildProps(day){ const d=DAYS[day], t=trails[day]; return d.items.map((it,k)=>{ const p=A.placeOf(it), type=p.landmark||(it.kind==='food'?'shop:noodle':'hotel'), g=makeLandmark(type,p);
+  const pos=t.stops[k], a0=camAngle(day,k), D=g.userData.visual?13:(LM_DEPTH[type]||11); g.position.set(pos.x-Math.sin(a0)*D,0,pos.z-Math.cos(a0)*D); g.rotation.y=a0;
   g.userData.fx=p.fx||null; g.userData.stopPos=pos.clone(); g.userData.h=new THREE.Box3().setFromObject(g).getSize(new THREE.Vector3()).y; g.visible=false; scene.add(g); return g; }); }
 for(let i=0;i<DAYS.length;i++) props[i]=[];
-function disposeGroup(g){ scene.remove(g); g.traverse(c=>{ if(c.isMesh&&c.geometry&&!c.isInstancedMesh){ try{ c.geometry.dispose(); }catch(e){} } }); }
+function disposeGroup(g){ scene.remove(g); if(g.userData.dispose) g.userData.dispose(); g.traverse(c=>{ if(c.isMesh&&c.geometry&&!c.isInstancedMesh&&!c.geometry.userData.shared){ try{ c.geometry.dispose(); }catch(e){} } }); }
 function ensureProps(day){ if(day<0||day>=DAYS.length) return; if(!props[day].length) props[day]=buildProps(day);
   const keep=lowEnd?1:2; props.forEach((list,i)=>{ if(list.length&&Math.abs(i-day)>keep){ list.forEach(disposeGroup); props[i]=[]; } }); }
 function rebuildProps(day){ props[day].forEach(disposeGroup); props[day]=buildProps(day); showProps(activeDay,activeStop); }
 /* only the active day's landmarks exist on screen; neighbours that would overlap the current one are hidden */
-function showProps(day,stop){ props.forEach((list,i)=>list.forEach((g,k)=>{ let vis=i===day; if(vis&&stop>=0&&k!==stop){ const cur=list[stop]; if(g.position.distanceTo(cur.position)<34||g.userData.stopPos.distanceTo(cur.userData.stopPos)<26) vis=false; } g.visible=vis; })); }
+function showProps(day,stop){ props.forEach((list,i)=>list.forEach((g,k)=>{ let vis=i===day; if(VISUAL_REVIEW&&stop>=0) vis=vis&&k===stop; if(vis&&stop>=0&&k!==stop){ const cur=list[stop]; if(g.position.distanceTo(cur.position)<34||g.userData.stopPos.distanceTo(cur.userData.stopPos)<26) vis=false; } g.visible=vis; })); }
 function animateProps(dt,t){ const list=activeDay>=0?props[activeDay]:[]; list.forEach(g=>{ const u=g.userData; const boost=u.pokeT!=null&&(u.lt||0)-u.pokeT<9?3.2:1; u.lt=(u.lt||0)+dt*boost; if(u.anim) u.anim.forEach(fn=>fn(dt*boost,u.lt));
   if(u.bounceT!=null){ u.bounceT+=dt; const b=u.bounceT, sy=1+Math.sin(b*14)*Math.exp(-b*4)*.07; g.scale.set(1-(sy-1)*.5,sy,1-(sy-1)*.5); if(b>1.6){ g.scale.set(1,1,1); delete u.bounceT; } }
   u.hov=(u.hov||0)+(((hoverG===g)?1:0)-(u.hov||0))*Math.min(1,dt*6); if(u.occlHold==null) g.position.y=u.hov*.35;
@@ -2897,16 +2923,17 @@ const V=(x,y,z)=>new THREE.Vector3(x,y,z), camPos=V(0,900,900), look=V(0,0,0), w
 let occlLift=0, occlFrame=0; const ray=new THREE.Raycaster(); ray.camera=cam;
 function spring(pos,vel,target,omega,dt){ const z=2*omega; tmp.copy(target).sub(pos).multiplyScalar(omega*omega*dt); vel.add(tmp); vel.multiplyScalar(Math.max(0,1-z*dt)); pos.addScaledVector(vel,dt); }
 /* anything standing between the camera and the couple sinks down smoothly, then rises back */
-function occlusion(dt){ occlFrame++; const blocked=new Set();
+function activeVisual(){ return visualAfter&&camMode==='follow'&&arrived&&!travel&&!quizOn&&activeDay>=0&&activeStop>=0&&props[activeDay][activeStop]?.userData.visual; }
+function occlusion(dt){ if(activeVisual()){occlLift=0;return;} occlFrame++; const blocked=new Set();
   if(camMode==='follow'&&occlFrame%2===0){ const from=couple.position.clone(); from.y+=2.2; const dir=camPos.clone().sub(from); const dist=dir.length(); dir.normalize(); ray.set(from,dir); ray.near=1; ray.far=Math.max(2,dist-3);
     cityMeshes.forEach(m=>{ ray.intersectObject(m,false).forEach(h=>{ if(h.instanceId!=null) blocked.add(m.id+':'+h.instanceId); }); });
-    if(activeDay>=0) props[activeDay].forEach(g=>{ if(g.visible&&ray.intersectObject(g,true).length) blocked.add('p:'+g.id); }); }
+    if(activeDay>=0) props[activeDay].forEach(g=>{ if(g.visible&&!g.userData.visual&&ray.intersectObject(g,true).length) blocked.add('p:'+g.id); }); }
   const anyBlocked=blocked.size>0; occlLift+=((anyBlocked?8:0)-occlLift)*Math.min(1,dt*2);
   cityMeshes.forEach(m=>{ const oc=m.userData.occl; blocked.forEach(k=>{ if(k.startsWith(m.id+':')){ const id=+k.split(':')[1]; if(!oc.has(id)) oc.set(id,{f:1,hold:0}); oc.get(id).hold=.6; } });
     if(!oc.size) return; const mm=new THREE.Matrix4(), q=new THREE.Quaternion(); let dirty=false;
     oc.forEach((o,id)=>{ o.hold-=dt; const target=o.hold>0?.08:1; const nf=o.f+(target-o.f)*Math.min(1,dt*(target<o.f?6:2.5)); if(Math.abs(nf-o.f)>1e-4||nf<1){ o.f=nf; const it=m.userData.items[id]; mm.compose(new THREE.Vector3(it.x,-(it.h+.3)*(1-nf),it.z),q,new THREE.Vector3(it.w,it.h,it.d)); m.setMatrixAt(id,mm); dirty=true; } if(o.hold<=0&&nf>.999) oc.delete(id); });
     if(dirty) m.instanceMatrix.needsUpdate=true; });
-  props.forEach(list=>list.forEach(g=>{ const u=g.userData; const hit=blocked.has('p:'+g.id); if(hit) u.occlHold=.6; if(u.occlHold==null) return; u.occlHold-=dt; const target=u.occlHold>0?.12:1; u.occlF=(u.occlF==null?1:u.occlF)+(target-(u.occlF==null?1:u.occlF))*Math.min(1,dt*(target<1?6:2.5)); g.position.y=-(u.h+.5)*(1-u.occlF); if(u.occlHold<=0&&u.occlF>.999){ g.position.y=0; delete u.occlHold; delete u.occlF; } })); }
+  props.forEach(list=>list.forEach(g=>{ const u=g.userData; if(u.visual){g.position.y=0;delete u.occlHold;delete u.occlF;return;} const hit=blocked.has('p:'+g.id); if(hit) u.occlHold=.6; if(u.occlHold==null) return; u.occlHold-=dt; const target=u.occlHold>0?.12:1; u.occlF=(u.occlF==null?1:u.occlF)+(target-(u.occlF==null?1:u.occlF))*Math.min(1,dt*(target<1?6:2.5)); g.position.y=-(u.h+.5)*(1-u.occlF); if(u.occlHold<=0&&u.occlF>.999){ g.position.y=0; delete u.occlHold; delete u.occlF; } })); }
 let fogWant=.0007, yaw=0, phase=0, appear=1, camMode='start', activeDay=-1, activeStop=-1, moveT=0, arrived=true;
 let travel=null; // {day,fromU,toU,t,dur}
 const mid=V((CITY.Seoul.ox+CITY.Busan.ox)/2,0,(CITY.Seoul.oz+CITY.Busan.oz)/2);
@@ -2915,7 +2942,7 @@ function placeCouple(day,stop){ const t=trails[day]; couple.position.copy(t.curv
 let vOff=0;
 const panelUp=()=>document.getElementById('sheet').classList.contains('show')||document.getElementById('daycard').classList.contains('show')||!!document.querySelector('.quiz.show');
 function resize(){ const w=innerWidth,h=innerHeight; renderer.setSize(w,h); cam.aspect=w/h;
-  if(mobileQ.matches){ vOff=h*(panelUp()?.26:.04); cam.setViewOffset(w,h,0,vOff,w,h); } else cam.setViewOffset(w,h,w*.17,0,w,h); cam.updateProjectionMatrix(); if(typeof pMat!=='undefined') pMat.uniforms.uScale.value=h; }
+  if(VISUAL_REVIEW){ cam.clearViewOffset(); } else if(mobileQ.matches){ vOff=h*(panelUp()?.26:.04); cam.setViewOffset(w,h,0,vOff,w,h); } else cam.setViewOffset(w,h,w*.17,0,w,h); cam.updateProjectionMatrix(); if(typeof pMat!=='undefined') pMat.uniforms.uScale.value=h; }
 addEventListener('resize',resize); resize();
 
 A.on('move',m=>{
@@ -2939,7 +2966,7 @@ A.on('choice',({day,stop})=>{ const wasA=trailMats[day].uniforms.uAlpha.value, w
   if(activeDay===day&&activeStop===stop&&!travel){ placeCouple(day,stop); appear=0; const nxt=stop+1<trails[day].stops.length?trails[day].stops[stop+1]:null; pin.visible=!!nxt; if(nxt) pin.position.copy(nxt); }
   else if(activeDay===day&&activeStop===stop-1&&!travel){ const nxt=trails[day].stops[stop]; pin.position.copy(nxt); }
   if(activeDay===day&&activeStop===stop&&props[day][stop]){ const pg=props[day][stop]; startFx(pg.userData.fx,pg.position); } });
-A.on('arrive',()=>{ arrived=true; const it=activeDay>=0&&activeStop>=0?DAYS[activeDay].items[activeStop]:null; gestKind=it?(it.kind||'sight'):'sight'; arriveScript(); });
+A.on('arrive',()=>{ arrived=true; const it=activeDay>=0&&activeStop>=0?DAYS[activeDay].items[activeStop]:null; gestKind=it?(it.kind||'sight'):'sight';if(!VISUAL_REVIEW)arriveScript(); });
 let celebT=0, quizOn=false, quizOrbit=0, finaleT=0, finaleCue=[], interT=0, interCue=[];
 /* together: the other phone pokes us, we're at the same place, a 가위바위보 result */
 let togetherOn=false, togetherT=0;
@@ -2991,15 +3018,15 @@ A.on('theme',(dark,force)=>{ themeForce=force||null; pMat.blending=dark?THREE.Ad
 A.on('move',m=>{ envHour=hourOf(m.day,m.stop); if(m.kind==='start'||m.kind==='intro') envHour=13; });
 
 /* sky dome */
-const skyMat=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,fog:false,uniforms:{uZen:{value:envCur.zen},uHor:{value:envCur.hor},uSun:{value:sunDir},uMoon:{value:moonDir},uSunC:{value:envCur.sunC},uNight:{value:0}},
+const skyMat=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,fog:false,uniforms:{uZen:{value:envCur.zen},uHor:{value:envCur.hor},uSun:{value:sunDir},uMoon:{value:moonDir},uSunC:{value:envCur.sunC},uNight:{value:0},uReview:{value:false}},
   vertexShader:`varying vec3 vD; void main(){ vD=normalize(position); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
-  fragmentShader:`uniform vec3 uZen,uHor,uSun,uMoon,uSunC; uniform float uNight; varying vec3 vD;
+  fragmentShader:`uniform vec3 uZen,uHor,uSun,uMoon,uSunC; uniform float uNight; uniform bool uReview; varying vec3 vD;
     float h31(vec3 p){ p=fract(p*vec3(443.897,441.423,437.195)); p+=dot(p,p.yzx+19.19); return fract((p.x+p.y)*p.z); }
     void main(){ vec3 d=normalize(vD); float y=max(d.y,0.0); vec3 col=mix(uHor,uZen,pow(y,0.55));
       float sd=max(dot(d,uSun),0.0); col+=uSunC*(pow(sd,180.0)*1.2+pow(sd,6.0)*0.25*(1.0-uNight));
       float md=max(dot(d,uMoon),0.0); col+=vec3(0.95,0.96,1.0)*pow(md,900.0)*uNight*1.6+vec3(.6,.65,.9)*pow(md,30.0)*uNight*.25;
       vec3 cell=floor(d*140.0); float st=step(0.9975,h31(cell))*uNight*(0.5+0.5*sin(h31(cell+1.0)*60.0+h31(cell)*7.0)); col+=vec3(st)*smoothstep(0.02,0.25,d.y);
-      gl_FragColor=vec4(col,1.0); }`});
+      if(uReview) col=mix(col*12.92,1.055*pow(max(col,vec3(0.)),vec3(.4166667))-.055,step(vec3(.0031308),col)); gl_FragColor=vec4(col,1.0); }`});
 const sky=new THREE.Mesh(new THREE.SphereGeometry(3800,32,16),skyMat); sky.renderOrder=-10; sky.frustumCulled=false; scene.add(sky);
 /* clouds */
 const cloudTex=(()=>{ const c=document.createElement('canvas'); c.width=256; c.height=128; const x=c.getContext('2d'); for(let i=0;i<7;i++){ const g=x.createRadialGradient(40+i*28,70+Math.sin(i)*14,2,40+i*28,70+Math.sin(i)*14,34+((i*7)%15)); g.addColorStop(0,'rgba(255,255,255,.9)'); g.addColorStop(1,'rgba(255,255,255,0)'); x.fillStyle=g; x.fillRect(0,0,256,128); } return new THREE.CanvasTexture(c); })();
@@ -3100,7 +3127,12 @@ function svLife(dt,t){ const on=lifeAmt>.01, cp=couple.position;
 let parX=0, parY=0, parTX=0, parTY=0; if(!mobileQ.matches) addEventListener('pointermove',e=>{ parTX=(e.clientX/innerWidth-.5)*2; parTY=(e.clientY/innerHeight-.5)*2; },{passive:true});
 
 function updateEnv(dt,t){
-  envTargets(); applyOvercast(); const k=Math.min(1,dt*1.3); for(const c of ENVC) envCur[c].lerp(envTgt[c],k); for(const n of ENVN) envCur[n]+=(envTgt[n]-envCur[n])*k;
+  envTargets(); applyOvercast();
+  const visual=activeVisual();
+  if(visual){envTgt.zen.setHex(visual.sky.zen);envTgt.hor.setHex(visual.sky.hor);envTgt.bg.setHex(visual.sky.hor);
+    envTgt.sunC.setHex(visual.light.sun);envTgt.hemiS.setHex(0xc7dcdf);envTgt.hemiG.setHex(0x8a7a61);
+    envTgt.hemiI=visual.light.ambient;envTgt.sunI=visual.light.key;envTgt.night=visual.light.night||0;}
+  const k=Math.min(1,dt*1.3); for(const c of ENVC) envCur[c].lerp(envTgt[c],k); for(const n of ENVN) envCur[n]+=(envTgt[n]-envCur[n])*k;
   const night=envCur.night; BG.copy(envCur.bg); scene.fog.color.copy(envCur.bg);
   groundMat.uniforms.uLand.value.copy(envCur.land); groundMat.uniforms.uWater.value.copy(envCur.water); groundMat.uniforms.uLine.value.copy(envCur.line); groundMat.uniforms.uWave.value.copy(envCur.wave); groundMat.uniforms.uPark.value.copy(envCur.land).lerp(PARK_C,.55*(1-.78*envCur.night)); plazaI.material.color.copy(envCur.land).lerp(envCur.line,.45);
   cityMats.forEach(m=>{ m.uniforms.uClayLo.value.copy(envCur.lo); m.uniforms.uClayHi.value.copy(envCur.hi); m.uniforms.uSoft.value.copy(envCur.soft); });
@@ -3109,8 +3141,9 @@ function updateEnv(dt,t){
   PM.gold.emissiveIntensity=.2+.7*night; PM.white.emissiveIntensity=.12*night; bulbI.material.emissiveIntensity=.15+1.1*night; svNight(night); cars.forEach(c=>c.userData.hl.forEach(l=>l.material.emissiveIntensity=.2+1.2*night));
   hemi.color.copy(envCur.hemiS); hemi.groundColor.copy(envCur.hemiG); hemi.intensity=envCur.hemiI; sun.color.copy(envCur.sunC); sun.intensity=envCur.sunI; shadowPlane.material.opacity=.14+.16*night; leafBase=.85-.7*night;
   const hh=camMode==='interlude'?14.2+Math.min(1,interT/24)*3.1:camMode==='finale'?17.15+Math.min(1,finaleT/26)*4.6:(camMode==='start'||camMode==='pick')?17.15:themeForce==='dark'?21:themeForce==='light'?13:envHour; sunDirFor(hh); if(night>.6) sunDir.lerp(moonDir,(night-.6)/.4);
+  if(visual) sunDir.set(.38,.65,.85).applyAxisAngle(new THREE.Vector3(0,1,0),props[activeDay][activeStop].rotation.y).normalize();
   placeSun(); shadowPlane.position.set(couple.position.x,.06,couple.position.z);
-  skyMat.uniforms.uNight.value=night; sky.position.copy(camPos);
+  skyMat.uniforms.uReview.value=!!visual;skyMat.uniforms.uNight.value=night; sky.position.copy(camPos);
   clouds.forEach((s,i)=>{ const u=s.userData; u.ox+=dt*u.sp; if(u.ox>280) u.ox=-280; s.position.set(camPos.x+u.ox,u.y,camPos.z+u.oz); s.material.opacity=(.5-.3*night)*(camMode==='follow'?1:.7); });
   // street + life
   if(streetDay!==activeDay) buildStreet(activeDay);
@@ -3381,7 +3414,7 @@ function flyProp(obj,from,to,dur,spin,onLand){ obj.visible=true; obj.position.co
 function updateProp(dt){ if(!propFly) return; const p=propFly; p.t+=dt; const f=Math.min(1,p.t/p.dur), e=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2; p.obj.position.lerpVectors(p.from,p.to,e); p.obj.position.y+=Math.sin(f*Math.PI)*1.1; p.obj.rotation.y+=dt*p.spin; p.obj.rotation.x+=dt*p.spin*.6;
   if(f>=1){ const land=p.onLand; propFly=null; if(land) land(p.obj); } }
 const fwd=()=>new THREE.Vector3(Math.sin(yaw),0,Math.cos(yaw));
-A.on('moment',m=>{ if(camMode!=='follow'||travel||!arrived) return; gestQueue=[]; const c=couple.position, fw=fwd(); momentCam=1; zoomT=.86; pitchT=.12;
+A.on('moment',m=>{ if(VISUAL_REVIEW||camMode!=='follow'||travel||!arrived) return; gestQueue=[]; const c=couple.position, fw=fwd(); momentCam=1; zoomT=.86; pitchT=.12;
   /* hearts only at the genuinely romantic places (m.r); elsewhere keep the gestures tender rather than cheeky */
   const hb=(sc,d)=>{ if(m.r) setTimeout(()=>{ if(arrived) sparkleBurst(c,[[1,.85,.9],[1,1,1],[1,.9,.75]],14,2.4); },d); }; const soft=g=>m.r?g:(g==='kiss'?'forehead':g==='dip'?'hug':g); const setG=g=>setGesture(soft(g)); const Q=(...g)=>{ gestQueue=g.map(soft); };
   switch(m.k){
@@ -3503,7 +3536,14 @@ function frame(){
     want.set(p.x+Math.sin(a)*r*zoom,p.y+h*zoom*(1+pitch),p.z+Math.cos(a)*r*zoom); wantLook.set(p.x,p.y+1.5+((mobile?6:9)-1.5)*lift+stand*(mobile?2.6:1.8),p.z); fogWant=flying?.0006:(stand?.0009:.0014);
     if(quizOn&&activeDay>=0&&activeStop>=0&&props[activeDay][activeStop]){ const pg=props[activeDay][activeStop]; const lh=Math.min(16,pg.userData.h||6); const mid=pg.position.clone().lerp(p,.5); const rq=(mobile?34:40)+lh*1.3; want.set(mid.x+Math.sin(a)*rq,(mobile?14:20)+lh*.6,mid.z+Math.cos(a)*rq); wantLook.set(mid.x,lh*.35+1,mid.z); if(!mobile){ const sx=Math.cos(a)*rq*.55, sz=-Math.sin(a)*rq*.55; want.x-=sx; want.z-=sz; wantLook.x-=sx; wantLook.z-=sz; } }
     if(travel){ const sp=Math.min(1,vel/40); want.y+=sp*(mobile?60:40); } }
-  const dist=camPos.distanceTo(want); want.y+=(camMode==='start'||camMode==='pick'||camMode==='finale'||camMode==='interlude'?0:Math.min(dist*.45,340))+(camMode==='follow'?occlLift:0);
+  const visual=activeVisual();
+  if(visual){ const pg=props[activeDay][activeStop]; pg.updateMatrixWorld(true);
+    const target=new THREE.Vector3(...visual.target), relative=new THREE.Vector3(...visual.camera).sub(target);
+    relative.applyAxisAngle(new THREE.Vector3(0,1,0),orbit); relative.multiplyScalar(zoom*(mobile?1.25:1)); relative.y*=1+pitch;
+    /* the authored framing is for the architecture; on phones keep the couple readable too: pull the target towards them, come a little closer and lower */
+    const cw=pg.worldToLocal(couple.position.clone()); const bias=mobile?.35:.15; const tgt=target.clone().lerp(new THREE.Vector3(cw.x,cw.y+1.6,cw.z),bias); relative.multiplyScalar(mobile?.86:.95); relative.y*=mobile?.9:1;
+    want.copy(pg.localToWorld(relative.add(tgt.clone())));wantLook.copy(pg.localToWorld(tgt));fogWant=.0007; }
+  const dist=camPos.distanceTo(want); want.y+=visual?0:((camMode==='start'||camMode==='pick'||camMode==='finale'||camMode==='interlude'?0:Math.min(dist*.45,340))+(camMode==='follow'?occlLift:0));
   if(dist>2500&&camMode!=='start'&&camMode!=='pick'){ camPos.copy(want); camPos.y+=70; look.copy(wantLook); camVel.set(0,0,0); lookVel.set(0,0,0); } // leaving the welcome hill: drop in from above instead of a 4 km flight through empty sky
   spring(camPos,camVel,want,travel?3.0:(camMode==='finale'||camMode==='interlude'?1.1:2.1),dt); spring(look,lookVel,wantLook,travel?3.4:(camMode==='finale'||camMode==='interlude'?1.3:2.6),dt); cam.position.copy(camPos); cam.lookAt(look); if(camMode==='follow'){ const right=new THREE.Vector3().crossVectors(cam.getWorldDirection(tmp),cam.up).normalize(); cam.position.addScaledVector(right,parX*1.6); cam.position.y-=parY*1.0; cam.lookAt(look); } occlusion(dt);
   scene.fog.density+=(fogWant-scene.fog.density)*Math.min(1,dt*2);
@@ -3516,10 +3556,39 @@ function frame(){
       if(Math.abs(P[j]-cx)>90) P[j]=cx-(P[j]-cx)*.9; if(Math.abs(P[j+2]-cz)>90) P[j+2]=cz-(P[j+2]-cz)*.9; }
     leafGeo.attributes.position.needsUpdate=true; leaves.material.opacity=camMode==='follow'?leafBase:.3; }
   updateEnv(dt,t);
-  if(mobile){ /* phone: slide the view so the couple sits above whatever card is on screen (sheet, finale/interlude caption) */ const want=innerHeight*(camMode==='follow'?(panelUp()?.26:.04):camMode==='finale'?.24:camMode==='interlude'?.18:.04); if(Math.abs(want-vOff)>.5){ vOff+=(want-vOff)*Math.min(1,dt*3.5); cam.setViewOffset(innerWidth,innerHeight,0,vOff,innerWidth,innerHeight); cam.updateProjectionMatrix(); } }
+  if(mobile&&!VISUAL_REVIEW){ /* phone: slide the view so the couple sits above whatever card is on screen (sheet, finale/interlude caption) */ const want=innerHeight*(camMode==='follow'?(panelUp()?.26:.04):camMode==='finale'?.24:camMode==='interlude'?.18:.04); if(Math.abs(want-vOff)>.5){ vOff+=(want-vOff)*Math.min(1,dt*3.5); cam.setViewOffset(innerWidth,innerHeight,0,vOff,innerWidth,innerHeight); cam.updateProjectionMatrix(); } }
+  const detailed=!!activeVisual();
+  ground.visible=!detailed;cityMeshes.forEach(m=>m.visible=!detailed);SV.forEach(m=>m.visible=!detailed);
+  if(detailed){[...peds,...cars,...cyclists,...pigeons,...svBirds,...clouds].forEach(m=>m.visible=false);leaves.visible=false;}
+  else { leaves.visible=true; clouds.forEach(m=>m.visible=true); }
+  /* the per-stop stage (textured ground, set dressing, backdrop) belongs to the generic world — the authored place scenes bring their own */
+  stages.forEach(list=>list.forEach(g=>{ if(g&&g.visible&&detailed) g.visible=false; }));
+  showProps(activeDay,activeStop);
+  props.forEach((list,i)=>list.forEach((g,k)=>{if(detailed)g.visible=i===activeDay&&k===activeStop;else if(g.userData.visual&&!VISUAL_REVIEW&&!arrived)g.visible=false;}));
+  trailMeshes.forEach(m=>m.visible=!VISUAL_REVIEW&&!detailed);markers.flat().forEach(m=>m.visible=!VISUAL_REVIEW&&!detailed);
+  if(VISUAL_REVIEW||detailed)pin.visible=false;
+  if(VISUAL_REVIEW&&detailed)rain.visible=false;
+  if(detailed&&activeVisual().indoors){rain.visible=false;fall.visible=false;umbrella.visible=false;}
   renderer.render(scene,cam);
 }
+if(VISUAL_REVIEW){
+  A.on('move',m=>{if(m.stop<0)return;travel=null;appear=1;arrived=true;orbit=orbitT=0;pitch=pitchT=0;zoom=zoomT=1;
+    yaw=camAngle(m.day,m.stop)+Math.PI;couple.rotation.y=yaw;setGesture('hands');gestQueue=[];gestNext=7;startFx(null,fxCenter);A.arrive();
+    const pg=props[m.day][m.stop],visual=pg?.userData.visual;
+    if(visual){pg.updateMatrixWorld(true);camPos.copy(pg.localToWorld(new THREE.Vector3(...visual.camera)));look.copy(pg.localToWorld(new THREE.Vector3(...visual.target)));}
+    else {const a=camAngle(m.day,m.stop),p=couple.position;camPos.set(p.x+Math.sin(a)*30,p.y+24,p.z+Math.cos(a)*30);look.set(p.x,p.y+1.5,p.z);}
+    yaw=Math.atan2(camPos.x-couple.position.x,camPos.z-couple.position.z);camVel.set(0,0,0);lookVel.set(0,0,0);updateEnv(1,performance.now()/1000);});
+  addEventListener('message',e=>{
+    if(e.origin!==location.origin||e.source!==parent||e.data?.type!=='korea-preview') return;
+    const valid=!!PLACE_SCENES[e.data.stop];if(!valid)return;
+    const changed=visualAfter!==!!e.data.after;visualAfter=!!e.data.after;
+    if(changed)props.forEach((list,i)=>{list.forEach(disposeGroup);props[i]=[];});
+    A.previewSelect(e.data.stop);
+    parent.postMessage({type:'korea-preview-selected',stop:e.data.stop,after:visualAfter},location.origin);
+  });
+}
 A.boot();
+if(VISUAL_REVIEW){A.previewSelect('d2s1a');parent.postMessage({type:'korea-preview-ready'},location.origin);}
 frame();
 }catch(e){ console.error('3D failed',e); A.dbgLog&&A.dbgLog('3D failed: '+(e&&e.message||e)); document.documentElement.classList.add('no3d'); if(!A.booted) A.boot(); }
 </script>

@@ -1,5 +1,7 @@
 # Seoul ⇄ Busan · a journey for two
 
+**Version 1.1** — twenty authored place scenes (external visual patch) merged: fade in/out on arrival, phone-aware framing that keeps the couple readable, clouds/stage handled, review gallery kept offline from live sync.
+
 **Version 1.0** — shared with Киця 💗. Set-dressing keeps a clear corridor between camera and couple (no more props in front of their faces), Common Ground sign fixed, umbrella held above both heads, shared data reset for a fresh start.
 
 **Version 0.3** — Explore more places (찜): 20 extra Seoul + 5 Busan ideas with the catch, fit, cost and route; auto-shown once per session when each city's trail is done; marks sync between phones and appear in the summary, itinerary and My Maps export.
@@ -50,6 +52,10 @@ After the last stop (→ at the airport, the ✨ pill, or ♥ → *Roll the cred
 ### Hello, Busan (interlude)
 
 The first time the trail reaches a Busan place (the KTX on day 6) the app cuts to a camellia cliff above Gwangalli: the sea shader slides from azure to gold, the Gwangan bridge cycles its lamp colours, gulls and sailboats drift by, and **Hello, Busan.** builds up word by word. *Step off the train →* carries on to the stop you were heading for. It plays once per session; the 🌊 button on any Busan day card replays it.
+
+### Place scenes
+
+Twenty stops have hand-built, place-specific Three.js scenes (`place-scenes.js`, listed in `VISUAL-SCENES.md`): Gyeongbokgung's courtyard, N Seoul Tower, Myeongdong, Bukchon, Seoul Forest, Seongsu, Gwangalli at night, the Sky Capsule, Haedong Yonggungsa, Gamcheon, Cheonggyecheon, Banpo, Common Ground, Seokchon Lake, Seoul Sky, Jagalchi, Huinnyeoul, Naksan, DDP and the Secret Garden. When the couple arrives at one of them the generic world fades out and the scene takes over, with its own sky and light; the Before/After gallery is at `/visual-review/`, and `?visual-before=1` shows the generic models in the normal trip.
 
 ### Stages
 
