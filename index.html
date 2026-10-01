@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f5f6fa">
-<meta name="build" content="20261001-130310">
+<meta name="build" content="20261001-131310">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
@@ -1569,7 +1569,7 @@ const A=window.APP, DAYS=A.days, stage=document.getElementById('stage');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches, mobileQ=matchMedia('(max-width: 899px)');
 const lowEnd=mobileQ.matches||(navigator.hardwareConcurrency||8)<=4;
 let renderer; try{ renderer=new THREE.WebGLRenderer({antialias:!lowEnd,powerPreference:lowEnd?'default':'high-performance',stencil:false,alpha:false,failIfMajorPerformanceCaveat:false}); }catch(e){ document.documentElement.classList.add('no3d'); A.dbgLog&&A.dbgLog('WebGL unavailable: '+e.message); throw e; }
-A.driven=true; A.dbgLog&&A.dbgLog('WebGL ok · lowEnd='+lowEnd+' · dpr='+devicePixelRatio);
+A.driven=true; document.documentElement.classList.remove('no3d'); /* the 7 s watchdog may have flagged us on a slow network / background tab */ A.dbgLog&&A.dbgLog('WebGL ok · lowEnd='+lowEnd+' · dpr='+devicePixelRatio);
 renderer.domElement.addEventListener('webglcontextlost',e=>{ e.preventDefault(); document.documentElement.classList.add('no3d'); A.dbgLog&&A.dbgLog('WebGL context lost'); },false);
 renderer.domElement.addEventListener('webglcontextrestored',()=>{ document.documentElement.classList.remove('no3d'); A.dbgLog&&A.dbgLog('WebGL context restored'); },false);
 renderer.setPixelRatio(Math.min(devicePixelRatio,lowEnd?1.5:1.75)); renderer.toneMapping=THREE.NoToneMapping; stage.appendChild(renderer.domElement);
@@ -2601,6 +2601,7 @@ function frame(){
     if(quizOn&&activeDay>=0&&activeStop>=0&&props[activeDay][activeStop]){ const pg=props[activeDay][activeStop]; const lh=Math.min(16,pg.userData.h||6); const mid=pg.position.clone().lerp(p,.5); const rq=(mobile?34:40)+lh*1.3; want.set(mid.x+Math.sin(a)*rq,(mobile?14:20)+lh*.6,mid.z+Math.cos(a)*rq); wantLook.set(mid.x,lh*.35+1,mid.z); if(!mobile){ const sx=Math.cos(a)*rq*.55, sz=-Math.sin(a)*rq*.55; want.x-=sx; want.z-=sz; wantLook.x-=sx; wantLook.z-=sz; } }
     if(travel){ const sp=Math.min(1,vel/40); want.y+=sp*(mobile?60:40); } }
   const dist=camPos.distanceTo(want); want.y+=(camMode==='start'||camMode==='pick'?0:Math.min(dist*.45,340))+(camMode==='follow'?occlLift:0);
+  if(dist>2500&&camMode!=='start'&&camMode!=='pick'){ camPos.copy(want); camPos.y+=70; look.copy(wantLook); camVel.set(0,0,0); lookVel.set(0,0,0); } // leaving the welcome hill: drop in from above instead of a 4 km flight through empty sky
   spring(camPos,camVel,want,travel?3.0:2.1,dt); spring(look,lookVel,wantLook,travel?3.4:2.6,dt); cam.position.copy(camPos); cam.lookAt(look); if(camMode==='follow'){ const right=new THREE.Vector3().crossVectors(cam.getWorldDirection(tmp),cam.up).normalize(); cam.position.addScaledVector(right,parX*1.6); cam.position.y-=parY*1.0; cam.lookAt(look); } occlusion(dt);
   scene.fog.density+=(fogWant-scene.fog.density)*Math.min(1,dt*2);
   if(!arrived&&!travel&&camMode==='follow'&&performance.now()-moveT>700&&dist<6) A.arrive();
