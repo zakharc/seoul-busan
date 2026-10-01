@@ -11,7 +11,9 @@ days = json.load(open(os.path.join(DATA, "days-a.json"))) + json.load(open(os.pa
 commutes = json.load(open(os.path.join(DATA, "commutes.json")))
 quiz = json.load(open(os.path.join(DATA, "quiz.json")))
 for i, q in enumerate(quiz): q["id"] = f"q{i}"
-trip = dict(meta, days=days, commutes=commutes, quiz=quiz)
+explore_path = os.path.join(DATA, "explore.json")
+explore = json.load(open(explore_path)) if os.path.exists(explore_path) else []
+trip = dict(meta, days=days, commutes=commutes, quiz=quiz, explore=explore)
 
 # ---- inject into index.html
 idx_path = os.path.join(ROOT, "index.html")
@@ -51,7 +53,7 @@ out = ['<?xml version="1.0" encoding="UTF-8"?>', '<kml xmlns="http://www.opengis
 for city, col in COL.items():
     out.append(f'<Style id="{city}"><IconStyle><color>{col}</color><scale>1.1</scale><Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>')
     out.append(f'<Style id="{city}-opt"><IconStyle><color>{col}</color><scale>0.9</scale><Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon></IconStyle></Style>')
-    out.append(f'<Style id="{city}-food"><IconStyle><color>ff17 9a d5</color><scale>0.9</scale><Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon></IconStyle></Style>'.replace(" ", ""))
+    out.append(f'<Style id="{city}-food"><IconStyle><color>ff179ad5</color><scale>0.9</scale><Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon></IconStyle></Style>')
 out.append('<Style id="hotel"><IconStyle><color>ff2a2a2a</color><scale>1.2</scale><Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-stars.png</href></Icon></IconStyle></Style>')
 
 def placemark(p, name, style, desc):
@@ -86,6 +88,25 @@ for st in stays:
                 if p.get("ko"): desc.append(f'Naver: {esc(p["ko"])}')
                 out.append(placemark(p, name, style, "<br>".join(desc)))
     out.append("</Folder>")
+# ---- more ideas, not in the plan (the explore pages)
+if explore:
+    out.append('<Style id="idea"><IconStyle><color>ff2f3bd2</color><scale>0.9</scale><Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-diamond.png</href></Icon></IconStyle></Style>')
+    EFF = {"easy": "Easy add-on", "half": "Half day", "day": "Day trip"}
+    for city in ("Seoul", "Busan"):
+        items = [p for p in explore if p["city"] == city]
+        if not items: continue
+        out.append(f'<Folder><name>More ideas · {city} (not in the plan yet)</name>')
+        for p in items:
+            go = p.get("go")
+            go_txt = go if isinstance(go, str) else (f'Taxi ≈{go["t"]} min from {hotels[go["h"]]["title"]}' if go else "")
+            desc = [f'<b>{esc(EFF.get(p.get("effort"), ""))}</b>', esc(p["cool"]), f'<b>The catch:</b> {esc(p["catch"])}', f'<b>Fits:</b> {esc(p["swap"])}']
+            if p.get("need"): desc.append(f'<b>Time:</b> {esc(p["need"])}')
+            if p.get("price"): desc.append(f'<b>Cost:</b> {esc(p["price"])}')
+            if go_txt: desc.append(f'<b>Getting there:</b> {esc(go_txt)}')
+            if p.get("metro"): desc.append(esc(p["metro"]))
+            if p.get("ko"): desc.append(f'Naver: {esc(p["ko"])}')
+            out.append(placemark(p, f'Idea · {p["title"]}', "idea", "<br>".join(desc)))
+        out.append("</Folder>")
 out.append("</Document></kml>")
 kml_path = os.path.join(ROOT, "seoul-busan-trip.kml")
 open(kml_path, "w", encoding="utf-8").write("\n".join(out))

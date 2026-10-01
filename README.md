@@ -1,5 +1,7 @@
 # Seoul ⇄ Busan · a journey for two
 
+**Version 0.3** — Explore more places (찜): 20 extra Seoul + 5 Busan ideas with the catch, fit, cost and route; auto-shown once per session when each city's trail is done; marks sync between phones and appear in the summary, itinerary and My Maps export.
+
 **Version 0.2** — visual direction pass: per-entry scene overrides (127), painted horizon backdrops with day/night cross-fade, neighbourhood kits (Myeongdong neon, Seongsu brick, hanok lanes, Gamcheon/Ihwa hill houses), real Hangul venue signs, the chosen dish at every meal, low three-quarter arrival camera, autumn welcome hill.
 
 **Version 0.1** — first complete release (Oct 2026): full 11-day trail, character pick, per-stop stages and moments, quiz, live two-phone sync, Busan interlude, finale.
@@ -38,6 +40,10 @@ In the app: ⋯ → **Sync between phones** → follow the 4 steps (free Firebas
 ### Finale
 
 After the last stop (→ at the airport, the ✨ pill, or ♥ → *Roll the credits*) the camera returns to the autumn hill from the welcome screen: golden hour slides into a starry night while the couple plays through their gestures, lanterns rise, a heart blooms, fireworks go up over Seoul, and the words build up to **An amazing trip is coming.**
+
+### Explore more places (찜)
+
+`data/explore.json` holds 20 extra Seoul places and 5 extra Busan places that are **not** in the plan — each with why it's great, the catch, where it could fit, time, cost and how to get there. The page opens by itself once per session after the last Seoul stop before the KTX (Sun 1 Nov) and after the last Busan stop (Wed 4 Nov), and any time from ⋯ → **Explore more places** or the summary page. Tap **찜** (or double-tap a photo) to mark a place; marks sync like hearts (`review/x-…/her|me`), show on the summary, in the illustrated itinerary and in the My Maps export. After editing places run `python3 tools/explore.py` (taxi/walk from the nearest hotel, OSRM, cached) and deploy.
 
 ### Hello, Busan (interlude)
 
