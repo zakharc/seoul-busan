@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f5f6fa">
-<meta name="build" content="20261001-092121">
+<meta name="build" content="20261001-092931">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Seoul ⇄ Busan · a journey for two</title>
@@ -72,7 +72,40 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:poin
 .start p.lede{color:#6e5a66}
 :root[data-theme="dark"] .start h1 em{color:#f0a8c0}:root[data-theme="dark"] .start .eyebrow{color:#f0a8c0}:root[data-theme="dark"] .start p.lede{color:#c9b8c2}
 .start .btn.primary{background:linear-gradient(135deg,#1b2140,#3a2a4a);box-shadow:0 14px 30px -14px rgba(60,30,60,.6)}
-.lede .short{display:none}
+.start .lede{max-width:380px}
+/* ---------- character pick ---------- */
+.pick{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;justify-content:space-between;padding:calc(var(--sat) + var(--top-h) + 10px) 20px calc(var(--sab) + 22px);pointer-events:none;opacity:0;transition:opacity .6s var(--ease)}
+.pick.show{opacity:1}
+.pick[hidden]{display:none}
+.pick>*{pointer-events:auto}
+.pick-top{text-align:center;transform:translateY(-14px);transition:transform .7s var(--ease)}
+.pick.show .pick-top{transform:none}
+.pick-top h2{font:800 clamp(30px,7vw,52px)/1 var(--display);letter-spacing:-.03em;margin:8px 0 6px;text-shadow:0 2px 24px rgba(251,228,236,.9)}
+.pick-top .eyebrow{color:#b06a86}
+.pick-sub{margin:0;color:#7a6473;font-size:14px}
+.pick-bottom{display:grid;gap:12px;max-width:560px;width:100%;margin:0 auto;transform:translateY(24px);transition:transform .7s var(--ease)}
+.pick.show .pick-bottom{transform:none}
+.pick-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pcard{position:relative;display:grid;justify-items:center;gap:4px;padding:16px 12px 14px;border-radius:22px;background:rgba(255,255,255,.72);border:1.5px solid rgba(255,255,255,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 18px 40px -24px rgba(90,40,70,.45);transition:transform .35s var(--ease),box-shadow .35s,border-color .35s,background .35s}
+.pcard .pav{font-size:26px;line-height:1}
+.pcard .pn{font:800 20px/1.1 var(--display);letter-spacing:-.01em}
+.pcard .pt{font:600 11.5px var(--body);letter-spacing:.06em;text-transform:uppercase;color:#8a7380}
+.pcard:hover{transform:translateY(-2px)}
+.pcard[aria-pressed="true"]{transform:translateY(-6px) scale(1.03);background:rgba(255,255,255,.95)}
+.pcard.her[aria-pressed="true"]{border-color:var(--rose);box-shadow:0 22px 44px -20px rgba(232,85,122,.7),0 0 0 4px rgba(232,85,122,.18)}
+.pcard.me[aria-pressed="true"]{border-color:var(--seoul);box-shadow:0 22px 44px -20px rgba(79,95,230,.7),0 0 0 4px rgba(79,95,230,.16)}
+.pcard[aria-pressed="true"]::after{content:"✓";position:absolute;top:-10px;right:-6px;width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;font:700 13px/26px var(--body);text-align:center;animation:popin .4s var(--ease)}
+.pcard.her[aria-pressed="true"]::after{background:var(--rose)}.pcard.me[aria-pressed="true"]::after{background:var(--seoul)}
+@keyframes popin{from{transform:scale(0)}}
+.pick-go{display:grid;grid-template-columns:1fr auto;gap:10px}
+.pick-go .btn.primary{background:linear-gradient(135deg,#1b2140,#3a2a4a);height:54px;font-size:16px}
+.pick-go .btn.primary:disabled{opacity:.55;transform:none;box-shadow:none;cursor:default}
+.pick.has .pick-go .btn.primary{animation:bump .5s var(--ease)}
+.btn.ghost{background:rgba(255,255,255,.6);border-color:rgba(255,255,255,.8)}
+:root[data-theme="dark"] .pcard{background:rgba(30,22,40,.7);border-color:rgba(255,255,255,.12)}
+:root[data-theme="dark"] .pcard[aria-pressed="true"]{background:rgba(40,30,52,.95)}
+:root[data-theme="dark"] .pick-sub,:root[data-theme="dark"] .pcard .pt{color:#c9b8c2}
+@media (min-width:900px){ .pick{padding:calc(var(--top-h) + 40px) 8vw 40px} .pick-top{text-align:left;max-width:460px} .pick-bottom{max-width:520px;margin:0 0 0 auto;margin-right:12vw} .pick-top h2{font-size:52px} }
 @media (max-width:899px){
   .lede .long{display:none}.lede .short{display:inline}
   .start h1{font-size:clamp(40px,10.5vw,64px)}
@@ -141,7 +174,7 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:poin
   .toast{bottom:auto;top:calc(var(--top-h) + var(--sat) + 60px);transform:translate(-50%,-10px)}
   .toast.show{transform:translate(-50%,0)}
   :root{--sheet-full:calc(100dvh - var(--bar-h) - var(--sab) - var(--top-h) - var(--sat) - 6px)}
-  .sheet{height:var(--sheet-h);transition:transform .65s var(--ease),height .5s var(--ease);will-change:transform,height}
+  .sheet{height:var(--sheet-h);transition:transform .65s var(--ease),height .5s var(--ease);will-change:transform,height;transform:translateY(calc(100% + var(--bar-h) + var(--sab) + 24px))}
   .sheet.show{transform:none}
   .sheet.show.full{height:var(--sheet-full)}
   .sheet.drag{transition:transform .65s var(--ease)}
@@ -541,15 +574,22 @@ dialog::backdrop{background:rgba(17,22,40,.35);backdrop-filter:blur(6px)}
   <div class="in">
     <p class="eyebrow">28 Oct — 7 Nov 2026 · eleven days · two cities</p>
     <h1>Seoul ⇄ Busan<em>a journey for two, one place at a time</em></h1>
-    <p class="lede"><span class="long">Palaces in hanbok, a river at sunset, a train to the sea, a capsule over the coast, a fortress wall at dusk. Tap through the trail with us — every stop has photos, prices, hours and the way to get there. Where there's a dashed card, pick the option you like best: press ♥ to make it yours — hearts and skips are saved, shared, and the route follows them.</span><span class="short">Palaces, a river at sunset, a train to the sea. Walk the trail stop by stop — tap ♥ on what you love and the route follows.</span></p>
+    <p class="lede">Eleven days, two cities, one trail — pick your character and walk it with me.</p>
     <div class="status" id="status"><i></i><span></span></div>
-    <div class="roles" id="roles" role="group" aria-label="Who is walking"></div>
-    <p class="hello" id="hello"></p>
     <div class="row">
       <button class="btn primary" id="cta-begin">Begin the journey <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-      <button class="btn" id="cta-book">Bookings</button>
-      <button class="btn" id="cta-share">Share</button>
     </div>
+  </div>
+</section>
+
+<section class="pick" id="pick" hidden aria-label="Pick your character">
+  <div class="pick-top"><p class="eyebrow">Player select</p><h2>Pick your character</h2><p class="pick-sub">Tap a figure or a card. Your hearts and skips are saved under that name.</p></div>
+  <div class="pick-bottom">
+    <div class="pick-cards">
+      <button class="pcard her" data-r="her" aria-pressed="false"><span class="pav">💗</span><span class="pn">Киця</span><span class="pt">picks the favourites</span></button>
+      <button class="pcard me" data-r="me" aria-pressed="false"><span class="pav">🧭</span><span class="pn">Mykola</span><span class="pt">plans the trail</span></button>
+    </div>
+    <div class="pick-go"><button class="btn primary" id="pick-go" disabled>Pick one to continue</button><button class="btn ghost" id="pick-back">Back</button></div>
   </div>
 </section>
 
@@ -773,7 +813,7 @@ function renderPolaroids(){ let el=sheetScroll.querySelector(".polaroids"); cons
   el.querySelectorAll("button").forEach(b=>b.onclick=()=>{ APP.photos.splice(+b.dataset.i,1); try{ sessionStorage.setItem("sbtrip-photos-v1",JSON.stringify(APP.photos)); }catch(e){} renderPolaroids(); }); }
 /* ---------- bottom bar ---------- */
 function renderBar(){
-  const s=APP.state; if(s.mode==="start"){ bar.classList.remove("show"); return; }
+  const s=APP.state; if(s.mode==="start"||s.mode==="pick"){ bar.classList.remove("show"); return; }
   bar.classList.add("show"); bar.classList.toggle("travel",s.mode==="travel");
   const d=DAYS[s.day]; root.style.setProperty("--c",CITYC[d.city]);
   btnPrev.disabled=(s.day===0&&s.stop<=-1&&s.mode!=="travel"); btnNext.disabled=(s.day===DAYS.length-1&&s.stop===d.items.length-1);
@@ -788,7 +828,7 @@ let arriveTimer=null, moveSeq=0;
 function setHash(){ const s=APP.state; const h=s.mode==="start"?"":(s.stop>=0?"#d"+(s.day+1)+"s"+(s.stop+1):"#d"+(s.day+1)); if(location.hash!==h) history.replaceState(null,"",location.pathname+location.search+h); }
 function go(day,stop,kind){
   const s=APP.state, prev={mode:s.mode,day:s.day,stop:s.stop}; const seq=++moveSeq;
-  startEl.hidden=true; clearTimeout(arriveTimer);
+  startEl.hidden=true; clearTimeout(arriveTimer); closePick();
   if(stop<0){ s.mode="day"; s.day=day; s.stop=-1; setEvening(false); renderDay(day); sheet.classList.remove("show"); travelEl.classList.remove("show");
     requestAnimationFrame(()=>daycard.classList.add("show")); renderBar(); setHash(); APP.emit("move",{kind:kind||"intro",day,stop:-1,prev}); return; }
   const it=DAYS[day].items[stop], p=placeOf(it);
@@ -815,7 +855,7 @@ addEventListener("touchstart",e=>{ if(!e.target.closest(".sheet,.bar,.daycard")|
 addEventListener("touchend",e=>{ if(!tt||e.target.closest("dialog,.seg,.review")) return; const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty, el=Date.now()-tt; tt=0; if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.6&&el<800){ if(dx<0) next(); else prev(); } },{passive:true});
 
 /* ---------- start & bookings ---------- */
-$("cta-begin").onclick=()=>go(0,-1);
+$("cta-begin").onclick=()=>openPick();
 function renderBook(){
   const left=T.book.filter((b,k)=>!done["book-"+k]).length; $("book-dot").style.display=left?"block":"none";
   $("bookdlg-in").innerHTML=`<button class="close" id="dlg-close" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
@@ -829,7 +869,7 @@ function renderBook(){
 }
 renderBook();
 const openBook=()=>{ renderBook(); $("bookdlg").showModal(); };
-$("btn-book").onclick=openBook; $("cta-book").onclick=openBook;
+$("btn-book").onclick=openBook; const _cb=$("cta-book"); if(_cb) _cb.onclick=openBook;
 $("bookdlg").addEventListener("click",e=>{ if(e.target===$("bookdlg")) $("bookdlg").close(); });
 
 /* ---------- share + toast ---------- */
@@ -842,7 +882,7 @@ async function share(){
   if(navigator.share){ try{ await navigator.share(data); return; }catch(e){ if(e.name==="AbortError") return; } }
   try{ await navigator.clipboard.writeText(url); toast("Link copied — send it to your person"); }catch(e){ prompt("Copy this link",url); }
 }
-$("btn-share").onclick=()=>{ $("moredlg").close(); share(); }; $("cta-share").onclick=share;
+$("btn-share").onclick=()=>{ $("moredlg").close(); share(); }; const _cs=$("cta-share"); if(_cs) _cs.onclick=share;
 
 /* ---------- review: who is here, hearts & skips ---------- */
 let review=store("sbtrip-review-v1",{}), names=Object.assign({me:"Mykola",her:"Киця"},store("sbtrip-names-v1",{})), approved=store("sbtrip-approved-v1",null);
@@ -904,7 +944,6 @@ function bindReview(scope,it,i,k,curOpt){
 }
 const roleBtns=`<button class="her" data-r="her">💗 Киця</button><button data-r="me">Mykola</button>`;
 function renderRoles(){ ["roles","roles2"].forEach(id=>{ const el=$(id); if(!el) return; el.innerHTML=roleBtns; el.querySelectorAll("button").forEach(b=>{ b.setAttribute("aria-pressed",b.dataset.r===role); b.onclick=()=>{ role=b.dataset.r; saveK("sbtrip-role",role); renderRoles(); rerender(); buzz(6); toast(role==="her"?"Привіт, Киця 💗":"Hi Mykola"); }; }); });
-  const cta=$("cta-begin"); if(cta){ const u=undecided().length, tot=ALL_ITEMS.length; const cont=role&&u<tot&&u>0; cta.innerHTML=(cont?`Continue · ${u} left`:"Begin the journey")+' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'; cta.onclick=cont?continueReview:()=>go(0,-1); }
   const h=$("hello"), mh=ALL_ITEMS.filter(([it])=>{ const x=rv(it,"me"); return x&&x.s==="heart"; }).length; if(h) h.innerHTML=role==="her"?`Привіт, <b>Киця</b> 💗 — tap <b>♥ Киця's pick</b> on the places and dishes you love, and <b>Skip</b> what you don't. ${mh?`Mykola has already hearted <b>${mh}</b> thing${mh===1?"":"s"} — look for his blue badge and tap <b>Agree</b> if you like them too.`:"Everything you choose is saved and appears on Mykola's phone."}`:(role==="me"?`You're walking as <b>Mykola</b>. Send Киця her link from ⋯ → Share so her picks land here.`:`Who's walking? Tap your name — hearts and skips are saved under it.`); }
 const undecided=()=>ALL_ITEMS.filter(([it])=>!rv(it,role||"her"));
 function continueReview(){ const u=undecided(); if(!u.length){ openSum(); return; } const [,i,k]=u[0]; APP.quick=true; go(i,k,"jump"); }
@@ -1083,6 +1122,16 @@ APP.on("move",()=>sheet.classList.remove("full"));
 
 APP.buildKml=buildKml; APP.paperHtml=paperHtml; APP.syncStatus=()=>fb.status; importPicks();
 renderRoles(); updateSum(); setSync(fb.cfg?"wait":"off"); if(fb.cfg) syncStart();
+
+/* ---------- character pick ---------- */
+const pickEl=$("pick"); let pickSel=null;
+function closePick(){ if(pickEl.hidden) return; pickEl.classList.remove("show"); setTimeout(()=>{ if(!pickEl.classList.contains("show")) pickEl.hidden=true; },600); }
+function setPickSel(r,silent){ pickSel=r; pickEl.querySelectorAll(".pcard").forEach(b=>b.setAttribute("aria-pressed",b.dataset.r===r)); const g=$("pick-go"); g.disabled=!r; g.innerHTML=r?`Continue as ${esc(names[r])} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`:"Pick one to continue"; pickEl.classList.toggle("has",!!r); if(!silent){ buzz(10); if(APP.sound&&APP.sound.on) APP.sound.pop(1.3); } APP.emit("pick",r,!!silent); }
+function openPick(){ startEl.hidden=true; APP.state.mode="pick"; pickEl.hidden=false; requestAnimationFrame(()=>requestAnimationFrame(()=>pickEl.classList.add("show"))); setPickSel(role,true); APP.emit("move",{kind:"pick",day:-1,stop:-1,prev:APP.state}); }
+pickEl.querySelectorAll(".pcard").forEach(b=>b.onclick=()=>setPickSel(b.dataset.r,false));
+APP.pickSelect=r=>setPickSel(r,false);
+$("pick-go").onclick=()=>{ if(!pickSel) return; role=pickSel; saveK("sbtrip-role",role); renderRoles(); toast(role==="her"?"Привіт, Киця 💗":"Hi Mykola"); const u=undecided().length, tot=ALL_ITEMS.length; if(u>0&&u<tot) continueReview(); else go(0,-1); };
+$("pick-back").onclick=()=>{ closePick(); startEl.hidden=false; APP.state.mode="start"; APP.emit("move",{kind:"start",day:-1,stop:-1,prev:APP.state}); };
 
 /* ---------- deep link / boot ---------- */
 function applyHash(){ const m=/^#d(\d+)(?:s(\d+))?$/.exec(location.hash); if(!m) return false; const d=Math.min(DAYS.length,Math.max(1,+m[1]))-1; const s=m[2]?Math.min(DAYS[d].items.length,Math.max(1,+m[2]))-1:-1; go(d,s,s>=0?"jump":"intro"); return true; }
@@ -1672,8 +1721,9 @@ addEventListener('resize',resize); resize();
 A.on('move',m=>{
   moveT=performance.now(); arrived=false; travel=null;
   startFx(null,fxCenter);
-  if(m.kind==='start'){ camMode='start'; activeDay=-1; activeStop=-1; couple.position.set(W0.x,W0.y+WY,W0.z); yaw=-Math.PI/2+.55; appear=0; pin.visible=false; showProps(0,-1); welcome.visible=true; petals.visible=true; setGesture('lean'); gestNext=4; return; }
-  welcome.visible=false; petals.visible=false;
+  if(m.kind==='start'){ camMode='start'; activeDay=-1; activeStop=-1; couple.position.set(W0.x,W0.y+WY,W0.z); yaw=-Math.PI/2+.55; appear=0; pin.visible=false; showProps(0,-1); welcome.visible=true; petals.visible=true; setGesture('lean'); gestNext=4; pickReset(); return; }
+  if(m.kind==='pick'){ camMode='pick'; activeDay=-1; activeStop=-1; couple.position.set(W0.x,W0.y+WY,W0.z); yaw=Math.PI/2; pin.visible=false; showProps(0,-1); welcome.visible=true; petals.visible=true; setGesture('idle'); pickReset(); return; }
+  welcome.visible=false; petals.visible=false; pickReset();
   activeDay=m.day; pin.userData.mat.color.copy(CITY[DAYS[m.day].city].col);
   if(m.kind==='intro'){ camMode='overview'; activeStop=-1; if(m.prev.day!==m.day||m.prev.stop!==0){ appear=0; placeCouple(m.day,0); } pin.visible=false; showProps(m.day,-1); return; }
   camMode='follow'; activeStop=m.stop;
@@ -1704,7 +1754,7 @@ const ENVC=['bg','hor','zen','land','water','line','wave','lo','hi','soft','sunC
 const envCur={}, envTgt={}; for(const k of ENVC){ envCur[k]=new THREE.Color(ENVK.day[k]); envTgt[k]=new THREE.Color(ENVK.day[k]); } for(const k of ENVN){ envCur[k]=ENVK.day[k]; envTgt[k]=ENVK.day[k]; }
 let themeForce=null, envHour=13, envSunset=17.6;
 const hourOf=(day,stop)=>{ if(day<0) return 13; const d=DAYS[day]; const m=stop>=0?/^(\d\d):(\d\d)$/.exec(d.items[stop].t||''):null; const ss=/^(\d\d):(\d\d)$/.exec(d.sunset||''); envSunset=ss?(+ss[1])+(+ss[2])/60:17.6; return m?(+m[1])+(+m[2])/60:13; };
-function envTargets(){ let h=envHour; if(themeForce==='dark') h=21; else if(themeForce==='light') h=13; const ss=envSunset; if(camMode==='start'){ for(const k of ENVC) envTgt[k].setHex(ENVK.bloom[k]); for(const k of ENVN) envTgt[k]=ENVK.bloom[k]; return; } const mix=(a,b,f)=>{ for(const k of ENVC) envTgt[k].setHex(ENVK[a][k]).lerp(new THREE.Color(ENVK[b][k]),f); for(const k of ENVN) envTgt[k]=ENVK[a][k]+(ENVK[b][k]-ENVK[a][k])*f; };
+function envTargets(){ let h=envHour; if(themeForce==='dark') h=21; else if(themeForce==='light') h=13; const ss=envSunset; if(camMode==='start'||camMode==='pick'){ for(const k of ENVC) envTgt[k].setHex(ENVK.bloom[k]); for(const k of ENVN) envTgt[k]=ENVK.bloom[k]; return; } const mix=(a,b,f)=>{ for(const k of ENVC) envTgt[k].setHex(ENVK[a][k]).lerp(new THREE.Color(ENVK[b][k]),f); for(const k of ENVN) envTgt[k]=ENVK[a][k]+(ENVK[b][k]-ENVK[a][k])*f; };
   const s=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
   if(h<5.5) mix('night','night',0); else if(h<7) mix('night','dawn',s((h-5.5)/1.5)); else if(h<9) mix('dawn','day',s((h-7)/2)); else if(h<ss-1.6) mix('day','day',0);
   else if(h<ss-.2) mix('day','golden',s((h-(ss-1.6))/1.4)); else if(h<ss+.5) mix('golden','dusk',s((h-(ss-.2))/.7)); else if(h<ss+1.3) mix('dusk','night',s((h-(ss+.5))/.8)); else mix('night','night',0); }
@@ -1758,7 +1808,7 @@ function updateEnv(dt,t){
   PM.water.color.setHex(0xbfe0f5).lerp(new THREE.Color(0x1d2b4d),night); PM.water.emissive.copy(PM.water.color); PM.water.emissiveIntensity=.05+.08*Math.sin(t*1.3)*.5+.04;
   PM.gold.emissiveIntensity=.2+.7*night; PM.white.emissiveIntensity=.12*night; bulbI.material.emissiveIntensity=.15+1.1*night; cars.forEach(c=>c.userData.hl.forEach(l=>l.material.emissiveIntensity=.2+1.2*night));
   hemi.color.copy(envCur.hemiS); hemi.groundColor.copy(envCur.hemiG); hemi.intensity=envCur.hemiI; sun.color.copy(envCur.sunC); sun.intensity=envCur.sunI; shadowPlane.material.opacity=.14+.16*night; leafBase=.85-.25*night;
-  const hh=camMode==='start'?17.15:themeForce==='dark'?21:themeForce==='light'?13:envHour; sunDirFor(hh); if(night>.6) sunDir.lerp(moonDir,(night-.6)/.4);
+  const hh=(camMode==='start'||camMode==='pick')?17.15:themeForce==='dark'?21:themeForce==='light'?13:envHour; sunDirFor(hh); if(night>.6) sunDir.lerp(moonDir,(night-.6)/.4);
   sun.position.copy(couple.position).addScaledVector(sunDir,120); sun.target.position.copy(couple.position); sun.target.updateMatrixWorld(); shadowPlane.position.set(couple.position.x,.03,couple.position.z);
   skyMat.uniforms.uNight.value=night; sky.position.copy(camPos);
   clouds.forEach((s,i)=>{ const u=s.userData; u.ox+=dt*u.sp; if(u.ox>280) u.ox=-280; s.position.set(camPos.x+u.ox,u.y,camPos.z+u.oz); s.material.opacity=(.5-.3*night)*(camMode==='follow'?1:.7); });
@@ -1827,7 +1877,7 @@ const PETAL_COLS=[[1,.78,.86],[1,.86,.91],[.98,.72,.82],[1,.93,.95],[.99,.8,.7]]
 const petalGeo=new THREE.BufferGeometry(); petalGeo.setAttribute('position',new THREE.BufferAttribute(ptPos,3)); petalGeo.setAttribute('aPh',new THREE.BufferAttribute(ptPh,1)); petalGeo.setAttribute('aSz',new THREE.BufferAttribute(ptSz,1)); petalGeo.setAttribute('aCol',new THREE.BufferAttribute(ptCol,3));
 const petalMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{uT:{value:0},uScale:{value:innerHeight}},
   vertexShader:`attribute float aPh; attribute float aSz; attribute vec3 aCol; varying vec3 vC; varying float vR; uniform float uT; uniform float uScale;
-    void main(){ vC=aCol; vR=aPh+uT*(1.4+fract(aPh)*1.2); vec4 mv=modelViewMatrix*vec4(position,1.0); gl_PointSize=aSz*uScale/max(1.0,-mv.z); gl_Position=projectionMatrix*mv; }`,
+    void main(){ vC=aCol; vR=aPh+uT*(1.4+fract(aPh)*1.2); vec4 mv=modelViewMatrix*vec4(position,1.0); gl_PointSize=min(aSz*uScale/max(1.0,-mv.z),42.0); gl_Position=projectionMatrix*mv; }`,
   fragmentShader:`varying vec3 vC; varying float vR; void main(){ vec2 p=gl_PointCoord-0.5; float c=cos(vR), s=sin(vR); p=mat2(c,-s,s,c)*p; float sq=0.5+0.5*sin(vR*0.7); float d=length(p*vec2(1.0+sq*0.6,1.9-sq*0.4)); float a=smoothstep(0.5,0.36,d); if(a<0.02) discard; float sh=0.9+0.1*sin(vR*2.0); gl_FragColor=vec4(vC*sh,a*0.92); }`});
 const petals=new THREE.Points(petalGeo,petalMat); petals.frustumCulled=false; petals.visible=false; scene.add(petals);
 function spawnPetal(i,top){ const x=-70+Math.random()*130, z=-70+Math.random()*130; ptPos.set([W0.x+x,W0.y+(top?22+Math.random()*26:Math.random()*40),W0.z+z],i*3); ptVel.set([.6+Math.random()*1.2,-(1.1+Math.random()*1.3),.3+Math.random()*.9],i*3); ptPh[i]=Math.random()*20; ptSz[i]=.55+Math.random()*.55; ptCol.set(PETAL_COLS[Math.floor(Math.random()*PETAL_COLS.length)],i*3); }
@@ -1837,6 +1887,24 @@ function updatePetals(dt,t){ petalMat.uniforms.uT.value=t; const gust=1+Math.sin
     const lx=ptPos[k]-W0.x, lz=ptPos[k+2]-W0.z; if(ptPos[k+1]<W0.y+hillY(lx,lz)+.2||lx>75||lz>75){ spawnPetal(i,true); } }
   petalGeo.attributes.position.needsUpdate=true; petalGeo.attributes.aPh.needsUpdate=true; petalGeo.attributes.aSz.needsUpdate=true; petalGeo.attributes.aCol.needsUpdate=true; }
 const WCAM=A.wcam={mob:{x:30,y:5,z:0,lx:-200,ly:-7,lz:-6},desk:{x:21,y:8.5,z:14,lx:-80,ly:1.5,lz:1}}; A.dbgCouple=()=>{ const v=couple.position.clone(); v.y+=1.5; v.project(cam); return [(v.x+1)/2,(1-v.y)/2]; };
+/* character pick: stage state + cute moves */
+const PCAM=A.pcam={mob:{x:13,y:2.4,z:.3,lx:0,ly:4.6,lz:0},desk:{x:12.5,y:2.2,z:.7,lx:0,ly:.75,lz:3.4}};
+let pickSelI=-1, pickMove={name:'idle',t:0,fired:false}, pickHold=2.4, pickSpin=0, pickSpinT=1; const pk=[{x:-1.15,z:0,s:1},{x:1.15,z:0,s:1}]; const _wp=new THREE.Vector3();
+const PICK_MOVES=['wave','kiss','hop','pose','heart','twirl'];
+function pickReset(){ fA.scale.setScalar(1); fB.scale.setScalar(1); pk[0].x=-1.15; pk[1].x=1.15; pk[0].z=pk[1].z=0; pk[0].s=pk[1].s=1; pickMove={name:'idle',t:0,fired:false}; pickSpin=0; pickSpinT=1; }
+A.on('pick',(r,silent)=>{ pickSelI=r==='me'?0:r==='her'?1:-1; if(pickSelI<0) return; pickMove={name:'twirl',t:0,fired:false}; pickHold=1.4; pickSpinT=0; if(!silent){ const f=pickSelI?fB:fA; f.getWorldPosition(_wp); sparkleBurst(_wp,pickSelI?[[1,.6,.75],[1,.85,.9],[1,1,1]]:[[.6,.7,1],[.85,.9,1],[1,1,1]],28,3.2); } });
+function nextPickMove(){ let m=PICK_MOVES[Math.floor(Math.random()*PICK_MOVES.length)]; if(m===pickMove.name) m=PICK_MOVES[(PICK_MOVES.indexOf(m)+1)%PICK_MOVES.length]; pickMove={name:m,t:0,fired:false}; pickHold=m==='twirl'?1.5:m==='kiss'?2.2:m==='hop'?1.6:2.6; if(m==='twirl') pickSpinT=0; }
+function applyPickMove(f,u,i,dt,t){ pickMove.t+=dt; const m=pickMove.name, mt=pickMove.t, R=u.armR, L=u.armL;
+  const elbow=a=>{ const e=a.userData.elbow; if(e) e.rotation.x=-(.18+Math.min(1.6,Math.max(0,-a.rotation.x))*.42); };
+  u.body.rotation.x=0; u.body.rotation.z=0; u.headP.rotation.y=Math.sin(t*.7)*.05; u.headP.rotation.x=0;
+  if(m==='twirl'){ R.rotation.x=-1; R.rotation.z=-1.1; L.rotation.x=-1; L.rotation.z=1.1; if(u.skirt){ const fl=Math.sin(Math.min(1,mt/1.1)*Math.PI)*.55; u.skirt.scale.set(1+fl,1,1+fl); } if(u.mouth) u.mouth.scale.setScalar(1.5); }
+  else if(m==='wave'){ R.rotation.x=-2.75+Math.sin(t*11)*.18; R.rotation.z=-.45+Math.sin(t*11)*.32; u.headP.rotation.z=.14; if(u.mouth) u.mouth.scale.setScalar(1.5); }
+  else if(m==='kiss'){ const out=mt>.9?Math.min(1,(mt-.9)*3.5):0; R.rotation.x=-2.05+out*.7; R.rotation.z=-.12-out*1.1; u.headP.rotation.z=.1-out*.06; if(u.blushes) u.blushes.forEach(b=>b.visible=true); if(!pickMove.fired&&mt>=.9){ pickMove.fired=true; f.getWorldPosition(_wp); _wp.y-=1.1; sparkleBurst(_wp,[[1,.55,.7],[1,.8,.88],[1,1,1]],22,2.6); if(A.sound.on) A.sound.pop(1.6); } }
+  else if(m==='hop'){ f.position.y+=Math.abs(Math.sin(mt*9))*.3*Math.max(0,1-mt/1.5); R.rotation.x=-.7; L.rotation.x=-.7; R.rotation.z=-.55; L.rotation.z=.55; u.headP.rotation.z=Math.sin(mt*9)*.08; if(u.mouth) u.mouth.scale.setScalar(1.5); }
+  else if(m==='pose'){ R.rotation.x=.35; R.rotation.z=-.95; L.rotation.x=.35; L.rotation.z=.95; u.legs[0].rotation.x=.28; u.headP.rotation.z=-.17; u.body.rotation.z=.06; }
+  else if(m==='heart'){ R.rotation.x=-2.55; R.rotation.z=-.7; L.rotation.x=-2.55; L.rotation.z=.7; u.headP.rotation.z=.08; if(u.mouth) u.mouth.scale.setScalar(1.4); if(u.blushes) u.blushes.forEach(b=>b.visible=true); if(!pickMove.fired&&mt>.6){ pickMove.fired=true; f.getWorldPosition(_wp); _wp.y+=.2; sparkleBurst(_wp,[[1,.55,.7],[1,.75,.85],[1,1,1]],26,2.2); } }
+  else { R.rotation.x=Math.sin(t*1.2)*.05; L.rotation.x=-Math.sin(t*1.2)*.05; }
+  elbow(R); elbow(L); if(mt>pickHold) nextPickMove(); }
 const WELCOME_GESTS=['lean','hands','forehead','whisper','sway','kiss','glance','hug'];
 
 /* ---------- interactivity: drag to orbit, pinch/wheel to zoom, tap things ---------- */
@@ -1858,6 +1926,7 @@ function updateSparks(dt){ let any=false; for(let i=0;i<SPN;i++){ if(spLife[i]<0
 const ripple=new THREE.Mesh(new THREE.RingGeometry(.6,.9,40),new THREE.MeshBasicMaterial({color:0x8b9cff,transparent:true,opacity:0,depthWrite:false})); ripple.rotation.x=-Math.PI/2; ripple.position.y=.06; scene.add(ripple); let rippleT=9;
 function gazeTo(p){ const dx=p.x-couple.position.x, dz=p.z-couple.position.z; let a=Math.atan2(dx,dz)-yaw; while(a>Math.PI) a-=Math.PI*2; while(a<-Math.PI) a+=Math.PI*2; gazeYaw=Math.max(-1.2,Math.min(1.2,a)); gazeAmt=1; }
 function tapAt(hit){
+  if(camMode==='pick'){ for(const [f,r] of [[fA,'me'],[fB,'her']]){ if(pick.intersectObject(f,true).length){ A.pickSelect(r); return; } } return; }
   if(!hit||camMode!=='follow'||travel) return;
   if(hit.kind==='couple'){ if(!arrived) return; const pool=['kiss','twirl','wave','hug','selfie','forehead']; let g=pool[Math.floor(Math.random()*pool.length)]; if(g===gest) g=pool[(pool.indexOf(g)+1)%pool.length]; gestQueue=[]; setGesture(g); gestNext=(G[g].hold||3)+1; sparkleBurst(couple.position,SPARK_GOLD); if(A.sound.on) A.sound.pop(); }
   else if(hit.kind==='landmark'){ const g=hit.g, u=g.userData; u.bounceT=0; u.pokeT=u.lt||0; if(u.poke) u.poke(); sparkleBurst(hit.point,SPARK_BLUE,14,2); if(A.sound.on) A.sound.pop(1.4); gazeTo(hit.point);
@@ -1935,7 +2004,13 @@ function frame(){
     if(u.phone) u.phone.visible=P.phone>.5; if(u.cup){ u.cup.visible=P.cups>.3; u.cup.scale.setScalar(Math.max(.01,P.cups)); }
     u.blinkT-=dt; if(u.blinkT<-.14) u.blinkT=2.6+Math.random()*2.5; const bl=u.blinkT<0?.12:1; u.eyes.forEach(e=>e.scale.y+=(1.3*bl-e.scale.y)*Math.min(1,dt*30));
     if(u.blushes) u.blushes.forEach(b=>b.visible=gest==='kiss'||gest==='dip'||gest==='forehead'||gest==='whisper'); });
-  handGlow.visible=hold>.6&&!spin.active; handGlow.position.set(0,1.42+Math.sin(t*1.4)*.03*(1-walk),.12); handGlow.material.emissiveIntensity=.4+.3*Math.sin(t*2.5);
+  if(camMode==='pick'){ const sel=pickSelI; if(pickSpinT<1){ pickSpinT+=dt/1.15; pickSpin=ease3(Math.min(1,pickSpinT))*Math.PI*2; } else pickSpin=0;
+    [fA,fB].forEach((f,i)=>{ const u=f.userData, isSel=i===sel, side=i?1:-1, q=pk[i]; const tx=sel<0?side*1.15:(isSel?0:side*1.8), tz=sel<0?0:(isSel?.75:-1.25), ts=sel<0?1:(isSel?1.12:.82); const k=Math.min(1,dt*4.5);
+      q.x+=(tx-q.x)*k; q.z+=(tz-q.z)*k; q.s+=(ts-q.s)*k; f.position.x=q.x; f.position.z=q.z; f.scale.setScalar(q.s);
+      f.rotation.y=(sel<0||isSel?0:-side*.4)+(isSel?pickSpin:0); u.body.rotation.z=0; u.body.rotation.x=0;
+      if(isSel) applyPickMove(f,u,i,dt,t); else { u.headP.rotation.y=sel<0?Math.sin(t*.7+i)*.08:-side*.32; u.headP.rotation.z=sel<0?0:side*.07; u.armR.rotation.x=Math.sin(t*1.1+i)*.05; u.armL.rotation.x=-Math.sin(t*1.1+i)*.05; } });
+    handGlow.visible=false; }
+  else handGlow.visible=hold>.6&&!spin.active; handGlow.position.set(0,1.42+Math.sin(t*1.4)*.03*(1-walk),.12); handGlow.material.emissiveIntensity=.4+.3*Math.sin(t*2.5);
   if(pin.visible){ pin.position.y=Math.sin(t*2.2)*.25+.2; pin.rotation.y=t*.8; const ps=activeStop>=0&&arrived?1:.001; pin.scale.setScalar(pin.scale.x+(ps-pin.scale.x)*Math.min(1,dt*6)); }
   updateFx(dt,t);
 
@@ -1953,6 +2028,7 @@ function frame(){
   if(welcome.visible){ wAnims.forEach(fn=>fn(dt,t)); updatePetals(dt,t); petalMat.uniforms.uScale.value=innerHeight; }
   // camera
   if(camMode==='start'){ const sw=Math.sin(t*.11), bob=Math.sin(t*.17); const C=mobile?WCAM.mob:WCAM.desk; want.set(W0.x+C.x+sw*2.5,W0.y+WY+C.y+bob*.5,W0.z+C.z+Math.cos(t*.09)*3); wantLook.set(W0.x+C.lx,W0.y+WY+C.ly,W0.z+C.lz); fogWant=.0011; }
+  else if(camMode==='pick'){ const C=mobile?PCAM.mob:PCAM.desk; want.set(W0.x+C.x,W0.y+WY+C.y+Math.sin(t*.4)*.04,W0.z+C.z+Math.sin(t*.23)*.22); wantLook.set(W0.x+C.lx,W0.y+WY+C.ly,W0.z+C.lz); fogWant=.0011; }
   else if(camMode==='overview'){ const tr=trails[activeDay], R=tr.radius*(mobile?2.6:2.1), a0=-.9+Math.sin(t*.1)*.15; want.set(tr.center.x+Math.sin(a0)*R*.7,R*1.05,tr.center.z+Math.cos(a0)*R*.7); wantLook.copy(tr.center); fogWant=Math.min(.0006,.05/R); }
   else { const showing=fxActive&&arrived&&!travel&&fxActive!=='sparkle', lmType=activeDay>=0&&activeStop>=0&&props[activeDay][activeStop]?props[activeDay][activeStop].userData.type:null, tall=arrived&&!travel&&/tower|skyscraper|observatory|xsky|bridge|cablecar|folkmuseum|cantilever|marina/.test(lmType||'');
     const lift=showing?1:(tall?.65:0), p=couple.position, a=-.7+(activeStop>=0?trails[activeDay].stopU[activeStop]:0)*1.1+Math.sin(t*.15)*.06+orbit;
