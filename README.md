@@ -57,7 +57,7 @@ Every stop gets its own little environment (`STAGE_KIT` in `index.html`): a them
 
 ### Moments
 
-Every special place has a little scene (`MOMENTS` in `index.html`, keyed by option id, with fall-backs per landmark type): the figurines act it out in 3D (lock on the fence, coin into the stream, lantern release, leaf storm, selfie, a toast…) and a small caption tells something nice about the place itself. It starts about a second after arrival, repeats quietly every half-minute or so while you stand there, and can be triggered by tapping the couple. Hearts only appear at the handful of places marked `r:1` (Namsan locks, the lotus pond, Gwangalli at night…).
+Every special place has a little scene (`MOMENTS` in `index.html`, keyed by option id, with fall-backs per landmark type): the figurines act it out in 3D (lock on the fence, coin into the stream, lantern release, leaf storm, selfie, a toast…) and a small caption tells something nice about the place itself. It starts about a second after arrival, repeats quietly every half-minute or so while you stand there, and can be triggered by tapping the couple. The places marked `r:1` get a slightly warmer gesture set and a soft sparkle instead of hearts.
 
 ### When you're both online
 
