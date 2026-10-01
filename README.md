@@ -1,5 +1,7 @@
 # Seoul ⇄ Busan · a journey for two
 
+**Version 0.1** — first complete release (Oct 2026): full 11-day trail, character pick, per-stop stages and moments, quiz, live two-phone sync, Busan interlude, finale.
+
 A single-file trip companion (`index.html`) with a 3D trail, choice cards with ♥ picks for two people, live sync (Firebase), Google My Maps export and an illustrated itinerary.
 
 ## Deploy / redeploy (one command)
