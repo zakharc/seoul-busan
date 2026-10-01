@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f5f6fa">
-<meta name="build" content="20261001-141418">
+<meta name="build" content="20261001-143651">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
@@ -341,6 +341,38 @@ dialog::backdrop{animation:fadein .35s ease-out}
 .bar.moving .prog{display:block}.bar.moving .dots{display:none}
 .bar.moving .nbtn{pointer-events:none;opacity:.5}
 
+/* ---------- finale: back on the blossom hill, golden hour sliding into a starry night ---------- */
+.finale{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;justify-content:flex-end;padding:0 24px calc(var(--sab) + 30px);pointer-events:none;opacity:0;transition:opacity 1.2s var(--ease);
+  background:linear-gradient(to top,rgba(251,228,236,.96) 0,rgba(251,228,236,.86) 24%,rgba(251,228,236,.3) 46%,rgba(251,228,236,0) 60%)}
+.finale[hidden]{display:none}
+.finale.show{opacity:1}
+.finale.night{background:linear-gradient(to top,rgba(20,16,36,.96) 0,rgba(20,16,36,.84) 26%,rgba(20,16,36,.3) 48%,rgba(20,16,36,0) 62%);transition:opacity 1.2s var(--ease),background 4s ease}
+.finale .fin-in{max-width:560px;margin:0 auto;width:100%;pointer-events:auto;color:#2b1f2e;transition:color 3s ease}
+.finale.night .fin-in{color:#fff5f8}
+.f-line{opacity:0;animation:fin-rise 1.6s var(--ease) forwards;animation-delay:var(--d)}
+@keyframes fin-rise{0%{opacity:0;transform:translateY(26px);filter:blur(6px)}100%{opacity:1;transform:none;filter:blur(0)}}
+.f-eyebrow{font:600 11.5px/1 var(--body);letter-spacing:.22em;text-transform:uppercase;color:#b06a86;margin:0 0 10px}
+.finale.night .f-eyebrow{color:#f6a3bd}
+.f-h2{font:700 clamp(22px,5.6vw,34px)/1.15 var(--display);letter-spacing:-.02em;margin:0 0 18px}
+.f-stats{font:500 15px/1.45 var(--body);margin:0 0 10px}
+.f-stats b{font-weight:700}
+.f-count{display:inline-flex;align-items:center;gap:8px;font:600 13px var(--body);padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.9);margin:0 0 22px;color:#2b1f2e;align-self:flex-start}
+.f-count i{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(229,178,58,.25);animation:pulse 1.6s infinite}
+.finale.night .f-count{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);color:#fff}
+.f-big{font:800 clamp(40px,10.4vw,78px)/.98 var(--display);letter-spacing:-.035em;margin:0}
+.f-big span{display:inline-block;opacity:0;animation:fin-word 1.5s cubic-bezier(.2,.9,.2,1) forwards;animation-delay:var(--d);background-image:linear-gradient(90deg,#2b1f2e,#9a5c74 55%,#e4534a);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% 100%}
+.finale.night .f-big span{background-image:linear-gradient(90deg,#fff,#ffc3d6 50%,#ffd36e)}
+.f-big span:last-child{animation:fin-word 1.5s cubic-bezier(.2,.9,.2,1) forwards,fin-shimmer 5s linear 13s infinite;animation-delay:var(--d),13s}
+@keyframes fin-word{0%{opacity:0;transform:translateY(40px) rotate(-3deg) scale(.92)}100%{opacity:1;transform:none}}
+@keyframes fin-shimmer{0%{background-position:0 0}100%{background-position:200% 0}}
+.f-sub{font:500 16px var(--body);margin:14px 0 0}
+.f-heart{display:inline-block;animation:mbeat 1.6s ease-in-out infinite}
+.f-row{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.f-row .btn.primary{background:linear-gradient(135deg,#1b2140,#3a2a4a);height:52px;padding:0 22px;font-size:15px}
+.finale.night .f-row .btn.primary{background:linear-gradient(135deg,#ffd36e,#f49ac1);color:#2b1f2e}
+.f-row .btn.ghost{height:52px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.85);color:#2b1f2e}
+.finale.night .f-row .btn.ghost{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22);color:#fff}
+@media (min-width:900px){ .finale{justify-content:center;padding:0 8vw;background:linear-gradient(to right,rgba(251,228,236,.94) 0,rgba(251,228,236,.86) 30%,rgba(251,228,236,.3) 50%,rgba(251,228,236,0) 64%)} .finale.night{background:linear-gradient(to right,rgba(20,16,36,.94) 0,rgba(20,16,36,.84) 30%,rgba(20,16,36,.3) 50%,rgba(20,16,36,0) 64%)} .finale .fin-in{margin:0;max-width:640px} .f-big{font-size:clamp(56px,6.6vw,96px)} }
 /* ---------- moments: a little romantic scene at every special place ---------- */
 .moment{position:fixed;left:50%;top:calc(var(--top-h) + var(--sat) + 70px);transform:translate(-50%,-14px) scale(.96);z-index:24;display:flex;gap:12px;align-items:center;width:min(92vw,440px);padding:12px 16px 12px 12px;border-radius:22px;background:color-mix(in srgb,var(--surface) 92%,transparent);border:1px solid color-mix(in srgb,var(--rose) 40%,transparent);box-shadow:0 24px 60px -24px color-mix(in srgb,var(--rose) 55%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .45s var(--ease),transform .6s var(--ease)}
 .moment.show{opacity:1;transform:translate(-50%,0) scale(1);pointer-events:auto}
@@ -837,6 +869,17 @@ html{background:var(--bg)}
   </div>
 </section>
 
+<section class="finale" id="finale" hidden aria-live="polite">
+  <div class="fin-in">
+    <p class="f-eyebrow f-line" style="--d:.6s">The end of the trail…</p>
+    <h2 class="f-h2 f-line" style="--d:2.2s">…and the start of the story.</h2>
+    <p class="f-stats f-line" style="--d:4.8s" id="f-stats"></p>
+    <p class="f-count f-line" style="--d:7.4s" id="f-count"></p>
+    <h1 class="f-big" id="f-big" aria-label="An amazing trip is coming"><span style="--d:10.2s">An</span> <span style="--d:10.55s">amazing</span> <span style="--d:10.9s">trip</span> <span style="--d:11.25s">is</span> <span style="--d:11.6s">coming.</span></h1>
+    <p class="f-sub f-line" style="--d:13s">Seoul ⇄ Busan · for the two of us <span class="f-heart">💗</span></p>
+    <div class="f-row f-line" style="--d:14.6s"><button class="btn primary" id="f-plan">Our plan ♥</button><button class="btn ghost" id="f-restart">From the top ↺</button></div>
+  </div>
+</section>
 <section class="daycard" id="daycard" aria-live="polite"></section>
 
 <aside class="sheet" id="sheet"><div class="grab" id="sheet-grab"></div><div class="handle"></div><div class="scroll" id="sheet-scroll"></div></aside>
@@ -1087,10 +1130,10 @@ function renderPolaroids(){ let el=sheetScroll.querySelector(".polaroids"); cons
   el.querySelectorAll("button").forEach(b=>b.onclick=()=>{ APP.photos.splice(+b.dataset.i,1); try{ sessionStorage.setItem("sbtrip-photos-v1",JSON.stringify(APP.photos)); }catch(e){} renderPolaroids(); }); }
 /* ---------- bottom bar ---------- */
 function renderBar(){
-  const s=APP.state; if(s.mode==="start"||s.mode==="pick"){ bar.classList.remove("show"); return; }
+  const s=APP.state; if(s.mode==="start"||s.mode==="pick"||s.mode==="finale"){ bar.classList.remove("show"); return; }
   bar.classList.add("show"); bar.classList.toggle("moving",s.mode==="travel");
   const d=DAYS[s.day]; root.style.setProperty("--c",CITYC[d.city]);
-  btnPrev.disabled=(s.day===0&&s.stop<=-1&&s.mode!=="travel"); btnNext.disabled=(s.day===DAYS.length-1&&s.stop===d.items.length-1);
+  btnPrev.disabled=(s.day===0&&s.stop<=-1&&s.mode!=="travel"); btnNext.disabled=false;
   midA.textContent="Day "+(s.day+1)+" · "+fmtDay(d.date)+" · "+d.city; const midEl=bar.querySelector(".mid"); if(midEl){ const tap=PHONE&&s.mode==="stop"&&!sheet.classList.contains("show"); midEl.classList.toggle("tap",tap); midEl.onclick=tap?openSheet:null; }
   const nb=s.mode==="day"?d.title:(s.mode==="travel"?travelTxt.textContent:placeOf(d.items[s.stop]).title||d.items[s.stop].title); if(nb!==midB.textContent){ midB.textContent=nb; midB.classList.remove("flip"); void midB.offsetWidth; midB.classList.add("flip"); }
   dotsEl.innerHTML=d.items.map((it,k)=>{ const h=rv(it,"her"); return `<i class="${k===s.stop?"on":(k<s.stop?"past":"")}${h&&h.s==="heart"?" love":""}${effSkip(it)?" skip":""}"></i>`; }).join("");
@@ -1180,15 +1223,28 @@ function scheduleMoment(){ clearTimeout(momentTimer); const s=APP.state; if(s.mo
 function momentHtml(it,curOpt){ const m=momentFor(it,curOpt); if(!m) return ""; const seen=!!momentSeen[m.id]; return `<div class="mcard"><span class="me">${m.e}</span><span><b>${esc(m.b)}</b><small>${esc(m.t)}</small></span><button class="${seen?"seen":""}">${seen?"Replay":"💞 Play"}</button></div>`; }
 APP.momentFor=momentFor; APP.playMoment=()=>playMoment(APP.state.day,APP.state.stop,true); APP.hasMoment=()=>{ const s=APP.state; if(s.mode!=="stop") return false; const it=DAYS[s.day].items[s.stop], opts=optionsOf(it); return !!momentFor(it,opts?opts[selIdx(it)]:null); };
 APP.on("arrive",scheduleMoment); APP.on("move",()=>{ clearTimeout(momentTimer); if(momentEl) momentEl.classList.remove("show"); });
+/* ---------- finale ---------- */
+const finaleEl=$("finale"); let finaleTimers=[];
+function startFinale(){ const s=APP.state; if(s.mode==="finale") return; const prev={mode:s.mode,day:s.day,stop:s.stop}; clearTimeout(arriveTimer); clearTimeout(momentTimer); if(momentEl) momentEl.classList.remove("show");
+  s.mode="finale"; s.day=-1; s.stop=-1; sheet.classList.remove("show","full"); daycard.classList.remove("show"); travelEl.classList.remove("show"); closeQuiz(); document.querySelectorAll("dialog[open]").forEach(d=>d.close()); renderBar(); if(typeof renderPeek==="function") renderPeek();
+  const tot=ALL_ITEMS.length, her=ALL_ITEMS.filter(([it])=>{ const x=rv(it,"her"); return x&&x.s==="heart"; }).length, both=ALL_ITEMS.filter(([it])=>{ const r=review[it.id]||{}; return r.her&&r.me&&r.her.s==="heart"&&r.me.s==="heart"&&(!optionsOf(it)||r.her.pick===r.me.pick); }).length, places=new Set(allPlaces().map(p=>p.title)).size;
+  $("f-stats").innerHTML=`<b>${DAYS.length} days</b> · <b>${places} places</b>${her?` · <b>${her}</b> ${her===1?"thing":"things"} ${esc(names.her)} loved`:""}${both?` · <b>${both}</b> we chose together 💞`:""} — and a lock waiting on Namsan.`;
+  const start=Date.parse(dates[0]+"T00:00:00Z"), dd=Math.round((start-Date.parse(now.date+"T00:00:00Z"))/864e5); $("f-count").innerHTML=todayIdx>=0?`<i></i>We're there — day ${todayIdx+1} of ${dates.length}`:(dd>0?`<i></i>${dd} day${dd===1?"":"s"} until take-off`:`<i></i>Thank you for walking it with me`);
+  finaleEl.hidden=false; finaleEl.classList.remove("show","night"); finaleEl.querySelectorAll(".f-line,.f-big span").forEach(el=>{ el.style.animation="none"; void el.offsetWidth; el.style.animation=""; });
+  $("f-plan").onclick=()=>{ buzz(6); openSum(); }; $("f-restart").onclick=()=>{ buzz(6); endFinale(); startEl.hidden=false; s.mode="start"; APP.emit("move",{kind:"start",day:-1,stop:-1,prev:APP.state}); };
+  finaleTimers.forEach(clearTimeout); finaleTimers=[setTimeout(()=>finaleEl.classList.add("night"),12500), setTimeout(()=>buzz([10,40,10,40,30]),10200)];
+  emitMove(true,{kind:"finale",day:-1,stop:-1,prev}); setTimeout(()=>finaleEl.classList.add("show"),400); buzz(8); }
+function endFinale(){ finaleTimers.forEach(clearTimeout); finaleEl.classList.remove("show"); setTimeout(()=>{ if(!finaleEl.classList.contains("show")) finaleEl.hidden=true; },900); }
+APP.finale=startFinale;
 /* ---------- staged phone flow: full-screen scene with one floating action; the info sheet is pulled up on demand ---------- */
 const PHONE=matchMedia("(max-width:899px)").matches, peekEl=$("peek");
 function openSheet(){ if(APP.state.mode!=="stop") return; sheet.classList.remove("still"); sheet.classList.add("show"); buzz(4); }
 function putDown(){ sheet.classList.remove("show","full"); buzz(4); }
 function renderPeek(){ if(!PHONE||!peekEl) return; const s=APP.state; let html="";
   if(s.mode==="day"&&!daycard.classList.contains("show")){ const d=DAYS[s.day]; html=`<button class="alt" id="peek-plan"><span class="ic">🗺️</span><span class="tx"><b>Day ${s.day+1} plan</b></span></button><button class="go" id="peek-go"><span class="tx"><b>Start the day</b><small>${esc(d.title)}</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>`; }
-  else if(s.mode==="stop"&&!s.quiz&&!sheet.classList.contains("show")){ const it=DAYS[s.day].items[s.stop], o=optionsOf(it), my=rv(it,role); html=`<button id="peek-info"><span class="ic">${my?(my.s==="heart"?"💗":"⤼"):"✨"}</span><span class="tx"><b>${esc(placeOf(it).title||it.title)}</b><small>${o?o.length+" options · ":""}photos, info${my?"":" · ♥ or skip"} · pull up</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button>`; }
+  else if(s.mode==="stop"&&!s.quiz&&!sheet.classList.contains("show")){ const it=DAYS[s.day].items[s.stop], o=optionsOf(it), my=rv(it,role); const lastStop=s.day===DAYS.length-1&&s.stop===DAYS[s.day].items.length-1; html=(lastStop&&my?`<button class="go" id="peek-fin"><span class="ic">✨</span><span class="tx"><b>The end</b><small>roll the credits</small></span></button>`:"")+`<button id="peek-info"><span class="ic">${my?(my.s==="heart"?"💗":"⤼"):"✨"}</span><span class="tx"><b>${esc(placeOf(it).title||it.title)}</b><small>${o?o.length+" options · ":""}photos, info${my?"":" · ♥ or skip"} · pull up</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button>`; }
   const changed=html!==peekEl.dataset.html; if(!html){ peekEl.classList.remove("show","pop"); peekEl.dataset.html=""; return; }
-  if(changed){ peekEl.innerHTML=html; peekEl.dataset.html=html; const pl=$("peek-plan"), pg=$("peek-go"), pi=$("peek-info"); if(pl) pl.onclick=()=>{ daycard.classList.add("show"); buzz(4); }; if(pg) pg.onclick=()=>{ buzz(6); go(s.day,0); }; if(pi) pi.onclick=openSheet; peekEl.classList.remove("pop"); void peekEl.offsetWidth; peekEl.classList.add("pop"); }
+  if(changed){ peekEl.innerHTML=html; peekEl.dataset.html=html; const pl=$("peek-plan"), pg=$("peek-go"), pi=$("peek-info"), pf=$("peek-fin"); if(pf) pf.onclick=()=>{ buzz(6); startFinale(); }; if(pl) pl.onclick=()=>{ daycard.classList.add("show"); buzz(4); }; if(pg) pg.onclick=()=>{ buzz(6); go(s.day,0); }; if(pi) pi.onclick=openSheet; peekEl.classList.remove("pop"); void peekEl.offsetWidth; peekEl.classList.add("pop"); }
   peekEl.classList.add("show"); }
 if(PHONE){ new MutationObserver(()=>renderPeek()).observe(sheet,{attributes:true,attributeFilter:["class"]}); new MutationObserver(()=>renderPeek()).observe(daycard,{attributes:true,attributeFilter:["class"]}); }
 APP.openSheet=openSheet; APP.putDown=putDown;
@@ -1199,8 +1255,8 @@ function setHash(){ if(location.hash) history.replaceState(null,"",location.path
 function go(day,stop,kind){
   const s=APP.state, prev={mode:s.mode,day:s.day,stop:s.stop}; const seq=++moveSeq;
   startEl.hidden=true; clearTimeout(arriveTimer); closePick();
-  const fromHill=prev.mode==="start"||prev.mode==="pick"; APP.lastKind=kind||null;
-  if(stop<0){ s.mode="day"; s.day=day; s.stop=-1; setEvening(false); renderDay(day); sheet.classList.remove("show"); travelEl.classList.remove("show");
+  const fromHill=prev.mode==="start"||prev.mode==="pick"||prev.mode==="finale"; APP.lastKind=kind||null; if(prev.mode==="finale") endFinale();
+  if(stop<0){ if(prev.mode==="finale"&&typeof renderPeek==="function"){ /* fall through */ } s.mode="day"; s.day=day; s.stop=-1; setEvening(false); renderDay(day); sheet.classList.remove("show"); travelEl.classList.remove("show");
     requestAnimationFrame(()=>{ if(!PHONE) daycard.classList.add("show"); renderPeek(); }); renderBar(); setHash(); emitMove(fromHill,{kind:kind||"intro",day,stop:-1,prev}); return; }
   const it=DAYS[day].items[stop], p=placeOf(it);
   const k=kind||(prev.mode==="day"&&prev.day===day?"descend":(prev.day===day&&prev.stop>=0?"walk":"jump"));
@@ -1219,8 +1275,8 @@ function emitMove(fade,m){ if(!fade){ APP.emit("move",m); return; } const st=$("
 APP.arrive=function(){ const s=APP.state; if(s.mode!=="travel") return; clearTimeout(arriveTimer); s.mode="stop"; const autoOpen=!PHONE||APP.quick; APP.quick=false; APP.arrivals=(APP.arrivals||0)+1; travelEl.classList.remove("show"); progEl.style.width="0"; renderBar(); if(autoOpen){ sheet.classList.add("show"); firstHints(); } renderPeek(); APP.emit("arrive",s); };
 APP.progress=p=>{ progEl.style.width=(p*100).toFixed(1)+"%"; };
 APP.go=go;
-function next(){ const s=APP.state; if(s.mode==="travel"||s.mode==="start") return; const d=DAYS[s.day]; if(s.mode==="day") return go(s.day,0); if(s.stop<d.items.length-1) return go(s.day,s.stop+1); if(s.day<DAYS.length-1) go(s.day+1,-1); }
-function prev(){ const s=APP.state; if(s.mode==="travel"||s.mode==="start") return; if(s.mode==="day"){ if(s.day>0) go(s.day-1,DAYS[s.day-1].items.length-1,"jump"); return; } if(s.stop>0) go(s.day,s.stop-1); else go(s.day,-1); }
+function next(){ const s=APP.state; if(s.mode==="travel"||s.mode==="start"||s.mode==="finale") return; const d=DAYS[s.day]; if(s.mode==="day") return go(s.day,0); if(s.stop<d.items.length-1) return go(s.day,s.stop+1); if(s.day<DAYS.length-1) go(s.day+1,-1); else startFinale(); }
+function prev(){ const s=APP.state; if(s.mode==="travel"||s.mode==="start") return; if(s.mode==="finale"){ go(DAYS.length-1,DAYS[DAYS.length-1].items.length-1,"jump"); return; } if(s.mode==="day"){ if(s.day>0) go(s.day-1,DAYS[s.day-1].items.length-1,"jump"); return; } if(s.stop>0) go(s.day,s.stop-1); else go(s.day,-1); }
 btnNext.onclick=next; btnPrev.onclick=prev;
 addEventListener("keydown",e=>{ if(e.target.matches("textarea,input")) return; if(e.key==="ArrowRight") next(); else if(e.key==="ArrowLeft") prev(); else if(e.key==="Escape"){ document.querySelectorAll("dialog[open]").forEach(d=>d.close()); $("doc").classList.remove("show"); closeQuiz(); } });
 let tx=0,ty=0,tt=0;
@@ -1305,13 +1361,13 @@ function reviewBar(it,curOpt,i,k){
   const my=rv(it,role), opts=optionsOf(it), d=DAYS[i];
   const heartOn=!!(my&&my.s==="heart"&&(!opts||my.pick===(curOpt&&curOpt.id))), skipOn=!!(my&&my.s==="skip"), answered=!!my;
   const lbl=role?(opts?`${esc(names[role])}'s pick`:`${esc(names[role])} loves it`):(opts?"Pick this one":"Love it");
-  const last=k===d.items.length-1, nextLbl=last?(i<DAYS.length-1?`Day ${i+2}`:"Done"):"";
-  return `<div class="rbar"><button class="rv heart" aria-pressed="${heartOn}">${heartOn?HEARTF.replace("<svg",'<svg fill="currentColor"'):HEART}<span>${heartOn?lbl+" ✓":lbl}</span><i class="fl" aria-hidden="true">💗</i><i class="fl" aria-hidden="true">💗</i><i class="fl" aria-hidden="true">💗</i></button><button class="rv skip" aria-pressed="${skipOn}">${SKIP}<span>${skipOn?"Skipped":"Skip"}</span></button>${answered&&!(last&&i===DAYS.length-1)?`<button class="rnext${last?" day":""}" aria-label="Next">${last?esc(nextLbl):""}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>`:""}</div>`;
+  const last=k===d.items.length-1, nextLbl=last?(i<DAYS.length-1?`Day ${i+2}`:"The end ✨"):"";
+  return `<div class="rbar"><button class="rv heart" aria-pressed="${heartOn}">${heartOn?HEARTF.replace("<svg",'<svg fill="currentColor"'):HEART}<span>${heartOn?lbl+" ✓":lbl}</span><i class="fl" aria-hidden="true">💗</i><i class="fl" aria-hidden="true">💗</i><i class="fl" aria-hidden="true">💗</i></button><button class="rv skip" aria-pressed="${skipOn}">${SKIP}<span>${skipOn?"Skipped":"Skip"}</span></button>${answered?`<button class="rnext${last?" day":""}" aria-label="Next">${last?esc(nextLbl):""}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>`:""}</div>`;
 }
 function bindReview(scope,it,i,k,curOpt){
   const hb=scope.querySelector(".rv.heart"), sb=scope.querySelector(".rv.skip"); if(!hb) return;
   hb.onclick=()=>{ const on=setReview(it,"heart",curOpt&&curOpt.id); if(on===null) return; const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; renderBar(); APP.emit("choice",{day:i,stop:k}); if(on){ buzz(14); const b=sheetScroll.querySelector(".rv.heart"); if(b){ b.classList.add("pop","bump"); } toast(role==="her"?"Marked as Киця's pick 💗":"Marked as your pick 💗"); } };
-  const nx=scope.querySelector(".rbar .rnext"); if(nx) nx.onclick=()=>{ APP.quick=!PHONE; buzz(5); next(); };
+  const nx=scope.querySelector(".rbar .rnext"); if(nx) nx.onclick=()=>{ APP.quick=!PHONE; buzz(5); if(i===DAYS.length-1&&k===DAYS[i].items.length-1) startFinale(); else next(); };
   const ag=scope.querySelector(".prop .agree"); if(ag) ag.onclick=()=>{ const o=other(role), x=rv(it,o); if(!x) return; const r=review[it.id]=review[it.id]||{}; r[role]={s:"heart",pick:x.pick||null,ts:Date.now()}; syncSet(["review",it.id,role],r[role]); delete choice[it.id]; saveK("sbtrip-choice-v1",choice); saveK("sbtrip-review-v1",review); updateSum(); APP.emit("review",{item:it,state:"heart",who:role}); const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; renderBar(); APP.emit("choice",{day:i,stop:k}); buzz([10,30,10]); toast("You both picked this 💞"); };
   const again=()=>{ const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; };
   scope.querySelectorAll(".rps .hands button[data-c]").forEach(b=>b.onclick=()=>{ (rps[it.id]=rps[it.id]||{})[role]={c:b.dataset.c,at:Date.now()}; saveK("sbtrip-rps-v1",rps); syncSet(["rps",it.id,role],rps[it.id][role]); buzz(8); if(APP.sound&&APP.sound.on) APP.sound.pop(1.2); again(); });
@@ -1366,13 +1422,14 @@ function renderSum(){
       ${role==="her"?`<button class="btn${fb.status==="live"?"":" rose"}" id="sum-send">${HEARTF.replace("<svg",'<svg fill="currentColor"')}<span>Send my picks to Mykola<small>${fb.status==="live"?"Already syncing live — this is just a backup link":"Shares a link that carries all your hearts and skips"}</small></span></button>`:""}
       ${approved?"":`<button class="btn rose" id="sum-approve">${HEARTF.replace("<svg",'<svg fill="currentColor"')}<span>${role==="her"?"Approve — I love this plan":"Mark the plan as approved"}<small>${done100?"Everything is answered. Seal it with a heart.":"You can approve now or finish the remaining stops first."}</small></span></button>`}
       <button class="btn${approved?" primary":""}" id="sum-kml">${I.metro}<span>Google My Maps file<small>Download .kml · import at mymaps.google.com</small></span></button>
+      <button class="btn" id="sum-fin">✨<span>Roll the credits<small>Back to the blossom hill — the trip is coming</small></span></button>
       <button class="btn" id="sum-doc">${I.book}<span>Illustrated itinerary<small>Day by day with photos · email · save as PDF</small></span></button>
       <button class="btn" id="sum-share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg><span>Share the trail<small>${role==="her"?"Send the link back to Mykola":"Send Киця her link"}</small></span></button>
     </div>`;
   $("sum-close").onclick=()=>$("sumdlg").close();
   $("sumdlg-in").querySelectorAll(".sumday li,.feed li").forEach(li=>li.onclick=()=>{ $("sumdlg").close(); go(+li.dataset.i,+li.dataset.k,"jump"); });
   const ap=$("sum-approve"); if(ap) ap.onclick=approve; const sc=$("sum-cont"); if(sc) sc.onclick=()=>{ $("sumdlg").close(); continueReview(); }; const ss=$("sum-send"); if(ss) ss.onclick=sendPicks;
-  $("sum-kml").onclick=downloadKml; $("sum-doc").onclick=()=>{ $("sumdlg").close(); openDoc(); }; $("sum-share").onclick=share;
+  $("sum-kml").onclick=downloadKml; const sfn=$("sum-fin"); if(sfn) sfn.onclick=()=>{ $("sumdlg").close(); startFinale(); }; $("sum-doc").onclick=()=>{ $("sumdlg").close(); openDoc(); }; $("sum-share").onclick=share;
 }
 const openSum=()=>{ renderSum(); $("sumdlg").showModal(); };
 $("btn-sum").onclick=openSum; $("btn-sum2").onclick=()=>{ $("moredlg").close(); openSum(); };
@@ -1698,7 +1755,7 @@ function rainSound(level){ level=Math.max(0,Math.min(1,level||0)); if(!S.ctx||!S
 const btns=[document.getElementById("btn-sound"),document.getElementById("btn-sound-top")].filter(Boolean);
 function setOn(on){ if(!S.ctx) init(); S.on=on; btns.forEach(b=>b.setAttribute("aria-pressed",on)); const st=document.getElementById("sound-st"); if(st) st.textContent=on?"On":"Off"; S.ctx.resume(); S.master.gain.setTargetAtTime(on?.9:0,now(),on?.8:.4); if(on){ applyScene(true); select(); A.toast("Sound on · headphones recommended"); } try{ localStorage.setItem("sbtrip-sound",on?"1":"0"); }catch(e){} }
 btns.forEach(b=>b.onclick=()=>setOn(!S.on));
-A.on("move",m=>{ const was=S.scene; S.scene=(m.kind==="start"||m.kind==="pick")?"blossom":"city"; if(m.day>=0) S.city=A.days[m.day].city; applyScene(false); if(m.kind==="intro"||m.kind==="jump") whoosh(); else if(m.kind==="pick") select(); });
+A.on("move",m=>{ const was=S.scene; S.scene=(m.kind==="start"||m.kind==="pick"||m.kind==="finale")?"blossom":"city"; if(m.day>=0) S.city=A.days[m.day].city; applyScene(false); if(m.kind==="intro"||m.kind==="jump") whoosh(); else if(m.kind==="pick") select(); });
 A.on("theme",dark=>{ S.dark=!!dark; applyScene(false); });
 A.on("arrive",s=>chime(s.stop));
 A.on("tick",tick);
@@ -2237,7 +2294,7 @@ function burst(){ const cx=fxCenter.x+(Math.random()-.5)*34, cy=fxCenter.y+20+Ma
     pPos[i*3]=cx; pPos[i*3+1]=cy; pPos[i*3+2]=cz; pVel[i*3]=Math.sin(ph)*Math.cos(th)*v; pVel[i*3+1]=Math.cos(ph)*v; pVel[i*3+2]=Math.sin(ph)*Math.sin(th)*v; pLife[i]=0; pMax[i]=1.4+Math.random()*.7; setCol(i,col); pSize[i]=1.4; pAlpha[i]=1; placed++; }
   pGeo.attributes.aColor.needsUpdate=true; if(A.sound&&A.sound.on&&A.sound.boom) A.sound.boom(); }
 const HEART=(k,n)=>{ const a=k/n*Math.PI*2, x=16*Math.pow(Math.sin(a),3), y=13*Math.cos(a)-5*Math.cos(2*a)-2*Math.cos(3*a)-Math.cos(4*a); return [x*.95,y*.95+8]; };
-function updateFx(dt,t){ if(!fxActive){ parts.visible=false; return; } fxT+=dt; const standingNow=arrived&&!travel; parts.visible=standingNow||fxActive==='sparkle'; if(!parts.visible) return;
+function updateFx(dt,t){ if(!fxActive){ parts.visible=false; return; } fxT+=dt; const standingNow=(arrived&&!travel)||camMode==='finale'; parts.visible=standingNow||fxActive==='sparkle'; if(!parts.visible) return;
   if(fxActive==='fireworks'){ fxBurstT-=dt; if(fxBurstT<=0){ burst(); fxBurstT=.7+Math.random()*.9; }
     for(let i=0;i<PN;i++){ if(pLife[i]<0) continue; pLife[i]+=dt; const f=pLife[i]/pMax[i]; if(f>=1){ pLife[i]=-1; pAlpha[i]=0; continue; } pVel[i*3+1]-=7*dt; pVel[i*3]*=1-dt*.9; pVel[i*3+2]*=1-dt*.9; pVel[i*3+1]*=1-dt*.5; pPos[i*3]+=pVel[i*3]*dt; pPos[i*3+1]+=pVel[i*3+1]*dt; pPos[i*3+2]+=pVel[i*3+2]*dt; pAlpha[i]=(1-f)*(f<.1?f*10:1)*(.7+.3*Math.sin(t*30+i)); pSize[i]=1.4*(1-f*.5); } }
   else if(fxActive==='drones'){ droneT+=dt; if(droneT>6){ droneT=0; droneShape=(droneShape+1)%3; } const k=1-Math.exp(-dt*2.2), N=360;
@@ -2286,6 +2343,7 @@ A.on('move',m=>{
   moveT=performance.now(); arrived=false; travel=null;
   startFx(null,fxCenter);
   if(m.kind==='start'){ camMode='start'; activeDay=-1; activeStop=-1; couple.position.set(W0.x,W0.y+WY,W0.z); yaw=-Math.PI/2+.55; appear=0; pin.visible=false; showProps(0,-1); welcome.visible=true; petals.visible=true; setGesture('lean'); gestNext=4; pickReset(); return; }
+  if(m.kind==='finale'){ camMode='finale'; finaleT=0; activeDay=-1; activeStop=-1; arrived=true; couple.position.set(W0.x,W0.y+WY,W0.z); yaw=Math.PI*.62; appear=0; pin.visible=false; showProps(0,-1); welcome.visible=true; petals.visible=true; pickReset(); gestQueue=['hands','forehead','kiss','lantern','hug','twirl','sway','kiss']; setGesture('lean'); gestNext=3.2; finaleCue=[[5,'lanterns'],[9.5,'hearts'],[15,'fireworks'],[21,'hearts'],[30,'hearts']]; return; }
   if(m.kind==='pick'){ camMode='pick'; activeDay=-1; activeStop=-1; couple.position.set(W0.x,W0.y+WY,W0.z); yaw=Math.PI/2; pin.visible=false; showProps(0,-1); welcome.visible=true; petals.visible=true; setGesture('idle'); pickReset(); return; }
   welcome.visible=false; petals.visible=false; pickReset();
   activeDay=m.day; ensureProps(m.day); pin.userData.mat.color.copy(CITY[DAYS[m.day].city].col);
@@ -2302,7 +2360,7 @@ A.on('choice',({day,stop})=>{ const wasA=trailMats[day].uniforms.uAlpha.value, w
   else if(activeDay===day&&activeStop===stop-1&&!travel){ const nxt=trails[day].stops[stop]; pin.position.copy(nxt); }
   if(activeDay===day&&activeStop===stop&&props[day][stop]){ const pg=props[day][stop]; startFx(pg.userData.fx,pg.position); } });
 A.on('arrive',()=>{ arrived=true; const it=activeDay>=0&&activeStop>=0?DAYS[activeDay].items[activeStop]:null; gestKind=it?(it.kind||'sight'):'sight'; arriveScript(); });
-let celebT=0, quizOn=false, quizOrbit=0;
+let celebT=0, quizOn=false, quizOrbit=0, finaleT=0, finaleCue=[];
 /* together: the other phone pokes us, we're at the same place, a 가위바위보 result */
 let togetherOn=false, togetherT=0;
 A.on('poke',p=>{ if(p.kind==='tap'){ if(camMode!=='follow'||p.x==null) return; ripple.position.set(p.x,.09,p.z); rippleT=0; sparkleBurst(new THREE.Vector3(p.x,.6,p.z),SPARK_GOLD,16,2.4); if(A.sound.on) A.sound.pop(.9); return; }
@@ -2335,7 +2393,8 @@ const ENVC=['bg','hor','zen','land','water','line','wave','lo','hi','soft','sunC
 const envCur={}, envTgt={}; for(const k of ENVC){ envCur[k]=new THREE.Color(ENVK.day[k]); envTgt[k]=new THREE.Color(ENVK.day[k]); } for(const k of ENVN){ envCur[k]=ENVK.day[k]; envTgt[k]=ENVK.day[k]; }
 let themeForce=null, envHour=13, envSunset=17.6;
 const hourOf=(day,stop)=>{ if(day<0) return 13; const d=DAYS[day]; const m=stop>=0?/^(\d\d):(\d\d)$/.exec(d.items[stop].t||''):null; const ss=/^(\d\d):(\d\d)$/.exec(d.sunset||''); envSunset=ss?(+ss[1])+(+ss[2])/60:17.6; return m?(+m[1])+(+m[2])/60:13; };
-function envTargets(){ let h=envHour; if(themeForce==='dark') h=21; else if(themeForce==='light') h=13; const ss=envSunset; if(camMode==='start'||camMode==='pick'){ for(const k of ENVC) envTgt[k].setHex(ENVK.bloom[k]); for(const k of ENVN) envTgt[k]=ENVK.bloom[k]; return; } const mix=(a,b,f)=>{ for(const k of ENVC) envTgt[k].setHex(ENVK[a][k]).lerp(new THREE.Color(ENVK[b][k]),f); for(const k of ENVN) envTgt[k]=ENVK[a][k]+(ENVK[b][k]-ENVK[a][k])*f; };
+function envTargets(){ let h=envHour; if(themeForce==='dark') h=21; else if(themeForce==='light') h=13; const ss=envSunset; if(camMode==='start'||camMode==='pick'){ for(const k of ENVC) envTgt[k].setHex(ENVK.bloom[k]); for(const k of ENVN) envTgt[k]=ENVK.bloom[k]; return; }
+  if(camMode==='finale'){ const f=Math.min(1,finaleT/26), sm=x=>x<=0?0:x>=1?1:x*x*(3-2*x), mixk=(a,b,q)=>{ for(const k of ENVC) envTgt[k].setHex(ENVK[a][k]).lerp(new THREE.Color(ENVK[b][k]),q); for(const k of ENVN) envTgt[k]=ENVK[a][k]+(ENVK[b][k]-ENVK[a][k])*q; }; if(f<.45) mixk('bloom','dusk',sm(f/.45)); else mixk('dusk','night',sm((f-.45)/.55)*.9); return; } const mix=(a,b,f)=>{ for(const k of ENVC) envTgt[k].setHex(ENVK[a][k]).lerp(new THREE.Color(ENVK[b][k]),f); for(const k of ENVN) envTgt[k]=ENVK[a][k]+(ENVK[b][k]-ENVK[a][k])*f; };
   const s=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
   if(h<5.5) mix('night','night',0); else if(h<7) mix('night','dawn',s((h-5.5)/1.5)); else if(h<9) mix('dawn','day',s((h-7)/2)); else if(h<ss-1.6) mix('day','day',0);
   else if(h<ss-.2) mix('day','golden',s((h-(ss-1.6))/1.4)); else if(h<ss+.5) mix('golden','dusk',s((h-(ss-.2))/.7)); else if(h<ss+1.3) mix('dusk','night',s((h-(ss+.5))/.8)); else mix('night','night',0); }
@@ -2467,7 +2526,7 @@ function updateEnv(dt,t){
   PM.water.color.setHex(0xbfe0f5).lerp(new THREE.Color(0x1d2b4d),night); PM.water.emissive.copy(PM.water.color); PM.water.emissiveIntensity=.05+.08*Math.sin(t*1.3)*.5+.04;
   PM.gold.emissiveIntensity=.2+.7*night; PM.white.emissiveIntensity=.12*night; bulbI.material.emissiveIntensity=.15+1.1*night; svNight(night); cars.forEach(c=>c.userData.hl.forEach(l=>l.material.emissiveIntensity=.2+1.2*night));
   hemi.color.copy(envCur.hemiS); hemi.groundColor.copy(envCur.hemiG); hemi.intensity=envCur.hemiI; sun.color.copy(envCur.sunC); sun.intensity=envCur.sunI; shadowPlane.material.opacity=.14+.16*night; leafBase=.85-.7*night;
-  const hh=(camMode==='start'||camMode==='pick')?17.15:themeForce==='dark'?21:themeForce==='light'?13:envHour; sunDirFor(hh); if(night>.6) sunDir.lerp(moonDir,(night-.6)/.4);
+  const hh=camMode==='finale'?17.15+Math.min(1,finaleT/26)*4.6:(camMode==='start'||camMode==='pick')?17.15:themeForce==='dark'?21:themeForce==='light'?13:envHour; sunDirFor(hh); if(night>.6) sunDir.lerp(moonDir,(night-.6)/.4);
   placeSun(); shadowPlane.position.set(couple.position.x,.06,couple.position.z);
   skyMat.uniforms.uNight.value=night; sky.position.copy(camPos);
   clouds.forEach((s,i)=>{ const u=s.userData; u.ox+=dt*u.sp; if(u.ox>280) u.ox=-280; s.position.set(camPos.x+u.ox,u.y,camPos.z+u.oz); s.material.opacity=(.5-.3*night)*(camMode==='follow'?1:.7); });
@@ -2732,7 +2791,7 @@ function frame(){
   const standing=arrived&&!travel&&camMode==='follow';
   if(togetherOn&&standing){ togetherT+=dt; if(togetherT>5.5){ togetherT=0; sparkleBurst(couple.position,[[1,.55,.7],[1,.85,.9]],14,2.6); } }
   if(standing&&!reduced){ gestT+=dt; if(gestT>gestNext){ if(gest==='idle') pickGesture(); else { setGesture('idle'); gestNext=fxActive?1.2:(gestQueue.length?.9:1.6+Math.random()*2.2); } } }
-  else if(camMode==='start'&&!reduced){ gestT+=dt; if(gestT>gestNext){ let g=WELCOME_GESTS[Math.floor(Math.random()*WELCOME_GESTS.length)]; if(g===gest) g='lean'; setGesture(g); gestNext=(G[g]&&G[g].hold||3)+2.5; } }
+  else if((camMode==='start'||camMode==='finale')&&!reduced){ gestT+=dt; if(gestT>gestNext){ let g=gestQueue.length?gestQueue.shift():WELCOME_GESTS[Math.floor(Math.random()*WELCOME_GESTS.length)]; if(g===gest) g='lean'; setGesture(g); gestNext=(G[g]&&G[g].hold||3)+(camMode==='finale'?1.2:2.5); } }
   else if(gest!=='idle'){ setGesture('idle'); gestNext=2.5; gestQueue=[]; }
   // critically-damped springs: no hitches when a new pose starts mid-motion
   PKEYS.forEach(k=>{ const w=POMEGA[k]||3.0, x=P[k], v=PV[k], acc=w*w*(Pto[k]-x)-2*w*v; PV[k]=v+acc*dt; P[k]=x+PV[k]*dt; });
@@ -2784,9 +2843,13 @@ function frame(){
   if(rippleT<3){ rippleT+=dt; const f=rippleT/1.2; ripple.scale.setScalar(1+f*6); ripple.material.opacity=Math.max(0,.6*(1-f)); }
   if(tapFx>0&&!fxActive){ tapFx-=dt; parts.visible=true; fxActive='fireworks'; fxBurstT=99; updateFx(dt,t); fxActive=null; if(tapFx<=0) parts.visible=false; }
   if(welcome.visible){ wAnims.forEach(fn=>fn(dt,t)); updatePetals(dt,t); petalMat.uniforms.uScale.value=innerHeight; }
+  if(camMode==='finale'){ finaleT+=dt; while(finaleCue.length&&finaleT>=finaleCue[0][0]){ const [,what]=finaleCue.shift(); const c=couple.position; if(what==='lanterns') startFx('lanterns',c); else if(what==='fireworks'){ startFx('fireworks',new THREE.Vector3(W0.x-120,W0.y+WY+10,W0.z-60)); } else if(what==='hearts'){ heartBurst(c,.08); sparkleBurst(c,[[1,.55,.7],[1,.85,.9],[1,1,1]],30,3.4); } }
+    petalMat.uniforms.uA.value=Math.max(.35,1-envCur.night*.7); }
   updateWeather(dt,t);
   // camera
   if(camMode==='start'){ const sw=Math.sin(t*.11), bob=Math.sin(t*.17); const C=mobile?WCAM.mob:WCAM.desk; want.set(W0.x+C.x+sw*2.5,W0.y+WY+C.y+bob*.5,W0.z+C.z+Math.cos(t*.09)*3); wantLook.set(W0.x+C.lx,W0.y+WY+C.ly,W0.z+C.lz); fogWant=.0011; }
+  else if(camMode==='finale'){ const f=Math.min(1,finaleT/30), e=1-Math.pow(1-f,3); const a=Math.PI*.42+Math.sin(finaleT*.045)*.55+finaleT*.012, R=(mobile?30:26)-e*(mobile?12:10), h=(mobile?9:7)-e*(mobile?3.6:2.6); const c=couple.position;
+    want.set(c.x+Math.sin(a)*R,c.y+h,c.z+Math.cos(a)*R); wantLook.set(c.x,c.y+(mobile?3.4:1.6)+e*(mobile?1.4:.4),c.z); fogWant=.0011; }
   else if(camMode==='pick'){ const C=mobile?PCAM.mob:PCAM.desk; want.set(W0.x+C.x,W0.y+WY+C.y+Math.sin(t*.4)*.04,W0.z+C.z+Math.sin(t*.23)*.22); wantLook.set(W0.x+C.lx,W0.y+WY+C.ly,W0.z+C.lz); fogWant=.0011; }
   else if(camMode==='overview'){ const tr=trails[activeDay], R=tr.radius*(mobile?2.6:2.1), a0=-.9+Math.sin(t*.1)*.15; want.set(tr.center.x+Math.sin(a0)*R*.7,R*1.05,tr.center.z+Math.cos(a0)*R*.7); wantLook.copy(tr.center); fogWant=Math.min(.0006,.05/R); }
   else { const showing=fxActive&&arrived&&!travel&&fxActive!=='sparkle', lmType=activeDay>=0&&activeStop>=0&&props[activeDay][activeStop]?props[activeDay][activeStop].userData.type:null, tall=arrived&&!travel&&/tower|skyscraper|observatory|xsky|bridge|cablecar|folkmuseum|cantilever|marina/.test(lmType||'');
@@ -2796,9 +2859,9 @@ function frame(){
     want.set(p.x+Math.sin(a)*r*zoom,p.y+h*zoom*(1+pitch),p.z+Math.cos(a)*r*zoom); wantLook.set(p.x,p.y+1.5+((mobile?6:9)-1.5)*lift,p.z); fogWant=flying?.0006:.0014;
     if(quizOn&&activeDay>=0&&activeStop>=0&&props[activeDay][activeStop]){ const pg=props[activeDay][activeStop]; const lh=Math.min(16,pg.userData.h||6); const mid=pg.position.clone().lerp(p,.5); const rq=(mobile?34:40)+lh*1.3; want.set(mid.x+Math.sin(a)*rq,(mobile?14:20)+lh*.6,mid.z+Math.cos(a)*rq); wantLook.set(mid.x,lh*.35+1,mid.z); if(!mobile){ const sx=Math.cos(a)*rq*.55, sz=-Math.sin(a)*rq*.55; want.x-=sx; want.z-=sz; wantLook.x-=sx; wantLook.z-=sz; } }
     if(travel){ const sp=Math.min(1,vel/40); want.y+=sp*(mobile?60:40); } }
-  const dist=camPos.distanceTo(want); want.y+=(camMode==='start'||camMode==='pick'?0:Math.min(dist*.45,340))+(camMode==='follow'?occlLift:0);
+  const dist=camPos.distanceTo(want); want.y+=(camMode==='start'||camMode==='pick'||camMode==='finale'?0:Math.min(dist*.45,340))+(camMode==='follow'?occlLift:0);
   if(dist>2500&&camMode!=='start'&&camMode!=='pick'){ camPos.copy(want); camPos.y+=70; look.copy(wantLook); camVel.set(0,0,0); lookVel.set(0,0,0); } // leaving the welcome hill: drop in from above instead of a 4 km flight through empty sky
-  spring(camPos,camVel,want,travel?3.0:2.1,dt); spring(look,lookVel,wantLook,travel?3.4:2.6,dt); cam.position.copy(camPos); cam.lookAt(look); if(camMode==='follow'){ const right=new THREE.Vector3().crossVectors(cam.getWorldDirection(tmp),cam.up).normalize(); cam.position.addScaledVector(right,parX*1.6); cam.position.y-=parY*1.0; cam.lookAt(look); } occlusion(dt);
+  spring(camPos,camVel,want,travel?3.0:(camMode==='finale'?1.1:2.1),dt); spring(look,lookVel,wantLook,travel?3.4:(camMode==='finale'?1.3:2.6),dt); cam.position.copy(camPos); cam.lookAt(look); if(camMode==='follow'){ const right=new THREE.Vector3().crossVectors(cam.getWorldDirection(tmp),cam.up).normalize(); cam.position.addScaledVector(right,parX*1.6); cam.position.y-=parY*1.0; cam.lookAt(look); } occlusion(dt);
   scene.fog.density+=(fogWant-scene.fog.density)*Math.min(1,dt*2);
   if(!arrived&&!travel&&camMode==='follow'&&performance.now()-moveT>700&&dist<6) A.arrive();
 

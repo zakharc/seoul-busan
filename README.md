@@ -31,6 +31,10 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 
 In the app: ⋯ → **Sync between phones** → follow the 4 steps (free Firebase project, Firestore, rules, paste `firebaseConfig`). Then **Copy her link** and send it.
 
+### Finale
+
+After the last stop (→ at the airport, the ✨ pill, or ♥ → *Roll the credits*) the camera returns to the blossom hill from the welcome screen: golden hour slides into a starry night while the couple plays through their gestures, lanterns rise, a heart blooms, fireworks go up over Seoul, and the words build up to **An amazing trip is coming.**
+
 ### Moments
 
 Every romantic place has a little scene (`MOMENTS` in `index.html`, keyed by option id, with fall-backs per landmark type): the figurines act it out in 3D (lock on the fence, coin into the stream, lantern release, leaf storm, selfie, dance, a toast…), a heart-shaped particle burst rises, and a caption card tells the story. It plays once on arrival, from the 💞 Play / Replay card in the sheet, or by tapping the couple.
