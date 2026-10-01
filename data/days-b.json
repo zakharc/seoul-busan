@@ -1,1342 +1,1706 @@
 [
-{
-"date": "2026-11-02",
-"city": "Busan",
-"title": "Train to the sea",
-"base": "h3",
-"sunset": "17:26",
-"items": [
-{
-"id": "d6s1",
-"t": "09:00",
-"title": "Check out, taxi to Seoul Station",
-"kind": "transit",
-"name": "Seoul Station",
-"ko": "서울역",
-"pid": "ChIJA3CU42aifDURaq-3csGXvuc",
-"lat": 37.555946,
-"lng": 126.972317,
-"wiki": "Seoul Station",
-"about": "The terminus for the KTX to Busan, a landmark since 1925 — the old red-brick station stands beside the modern glass one.",
-"price": "Taxi ≈₩20k",
-"hours": "Allow 30 min + a 20 min buffer",
-"need": "—",
-"tips": [
-"Lockers, cafés and a snack floor inside for the train.",
-"KTX platforms are on the ground level — check the board for your train number."
-],
-"landmark": "station"
-},
-{
-"id": "d6s2",
-"t": "10:00",
-"title": "KTX Seoul → Busan",
-"kind": "transit",
-"book": true,
-"long": true,
-"name": "Busan Station",
-"ko": "부산역",
-"pid": "ChIJqxrVY9jraDURTqBi-qe-mAI",
-"lat": 35.115225,
-"lng": 129.042243,
-"wiki": "Korea Train Express",
-"about": "Korea's high-speed train (up to 305 km/h) covers the 417 km to Busan in under three hours, past Daejeon, Daegu and the Gyeongju hills.",
-"fixed": "KTX from Seoul Station, ≈2 h 40 min, ≈₩60k per person. Sit on the right (D seats) for the Nakdong river near Busan.",
-"price": "≈₩60k per person",
-"hours": "≈2 h 40 min",
-"need": "Book ≈1 month ahead",
-"tips": [
-"Book at letskorail.com or the Korail Talk app as soon as sales open.",
-"Snack cart and vending in car 4; Wi-Fi on board."
-],
-"landmark": "station"
-},
-{
-"id": "d6s3",
-"t": "12:45",
-"title": "Lunch at Busan Station",
-"kind": "food",
-"fixed": "Both are a 3–5 min walk from the station's main exit. Leave the bags in a station locker (≈₩3–4k) or roll them along — it's flat.",
-"options": [
-{
-"id": "d6s3a",
-"title": "Choryang Milmyeon",
-"type": "Busan · wheat cold noodles",
-"price": "≈₩9–13k per person, food only",
-"name": "초량밀면",
-"ko": "초량밀면",
-"lat": 35.1163,
-"lng": 129.0407,
-"wiki": "Milmyeon",
-"about": "Busan's own noodle: chewy wheat noodles in an icy beef broth with a dab of spicy sauce, born in the refugee kitchens of the 1950s. This is the branch Busan people send you to.",
-"cool": "Milmyeon exists only in Busan — start the visit with it.",
-"booking": "None; quick turnover.",
-"hours": "≈10:00–20:00",
-"tips": [
-"'Mul' (broth) or 'bibim' (dry, spicy) — get one of each and swap.",
-"Add a plate of mandu (₩6k)."
-],
-"landmark": "shop:noodle"
-},
-{
-"id": "d6s3b",
-"title": "Bonjeon Dwaeji Gukbap",
-"type": "Busan · pork & rice soup",
-"price": "≈₩10–13k per person, food only",
-"name": "본전돼지국밥",
-"ko": "본전돼지국밥",
-"lat": 35.1157,
-"lng": 129.041,
-"wiki": "Dwaeji-gukbap",
-"about": "Right across from the station: the Michelin Bib Gourmand dwaeji-gukbap that Busanites queue for — a milky, clean pork broth over rice, seasoned with salted shrimp and chives.",
-"cool": "Busan's comfort food at its most famous address.",
-"booking": "None; 10–20 min queue at lunch.",
-"hours": "09:00–21:00",
-"tips": [
-"One bowl each (≈₩10k); add a side of suyuk (boiled pork) to share if hungry.",
-"Season with saeu-jeot (salted shrimp) and a spoon of the chives."
-],
-"landmark": "shop:soup"
-}
-]
-},
-{
-"id": "d6s4",
-"t": "14:00",
-"title": "Check in at Hotel Aqua Palace, rest",
-"kind": "stay",
-"place": "h3",
-"metro": "Metro alternative: Line 1 Busan Station → Seomyeon, Line 2 → Gwangan (exit 3), ≈40 min.",
-"tips": [
-"Ask for a bridge-view room.",
-"The hotel bathhouse is naked and gender-separated; swimsuits for the pool."
-],
-"landmark": "hotel"
-},
-{
-"id": "d6s5",
-"t": "16:15",
-"title": "Sunset over the bridge",
-"kind": "activity",
-"options": [
-{
-"id": "d6s5a",
-"title": "Millak Waterside Park",
-"type": "Waterfront · free",
-"price": "Free",
-"name": "Millak Waterside Park",
-"ko": "민락수변공원",
-"pid": "ChIJdeSNUzXtaDURXJLasMAd0Fg",
-"lat": 35.1545716,
-"lng": 129.1329907,
-"wiki": "Gwangan Bridge",
-"about": "Wide stone steps down to the water at the eastern end of Gwangalli — the best free seat for the 7.4 km Gwangan Bridge at dusk.",
-"cool": "Beer and snacks from the convenience store behind you.",
-"booking": "None.",
-"hours": "24 h · sunset 17:26",
-"tips": [
-"Sit on the steps facing the bridge; it lights up at dusk.",
-"The drone show is Saturdays only — you get the bridge lights anyway."
-],
-"landmark": "waterfront",
-"fx": "sparkle"
-},
-{
-"id": "d6s5b",
-"title": "Igidae coastal walk",
-"type": "Coastal path · 2 km",
-"price": "Free",
-"name": "Igidae Coastal Walk",
-"ko": "이기대 해안산책로",
-"lat": 35.131,
-"lng": 129.1215,
-"wiki": "Igidae",
-"about": "A boardwalk and cliff path on the headland south of Gwangalli, looking straight back at the bridge and the Haeundae skyline across the bay.",
-"cool": "The best angle on the bridge at sunset, with the sea below you.",
-"booking": "None.",
-"hours": "24 h · sunset 17:26",
-"tips": [
-"Start at the Dongsaengmal viewpoint (taxi drop-off) and walk 20 min north for the views.",
-"Some steps — wear trainers."
-],
-"landmark": "cliff"
-}
-]
-},
-{
-"id": "d6s6",
-"t": "18:00",
-"title": "Dinner on Gwangalli",
-"kind": "food",
-"options": [
-{
-"id": "d6s6a",
-"title": "Millak Fisherman's Market — raw fish upstairs",
-"type": "Seafood · raw fish (hoe) with a view",
-"price": "≈₩30–35k per person, food only · ₩5k pp table charge",
-"name": "민락어민활어직판장",
-"ko": "민락어민활어직판장",
-"lat": 35.1545,
-"lng": 129.1315,
-"wiki": "Hoe (food)",
-"about": "Pick a live fish from a vendor downstairs, carry it upstairs, and eat it as sashimi facing the lit-up Gwangan Bridge — the Busan dinner.",
-"cool": "Bridge view, plastic chairs, the freshest fish in the city.",
-"booking": "None. Set a budget with the vendor first (≈₩50–60k of fish for two) and confirm the ₩5k-per-person seating charge upstairs.",
-"hours": "≈10:00–24:00",
-"tips": [
-"Budget tip: say '5만원어치' (₩50k worth) and stick to it — flounder and sea bream are the value picks.",
-"Finish with maeuntang (spicy fish stew) made from the bones, ≈₩10k."
-],
-"landmark": "shop:fishtown"
-},
-{
-"id": "d6s6b",
-"title": "Gwangan Jeil Dwaeji Gukbap",
-"type": "Busan · pork & rice soup",
-"price": "≈₩10–13k per person, food only",
-"name": "광안제일돼지국밥",
-"ko": "광안제일돼지국밥",
-"lat": 35.1533,
-"lng": 129.1172,
-"wiki": "Dwaeji-gukbap",
-"about": "The neighbourhood gukbap house two blocks behind the beach — a clean, rich pork broth and a menu you can read in ten seconds.",
-"cool": "Open late, cheap, and five minutes from the hotel.",
-"booking": "None.",
-"hours": "≈24 h",
-"tips": [
-"Add suyuk-baekban (boiled pork with rice) if one of you wants something less soupy."
-],
-"landmark": "shop:soup"
-}
-]
-},
-{
-"id": "d6s7",
-"t": "20:00",
-"title": "Night on the bay",
-"kind": "show",
-"options": [
-{
-"title": "Night yacht on Suyeongman Bay",
-"name": "수영만요트경기장",
-"ko": "수영만요트경기장",
-"lat": 35.156,
-"lng": 129.1405,
-"wiki": "Gwangan Bridge",
-"about": "A 50-minute sail under the lit Gwangan Bridge and along the Marine City towers from the 1988 Olympic yachting centre — the bay at night from the water.",
-"price": "≈₩30k per person",
-"hours": "Weekday sailings hourly 18:00–21:00",
-"need": "50 min",
-"tips": [
-"Book on Trazy or Klook; pick the 20:00 sailing.",
-"Cold on deck — bring the layer.",
-"Taxi back to the hotel ≈8 min, ≈₩6k."
-],
-"id": "d6s7a",
-"type": "Night sailing · 50 min",
-"book": true,
-"cool": "Under the lit bridge from the water; Marine City towers overhead.",
-"booking": "Book on Trazy or Klook; weekday sailings hourly 18:00–21:00.",
-"landmark": "marina",
-"fx": "fireworks"
-},
-{
-"id": "d6s7b",
-"title": "Gwangalli beach night walk & bridge lights",
-"type": "Night walk · free",
-"price": "Free · beer ≈₩4k",
-"name": "광안리해수욕장",
-"ko": "광안리해수욕장",
-"lat": 35.1531,
-"lng": 129.1187,
-"wiki": "Gwangalli Beach",
-"about": "The 1.4 km beach promenade after dark with the whole Gwangan Bridge lit in changing colours, then a can of beer on the sand.",
-"cool": "Zero cost, five minutes from the hotel; the bridge light show runs nightly.",
-"booking": "None.",
-"hours": "24 h · bridge lit until ≈24:00",
-"tips": [
-"Walk east to Millak and back.",
-"'Beer street' is one block behind the beach for a nightcap."
-],
-"landmark": "beach",
-"fx": "sparkle"
-},
-{
-"id": "d6s7c",
-"title": "Haeundae Blueline beach train at night",
-"type": "Night ride · 30 min",
-"price": "≈₩7k per person one way",
-"name": "해운대 블루라인파크 해변열차",
-"ko": "해운대 블루라인파크",
-"lat": 35.1587,
-"lng": 129.173,
-"wiki": "Haeundae Beach",
-"about": "The slow beach train along the lit coast from Mipo to Cheongsapo and back — the same line as tomorrow's capsule, from the other carriage.",
-"cool": "Harbour lights and the dark sea; far fewer people than by day.",
-"booking": "Walk-up; last trains ≈21:00 in November — check the day's timetable.",
-"hours": "≈09:30–21:00",
-"tips": [
-"Taxi ≈15 min from Gwangalli.",
-"If you ride tonight, tomorrow's capsule still feels different — it's the view down."
-],
-"landmark": "capsule"
-}
-]
-}
-]
-},
-{
-"date": "2026-11-03",
-"city": "Busan",
-"title": "Coast capsule & sea temple",
-"base": "h3",
-"sunset": "17:25",
-"items": [
-{
-"id": "d7s1",
-"t": "10:00",
-"title": "Sky Capsule, Mipo → Cheongsapo",
-"kind": "activity",
-"book": true,
-"name": "Blueline Park, Mipo Station",
-"ko": "블루라인파크 미포정거장",
-"pid": "ChIJfdIYWwuNaDURDx-eqtUjCkg",
-"lat": 35.158284,
-"lng": 129.1727672,
-"wiki": "Haeundae Beach",
-"about": "Private four-seat pods gliding 7–10 m above the shoreline on the old railway line from Mipo to Cheongsapo — Busan's most photographed ride.",
-"fixed": "Leave the hotel at 09:30 — taxi ≈15 min (≈₩12k) to Mipo station at the east end of Haeundae beach. Check in 15 min before your slot.",
-"price": "≈₩35k per 2-person capsule one way",
-"hours": "09:30–17:30 (Nov)",
-"need": "30 min ride",
-"tips": [
-"Bookings open Tue 6 Oct 09:00 KST = 02:00 Munich — the 10:00 slot sells out fast.",
-"Sit on the sea side; the colourful pods over the water are the photo."
-],
-"landmark": "capsule"
-},
-{
-"id": "d7s2",
-"t": "11:00",
-"title": "Cheongsapo Daritdol Skywalk",
-"kind": "sight",
-"name": "Cheongsapo Daritdol Skywalk",
-"ko": "청사포 다릿돌전망대",
-"pid": "ChIJUQsDVhuNaDURJo5GeByloeQ",
-"lat": 35.1640365,
-"lng": 129.1967173,
-"wiki": "Haeundae District",
-"about": "A 72 m glass-bottomed walkway jutting out over the rocks beside a fishing village with twin red-and-white lighthouses.",
-"fixed": "The capsule drops you at Cheongsapo station; the skywalk is a 10-min walk east along the old tracks (follow the boardwalk).",
-"price": "Free",
-"hours": "09:00–17:00 (Nov)",
-"need": "40 min",
-"tips": [
-"Shoe covers are provided for the glass section.",
-"The lighthouses are 5 min back toward the harbour."
-],
-"landmark": "skywalk"
-},
-{
-"id": "d7s3",
-"t": "12:00",
-"title": "Lunch in Cheongsapo",
-"kind": "food",
-"options": [
-{
-"id": "d7s3a",
-"title": "Suminine — grilled shellfish, smallest set",
-"type": "Seafood · grilled clams (jogae-gui)",
-"price": "≈₩30–35k per person, food only",
-"name": "수민이네 청사포",
-"ko": "청사포 수민이네",
-"lat": 35.1633,
-"lng": 129.1952,
-"wiki": "Clam",
-"about": "The harbour's grilled-shellfish house: a tray of clams, scallops and abalone over charcoal at your table, with cheese-baked scallops and a kimchi-fried-rice finish.",
-"cool": "Sea view from the second floor; the whole harbour smells of it.",
-"booking": "None; sets are for two.",
-"hours": "≈11:00–21:00",
-"tips": [
-"Budget tip: order the smallest set (≈₩60–70k for two) and skip the abalone upgrade.",
-"Ask for the kimchi bokkeumbap at the end — cooked in the shell juices."
-],
-"landmark": "shop:seafood"
-},
-{
-"id": "d7s3b",
-"title": "Geumsu Bokguk — regular soup",
-"type": "Busan · pufferfish soup",
-"price": "≈₩15–20k per person, food only",
-"name": "금수복국 해운대본점",
-"ko": "금수복국 해운대본점",
-"lat": 35.1625,
-"lng": 129.1595,
-"wiki": "Fugu",
-"about": "Busan's most famous bokguk (pufferfish soup) since 1970: a clear, restorative broth with bean sprouts and water parsley — the city's classic hangover cure.",
-"cool": "Open 24 hours; the safest, cleanest way to try fugu.",
-"booking": "None.",
-"hours": "24 h",
-"tips": [
-"Budget tip: the regular 'eun-bok' soup (≈₩16k) — the premium fish versions run to ₩40k+.",
-"Taxi ≈12 min from Cheongsapo, on the way to the temple."
-],
-"landmark": "shop:soup"
-}
-]
-},
-{
-"id": "d7s4",
-"t": "13:30",
-"title": "Haedong Yonggungsa Temple",
-"kind": "sight",
-"name": "Haedong Yonggungsa Temple",
-"ko": "해동용궁사",
-"pid": "ChIJwabeuxuMaDURXC4Rb21AQaE",
-"lat": 35.1884543,
-"lng": 129.2231109,
-"wiki": "Haedong Yonggungsa",
-"about": "A Buddhist temple from 1376 built on the rocks above the waves in Gijang — one of very few Korean temples on the coast rather than in the mountains.",
-"price": "Free",
-"hours": "≈05:00–sunset",
-"need": "1 h",
-"tips": [
-"108 steps down to the temple; rub the golden pigs for luck.",
-"Weekends are packed — a Tuesday is ideal."
-],
-"landmark": "seatemple"
-},
-{
-"id": "d7s5",
-"t": "16:15",
-"title": "Sunset over Haeundae",
-"kind": "activity",
-"options": [
-{
-"id": "d7s5a",
-"title": "BUSAN X the SKY",
-"type": "Observatory · 100th floor",
-"price": "≈₩27k per person",
-"name": "BUSAN X the SKY",
-"ko": "부산엑스더스카이",
-"lat": 35.1601,
-"lng": 129.1668,
-"wiki": "Haeundae LCT The Sharp",
-"about": "The observatory on floors 98–100 of the LCT tower at the east end of Haeundae beach — the beach, Gwangan Bridge and the coast you rode this morning, from 384 m.",
-"cool": "Starbucks on the 99th floor is the highest in the world.",
-"booking": "Walk-up or online; sunset slots are busiest.",
-"hours": "10:00–21:00 · last entry 20:30",
-"tips": [
-"Be up by 16:45 for the 17:25 sunset.",
-"Taxi ≈20 min from the temple."
-],
-"landmark": "xsky"
-},
-{
-"id": "d7s5b",
-"title": "Dongbaekseom island walk",
-"type": "Coastal loop · 1.5 km · free",
-"price": "Free",
-"name": "Dongbaekseom Island",
-"ko": "동백섬",
-"lat": 35.1535,
-"lng": 129.153,
-"wiki": "Dongbaekseom",
-"about": "The pine-covered headland at the west end of Haeundae: a flat boardwalk loop around the island with the APEC House, a mermaid statue and the bridge across the bay.",
-"cool": "Sunset from the western rocks, then the beach lights on the walk back.",
-"booking": "None.",
-"hours": "24 h · sunset 17:25",
-"tips": [
-"Start from the Westin/Chosun side and walk anticlockwise.",
-"Taxi ≈25 min from the temple."
-],
-"landmark": "island"
-}
-]
-},
-{
-"id": "d7s6",
-"t": "18:30",
-"title": "Dinner in Haeundae",
-"kind": "food",
-"options": [
-{
-"id": "d7s6a",
-"title": "Sangguginae, Haeundae Market",
-"type": "Busan street food · tteokbokki, fish cake, gimbap",
-"price": "≈₩8–12k per person, food only",
-"name": "상국이네 해운대시장",
-"ko": "상국이네",
-"lat": 35.1612,
-"lng": 129.1605,
-"wiki": "Haeundae Market",
-"about": "The most famous stall in Haeundae Market: tteokbokki, eomuk skewers in broth, fried gimbap and sundae eaten standing at the counter.",
-"cool": "Loud, hot, ₩10k for two — Busan snack culture in one stop.",
-"booking": "None; short queue.",
-"hours": "≈09:00–24:00",
-"tips": [
-"Add the grilled eel restaurants next door if you're still hungry (≈₩20k).",
-"Taxi home ≈15 min."
-],
-"landmark": "market"
-},
-{
-"id": "d7s6b",
-"title": "Geumsu Bokguk (24 h)",
-"type": "Busan · pufferfish soup",
-"price": "≈₩15–20k per person, food only",
-"name": "금수복국 해운대본점",
-"ko": "금수복국 해운대본점",
-"lat": 35.1625,
-"lng": 129.1595,
-"wiki": "Fugu",
-"about": "If you had clams at lunch, dinner is the bokguk you skipped — a clear pufferfish broth that's as good at night as it is in the morning.",
-"cool": "Open 24 h, 5 min from the beach.",
-"booking": "None.",
-"hours": "24 h",
-"tips": [
-"Regular soup ≈₩16k; skip the premium fish upgrades."
-],
-"landmark": "shop:soup"
-}
-]
-},
-{
-"id": "d7s7",
-"t": "20:00",
-"title": "Evening in Haeundae",
-"kind": "show",
-"options": [
-{
-"id": "d7s7a",
-"title": "The Bay 101 — Marine City night view",
-"type": "Night view · café",
-"price": "Free · drinks ≈₩8k",
-"name": "더베이101",
-"ko": "더베이101",
-"lat": 35.156,
-"lng": 129.152,
-"wiki": "Marine City",
-"about": "A yacht-club deck opposite the Marine City towers, which mirror in the still water of the marina after dark — Busan's postcard night shot.",
-"cool": "Fish and chips and a beer on the deck; the reflections are the photo.",
-"booking": "None.",
-"hours": "≈11:00–24:00",
-"tips": [
-"Taxi ≈7 min from Haeundae Market.",
-"Then a taxi home ≈15 min."
-],
-"landmark": "marina",
-"fx": "sparkle"
-},
-{
-"id": "d7s7b",
-"title": "Haeundae beach lights & Gunam-ro",
-"type": "Night walk · free",
-"price": "Free",
-"name": "해운대해수욕장",
-"ko": "해운대해수욕장",
-"lat": 35.1587,
-"lng": 129.1604,
-"wiki": "Haeundae Beach",
-"about": "The beach after dark with the LCT tower lit above it, then the busy Gunam-ro pedestrian street of buskers and bars.",
-"cool": "Street performers most evenings around the Gunam-ro fountain.",
-"booking": "None.",
-"hours": "24 h",
-"tips": [
-"Five minutes from the market.",
-"Taxi home ≈15 min."
-],
-"landmark": "plaza"
-},
-{
-"id": "d7s7c",
-"title": "Busan Cinema Center LED roof",
-"type": "Architecture · free",
-"price": "Free",
-"name": "영화의전당",
-"ko": "영화의전당",
-"lat": 35.1716,
-"lng": 129.1274,
-"wiki": "Busan Cinema Center",
-"about": "The world's longest cantilever roof, a 163 m wing of LEDs that plays light sequences over the plaza where the Busan film festival opens.",
-"cool": "Quiet, odd and beautiful; ten minutes from Spa Land.",
-"booking": "None.",
-"hours": "Roof lights until ≈22:00",
-"tips": [
-"Taxi ≈12 min from Haeundae.",
-"Taxi home to Gwangalli ≈10 min."
-],
-"landmark": "cantilever",
-"fx": "sparkle"
-}
-]
-}
-]
-},
-{
-"date": "2026-11-04",
-"city": "Busan",
-"title": "Colourful old Busan",
-"base": "h3",
-"sunset": "17:24",
-"items": [
-{
-"id": "d8s1",
-"t": "09:30",
-"title": "Gamcheon Culture Village",
-"kind": "sight",
-"name": "Gamcheon Culture Village",
-"ko": "감천문화마을",
-"pid": "ChIJUToRo7fpaDURo_ZMItcBfpc",
-"lat": 35.0973935,
-"lng": 129.0105921,
-"wiki": "Gamcheon Culture Village",
-"about": "A 1950s refugee settlement of pastel houses stacked up the hillside, turned into an open-air art village in 2009.",
-"metro": "Leave 09:00 — taxi across town is simplest (≈35 min); the metro needs Line 2 → Line 1 → bus 2-2 up the hill.",
-"price": "Free · stamp map ≈₩2,000",
-"hours": "09:00–18:00",
-"need": "2 h",
-"tips": [
-"Buy the stamp map at the info centre and collect stamps for a free postcard.",
-"The Little Prince viewpoint has a queue — go there first.",
-"Steep stairs: good shoes."
-],
-"landmark": "village"
-},
-{
-"id": "d8s2",
-"t": "12:00",
-"title": "Lunch at Nampo",
-"kind": "food",
-"options": [
-{
-"id": "d8s2a",
-"title": "Jagalchi Market 2F grilled fish + BIFF hotteok",
-"type": "Seafood · grilled fish set, then a seed pancake",
-"price": "≈₩12–20k per person, food only",
-"name": "Jagalchi Market",
-"ko": "자갈치시장",
-"pid": "ChIJudkrFArpaDURbbCzajeQs0c",
-"lat": 35.0966339,
-"lng": 129.0307965,
-"wiki": "Jagalchi Market",
-"about": "Korea's largest fish market: on the second floor, restaurants grill mackerel, hairtail and eel over charcoal and serve them as a set with rice and soup. Then walk 5 min to BIFF Square for ssiat-hotteok.",
-"cool": "Grilled-fish set (₩12–15k) beats buying live fish for value; the seed-stuffed hotteok (₩2k) is Busan's iconic snack.",
-"booking": "None. Closed 1st & 3rd Tuesday.",
-"hours": "05:00–22:00",
-"tips": [
-"Budget tip: order the 'saengseon-gui jeongsik' (grilled fish set) rather than by-weight fish.",
-"Nampo station exit 2 for BIFF Square."
-],
-"landmark": "fishmarket"
-},
-{
-"id": "d8s2b",
-"title": "Halmae Gaya Milmyeon",
-"type": "Busan · wheat cold noodles",
-"price": "≈₩8–12k per person, food only",
-"name": "할매가야밀면",
-"ko": "할매가야밀면",
-"lat": 35.0985,
-"lng": 129.0292,
-"wiki": "Milmyeon",
-"about": "A Nampo-dong milmyeon house from the 1970s, two minutes from BIFF Square — plain bowls, icy broth, no fuss.",
-"cool": "The Nampo locals' lunch; ₩8k bowls.",
-"booking": "None.",
-"hours": "≈10:00–21:00",
-"tips": [
-"Order 'mul-milmyeon' and a plate of mandu.",
-"Then hotteok at BIFF Square anyway."
-],
-"landmark": "shop:noodle"
-}
-]
-},
-{
-"id": "d8s3",
-"t": "14:30",
-"title": "Afternoon by the sea",
-"kind": "activity",
-"options": [
-{
-"id": "d8s3a",
-"title": "Huinnyeoul Culture Village",
-"type": "Cliff village · walk & cafés",
-"price": "Free · coffee ≈₩6k",
-"name": "Huinnyeoul Culture Village",
-"ko": "흰여울문화마을",
-"pid": "ChIJseGsfh7paDURigYilgTVojA",
-"lat": 35.0782798,
-"lng": 129.0453198,
-"wiki": "Huinnyeoul Culture Village",
-"about": "White-washed houses on a cliff above the sea on Yeongdo island, with a coastal path, a tunnel through the rock and cafés hanging over the water.",
-"cool": "Stay for the 17:24 sunset over the anchored ships.",
-"booking": "None.",
-"hours": "Cafés ≈11:00–20:00",
-"tips": [
-"Taxi ≈15 min across the Yeongdo bridge.",
-"Featured in the film 'The Attorney' — hence the murals."
-],
-"landmark": "cliff"
-},
-{
-"id": "d8s3b",
-"title": "Songdo Marine Cable Car",
-"type": "Cable car · 1.6 km over the sea",
-"price": "≈₩17k return (standard) · ₩22k crystal floor",
-"name": "Songdo Marine Cable Car",
-"ko": "송도해상케이블카",
-"lat": 35.0762,
-"lng": 129.0174,
-"wiki": "Songdo Beach",
-"about": "Cabins crossing 1.6 km of open water from Songdo beach to Amnam Park's cliffs, with a coastal skywalk and a cliff trail on the far side.",
-"cool": "Crystal-floor cabins look straight down at the sea.",
-"booking": "Walk-up.",
-"hours": "09:00–21:00",
-"tips": [
-"Taxi ≈10 min from Jagalchi.",
-"Walk Amnam Park's cliff path for 30 min before riding back."
-],
-"landmark": "cablecar"
-},
-{
-"id": "d8s3c",
-"title": "Taejongdae",
-"type": "Cliffs & lighthouse park",
-"price": "Free · Danubi train ≈₩4k",
-"name": "Taejongdae",
-"ko": "태종대",
-"lat": 35.053,
-"lng": 129.087,
-"wiki": "Taejongdae",
-"about": "The wooded southern tip of Yeongdo: 100 m sea cliffs, a lighthouse and an observatory looking out to where Tsushima appears on clear days.",
-"cool": "The Danubi road train loops the park so you don't have to climb.",
-"booking": "None.",
-"hours": "04:00–24:00 · train 09:20–17:30",
-"tips": [
-"Taxi ≈25 min from Jagalchi.",
-"Weekday afternoons are quiet."
-],
-"landmark": "cliff"
-}
-]
-},
-{
-"id": "d8s4",
-"t": "18:30",
-"title": "Evening soak",
-"kind": "activity",
-"options": [
-{
-"id": "d8s4a",
-"title": "Spa Land Centum City",
-"type": "Spa · 13 saunas & hot springs",
-"price": "≈₩20–25k per person (weekday)",
-"name": "Spa Land Centum City",
-"ko": "스파랜드 센텀시티",
-"lat": 35.169,
-"lng": 129.1302,
-"wiki": "Shinsegae Centum City",
-"about": "Korea's most luxurious jjimjilbang, inside the world's largest department store: 22 hot-spring baths from two natural sources, 13 themed saunas, an open-air foot spa and a relaxation lounge.",
-"cool": "The Roman bath and the Finnish sauna; couples meet in the mixed sauna zone in the spa uniform.",
-"booking": "None; 4-hour ticket. Last entry 21:00.",
-"hours": "06:00–22:00 · last entry 21:00",
-"tips": [
-"Taxi ≈25 min from Yeongdo, ≈10 min from the hotel afterwards.",
-"Baths are naked and gender-separated; the themed saunas are mixed."
-],
-"landmark": "spa2"
-},
-{
-"id": "d8s4b",
-"title": "Hotel spa & beach walk",
-"type": "Rest · hotel bathhouse",
-"price": "Spa ≈₩15k per person",
-"place": "h3",
-"name": "Hotel Aqua Palace",
-"ko": "아쿠아팰리스호텔",
-"pid": "ChIJL8ODxi7taDURTYsPKs4ilig",
-"lat": 35.1540793,
-"lng": 129.1188051,
-"wiki": "Gwangalli Beach",
-"about": "Back to Gwangalli for the hotel's own bathhouse, then a slow walk along the beach under the bridge lights.",
-"cool": "No travel, bridge view, bed nearby.",
-"booking": "None.",
-"hours": "Spa ≈06:00–22:00",
-"tips": [
-"Gwangalli has a 'beer street' one block behind the beach for a nightcap."
-],
-"landmark": "hotel"
-}
-]
-},
-{
-"id": "d8s5",
-"t": "21:00",
-"title": "Late dinner: gukbap",
-"kind": "food",
-"options": [
-{
-"id": "d8s5a",
-"title": "Gwangan Jeil Dwaeji Gukbap",
-"type": "Busan · pork & rice soup",
-"price": "≈₩10–13k per person, food only",
-"name": "광안제일돼지국밥",
-"ko": "광안제일돼지국밥",
-"lat": 35.1533,
-"lng": 129.1172,
-"wiki": "Dwaeji-gukbap",
-"about": "The neighbourhood gukbap house behind Gwangalli beach — open late and five minutes from the hotel.",
-"cool": "A hot bowl at 21:00 after the spa.",
-"booking": "None.",
-"hours": "≈24 h",
-"tips": [
-"Add suyuk-baekban if you want something less soupy."
-],
-"landmark": "shop:soup"
-},
-{
-"id": "d8s5b",
-"title": "1953 Hyeongje Dwaeji Gukbap, Seomyeon",
-"type": "Busan · pork & rice soup",
-"price": "≈₩11–14k per person, food only",
-"name": "1953 형제돼지국밥",
-"ko": "형제돼지국밥 서면",
-"lat": 35.1566,
-"lng": 129.0607,
-"wiki": "Dwaeji-gukbap",
-"about": "On Seomyeon's 'gukbap alley': a 70-year-old kitchen serving a milkier, richer style of the soup, open around the clock.",
-"cool": "The oldest name on the alley; Seomyeon's neon streets outside.",
-"booking": "None.",
-"hours": "24 h",
-"tips": [
-"Line 2 from Centum City to Seomyeon ≈20 min; taxi home from Seomyeon ≈20 min."
-],
-"landmark": "shop:soup"
-}
-]
-}
-]
-},
-{
-"date": "2026-11-05",
-"city": "Seoul",
-"title": "Back to Seoul",
-"base": "h4",
-"sunset": "17:31",
-"items": [
-{
-"id": "d9s1",
-"t": "11:00",
-"title": "Samjin Eomuk at Busan Station — snacks for the train",
-"kind": "food",
-"name": "삼진어묵 부산역점",
-"ko": "삼진어묵 부산역점",
-"lat": 35.1152,
-"lng": 129.0416,
-"wiki": "Eomuk",
-"about": "Busan's oldest fish-cake maker (1953) runs a bakery-style shop inside the station: trays of warm fish cakes stuffed with cheese, shrimp or peppers — the train picnic.",
-"type": "Busan · fish cakes",
-"price": "≈₩6–10k per person, food only",
-"hours": "≈07:00–21:00",
-"need": "Leave the hotel 10:30 (taxi ≈30 min)",
-"tips": [
-"Buy 5–6 pieces and a coffee; eat them on the train.",
-"Card accepted."
-],
-"landmark": "shop:eomuk"
-},
-{
-"id": "d9s2",
-"t": "11:30",
-"title": "KTX Busan → Seoul",
-"kind": "transit",
-"book": true,
-"long": true,
-"name": "Seoul Station",
-"ko": "서울역",
-"pid": "ChIJA3CU42aifDURaq-3csGXvuc",
-"lat": 37.555946,
-"lng": 126.972317,
-"wiki": "Korea Train Express",
-"about": "The same route in reverse — back in Seoul by early afternoon.",
-"fixed": "KTX from Busan Station, ≈2 h 40 min. Left side (A seats) for the river views this time.",
-"price": "≈₩60k per person",
-"hours": "≈2 h 40 min",
-"need": "Book with the outbound",
-"tips": [
-"Platforms are upstairs at Busan Station; check the board."
-],
-"landmark": "station"
-},
-{
-"id": "d9s3",
-"t": "14:30",
-"title": "Check in at glue hotel",
-"kind": "stay",
-"place": "h4",
-"fixed": "From Seoul Station a taxi (≈20–25 min, ≈₩13–15k) is recommended because of the bags. Metro alternative: Line 4 to Hyehwa + an 11-min walk.",
-"tips": [
-"Rooftop faces Naksan; the lounge has live sets ≈20:00–22:00."
-],
-"landmark": "hotel"
-},
-{
-"id": "d9s4",
-"t": "16:40",
-"title": "Naksan fortress wall at sunset",
-"kind": "sight",
-"name": "Naksan Fortress Wall Trail",
-"ko": "낙산공원 성곽길",
-"pid": "ChIJj1q-SjCjfDURrEOH3_cjrMM",
-"lat": 37.5760794,
-"lng": 127.0089876,
-"wiki": "Ihwa Mural Village",
-"about": "A section of the 600-year-old Seoul City Wall climbs Naksan hill behind the hotel — murals on the way up, the whole skyline from the top.",
-"price": "Free",
-"hours": "24 h · wall lit until ≈23:00",
-"need": "1.5 h · sunset 17:31",
-"tips": [
-"Walk up through Ihwa Mural Village.",
-"Naksan Park terrace has the best downtown skyline view."
-],
-"landmark": "wall"
-},
-{
-"id": "d9s5",
-"t": "18:30",
-"title": "Dinner at Gwangjang Market",
-"kind": "food",
-"options": [
-{
-"id": "d9s5a",
-"title": "Sunhui-ne Bindaetteok",
-"type": "Market food · mung-bean pancakes",
-"price": "≈₩8–12k per person, food only",
-"name": "순희네빈대떡",
-"ko": "순희네빈대떡 광장시장",
-"lat": 37.57,
-"lng": 126.9996,
-"wiki": "Bindae-tteok",
-"about": "The market's most famous bindaetteok stall: mung beans ground in front of you and fried in a pool of oil, eaten on a plastic stool with makgeolli.",
-"cool": "Netflix-famous, and still ₩5k a pancake.",
-"booking": "None — find a stool.",
-"hours": "≈09:00–23:00",
-"tips": [
-"Two pancakes and a bowl of makgeolli (≈₩5k) between you.",
-"Mostly cash."
-],
-"landmark": "market"
-},
-{
-"id": "d9s5b",
-"title": "Buchon Yukhoe",
-"type": "Korean · raw beef tartare",
-"price": "≈₩15–22k per person, food only",
-"name": "부촌육회",
-"ko": "부촌육회 광장시장",
-"lat": 37.5699,
-"lng": 127.0001,
-"wiki": "Yukhoe",
-"about": "On Gwangjang's yukhoe alley: hand-cut raw beef with pear, sesame oil and a raw egg yolk — Michelin Bib Gourmand and the best-known of the alley's shops.",
-"cool": "Order the yukhoe-bibimbap for something more filling.",
-"booking": "None; 10–20 min queue at dinner.",
-"hours": "≈10:00–22:00",
-"tips": [
-"Budget tip: one plate of yukhoe (≈₩20k) shared plus a bibimbap keeps it under ₩20k each.",
-"Then a bindaetteok for dessert anyway."
-],
-"landmark": "market"
-}
-]
-},
-{
-"id": "d9s6",
-"t": "20:00",
-"title": "Evening",
-"kind": "activity",
-"options": [
-{
-"id": "d9s6a",
-"title": "Live music in the hotel lounge",
-"type": "Music · free",
-"price": "Drinks ≈₩8–15k",
-"place": "h4",
-"name": "glue hotel",
-"ko": "글루호텔",
-"pid": "ChIJM9gvYS-jfDURAiRJGXn8BpU",
-"lat": 37.5758065,
-"lng": 127.0039779,
-"wiki": "Daehangno",
-"about": "The hotel lounge hosts small live sets most evenings ≈20:00–22:00 — a soft landing after the market.",
-"cool": "Zero commute.",
-"booking": "Ask the front desk for tonight's set.",
-"hours": "≈20:00–22:00",
-"landmark": "hotel"
-},
-{
-"id": "d9s6b",
-"title": "DDP at night",
-"type": "Architecture · free",
-"price": "Free",
-"name": "Dongdaemun Design Plaza",
-"ko": "동대문디자인플라자",
-"lat": 37.5665,
-"lng": 127.0092,
-"wiki": "Dongdaemun Design Plaza",
-"about": "Zaha Hadid's silver spaceship of a building, lit at night, with the LED rose garden on the lawn and Dongdaemun's 24-hour fashion malls around it.",
-"cool": "Ten minutes' walk from Gwangjang Market; the roses glow after dark.",
-"booking": "None.",
-"hours": "Exterior 24 h",
-"tips": [
-"Taxi back to the hotel ≈7 min."
-],
-"landmark": "dome",
-"fx": "sparkle"
-},
-{
-"id": "d9s6c",
-"title": "A small Daehangno play",
-"type": "Theatre · 90 min",
-"price": "≈₩20–40k per person",
-"name": "대학로 소극장",
-"ko": "대학로 소극장",
-"lat": 37.5822,
-"lng": 127.0025,
-"wiki": "Daehangno",
-"about": "Daehangno has over a hundred small theatres around Hyehwa station; comedies and musicals with easy plots work even without Korean.",
-"cool": "Tickets at the booth on the Marronnier Park square; same-day discounts are common.",
-"booking": "Same-day at the ticket booth, or Interpark for English listings.",
-"hours": "Evening shows ≈19:30–20:00",
-"tips": [
-"Five minutes' walk from the hotel.",
-"Pick a non-verbal show (Nanta-style) if you want zero language barrier."
-],
-"landmark": "theatre"
-}
-]
-}
-]
-},
-{
-"date": "2026-11-06",
-"city": "Seoul",
-"title": "Secret Garden & farewell",
-"base": "h4",
-"sunset": "17:30",
-"items": [
-{
-"id": "d10s1",
-"t": "10:00",
-"title": "Changdeokgung & Secret Garden tour",
-"kind": "sight",
-"book": true,
-"name": "Changdeokgung Secret Garden",
-"ko": "창덕궁 후원",
-"pid": "ChIJHyS4wtaifDURHzOOAZM0aWA",
-"lat": 37.5821721,
-"lng": 126.9931659,
-"wiki": "Changdeokgung",
-"about": "A UNESCO-listed palace laid into the hillside, with the 32-hectare Huwon (Secret Garden) of pavilions and lotus ponds behind it — the loveliest place in Seoul in autumn.",
-"metro": "Leave the hotel at 09:35 — ≈25 min on foot along Changgyeonggung-ro, or a 5-min taxi.",
-"price": "Palace ₩3,000 + garden ₩5,000",
-"hours": "09:00–17:30 (Nov) · garden by guided tour only",
-"closed": "Mondays",
-"need": "Tour 90 min + palace 1 h",
-"tips": [
-"Garden tickets are released 6 days ahead at royal.khs.go.kr — 50 online, 50 on-site per slot.",
-"Peak colour in the garden: late Oct – early Nov."
-],
-"landmark": "garden"
-},
-{
-"id": "d10s2",
-"t": "12:00",
-"title": "Changgyeonggung glasshouse",
-"kind": "sight",
-"name": "Changgyeonggung Palace",
-"ko": "창경궁 대온실",
-"lat": 37.579,
-"lng": 126.996,
-"wiki": "Changgyeonggung",
-"about": "The quieter palace next door: a 1909 Victorian glasshouse (Korea's first), the Chundangji pond you saw lit up on Thursday, and almost no crowds.",
-"fixed": "Use the Hamyangmun connecting gate on the east side of Changdeokgung — the two palaces join directly. Changgyeonggung ticket ₩1,000 at the gate.",
-"price": "₩1,000",
-"hours": "09:00–21:00",
-"closed": "Mondays",
-"need": "45 min",
-"tips": [
-"The glasshouse is at the far north end past the pond.",
-"Exit through Honghwamun onto Changgyeonggung-ro."
-],
-"landmark": "pond"
-},
-{
-"id": "d10s3",
-"t": "13:00",
-"title": "Lunch",
-"kind": "food",
-"options": [
-{
-"id": "d10s3a",
-"title": "Changhwadang Ikseon",
-"type": "Korean · dumplings & tteokbokki in a hanok",
-"price": "≈₩12–16k per person, food only",
-"name": "창화당 익선점",
-"ko": "창화당 익선동",
-"lat": 37.5738,
-"lng": 126.9902,
-"wiki": "Ikseon-dong",
-"about": "In the 1920s hanok lanes of Ikseon-dong: crisp pan-fried dumplings, cheese tteokbokki and cold noodles, at long wooden tables under a glass roof.",
-"cool": "The lanes themselves — go before 12:30 or queue.",
-"booking": "None; waitlist app at the door.",
-"hours": "11:30–21:30",
-"tips": [
-"Two dumpling plates + one tteokbokki between you ≈₩28k total.",
-"Dessert at Cheongsudang's garden café next door."
-],
-"landmark": "shop:dumpling"
-},
-{
-"id": "d10s3b",
-"title": "Woo Lae Oak — cold noodles only",
-"type": "Korean · Pyongyang naengmyeon",
-"price": "≈₩17–20k per person, food only",
-"name": "Woo Lae Oak",
-"ko": "우래옥 본점",
-"lat": 37.5672,
-"lng": 126.998,
-"wiki": "Naengmyeon",
-"about": "If you skipped it on Thursday: Seoul's legendary 1946 naengmyeon house, 12 minutes' walk south.",
-"cool": "The definitive Pyongyang cold noodles.",
-"booking": "No reservations.",
-"hours": "11:30–21:30",
-"closed": "Mondays",
-"tips": [
-"Budget tip: naengmyeon only (≈₩17k); the bulgogi is ₩50k+."
-],
-"landmark": "shop:noodle"
-}
-]
-},
-{
-"id": "d10s4",
-"t": "14:30",
-"title": "Afternoon",
-"kind": "activity",
-"options": [
-{
-"id": "d10s4a",
-"title": "Rest at the hotel",
-"type": "Rest",
-"price": "Free",
-"place": "h4",
-"name": "glue hotel",
-"ko": "글루호텔",
-"pid": "ChIJM9gvYS-jfDURAiRJGXn8BpU",
-"lat": 37.5758065,
-"lng": 127.0039779,
-"wiki": "Daehangno",
-"about": "Pack, nap, rooftop. The last big day deserves a pause.",
-"cool": "Zero commute.",
-"booking": "None.",
-"hours": "—",
-"landmark": "hotel"
-},
-{
-"id": "d10s4b",
-"title": "Last gifts in Insadong",
-"type": "Shopping",
-"price": "Free to wander",
-"name": "Insadong",
-"ko": "인사동길",
-"lat": 37.574,
-"lng": 126.9855,
-"wiki": "Insa-dong",
-"about": "Ten minutes' walk: hanji paper, ceramics, tea and the Ssamziegil craft arcade for the final presents.",
-"cool": "Tax refund at the counter over ₩15k.",
-"booking": "None.",
-"hours": "≈10:30–20:30",
-"tips": [
-"Kyung-in Museum of Fine Art has a hanok tea garden for a break."
-],
-"landmark": "teahouse"
-}
-]
-},
-{
-"id": "d10s5",
-"t": "16:00",
-"title": "Jongmyo Shrine — English guided tour",
-"kind": "sight",
-"name": "Jongmyo Shrine",
-"ko": "종묘",
-"lat": 37.5745,
-"lng": 126.994,
-"wiki": "Jongmyo",
-"about": "The Confucian shrine to the Joseon kings — a 100 m-long hall of dark wood and stone, UNESCO-listed, and the quietest world-heritage site in downtown Seoul.",
-"price": "₩1,000",
-"hours": "Weekdays by guided tour only · English tours 10:00 / 12:00 / 14:00 / 16:00",
-"closed": "Tuesdays",
-"need": "1 h",
-"tips": [
-"Be at the ticket gate by 15:50 — the 16:00 English tour is the last.",
-"Saturdays are free-roaming; weekdays guided only."
-],
-"landmark": "jongmyo"
-},
-{
-"id": "d10s6",
-"t": "18:30",
-"title": "Farewell dinner: Korean barbecue",
-"kind": "food",
-"book": true,
-"options": [
-{
-"id": "d10s6a",
-"title": "Jongsamyook",
-"type": "Korean BBQ · aged pork & beef",
-"price": "≈₩25–35k per person, food only (≈150–200 g pp)",
-"name": "종삼육",
-"ko": "종삼육 종로3가",
-"lat": 37.5711,
-"lng": 126.9912,
-"wiki": "Korean barbecue",
-"about": "A polished grill house by Jongno 3-ga where the staff cook thick-cut aged pork and beef over charcoal for you, with kimchi stew to finish.",
-"cool": "Staff-grilled, so you can just hold hands and eat.",
-"booking": "Reserve a 18:30 table via Catch Table or Naver a few days ahead.",
-"hours": "≈16:00–23:00",
-"tips": [
-"Budget tip: 300–400 g between two plus one stew stays under ₩35k each.",
-"Drinks extra: soju ≈₩5k, beer ≈₩5k."
-],
-"landmark": "shop:bbq"
-},
-{
-"id": "d10s6b",
-"title": "Hando Samgyeopsal",
-"type": "Korean BBQ · pork belly sets",
-"price": "≈₩18–25k per person, food only (sets ≈₩13–14k per portion)",
-"name": "한도삼겹살",
-"ko": "한도삼겹살 종로",
-"lat": 37.5716,
-"lng": 126.9906,
-"wiki": "Samgyeopsal",
-"about": "The old-school neighbourhood grill: thick pork belly on a slanted iron plate with kimchi and bean sprouts frying in the fat, and a bowl of doenjang stew.",
-"cool": "Cheap, loud and exactly what a last night in Seoul should taste like.",
-"booking": "Walk in; busy after 19:00.",
-"hours": "≈15:00–23:00",
-"tips": [
-"Two portions (≈₩27k) + rice + stew is plenty for two.",
-"Order 'mokssal' (neck) too if you want variety."
-],
-"landmark": "shop:bbq"
-}
-]
-},
-{
-"id": "d10s7",
-"t": "20:30",
-"title": "Last night in Seoul",
-"kind": "show",
-"options": [
-{
-"id": "d10s7a",
-"title": "Namsan night view from Baekbeom Square",
-"type": "Night view · free",
-"price": "Free",
-"name": "백범광장",
-"ko": "남산공원 백범광장",
-"lat": 37.5547,
-"lng": 126.98,
-"wiki": "Namsan (Seoul)",
-"about": "The lawn terraces on Namsan's north slope with the tower lit above you and the whole downtown glittering below — where you started eleven nights ago.",
-"cool": "Bring a convenience-store drink; the fortress wall is lit along the path.",
-"booking": "None.",
-"hours": "24 h",
-"tips": [
-"Taxi ≈12 min from Jongno 3-ga (≈₩8k).",
-"Taxi back to the hotel ≈15 min."
-],
-"landmark": "tower",
-"fx": "fireworks"
-},
-{
-"id": "d10s7b",
-"title": "Gwanghwamun Square by night",
-"type": "Night walk · free",
-"price": "Free",
-"name": "광화문광장",
-"ko": "광화문광장",
-"lat": 37.5725,
-"lng": 126.9768,
-"wiki": "Gwanghwamun Plaza",
-"about": "The great axis of Seoul lit at night: King Sejong and Admiral Yi, the floodlit Gwanghwamun gate, and the fountains along the square.",
-"cool": "Fifteen minutes' walk from the barbecue; benches and the media wall.",
-"booking": "None.",
-"hours": "24 h",
-"tips": [
-"Walk down Cheonggyecheon on the way back.",
-"Taxi home ≈10 min."
-],
-"landmark": "square",
-"fx": "fireworks"
-},
-{
-"id": "d10s7c",
-"title": "Rooftop at glue hotel",
-"type": "Rest · rooftop",
-"price": "Free",
-"place": "h4",
-"name": "glue hotel",
-"ko": "글루호텔",
-"pid": "ChIJM9gvYS-jfDURAiRJGXn8BpU",
-"lat": 37.5758065,
-"lng": 127.0039779,
-"wiki": "Daehangno",
-"about": "Naksan's wall lit above the hotel, the last bags half-packed, and nowhere else to be.",
-"cool": "Zero commute; the lounge set is on until 22:00.",
-"booking": "None.",
-"hours": "—",
-"landmark": "hotel",
-"fx": "fireworks"
-}
-]
-}
-]
-},
-{
-"date": "2026-11-07",
-"city": "Seoul",
-"title": "Fly home",
-"base": "h4",
-"sunset": "",
-"items": [
-{
-"id": "d11s1",
-"t": "—",
-"title": "Leave for the airport ≥3.5 h before the flight",
-"kind": "transit",
-"name": "인천국제공항",
-"ko": "인천국제공항",
-"lat": 37.5559,
-"lng": 126.9723,
-"from": {
-"lat": 37.5758065,
-"lng": 127.0039779
-},
-"wiki": "Incheon International Airport",
-"about": "Incheon International Airport — the way home. Hold hands in the queue.",
-"fixed": "Airport bus 6011 from the Changgyeonggung stop (≈10 min walk from the hotel): ≈70–80 min, ≈₩17–18k per person. Taxi: ≈60–75 min, ≈₩65–80k per car.",
-"price": "Bus ≈₩17–18k pp · taxi ≈₩65–80k",
-"hours": "Bus every 15–20 min from ≈05:00",
-"need": "≥3.5 h before departure",
-"tips": [
-"Check your terminal — T1 or T2.",
-"Tax-refund counters are after security; keep the receipts handy."
-],
-"landmark": "airport"
-}
-]
-}
+ {
+  "date": "2026-11-02",
+  "city": "Busan",
+  "title": "Train to the sea",
+  "base": "h3",
+  "sunset": "17:26",
+  "items": [
+   {
+    "id": "d6s1",
+    "t": "09:00",
+    "title": "To Seoul Station",
+    "kind": "transit",
+    "options": [
+     {
+      "id": "d6s1a",
+      "title": "Taxi to Seoul Station with the bags",
+      "name": "Seoul Station",
+      "ko": "서울역",
+      "pid": "ChIJA3CU42aifDURaq-3csGXvuc",
+      "lat": 37.555946,
+      "lng": 126.972317,
+      "wiki": "Seoul Station",
+      "about": "The terminus for the KTX to Busan, a landmark since 1925 — the old red-brick station stands beside the modern glass one.",
+      "price": "Taxi ≈₩20k",
+      "hours": "Allow 30 min + a 20 min buffer",
+      "need": "—",
+      "tips": [
+       "Lockers, cafés and a snack floor inside for the train.",
+       "KTX platforms are on the ground level — check the board for your train number."
+      ],
+      "landmark": "station"
+     },
+     {
+      "id": "d6s1b",
+      "title": "Metro Line 2 → Line 4 with the bags",
+      "type": "Metro · ≈35 min · ₩1,550",
+      "name": "서울역",
+      "ko": "서울역",
+      "lat": 37.5547,
+      "lng": 126.9707,
+      "wiki": "Seoul Station",
+      "about": "Konkuk Univ. → Line 2 to Dongdaemun History & Culture Park → Line 4 to Seoul Station: two trains, one easy change, elevators at both ends.",
+      "cool": "Cheap and traffic-proof — worth it if the bags roll well.",
+      "price": "₩1,550 per person",
+      "hours": "First trains 05:30",
+      "need": "≈35 min",
+      "tips": [
+       "Leave by 08:45 for the 10:00 train — buffer for the ticket gates.",
+       "Seoul Station exit 1 / 2 lead straight to the KTX hall."
+      ],
+      "landmark": "station",
+      "fixed": "Konkuk Univ. → Line 2 to Dongdaemun History & Culture Park → Line 4 to Seoul Station, ≈35 min with elevators at both ends. Leave by 08:45."
+     }
+    ]
+   },
+   {
+    "id": "d6s2",
+    "t": "10:00",
+    "title": "Train to Busan",
+    "kind": "transit",
+    "long": true,
+    "options": [
+     {
+      "id": "d6s2a",
+      "title": "KTX Seoul → Busan",
+      "name": "Busan Station",
+      "ko": "부산역",
+      "pid": "ChIJqxrVY9jraDURTqBi-qe-mAI",
+      "lat": 35.115225,
+      "lng": 129.042243,
+      "wiki": "Korea Train Express",
+      "about": "Korea's high-speed train (up to 305 km/h) covers the 417 km to Busan in under three hours, past Daejeon, Daegu and the Gyeongju hills.",
+      "price": "≈₩60k per person",
+      "hours": "≈2 h 40 min",
+      "need": "Book ≈1 month ahead",
+      "tips": [
+       "Book at letskorail.com or the Korail Talk app as soon as sales open.",
+       "Snack cart and vending in car 4; Wi-Fi on board."
+      ],
+      "landmark": "station",
+      "book": true,
+      "fixed": "KTX from Seoul Station, ≈2 h 40 min, ≈₩60k per person. Sit on the right (D seats) for the Nakdong river near Busan."
+     },
+     {
+      "id": "d6s2b",
+      "title": "SRT from Suseo → Busan (back-up)",
+      "type": "High-speed rail · ≈2 h 20",
+      "name": "수서역",
+      "ko": "수서역",
+      "lat": 37.4871,
+      "lng": 127.1016,
+      "wiki": "Suseo station",
+      "about": "The second high-speed line leaves from Suseo in the south-east: slightly cheaper and faster, handy if the KTX sells out — but Suseo is 35 min by metro from Konkuk.",
+      "cool": "A quieter station and ₩8k cheaper per seat.",
+      "price": "≈₩52,000 per person",
+      "hours": "Roughly hourly",
+      "need": "2 h 20 + 35 min to Suseo",
+      "tips": [
+       "Book at srtrain.co.kr (foreign cards work).",
+       "Line 3 or the Bundang line to Suseo; allow an hour door to door."
+      ],
+      "landmark": "station",
+      "long": true,
+      "fixed": "From Konkuk: Line 7 → Line 3 (or the Suin-Bundang line) to Suseo ≈35–40 min, or a taxi ≈30 min (≈₩20k). Be there 20 min before departure."
+     }
+    ]
+   },
+   {
+    "id": "d6s3",
+    "t": "12:45",
+    "title": "Lunch at Busan Station",
+    "kind": "food",
+    "fixed": "Both are a 3–5 min walk from the station's main exit. Leave the bags in a station locker (≈₩3–4k) or roll them along — it's flat.",
+    "options": [
+     {
+      "id": "d6s3a",
+      "title": "Choryang Milmyeon",
+      "type": "Busan · wheat cold noodles",
+      "price": "≈₩9–13k per person, food only",
+      "name": "초량밀면",
+      "ko": "초량밀면",
+      "lat": 35.1163,
+      "lng": 129.0407,
+      "wiki": "Milmyeon",
+      "about": "Busan's own noodle: chewy wheat noodles in an icy beef broth with a dab of spicy sauce, born in the refugee kitchens of the 1950s. This is the branch Busan people send you to.",
+      "cool": "Milmyeon exists only in Busan — start the visit with it.",
+      "booking": "None; quick turnover.",
+      "hours": "≈10:00–20:00",
+      "tips": [
+       "'Mul' (broth) or 'bibim' (dry, spicy) — get one of each and swap.",
+       "Add a plate of mandu (₩6k)."
+      ],
+      "landmark": "shop:noodle"
+     },
+     {
+      "id": "d6s3b",
+      "title": "Bonjeon Dwaeji Gukbap",
+      "type": "Busan · pork & rice soup",
+      "price": "≈₩10–13k per person, food only",
+      "name": "본전돼지국밥",
+      "ko": "본전돼지국밥",
+      "lat": 35.1157,
+      "lng": 129.041,
+      "wiki": "Dwaeji-gukbap",
+      "about": "Right across from the station: the Michelin Bib Gourmand dwaeji-gukbap that Busanites queue for — a milky, clean pork broth over rice, seasoned with salted shrimp and chives.",
+      "cool": "Busan's comfort food at its most famous address.",
+      "booking": "None; 10–20 min queue at lunch.",
+      "hours": "09:00–21:00",
+      "tips": [
+       "One bowl each (≈₩10k); add a side of suyuk (boiled pork) to share if hungry.",
+       "Season with saeu-jeot (salted shrimp) and a spoon of the chives."
+      ],
+      "landmark": "shop:soup"
+     }
+    ]
+   },
+   {
+    "id": "d6s4",
+    "t": "14:00",
+    "title": "Check in at Hotel Aqua Palace, rest",
+    "kind": "stay",
+    "place": "h3",
+    "metro": "Metro alternative: Line 1 Busan Station → Seomyeon, Line 2 → Gwangan (exit 3), ≈40 min.",
+    "tips": [
+     "Ask for a bridge-view room.",
+     "The hotel bathhouse is naked and gender-separated; swimsuits for the pool."
+    ],
+    "landmark": "hotel"
+   },
+   {
+    "id": "d6s5",
+    "t": "16:15",
+    "title": "Sunset over the bridge",
+    "kind": "activity",
+    "options": [
+     {
+      "id": "d6s5a",
+      "title": "Millak Waterside Park",
+      "type": "Waterfront · free",
+      "price": "Free",
+      "name": "Millak Waterside Park",
+      "ko": "민락수변공원",
+      "pid": "ChIJdeSNUzXtaDURXJLasMAd0Fg",
+      "lat": 35.1545716,
+      "lng": 129.1329907,
+      "wiki": "Gwangan Bridge",
+      "about": "Wide stone steps down to the water at the eastern end of Gwangalli — the best free seat for the 7.4 km Gwangan Bridge at dusk.",
+      "cool": "Beer and snacks from the convenience store behind you.",
+      "booking": "None.",
+      "hours": "24 h · sunset 17:26",
+      "tips": [
+       "Sit on the steps facing the bridge; it lights up at dusk.",
+       "The drone show is Saturdays only — you get the bridge lights anyway."
+      ],
+      "landmark": "waterfront",
+      "fx": "sparkle"
+     },
+     {
+      "id": "d6s5b",
+      "title": "Igidae coastal walk",
+      "type": "Coastal path · 2 km",
+      "price": "Free",
+      "name": "Igidae Coastal Walk",
+      "ko": "이기대 해안산책로",
+      "lat": 35.131,
+      "lng": 129.1215,
+      "wiki": "Igidae",
+      "about": "A boardwalk and cliff path on the headland south of Gwangalli, looking straight back at the bridge and the Haeundae skyline across the bay.",
+      "cool": "The best angle on the bridge at sunset, with the sea below you.",
+      "booking": "None.",
+      "hours": "24 h · sunset 17:26",
+      "tips": [
+       "Start at the Dongsaengmal viewpoint (taxi drop-off) and walk 20 min north for the views.",
+       "Some steps — wear trainers."
+      ],
+      "landmark": "cliff"
+     }
+    ]
+   },
+   {
+    "id": "d6s6",
+    "t": "18:00",
+    "title": "Dinner on Gwangalli",
+    "kind": "food",
+    "options": [
+     {
+      "id": "d6s6a",
+      "title": "Millak Fisherman's Market — raw fish upstairs",
+      "type": "Seafood · raw fish (hoe) with a view",
+      "price": "≈₩30–35k per person, food only · ₩5k pp table charge",
+      "name": "민락어민활어직판장",
+      "ko": "민락어민활어직판장",
+      "lat": 35.1545,
+      "lng": 129.1315,
+      "wiki": "Hoe (food)",
+      "about": "Pick a live fish from a vendor downstairs, carry it upstairs, and eat it as sashimi facing the lit-up Gwangan Bridge — the Busan dinner.",
+      "cool": "Bridge view, plastic chairs, the freshest fish in the city.",
+      "booking": "None. Set a budget with the vendor first (≈₩50–60k of fish for two) and confirm the ₩5k-per-person seating charge upstairs.",
+      "hours": "≈10:00–24:00",
+      "tips": [
+       "Budget tip: say '5만원어치' (₩50k worth) and stick to it — flounder and sea bream are the value picks.",
+       "Finish with maeuntang (spicy fish stew) made from the bones, ≈₩10k."
+      ],
+      "landmark": "shop:fishtown"
+     },
+     {
+      "id": "d6s6b",
+      "title": "Gwangan Jeil Dwaeji Gukbap",
+      "type": "Busan · pork & rice soup",
+      "price": "≈₩10–13k per person, food only",
+      "name": "광안제일돼지국밥",
+      "ko": "광안제일돼지국밥",
+      "lat": 35.1533,
+      "lng": 129.1172,
+      "wiki": "Dwaeji-gukbap",
+      "about": "The neighbourhood gukbap house two blocks behind the beach — a clean, rich pork broth and a menu you can read in ten seconds.",
+      "cool": "Open late, cheap, and five minutes from the hotel.",
+      "booking": "None.",
+      "hours": "≈24 h",
+      "tips": [
+       "Add suyuk-baekban (boiled pork with rice) if one of you wants something less soupy."
+      ],
+      "landmark": "shop:soup"
+     }
+    ]
+   },
+   {
+    "id": "d6s7",
+    "t": "20:00",
+    "title": "Night on the bay",
+    "kind": "show",
+    "options": [
+     {
+      "title": "Night yacht on Suyeongman Bay",
+      "name": "수영만요트경기장",
+      "ko": "수영만요트경기장",
+      "lat": 35.156,
+      "lng": 129.1405,
+      "wiki": "Gwangan Bridge",
+      "about": "A 50-minute sail under the lit Gwangan Bridge and along the Marine City towers from the 1988 Olympic yachting centre — the bay at night from the water.",
+      "price": "≈₩30k per person",
+      "hours": "Weekday sailings hourly 18:00–21:00",
+      "need": "50 min",
+      "tips": [
+       "Book on Trazy or Klook; pick the 20:00 sailing.",
+       "Cold on deck — bring the layer.",
+       "Taxi back to the hotel ≈8 min, ≈₩6k."
+      ],
+      "id": "d6s7a",
+      "type": "Night sailing · 50 min",
+      "book": true,
+      "cool": "Under the lit bridge from the water; Marine City towers overhead.",
+      "booking": "Book on Trazy or Klook; weekday sailings hourly 18:00–21:00.",
+      "landmark": "marina",
+      "fx": "fireworks"
+     },
+     {
+      "id": "d6s7b",
+      "title": "Gwangalli beach night walk & bridge lights",
+      "type": "Night walk · free",
+      "price": "Free · beer ≈₩4k",
+      "name": "광안리해수욕장",
+      "ko": "광안리해수욕장",
+      "lat": 35.1531,
+      "lng": 129.1187,
+      "wiki": "Gwangalli Beach",
+      "about": "The 1.4 km beach promenade after dark with the whole Gwangan Bridge lit in changing colours, then a can of beer on the sand.",
+      "cool": "Zero cost, five minutes from the hotel; the bridge light show runs nightly.",
+      "booking": "None.",
+      "hours": "24 h · bridge lit until ≈24:00",
+      "tips": [
+       "Walk east to Millak and back.",
+       "'Beer street' is one block behind the beach for a nightcap."
+      ],
+      "landmark": "beach",
+      "fx": "sparkle"
+     },
+     {
+      "id": "d6s7c",
+      "title": "Haeundae Blueline beach train at night",
+      "type": "Night ride · 30 min",
+      "price": "≈₩7k per person one way",
+      "name": "해운대 블루라인파크 해변열차",
+      "ko": "해운대 블루라인파크",
+      "lat": 35.1587,
+      "lng": 129.173,
+      "wiki": "Haeundae Beach",
+      "about": "The slow beach train along the lit coast from Mipo to Cheongsapo and back — the same line as tomorrow's capsule, from the other carriage.",
+      "cool": "Harbour lights and the dark sea; far fewer people than by day.",
+      "booking": "Walk-up; last trains ≈21:00 in November — check the day's timetable.",
+      "hours": "≈09:30–21:00",
+      "tips": [
+       "Taxi ≈15 min from Gwangalli.",
+       "If you ride tonight, tomorrow's capsule still feels different — it's the view down."
+      ],
+      "landmark": "capsule"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "date": "2026-11-03",
+  "city": "Busan",
+  "title": "Coast capsule & sea temple",
+  "base": "h3",
+  "sunset": "17:25",
+  "items": [
+   {
+    "id": "d7s1",
+    "t": "10:00",
+    "title": "Along the Blueline coast",
+    "kind": "activity",
+    "fixed": "Leave the hotel at 09:30 — taxi ≈15 min (≈₩12k) to Mipo station at the east end of Haeundae beach. Check in 15 min before your slot.",
+    "options": [
+     {
+      "id": "d7s1a",
+      "title": "Sky Capsule, Mipo → Cheongsapo",
+      "name": "Blueline Park, Mipo Station",
+      "ko": "블루라인파크 미포정거장",
+      "pid": "ChIJfdIYWwuNaDURDx-eqtUjCkg",
+      "lat": 35.158284,
+      "lng": 129.1727672,
+      "wiki": "Haeundae Beach",
+      "about": "Private four-seat pods gliding 7–10 m above the shoreline on the old railway line from Mipo to Cheongsapo — Busan's most photographed ride.",
+      "price": "≈₩35k per 2-person capsule one way",
+      "hours": "09:30–17:30 (Nov)",
+      "need": "30 min ride",
+      "tips": [
+       "Bookings open Tue 6 Oct 09:00 KST = 02:00 Munich — the 10:00 slot sells out fast.",
+       "Sit on the sea side; the colourful pods over the water are the photo."
+      ],
+      "landmark": "capsule",
+      "book": true
+     },
+     {
+      "id": "d7s1b",
+      "title": "Blueline Beach Train instead (cheaper, no booking)",
+      "type": "Coastal train · 30 min",
+      "name": "해운대 블루라인파크 해변열차",
+      "ko": "해운대 해변열차",
+      "lat": 35.1596,
+      "lng": 129.1645,
+      "wiki": "Haeundae Blueline Park",
+      "about": "The slow red beach train runs the same clifftop track as the capsules, with big windows facing the sea; hop on at Mipo and off at Cheongsapo.",
+      "cool": "Walk-up tickets, same views, a third of the price.",
+      "price": "≈₩7,000 one way per person",
+      "hours": "09:30–18:00 (Nov)",
+      "need": "30 min",
+      "tips": [
+       "Sit on the sea side (left going north).",
+       "If capsules are sold out, this is the plan — no booking needed."
+      ],
+      "landmark": "station"
+     }
+    ]
+   },
+   {
+    "id": "d7s2",
+    "t": "11:00",
+    "title": "Cheongsapo",
+    "kind": "sight",
+    "fixed": "The capsule drops you at Cheongsapo station; the skywalk is a 10-min walk east along the old tracks (follow the boardwalk).",
+    "options": [
+     {
+      "id": "d7s2a",
+      "title": "Cheongsapo Daritdol Skywalk",
+      "name": "Cheongsapo Daritdol Skywalk",
+      "ko": "청사포 다릿돌전망대",
+      "pid": "ChIJUQsDVhuNaDURJo5GeByloeQ",
+      "lat": 35.1640365,
+      "lng": 129.1967173,
+      "wiki": "Haeundae District",
+      "about": "A 72 m glass-bottomed walkway jutting out over the rocks beside a fishing village with twin red-and-white lighthouses.",
+      "price": "Free",
+      "hours": "09:00–17:00 (Nov)",
+      "need": "40 min",
+      "tips": [
+       "Shoe covers are provided for the glass section.",
+       "The lighthouses are 5 min back toward the harbour."
+      ],
+      "landmark": "skywalk"
+     },
+     {
+      "id": "d7s2b",
+      "title": "Cheongsapo harbour & twin lighthouses",
+      "type": "Harbour stroll · free",
+      "name": "청사포 등대",
+      "ko": "청사포 쌍둥이등대",
+      "lat": 35.1588,
+      "lng": 129.1915,
+      "wiki": "Cheongsapo",
+      "about": "A tiny fishing harbour with a red and a white lighthouse at the end of the breakwaters, drying seaweed on the quay and cafés tucked above the rocks.",
+      "cool": "Walk out to the red lighthouse — the view back to the village is pure Busan.",
+      "price": "Free",
+      "hours": "Always open",
+      "need": "45 min",
+      "tips": [
+       "Grilled clams restaurants here are the lunch option next.",
+       "Watch the slippery breakwater steps after rain."
+      ],
+      "landmark": "waterfront"
+     }
+    ]
+   },
+   {
+    "id": "d7s3",
+    "t": "12:00",
+    "title": "Lunch in Cheongsapo",
+    "kind": "food",
+    "options": [
+     {
+      "id": "d7s3a",
+      "title": "Suminine — grilled shellfish, smallest set",
+      "type": "Seafood · grilled clams (jogae-gui)",
+      "price": "≈₩30–35k per person, food only",
+      "name": "수민이네 청사포",
+      "ko": "청사포 수민이네",
+      "lat": 35.1633,
+      "lng": 129.1952,
+      "wiki": "Clam",
+      "about": "The harbour's grilled-shellfish house: a tray of clams, scallops and abalone over charcoal at your table, with cheese-baked scallops and a kimchi-fried-rice finish.",
+      "cool": "Sea view from the second floor; the whole harbour smells of it.",
+      "booking": "None; sets are for two.",
+      "hours": "≈11:00–21:00",
+      "tips": [
+       "Budget tip: order the smallest set (≈₩60–70k for two) and skip the abalone upgrade.",
+       "Ask for the kimchi bokkeumbap at the end — cooked in the shell juices."
+      ],
+      "landmark": "shop:seafood"
+     },
+     {
+      "id": "d7s3b",
+      "title": "Geumsu Bokguk — regular soup",
+      "type": "Busan · pufferfish soup",
+      "price": "≈₩15–20k per person, food only",
+      "name": "금수복국 해운대본점",
+      "ko": "금수복국 해운대본점",
+      "lat": 35.1625,
+      "lng": 129.1595,
+      "wiki": "Fugu",
+      "about": "Busan's most famous bokguk (pufferfish soup) since 1970: a clear, restorative broth with bean sprouts and water parsley — the city's classic hangover cure.",
+      "cool": "Open 24 hours; the safest, cleanest way to try fugu.",
+      "booking": "None.",
+      "hours": "24 h",
+      "tips": [
+       "Budget tip: the regular 'eun-bok' soup (≈₩16k) — the premium fish versions run to ₩40k+.",
+       "Taxi ≈12 min from Cheongsapo, on the way to the temple."
+      ],
+      "landmark": "shop:soup"
+     }
+    ]
+   },
+   {
+    "id": "d7s4",
+    "t": "13:30",
+    "title": "Afternoon on the north coast",
+    "kind": "sight",
+    "options": [
+     {
+      "id": "d7s4a",
+      "title": "Haedong Yonggungsa Temple",
+      "name": "Haedong Yonggungsa Temple",
+      "ko": "해동용궁사",
+      "pid": "ChIJwabeuxuMaDURXC4Rb21AQaE",
+      "lat": 35.1884543,
+      "lng": 129.2231109,
+      "wiki": "Haedong Yonggungsa",
+      "about": "A Buddhist temple from 1376 built on the rocks above the waves in Gijang — one of very few Korean temples on the coast rather than in the mountains.",
+      "price": "Free",
+      "hours": "≈05:00–sunset",
+      "need": "1 h",
+      "tips": [
+       "108 steps down to the temple; rub the golden pigs for luck.",
+       "Weekends are packed — a Tuesday is ideal."
+      ],
+      "landmark": "seatemple"
+     },
+     {
+      "id": "d7s4b",
+      "title": "Songjeong Beach & Jukdo Park",
+      "type": "Beach walk · free",
+      "name": "송정해수욕장",
+      "ko": "송정해수욕장",
+      "lat": 35.1786,
+      "lng": 129.1998,
+      "wiki": "Songjeong Beach",
+      "about": "Busan's laid-back surf beach, two stops up the coast: a wide crescent of sand, a wooden boardwalk, surf cafés and the little pine-covered Jukdo islet at the end.",
+      "cool": "Empty sand in November and the best flat-white on the coast.",
+      "price": "Free",
+      "hours": "Always open",
+      "need": "1.5 h",
+      "tips": [
+       "Taxi from Cheongsapo ≈8 min.",
+       "Jukdo Park pavilion at the north end is the sunset spot."
+      ],
+      "landmark": "beach"
+     }
+    ]
+   },
+   {
+    "id": "d7s5",
+    "t": "16:15",
+    "title": "Sunset over Haeundae",
+    "kind": "activity",
+    "options": [
+     {
+      "id": "d7s5a",
+      "title": "BUSAN X the SKY",
+      "type": "Observatory · 100th floor",
+      "price": "≈₩27k per person",
+      "name": "BUSAN X the SKY",
+      "ko": "부산엑스더스카이",
+      "lat": 35.1601,
+      "lng": 129.1668,
+      "wiki": "Haeundae LCT The Sharp",
+      "about": "The observatory on floors 98–100 of the LCT tower at the east end of Haeundae beach — the beach, Gwangan Bridge and the coast you rode this morning, from 384 m.",
+      "cool": "Starbucks on the 99th floor is the highest in the world.",
+      "booking": "Walk-up or online; sunset slots are busiest.",
+      "hours": "10:00–21:00 · last entry 20:30",
+      "tips": [
+       "Be up by 16:45 for the 17:25 sunset.",
+       "Taxi ≈20 min from the temple."
+      ],
+      "landmark": "xsky"
+     },
+     {
+      "id": "d7s5b",
+      "title": "Dongbaekseom island walk",
+      "type": "Coastal loop · 1.5 km · free",
+      "price": "Free",
+      "name": "Dongbaekseom Island",
+      "ko": "동백섬",
+      "lat": 35.1535,
+      "lng": 129.153,
+      "wiki": "Dongbaekseom",
+      "about": "The pine-covered headland at the west end of Haeundae: a flat boardwalk loop around the island with the APEC House, a mermaid statue and the bridge across the bay.",
+      "cool": "Sunset from the western rocks, then the beach lights on the walk back.",
+      "booking": "None.",
+      "hours": "24 h · sunset 17:25",
+      "tips": [
+       "Start from the Westin/Chosun side and walk anticlockwise.",
+       "Taxi ≈25 min from the temple."
+      ],
+      "landmark": "island"
+     }
+    ]
+   },
+   {
+    "id": "d7s6",
+    "t": "18:30",
+    "title": "Dinner in Haeundae",
+    "kind": "food",
+    "options": [
+     {
+      "id": "d7s6a",
+      "title": "Sangguginae, Haeundae Market",
+      "type": "Busan street food · tteokbokki, fish cake, gimbap",
+      "price": "≈₩8–12k per person, food only",
+      "name": "상국이네 해운대시장",
+      "ko": "상국이네",
+      "lat": 35.1612,
+      "lng": 129.1605,
+      "wiki": "Haeundae Market",
+      "about": "The most famous stall in Haeundae Market: tteokbokki, eomuk skewers in broth, fried gimbap and sundae eaten standing at the counter.",
+      "cool": "Loud, hot, ₩10k for two — Busan snack culture in one stop.",
+      "booking": "None; short queue.",
+      "hours": "≈09:00–24:00",
+      "tips": [
+       "Add the grilled eel restaurants next door if you're still hungry (≈₩20k).",
+       "Taxi home ≈15 min."
+      ],
+      "landmark": "market"
+     },
+     {
+      "id": "d7s6b",
+      "title": "Geumsu Bokguk (24 h)",
+      "type": "Busan · pufferfish soup",
+      "price": "≈₩15–20k per person, food only",
+      "name": "금수복국 해운대본점",
+      "ko": "금수복국 해운대본점",
+      "lat": 35.1625,
+      "lng": 129.1595,
+      "wiki": "Fugu",
+      "about": "If you had clams at lunch, dinner is the bokguk you skipped — a clear pufferfish broth that's as good at night as it is in the morning.",
+      "cool": "Open 24 h, 5 min from the beach.",
+      "booking": "None.",
+      "hours": "24 h",
+      "tips": [
+       "Regular soup ≈₩16k; skip the premium fish upgrades."
+      ],
+      "landmark": "shop:soup"
+     }
+    ]
+   },
+   {
+    "id": "d7s7",
+    "t": "20:00",
+    "title": "Evening in Haeundae",
+    "kind": "show",
+    "options": [
+     {
+      "id": "d7s7a",
+      "title": "The Bay 101 — Marine City night view",
+      "type": "Night view · café",
+      "price": "Free · drinks ≈₩8k",
+      "name": "더베이101",
+      "ko": "더베이101",
+      "lat": 35.156,
+      "lng": 129.152,
+      "wiki": "Marine City",
+      "about": "A yacht-club deck opposite the Marine City towers, which mirror in the still water of the marina after dark — Busan's postcard night shot.",
+      "cool": "Fish and chips and a beer on the deck; the reflections are the photo.",
+      "booking": "None.",
+      "hours": "≈11:00–24:00",
+      "tips": [
+       "Taxi ≈7 min from Haeundae Market.",
+       "Then a taxi home ≈15 min."
+      ],
+      "landmark": "marina",
+      "fx": "sparkle"
+     },
+     {
+      "id": "d7s7b",
+      "title": "Haeundae beach lights & Gunam-ro",
+      "type": "Night walk · free",
+      "price": "Free",
+      "name": "해운대해수욕장",
+      "ko": "해운대해수욕장",
+      "lat": 35.1587,
+      "lng": 129.1604,
+      "wiki": "Haeundae Beach",
+      "about": "The beach after dark with the LCT tower lit above it, then the busy Gunam-ro pedestrian street of buskers and bars.",
+      "cool": "Street performers most evenings around the Gunam-ro fountain.",
+      "booking": "None.",
+      "hours": "24 h",
+      "tips": [
+       "Five minutes from the market.",
+       "Taxi home ≈15 min."
+      ],
+      "landmark": "plaza"
+     },
+     {
+      "id": "d7s7c",
+      "title": "Busan Cinema Center LED roof",
+      "type": "Architecture · free",
+      "price": "Free",
+      "name": "영화의전당",
+      "ko": "영화의전당",
+      "lat": 35.1716,
+      "lng": 129.1274,
+      "wiki": "Busan Cinema Center",
+      "about": "The world's longest cantilever roof, a 163 m wing of LEDs that plays light sequences over the plaza where the Busan film festival opens.",
+      "cool": "Quiet, odd and beautiful; ten minutes from Spa Land.",
+      "booking": "None.",
+      "hours": "Roof lights until ≈22:00",
+      "tips": [
+       "Taxi ≈12 min from Haeundae.",
+       "Taxi home to Gwangalli ≈10 min."
+      ],
+      "landmark": "cantilever",
+      "fx": "sparkle"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "date": "2026-11-04",
+  "city": "Busan",
+  "title": "Colourful old Busan",
+  "base": "h3",
+  "sunset": "17:24",
+  "items": [
+   {
+    "id": "d8s1",
+    "t": "09:30",
+    "title": "Old Busan morning",
+    "kind": "sight",
+    "metro": "Leave 09:00 — taxi across town is simplest (≈35 min); the metro needs Line 2 → Line 1 → bus 2-2 up the hill.",
+    "options": [
+     {
+      "id": "d8s1a",
+      "title": "Gamcheon Culture Village",
+      "name": "Gamcheon Culture Village",
+      "ko": "감천문화마을",
+      "pid": "ChIJUToRo7fpaDURo_ZMItcBfpc",
+      "lat": 35.0973935,
+      "lng": 129.0105921,
+      "wiki": "Gamcheon Culture Village",
+      "about": "A 1950s refugee settlement of pastel houses stacked up the hillside, turned into an open-air art village in 2009.",
+      "price": "Free · stamp map ≈₩2,000",
+      "hours": "09:00–18:00",
+      "need": "2 h",
+      "tips": [
+       "Buy the stamp map at the info centre and collect stamps for a free postcard.",
+       "The Little Prince viewpoint has a queue — go there first.",
+       "Steep stairs: good shoes."
+      ],
+      "landmark": "village"
+     },
+     {
+      "id": "d8s1b",
+      "title": "Bosu-dong Book Alley & Bupyeong Kkangtong Market",
+      "type": "Old town walk · free",
+      "name": "보수동 책방골목",
+      "ko": "보수동 책방골목",
+      "lat": 35.1041,
+      "lng": 129.0227,
+      "wiki": "Bosu-dong Book Street",
+      "about": "A lane of 50 second-hand bookshops stacked to the ceilings, then the covered Kkangtong (\"tin can\") market next door — Busan as it was before the murals.",
+      "cool": "Real old Busan with zero tour buses, and it's on the way to Jagalchi.",
+      "price": "Free",
+      "hours": "Shops ≈10:00–19:00",
+      "need": "1.5 h",
+      "tips": [
+       "Korean picture books make lovely cheap gifts.",
+       "Kkangtong Market has a night-market street from 18:00 — different vibe."
+      ],
+      "landmark": "market"
+     }
+    ]
+   },
+   {
+    "id": "d8s2",
+    "t": "12:00",
+    "title": "Lunch at Nampo",
+    "kind": "food",
+    "options": [
+     {
+      "id": "d8s2a",
+      "title": "Jagalchi Market 2F grilled fish + BIFF hotteok",
+      "type": "Seafood · grilled fish set, then a seed pancake",
+      "price": "≈₩12–20k per person, food only",
+      "name": "Jagalchi Market",
+      "ko": "자갈치시장",
+      "pid": "ChIJudkrFArpaDURbbCzajeQs0c",
+      "lat": 35.0966339,
+      "lng": 129.0307965,
+      "wiki": "Jagalchi Market",
+      "about": "Korea's largest fish market: on the second floor, restaurants grill mackerel, hairtail and eel over charcoal and serve them as a set with rice and soup. Then walk 5 min to BIFF Square for ssiat-hotteok.",
+      "cool": "Grilled-fish set (₩12–15k) beats buying live fish for value; the seed-stuffed hotteok (₩2k) is Busan's iconic snack.",
+      "booking": "None. Closed 1st & 3rd Tuesday.",
+      "hours": "05:00–22:00",
+      "tips": [
+       "Budget tip: order the 'saengseon-gui jeongsik' (grilled fish set) rather than by-weight fish.",
+       "Nampo station exit 2 for BIFF Square."
+      ],
+      "landmark": "fishmarket"
+     },
+     {
+      "id": "d8s2b",
+      "title": "Halmae Gaya Milmyeon",
+      "type": "Busan · wheat cold noodles",
+      "price": "≈₩8–12k per person, food only",
+      "name": "할매가야밀면",
+      "ko": "할매가야밀면",
+      "lat": 35.0985,
+      "lng": 129.0292,
+      "wiki": "Milmyeon",
+      "about": "A Nampo-dong milmyeon house from the 1970s, two minutes from BIFF Square — plain bowls, icy broth, no fuss.",
+      "cool": "The Nampo locals' lunch; ₩8k bowls.",
+      "booking": "None.",
+      "hours": "≈10:00–21:00",
+      "tips": [
+       "Order 'mul-milmyeon' and a plate of mandu.",
+       "Then hotteok at BIFF Square anyway."
+      ],
+      "landmark": "shop:noodle"
+     }
+    ]
+   },
+   {
+    "id": "d8s3",
+    "t": "14:30",
+    "title": "Afternoon by the sea",
+    "kind": "activity",
+    "options": [
+     {
+      "id": "d8s3a",
+      "title": "Huinnyeoul Culture Village",
+      "type": "Cliff village · walk & cafés",
+      "price": "Free · coffee ≈₩6k",
+      "name": "Huinnyeoul Culture Village",
+      "ko": "흰여울문화마을",
+      "pid": "ChIJseGsfh7paDURigYilgTVojA",
+      "lat": 35.0782798,
+      "lng": 129.0453198,
+      "wiki": "Huinnyeoul Culture Village",
+      "about": "White-washed houses on a cliff above the sea on Yeongdo island, with a coastal path, a tunnel through the rock and cafés hanging over the water.",
+      "cool": "Stay for the 17:24 sunset over the anchored ships.",
+      "booking": "None.",
+      "hours": "Cafés ≈11:00–20:00",
+      "tips": [
+       "Taxi ≈15 min across the Yeongdo bridge.",
+       "Featured in the film 'The Attorney' — hence the murals."
+      ],
+      "landmark": "cliff"
+     },
+     {
+      "id": "d8s3b",
+      "title": "Songdo Marine Cable Car",
+      "type": "Cable car · 1.6 km over the sea",
+      "price": "≈₩17k return (standard) · ₩22k crystal floor",
+      "name": "Songdo Marine Cable Car",
+      "ko": "송도해상케이블카",
+      "lat": 35.0762,
+      "lng": 129.0174,
+      "wiki": "Songdo Beach",
+      "about": "Cabins crossing 1.6 km of open water from Songdo beach to Amnam Park's cliffs, with a coastal skywalk and a cliff trail on the far side.",
+      "cool": "Crystal-floor cabins look straight down at the sea.",
+      "booking": "Walk-up.",
+      "hours": "09:00–21:00",
+      "tips": [
+       "Taxi ≈10 min from Jagalchi.",
+       "Walk Amnam Park's cliff path for 30 min before riding back."
+      ],
+      "landmark": "cablecar"
+     },
+     {
+      "id": "d8s3c",
+      "title": "Taejongdae",
+      "type": "Cliffs & lighthouse park",
+      "price": "Free · Danubi train ≈₩4k",
+      "name": "Taejongdae",
+      "ko": "태종대",
+      "lat": 35.053,
+      "lng": 129.087,
+      "wiki": "Taejongdae",
+      "about": "The wooded southern tip of Yeongdo: 100 m sea cliffs, a lighthouse and an observatory looking out to where Tsushima appears on clear days.",
+      "cool": "The Danubi road train loops the park so you don't have to climb.",
+      "booking": "None.",
+      "hours": "04:00–24:00 · train 09:20–17:30",
+      "tips": [
+       "Taxi ≈25 min from Jagalchi.",
+       "Weekday afternoons are quiet."
+      ],
+      "landmark": "cliff"
+     }
+    ]
+   },
+   {
+    "id": "d8s4",
+    "t": "18:30",
+    "title": "Evening soak",
+    "kind": "activity",
+    "options": [
+     {
+      "id": "d8s4a",
+      "title": "Spa Land Centum City",
+      "type": "Spa · 13 saunas & hot springs",
+      "price": "≈₩20–25k per person (weekday)",
+      "name": "Spa Land Centum City",
+      "ko": "스파랜드 센텀시티",
+      "lat": 35.169,
+      "lng": 129.1302,
+      "wiki": "Shinsegae Centum City",
+      "about": "Korea's most luxurious jjimjilbang, inside the world's largest department store: 22 hot-spring baths from two natural sources, 13 themed saunas, an open-air foot spa and a relaxation lounge.",
+      "cool": "The Roman bath and the Finnish sauna; couples meet in the mixed sauna zone in the spa uniform.",
+      "booking": "None; 4-hour ticket. Last entry 21:00.",
+      "hours": "06:00–22:00 · last entry 21:00",
+      "tips": [
+       "Taxi ≈25 min from Yeongdo, ≈10 min from the hotel afterwards.",
+       "Baths are naked and gender-separated; the themed saunas are mixed."
+      ],
+      "landmark": "spa2"
+     },
+     {
+      "id": "d8s4b",
+      "title": "Hotel spa & beach walk",
+      "type": "Rest · hotel bathhouse",
+      "price": "Spa ≈₩15k per person",
+      "place": "h3",
+      "name": "Hotel Aqua Palace",
+      "ko": "아쿠아팰리스호텔",
+      "pid": "ChIJL8ODxi7taDURTYsPKs4ilig",
+      "lat": 35.1540793,
+      "lng": 129.1188051,
+      "wiki": "Gwangalli Beach",
+      "about": "Back to Gwangalli for the hotel's own bathhouse, then a slow walk along the beach under the bridge lights.",
+      "cool": "No travel, bridge view, bed nearby.",
+      "booking": "None.",
+      "hours": "Spa ≈06:00–22:00",
+      "tips": [
+       "Gwangalli has a 'beer street' one block behind the beach for a nightcap."
+      ],
+      "landmark": "hotel"
+     }
+    ]
+   },
+   {
+    "id": "d8s5",
+    "t": "21:00",
+    "title": "Late dinner: gukbap",
+    "kind": "food",
+    "options": [
+     {
+      "id": "d8s5a",
+      "title": "Gwangan Jeil Dwaeji Gukbap",
+      "type": "Busan · pork & rice soup",
+      "price": "≈₩10–13k per person, food only",
+      "name": "광안제일돼지국밥",
+      "ko": "광안제일돼지국밥",
+      "lat": 35.1533,
+      "lng": 129.1172,
+      "wiki": "Dwaeji-gukbap",
+      "about": "The neighbourhood gukbap house behind Gwangalli beach — open late and five minutes from the hotel.",
+      "cool": "A hot bowl at 21:00 after the spa.",
+      "booking": "None.",
+      "hours": "≈24 h",
+      "tips": [
+       "Add suyuk-baekban if you want something less soupy."
+      ],
+      "landmark": "shop:soup"
+     },
+     {
+      "id": "d8s5b",
+      "title": "1953 Hyeongje Dwaeji Gukbap, Seomyeon",
+      "type": "Busan · pork & rice soup",
+      "price": "≈₩11–14k per person, food only",
+      "name": "1953 형제돼지국밥",
+      "ko": "형제돼지국밥 서면",
+      "lat": 35.1566,
+      "lng": 129.0607,
+      "wiki": "Dwaeji-gukbap",
+      "about": "On Seomyeon's 'gukbap alley': a 70-year-old kitchen serving a milkier, richer style of the soup, open around the clock.",
+      "cool": "The oldest name on the alley; Seomyeon's neon streets outside.",
+      "booking": "None.",
+      "hours": "24 h",
+      "tips": [
+       "Line 2 from Centum City to Seomyeon ≈20 min; taxi home from Seomyeon ≈20 min."
+      ],
+      "landmark": "shop:soup"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "date": "2026-11-05",
+  "city": "Seoul",
+  "title": "Back to Seoul",
+  "base": "h4",
+  "sunset": "17:31",
+  "items": [
+   {
+    "id": "d9s1",
+    "t": "11:00",
+    "title": "Snacks for the train",
+    "kind": "food",
+    "options": [
+     {
+      "id": "d9s1a",
+      "title": "Samjin Eomuk at Busan Station",
+      "name": "삼진어묵 부산역점",
+      "ko": "삼진어묵 부산역점",
+      "lat": 35.1152,
+      "lng": 129.0416,
+      "wiki": "Eomuk",
+      "about": "Busan's oldest fish-cake maker (1953) runs a bakery-style shop inside the station: trays of warm fish cakes stuffed with cheese, shrimp or peppers — the train picnic.",
+      "price": "≈₩6–10k per person, food only",
+      "hours": "≈07:00–21:00",
+      "need": "Leave the hotel 10:30 (taxi ≈30 min)",
+      "tips": [
+       "Buy 5–6 pieces and a coffee; eat them on the train.",
+       "Card accepted."
+      ],
+      "landmark": "shop:eomuk",
+      "type": "Busan · fish cakes"
+     },
+     {
+      "id": "d9s1b",
+      "title": "Station food court: kimbap, coffee & pastries",
+      "type": "Food court · quick bites",
+      "name": "부산역 푸드코트",
+      "ko": "부산역 2층 식당가",
+      "lat": 35.1152,
+      "lng": 129.0416,
+      "wiki": "Busan station",
+      "about": "The second floor of Busan Station has a food court and bakeries — kimbap rolls, egg sandwiches, coffee — right next to the KTX gates.",
+      "cool": "Fast, cheap and you can eat it on the train.",
+      "price": "≈₩6–9k per person",
+      "hours": "≈07:00–21:00",
+      "need": "20 min",
+      "tips": [
+       "Buy two coffees — KTX has no café car.",
+       "Convenience store at platform level if you're late."
+      ],
+      "landmark": "shop:foodhall"
+     }
+    ]
+   },
+   {
+    "id": "d9s2",
+    "t": "11:30",
+    "title": "Train back to Seoul",
+    "kind": "transit",
+    "long": true,
+    "fixed": "KTX from Busan Station, ≈2 h 40 min. Left side (A seats) for the river views this time.",
+    "options": [
+     {
+      "id": "d9s2a",
+      "title": "KTX Busan → Seoul",
+      "name": "Seoul Station",
+      "ko": "서울역",
+      "pid": "ChIJA3CU42aifDURaq-3csGXvuc",
+      "lat": 37.555946,
+      "lng": 126.972317,
+      "wiki": "Korea Train Express",
+      "about": "The same route in reverse — back in Seoul by early afternoon.",
+      "price": "≈₩60k per person",
+      "hours": "≈2 h 40 min",
+      "need": "Book with the outbound",
+      "tips": [
+       "Platforms are upstairs at Busan Station; check the board."
+      ],
+      "landmark": "station",
+      "book": true
+     },
+     {
+      "id": "d9s2b",
+      "title": "SRT Busan → Suseo (back-up)",
+      "type": "High-speed rail · ≈2 h 20",
+      "name": "부산역 SRT",
+      "ko": "부산역",
+      "lat": 35.1152,
+      "lng": 129.0416,
+      "wiki": "Suseo station",
+      "about": "If the KTX is full, the SRT reaches Suseo in south-east Seoul in 2 h 20; from Suseo the glue hotel is ≈40 min by metro (Line 3 → Jongno 3-ga) or a 35-min taxi.",
+      "cool": "Slightly cheaper and often has seats when KTX is sold out.",
+      "price": "≈₩52,000 per person",
+      "hours": "Roughly hourly",
+      "need": "2 h 20 + 40 min",
+      "tips": [
+       "Book at srtrain.co.kr.",
+       "From Suseo take Line 3 to Anguk and a 10-min taxi to the hotel."
+      ],
+      "landmark": "station",
+      "long": true
+     }
+    ]
+   },
+   {
+    "id": "d9s3",
+    "t": "14:30",
+    "title": "Check in at glue hotel",
+    "kind": "stay",
+    "place": "h4",
+    "fixed": "From Seoul Station a taxi (≈20–25 min, ≈₩13–15k) is recommended because of the bags. Metro alternative: Line 4 to Hyehwa + an 11-min walk.",
+    "tips": [
+     "Rooftop faces Naksan; the lounge has live sets ≈20:00–22:00."
+    ],
+    "landmark": "hotel"
+   },
+   {
+    "id": "d9s4",
+    "t": "16:40",
+    "title": "Naksan at sunset",
+    "kind": "sight",
+    "options": [
+     {
+      "id": "d9s4a",
+      "title": "Naksan fortress wall at sunset",
+      "name": "Naksan Fortress Wall Trail",
+      "ko": "낙산공원 성곽길",
+      "pid": "ChIJj1q-SjCjfDURrEOH3_cjrMM",
+      "lat": 37.5760794,
+      "lng": 127.0089876,
+      "wiki": "Ihwa Mural Village",
+      "about": "A section of the 600-year-old Seoul City Wall climbs Naksan hill behind the hotel — murals on the way up, the whole skyline from the top.",
+      "price": "Free",
+      "hours": "24 h · wall lit until ≈23:00",
+      "need": "1.5 h · sunset 17:31",
+      "tips": [
+       "Walk up through Ihwa Mural Village.",
+       "Naksan Park terrace has the best downtown skyline view."
+      ],
+      "landmark": "wall"
+     },
+     {
+      "id": "d9s4b",
+      "title": "Ihwa Mural Village lanes",
+      "type": "Hillside village · free",
+      "name": "이화벽화마을",
+      "ko": "이화벽화마을",
+      "lat": 37.5802,
+      "lng": 127.0056,
+      "wiki": "Ihwa-dong",
+      "about": "The steep lanes below the fortress wall: stair murals, tiny cafés, rooftop views over Dongdaemun — the same sunset from a lower, cosier angle.",
+      "cool": "Flowers-on-stairs photo spot and a rooftop café for the sunset.",
+      "price": "Free",
+      "hours": "Always open (quiet after 20:00, residents live here)",
+      "need": "1.5 h",
+      "tips": [
+       "Keep voices down — it's a residential hill.",
+       "Café 개뿔 rooftop faces the sunset."
+      ],
+      "landmark": "village"
+     }
+    ]
+   },
+   {
+    "id": "d9s5",
+    "t": "18:30",
+    "title": "Dinner at Gwangjang Market",
+    "kind": "food",
+    "options": [
+     {
+      "id": "d9s5a",
+      "title": "Sunhui-ne Bindaetteok",
+      "type": "Market food · mung-bean pancakes",
+      "price": "≈₩8–12k per person, food only",
+      "name": "순희네빈대떡",
+      "ko": "순희네빈대떡 광장시장",
+      "lat": 37.57,
+      "lng": 126.9996,
+      "wiki": "Bindae-tteok",
+      "about": "The market's most famous bindaetteok stall: mung beans ground in front of you and fried in a pool of oil, eaten on a plastic stool with makgeolli.",
+      "cool": "Netflix-famous, and still ₩5k a pancake.",
+      "booking": "None — find a stool.",
+      "hours": "≈09:00–23:00",
+      "tips": [
+       "Two pancakes and a bowl of makgeolli (≈₩5k) between you.",
+       "Mostly cash."
+      ],
+      "landmark": "market"
+     },
+     {
+      "id": "d9s5b",
+      "title": "Buchon Yukhoe",
+      "type": "Korean · raw beef tartare",
+      "price": "≈₩15–22k per person, food only",
+      "name": "부촌육회",
+      "ko": "부촌육회 광장시장",
+      "lat": 37.5699,
+      "lng": 127.0001,
+      "wiki": "Yukhoe",
+      "about": "On Gwangjang's yukhoe alley: hand-cut raw beef with pear, sesame oil and a raw egg yolk — Michelin Bib Gourmand and the best-known of the alley's shops.",
+      "cool": "Order the yukhoe-bibimbap for something more filling.",
+      "booking": "None; 10–20 min queue at dinner.",
+      "hours": "≈10:00–22:00",
+      "tips": [
+       "Budget tip: one plate of yukhoe (≈₩20k) shared plus a bibimbap keeps it under ₩20k each.",
+       "Then a bindaetteok for dessert anyway."
+      ],
+      "landmark": "market"
+     }
+    ]
+   },
+   {
+    "id": "d9s6",
+    "t": "20:00",
+    "title": "Evening",
+    "kind": "activity",
+    "options": [
+     {
+      "id": "d9s6a",
+      "title": "Live music in the hotel lounge",
+      "type": "Music · free",
+      "price": "Drinks ≈₩8–15k",
+      "place": "h4",
+      "name": "glue hotel",
+      "ko": "글루호텔",
+      "pid": "ChIJM9gvYS-jfDURAiRJGXn8BpU",
+      "lat": 37.5758065,
+      "lng": 127.0039779,
+      "wiki": "Daehangno",
+      "about": "The hotel lounge hosts small live sets most evenings ≈20:00–22:00 — a soft landing after the market.",
+      "cool": "Zero commute.",
+      "booking": "Ask the front desk for tonight's set.",
+      "hours": "≈20:00–22:00",
+      "landmark": "hotel"
+     },
+     {
+      "id": "d9s6b",
+      "title": "DDP at night",
+      "type": "Architecture · free",
+      "price": "Free",
+      "name": "Dongdaemun Design Plaza",
+      "ko": "동대문디자인플라자",
+      "lat": 37.5665,
+      "lng": 127.0092,
+      "wiki": "Dongdaemun Design Plaza",
+      "about": "Zaha Hadid's silver spaceship of a building, lit at night, with the LED rose garden on the lawn and Dongdaemun's 24-hour fashion malls around it.",
+      "cool": "Ten minutes' walk from Gwangjang Market; the roses glow after dark.",
+      "booking": "None.",
+      "hours": "Exterior 24 h",
+      "tips": [
+       "Taxi back to the hotel ≈7 min."
+      ],
+      "landmark": "dome",
+      "fx": "sparkle"
+     },
+     {
+      "id": "d9s6c",
+      "title": "A small Daehangno play",
+      "type": "Theatre · 90 min",
+      "price": "≈₩20–40k per person",
+      "name": "대학로 소극장",
+      "ko": "대학로 소극장",
+      "lat": 37.5822,
+      "lng": 127.0025,
+      "wiki": "Daehangno",
+      "about": "Daehangno has over a hundred small theatres around Hyehwa station; comedies and musicals with easy plots work even without Korean.",
+      "cool": "Tickets at the booth on the Marronnier Park square; same-day discounts are common.",
+      "booking": "Same-day at the ticket booth, or Interpark for English listings.",
+      "hours": "Evening shows ≈19:30–20:00",
+      "tips": [
+       "Five minutes' walk from the hotel.",
+       "Pick a non-verbal show (Nanta-style) if you want zero language barrier."
+      ],
+      "landmark": "theatre"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "date": "2026-11-06",
+  "city": "Seoul",
+  "title": "Secret Garden & farewell",
+  "base": "h4",
+  "sunset": "17:30",
+  "items": [
+   {
+    "id": "d10s1",
+    "t": "10:00",
+    "title": "Changdeokgung morning",
+    "kind": "sight",
+    "metro": "Leave the hotel at 09:35 — ≈25 min on foot along Changgyeonggung-ro, or a 5-min taxi.",
+    "options": [
+     {
+      "id": "d10s1a",
+      "title": "Changdeokgung & Secret Garden tour",
+      "name": "Changdeokgung Secret Garden",
+      "ko": "창덕궁 후원",
+      "pid": "ChIJHyS4wtaifDURHzOOAZM0aWA",
+      "lat": 37.5821721,
+      "lng": 126.9931659,
+      "wiki": "Changdeokgung",
+      "about": "A UNESCO-listed palace laid into the hillside, with the 32-hectare Huwon (Secret Garden) of pavilions and lotus ponds behind it — the loveliest place in Seoul in autumn.",
+      "price": "Palace ₩3,000 + garden ₩5,000",
+      "hours": "09:00–17:30 (Nov) · garden by guided tour only",
+      "closed": "Mondays",
+      "need": "Tour 90 min + palace 1 h",
+      "tips": [
+       "Garden tickets are released 6 days ahead at royal.khs.go.kr — 50 online, 50 on-site per slot.",
+       "Peak colour in the garden: late Oct – early Nov."
+      ],
+      "landmark": "garden",
+      "book": true
+     },
+     {
+      "id": "d10s1b",
+      "title": "Changdeokgung palace only + Bukchon viewpoint",
+      "type": "Palace · no tour booking",
+      "name": "창덕궁",
+      "ko": "창덕궁",
+      "lat": 37.5794,
+      "lng": 126.991,
+      "wiki": "Changdeokgung",
+      "about": "Skip the timed garden tour and wander the main palace at your own pace — the most beautiful of the five — then climb to the Bukchon 6th view for the hanok-roofs-and-palace photo.",
+      "cool": "No slot to chase; the Injeongjeon hall and Nakseonjae are stunning on their own.",
+      "price": "₩3,000 per person",
+      "hours": "09:00–17:30 · closed Mon",
+      "need": "1.5 h",
+      "tips": [
+       "Still free with the 4-palace pass if you bought one.",
+       "Bukchon-ro 11-gil for the classic view, 10 min walk."
+      ],
+      "landmark": "palace"
+     }
+    ]
+   },
+   {
+    "id": "d10s2",
+    "t": "12:00",
+    "title": "Midday around the palaces",
+    "kind": "sight",
+    "options": [
+     {
+      "id": "d10s2a",
+      "title": "Changgyeonggung glasshouse",
+      "name": "Changgyeonggung Palace",
+      "ko": "창경궁 대온실",
+      "lat": 37.579,
+      "lng": 126.996,
+      "wiki": "Changgyeonggung",
+      "about": "The quieter palace next door: a 1909 Victorian glasshouse (Korea's first), the Chundangji pond you saw lit up on Thursday, and almost no crowds.",
+      "price": "₩1,000",
+      "hours": "09:00–21:00",
+      "closed": "Mondays",
+      "need": "45 min",
+      "tips": [
+       "The glasshouse is at the far north end past the pond.",
+       "Exit through Honghwamun onto Changgyeonggung-ro."
+      ],
+      "landmark": "pond",
+      "fixed": "Use the Hamyangmun connecting gate on the east side of Changdeokgung — the two palaces join directly. Changgyeonggung ticket ₩1,000 at the gate."
+     },
+     {
+      "id": "d10s2b",
+      "title": "Ikseon-dong hanok alleys",
+      "type": "Cafés · shops · hanok lanes",
+      "name": "익선동",
+      "ko": "익선동 한옥거리",
+      "lat": 37.5723,
+      "lng": 126.9897,
+      "wiki": "Ikseon-dong",
+      "about": "A maze of 1920s hanok turned into tiny cafés, tea rooms and shops a few minutes south of the palace — Seoul's prettiest alleys for an unhurried hour.",
+      "cool": "Low roofs, lanterns and good coffee all within 200 m.",
+      "price": "Free (coffee ≈₩7k)",
+      "hours": "Shops ≈11:00–22:00",
+      "need": "1 h",
+      "tips": [
+       "Lunch options are right here (Changhwadang is in Ikseon).",
+       "Narrow lanes: go before 12:00 to beat the weekend crowd."
+      ],
+      "landmark": "hanok"
+     }
+    ]
+   },
+   {
+    "id": "d10s3",
+    "t": "13:00",
+    "title": "Lunch",
+    "kind": "food",
+    "options": [
+     {
+      "id": "d10s3a",
+      "title": "Changhwadang Ikseon",
+      "type": "Korean · dumplings & tteokbokki in a hanok",
+      "price": "≈₩12–16k per person, food only",
+      "name": "창화당 익선점",
+      "ko": "창화당 익선동",
+      "lat": 37.5738,
+      "lng": 126.9902,
+      "wiki": "Ikseon-dong",
+      "about": "In the 1920s hanok lanes of Ikseon-dong: crisp pan-fried dumplings, cheese tteokbokki and cold noodles, at long wooden tables under a glass roof.",
+      "cool": "The lanes themselves — go before 12:30 or queue.",
+      "booking": "None; waitlist app at the door.",
+      "hours": "11:30–21:30",
+      "tips": [
+       "Two dumpling plates + one tteokbokki between you ≈₩28k total.",
+       "Dessert at Cheongsudang's garden café next door."
+      ],
+      "landmark": "shop:dumpling"
+     },
+     {
+      "id": "d10s3b",
+      "title": "Woo Lae Oak — cold noodles only",
+      "type": "Korean · Pyongyang naengmyeon",
+      "price": "≈₩17–20k per person, food only",
+      "name": "Woo Lae Oak",
+      "ko": "우래옥 본점",
+      "lat": 37.5672,
+      "lng": 126.998,
+      "wiki": "Naengmyeon",
+      "about": "If you skipped it on Thursday: Seoul's legendary 1946 naengmyeon house, 12 minutes' walk south.",
+      "cool": "The definitive Pyongyang cold noodles.",
+      "booking": "No reservations.",
+      "hours": "11:30–21:30",
+      "closed": "Mondays",
+      "tips": [
+       "Budget tip: naengmyeon only (≈₩17k); the bulgogi is ₩50k+."
+      ],
+      "landmark": "shop:noodle"
+     }
+    ]
+   },
+   {
+    "id": "d10s4",
+    "t": "14:30",
+    "title": "Afternoon",
+    "kind": "activity",
+    "options": [
+     {
+      "id": "d10s4a",
+      "title": "Rest at the hotel",
+      "type": "Rest",
+      "price": "Free",
+      "place": "h4",
+      "name": "glue hotel",
+      "ko": "글루호텔",
+      "pid": "ChIJM9gvYS-jfDURAiRJGXn8BpU",
+      "lat": 37.5758065,
+      "lng": 127.0039779,
+      "wiki": "Daehangno",
+      "about": "Pack, nap, rooftop. The last big day deserves a pause.",
+      "cool": "Zero commute.",
+      "booking": "None.",
+      "hours": "—",
+      "landmark": "hotel"
+     },
+     {
+      "id": "d10s4b",
+      "title": "Last gifts in Insadong",
+      "type": "Shopping",
+      "price": "Free to wander",
+      "name": "Insadong",
+      "ko": "인사동길",
+      "lat": 37.574,
+      "lng": 126.9855,
+      "wiki": "Insa-dong",
+      "about": "Ten minutes' walk: hanji paper, ceramics, tea and the Ssamziegil craft arcade for the final presents.",
+      "cool": "Tax refund at the counter over ₩15k.",
+      "booking": "None.",
+      "hours": "≈10:30–20:30",
+      "tips": [
+       "Kyung-in Museum of Fine Art has a hanok tea garden for a break."
+      ],
+      "landmark": "teahouse"
+     }
+    ]
+   },
+   {
+    "id": "d10s5",
+    "t": "16:00",
+    "title": "Late afternoon",
+    "kind": "sight",
+    "options": [
+     {
+      "id": "d10s5a",
+      "title": "Jongmyo Shrine — English guided tour",
+      "name": "Jongmyo Shrine",
+      "ko": "종묘",
+      "lat": 37.5745,
+      "lng": 126.994,
+      "wiki": "Jongmyo",
+      "about": "The Confucian shrine to the Joseon kings — a 100 m-long hall of dark wood and stone, UNESCO-listed, and the quietest world-heritage site in downtown Seoul.",
+      "price": "₩1,000",
+      "hours": "Weekdays by guided tour only · English tours 10:00 / 12:00 / 14:00 / 16:00",
+      "closed": "Tuesdays",
+      "need": "1 h",
+      "tips": [
+       "Be at the ticket gate by 15:50 — the 16:00 English tour is the last.",
+       "Saturdays are free-roaming; weekdays guided only."
+      ],
+      "landmark": "jongmyo"
+     },
+     {
+      "id": "d10s5b",
+      "title": "Cheonggyecheon stream walk",
+      "type": "Riverside walk · free",
+      "name": "청계천",
+      "ko": "청계천",
+      "lat": 37.5695,
+      "lng": 126.978,
+      "wiki": "Cheonggyecheon",
+      "about": "Drop below street level and follow the restored stream west from Gwangjang towards Gwangtonggyo: stepping stones, bridges, and lanterns switching on as the light goes.",
+      "cool": "A calm 2 km of water through the middle of the city — perfect before a farewell dinner.",
+      "price": "Free",
+      "hours": "Always open",
+      "need": "1 h",
+      "tips": [
+       "Walk west: the lanterns are best between Gwanggyo and Cheonggye Plaza.",
+       "Jongsamyook BBQ is a 10-min walk back east."
+      ],
+      "landmark": "river"
+     }
+    ]
+   },
+   {
+    "id": "d10s6",
+    "t": "18:30",
+    "title": "Farewell dinner: Korean barbecue",
+    "kind": "food",
+    "book": true,
+    "options": [
+     {
+      "id": "d10s6a",
+      "title": "Jongsamyook",
+      "type": "Korean BBQ · aged pork & beef",
+      "price": "≈₩25–35k per person, food only (≈150–200 g pp)",
+      "name": "종삼육",
+      "ko": "종삼육 종로3가",
+      "lat": 37.5711,
+      "lng": 126.9912,
+      "wiki": "Korean barbecue",
+      "about": "A polished grill house by Jongno 3-ga where the staff cook thick-cut aged pork and beef over charcoal for you, with kimchi stew to finish.",
+      "cool": "Staff-grilled, so you can just hold hands and eat.",
+      "booking": "Reserve a 18:30 table via Catch Table or Naver a few days ahead.",
+      "hours": "≈16:00–23:00",
+      "tips": [
+       "Budget tip: 300–400 g between two plus one stew stays under ₩35k each.",
+       "Drinks extra: soju ≈₩5k, beer ≈₩5k."
+      ],
+      "landmark": "shop:bbq"
+     },
+     {
+      "id": "d10s6b",
+      "title": "Hando Samgyeopsal",
+      "type": "Korean BBQ · pork belly sets",
+      "price": "≈₩18–25k per person, food only (sets ≈₩13–14k per portion)",
+      "name": "한도삼겹살",
+      "ko": "한도삼겹살 종로",
+      "lat": 37.5716,
+      "lng": 126.9906,
+      "wiki": "Samgyeopsal",
+      "about": "The old-school neighbourhood grill: thick pork belly on a slanted iron plate with kimchi and bean sprouts frying in the fat, and a bowl of doenjang stew.",
+      "cool": "Cheap, loud and exactly what a last night in Seoul should taste like.",
+      "booking": "Walk in; busy after 19:00.",
+      "hours": "≈15:00–23:00",
+      "tips": [
+       "Two portions (≈₩27k) + rice + stew is plenty for two.",
+       "Order 'mokssal' (neck) too if you want variety."
+      ],
+      "landmark": "shop:bbq"
+     }
+    ]
+   },
+   {
+    "id": "d10s7",
+    "t": "20:30",
+    "title": "Last night in Seoul",
+    "kind": "show",
+    "options": [
+     {
+      "id": "d10s7a",
+      "title": "Namsan night view from Baekbeom Square",
+      "type": "Night view · free",
+      "price": "Free",
+      "name": "백범광장",
+      "ko": "남산공원 백범광장",
+      "lat": 37.5547,
+      "lng": 126.98,
+      "wiki": "Namsan (Seoul)",
+      "about": "The lawn terraces on Namsan's north slope with the tower lit above you and the whole downtown glittering below — where you started eleven nights ago.",
+      "cool": "Bring a convenience-store drink; the fortress wall is lit along the path.",
+      "booking": "None.",
+      "hours": "24 h",
+      "tips": [
+       "Taxi ≈12 min from Jongno 3-ga (≈₩8k).",
+       "Taxi back to the hotel ≈15 min."
+      ],
+      "landmark": "tower",
+      "fx": "fireworks"
+     },
+     {
+      "id": "d10s7b",
+      "title": "Gwanghwamun Square by night",
+      "type": "Night walk · free",
+      "price": "Free",
+      "name": "광화문광장",
+      "ko": "광화문광장",
+      "lat": 37.5725,
+      "lng": 126.9768,
+      "wiki": "Gwanghwamun Plaza",
+      "about": "The great axis of Seoul lit at night: King Sejong and Admiral Yi, the floodlit Gwanghwamun gate, and the fountains along the square.",
+      "cool": "Fifteen minutes' walk from the barbecue; benches and the media wall.",
+      "booking": "None.",
+      "hours": "24 h",
+      "tips": [
+       "Walk down Cheonggyecheon on the way back.",
+       "Taxi home ≈10 min."
+      ],
+      "landmark": "square",
+      "fx": "fireworks"
+     },
+     {
+      "id": "d10s7c",
+      "title": "Rooftop at glue hotel",
+      "type": "Rest · rooftop",
+      "price": "Free",
+      "place": "h4",
+      "name": "glue hotel",
+      "ko": "글루호텔",
+      "pid": "ChIJM9gvYS-jfDURAiRJGXn8BpU",
+      "lat": 37.5758065,
+      "lng": 127.0039779,
+      "wiki": "Daehangno",
+      "about": "Naksan's wall lit above the hotel, the last bags half-packed, and nowhere else to be.",
+      "cool": "Zero commute; the lounge set is on until 22:00.",
+      "booking": "None.",
+      "hours": "—",
+      "landmark": "hotel",
+      "fx": "fireworks"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "date": "2026-11-07",
+  "city": "Seoul",
+  "title": "Fly home",
+  "base": "h4",
+  "sunset": "",
+  "items": [
+   {
+    "id": "d11s1",
+    "t": "—",
+    "title": "To the airport",
+    "kind": "transit",
+    "from": {
+     "lat": 37.5758065,
+     "lng": 127.0039779
+    },
+    "options": [
+     {
+      "id": "d11s1a",
+      "title": "Airport bus 6011 from the Changgyeonggung stop",
+      "name": "인천국제공항",
+      "ko": "인천국제공항",
+      "lat": 37.5559,
+      "lng": 126.9723,
+      "wiki": "Incheon International Airport",
+      "about": "Incheon International Airport — the way home. Hold hands in the queue.",
+      "price": "Bus ≈₩17–18k pp · taxi ≈₩65–80k",
+      "hours": "Bus every 15–20 min from ≈05:00",
+      "need": "≥3.5 h before departure",
+      "tips": [
+       "Check your terminal — T1 or T2.",
+       "Tax-refund counters are after security; keep the receipts handy."
+      ],
+      "landmark": "airport",
+      "fixed": "Airport bus 6011 from the Changgyeonggung stop (≈10 min walk from the hotel): ≈70–80 min, ≈₩17–18k per person. Taxi: ≈60–75 min, ≈₩65–80k per car."
+     },
+     {
+      "id": "d11s1b",
+      "title": "Taxi to Incheon",
+      "type": "Taxi · ≈60–75 min",
+      "name": "인천국제공항",
+      "ko": "인천국제공항",
+      "lat": 37.4602,
+      "lng": 126.4407,
+      "wiki": "Incheon International Airport",
+      "about": "Door to door with the bags, ≈60–75 min outside rush hour via the airport expressway; Kakao T shows the fixed estimate before you book.",
+      "cool": "Zero hassle for two people with luggage.",
+      "price": "≈₩65–80k per car (+ ₩6.6k toll)",
+      "hours": "24 h",
+      "need": "60–75 min",
+      "tips": [
+       "Say which terminal — Terminal 1 for most airlines, 2 for KAL/Delta/Air France/KLM.",
+       "Book via Kakao T to avoid negotiating."
+      ],
+      "landmark": "airport",
+      "fixed": "Taxi from the hotel door: ≈60–75 min outside rush hour, ≈₩65–80k per car plus the ₩6,600 expressway toll. Leave ≥3.5 h before the flight."
+     },
+     {
+      "id": "d11s1c",
+      "title": "AREX express from Seoul Station",
+      "type": "Train · 43 min · ₩11k",
+      "name": "서울역 공항철도",
+      "ko": "서울역 공항철도",
+      "lat": 37.5547,
+      "lng": 126.9707,
+      "wiki": "AREX",
+      "about": "Taxi 15 min to Seoul Station, then the non-stop AREX Express to Incheon T1 in 43 min (T2 51 min); some airlines allow check-in at Seoul Station.",
+      "cool": "Traffic-proof and you can drop bags early at the station check-in counters.",
+      "price": "₩11,000 per person + taxi ≈₩10k",
+      "hours": "05:20–22:40, every 25–40 min",
+      "need": "≈1 h 15 total",
+      "tips": [
+       "Check if your airline offers city check-in at Seoul Station (KAL, Asiana, Jeju Air).",
+       "Buy express tickets at the machines — the all-stop train takes 20 min longer."
+      ],
+      "landmark": "airport",
+      "fixed": "Taxi ≈15 min to Seoul Station (≈₩10k), then the AREX Express: 43 min to Terminal 1, 51 min to Terminal 2. Leave ≥3.5 h before the flight."
+     }
+    ]
+   }
+  ]
+ }
 ]
