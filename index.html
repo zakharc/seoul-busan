@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f5f6fa">
-<meta name="build" content="20261001-131939">
+<meta name="build" content="20261001-134927">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
@@ -35,6 +35,8 @@ a{color:inherit}
 button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
 #stage{position:fixed;inset:0;z-index:0;background:var(--bg)}
 #stage canvas{display:block;width:100%;height:100%}
+#stage{transition:opacity .38s ease}
+#stage.fade{opacity:0}
 .vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(to bottom,rgba(245,246,250,.9),rgba(245,246,250,0) 22%),linear-gradient(to top,rgba(245,246,250,.85),rgba(245,246,250,0) 30%)}
 
@@ -216,15 +218,38 @@ dialog::backdrop{animation:fadein .35s ease-out}
 .sheet.show{transform:none}
 @media (max-width:899px){
   .photo{height:176px}
-  .toast{bottom:auto;top:calc(var(--top-h) + var(--sat) + 60px);transform:translate(-50%,-10px)}
   .toast.show{transform:translate(-50%,0)}
   :root{--sheet-full:calc(100dvh - var(--bar-h) - var(--sab) - var(--top-h) - var(--sat) - 6px)}
   .sheet{height:var(--sheet-h);transition:transform .65s var(--ease),height .5s var(--ease);will-change:transform,height;transform:translateY(calc(100% + var(--bar-h) + var(--sab) + 24px))}
   .sheet.show{transform:none}
-  .sheet.show.full{height:var(--sheet-full)}
+  .sheet.show.full{height:var(--sheet-full);z-index:23} /* above the travel banner / presence dock so the handle is always grabbable */
   .sheet.drag{transition:transform .65s var(--ease)}
-  .sheet .grab{position:absolute;left:0;right:0;top:0;height:34px;z-index:4;touch-action:none;cursor:grab}
+  .sheet .grab{position:absolute;left:0;right:0;top:0;height:52px;z-index:4;touch-action:none;cursor:grab}
+  .handle{top:10px;width:52px;height:6px;border-radius:3px;background:rgba(255,255,255,.92);box-shadow:0 1px 8px rgba(0,0,0,.28)}
+  .handle::after{content:"";position:absolute;left:50%;top:-14px;width:120px;height:34px;transform:translateX(-50%)}
+  /* staged phone flow: a floating action pill over the full-screen scene */
+  .peek{position:fixed;left:50%;bottom:calc(var(--bar-h) + var(--sab) + 16px);transform:translate(-50%,24px);z-index:21;display:flex;gap:8px;align-items:center;max-width:calc(100vw - 24px);opacity:0;pointer-events:none;transition:opacity .4s var(--ease),transform .5s var(--ease)}
+  .peek.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+  .peek button{height:54px;padding:0 18px 0 16px;border-radius:999px;background:var(--ink);color:#fff;display:inline-flex;align-items:center;gap:10px;min-width:0;box-shadow:0 18px 40px -16px rgba(17,22,40,.55);font:700 14.5px var(--body);transition:transform .25s var(--ease)}
+  .peek button:active{transform:scale(.96)}
+  .peek button .tx{display:flex;flex-direction:column;align-items:flex-start;min-width:0;line-height:1.15}
+  .peek button .tx b{font:700 14.5px var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:56vw}
+  .peek button .tx small{font:600 11px var(--body);opacity:.72;letter-spacing:.04em;white-space:nowrap}
+  .peek button .ic{font-size:18px;flex:0 0 auto}
+  .peek button svg{width:18px;height:18px;flex:0 0 auto}
+  .peek button.alt{background:color-mix(in srgb,var(--surface) 90%,transparent);color:var(--ink);border:1px solid var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:0 16px;box-shadow:0 10px 30px -18px rgba(17,22,40,.4)}
+  .peek button.go{background:var(--c)}
+  .peek.pop button{animation:peekpop .65s var(--ease) both}
+  .peek button#peek-info{animation:peekpop .65s var(--ease) both,peekglow 2.6s ease-in-out 1s infinite}
+  @keyframes peekglow{0%,100%{box-shadow:0 18px 40px -16px rgba(17,22,40,.55)}50%{box-shadow:0 18px 44px -14px rgba(17,22,40,.55),0 0 0 6px color-mix(in srgb,var(--c) 22%,transparent)}}
+  .peek.pop button:nth-child(2){animation-delay:.07s}
+  @keyframes peekpop{0%{transform:translateY(26px) scale(.9);opacity:0}60%{transform:translateY(-4px) scale(1.02);opacity:1}100%{transform:none;opacity:1}}
+  .daycard .dc-close{display:grid;position:absolute;right:12px;top:12px;width:38px;height:38px;border-radius:50%;background:var(--soft);place-items:center;color:var(--ink);z-index:2}
+  .daycard .dc-close svg{width:16px;height:16px}
+  .bar .mid.tap{cursor:pointer}
+  .bar .mid.tap .b::after{content:" ↑";color:var(--c)}
 }
+@media (min-width:900px){ .peek,.daycard .dc-close{display:none!important} }
 @media (min-width:900px){.sheet .grab,.sheet .handle{display:none}}
 .sheet .scroll{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-width:none;touch-action:pan-y}
 .sheet .scroll::-webkit-scrollbar{display:none}
@@ -313,12 +338,12 @@ dialog::backdrop{animation:fadein .35s ease-out}
 .mid .dots i.past{background:color-mix(in srgb,var(--c) 45%,#fff)}
 .mid .prog{height:3px;border-radius:2px;background:var(--soft);margin-top:8px;overflow:hidden;display:none}
 .mid .prog i{display:block;height:100%;width:0;background:var(--c);transition:width .1s linear}
-.bar.travel .prog{display:block}.bar.travel .dots{display:none}
-.bar.travel .nbtn{pointer-events:none;opacity:.5}
+.bar.moving .prog{display:block}.bar.moving .dots{display:none}
+.bar.moving .nbtn{pointer-events:none;opacity:.5}
 
 /* ---------- travel label ---------- */
 .travel{position:fixed;left:50%;top:calc(var(--top-h) + var(--sat) + 18px);transform:translate(-50%,-10px);z-index:21;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,.85);border:1px solid var(--line);
-  backdrop-filter:blur(12px);font:600 13px var(--body);opacity:0;transition:.4s var(--ease);white-space:nowrap;display:flex;gap:8px;align-items:center}
+  backdrop-filter:blur(12px);font:600 13px var(--body);opacity:0;pointer-events:none;transition:.4s var(--ease);white-space:nowrap;display:flex;gap:8px;align-items:center}
 .travel{max-width:min(92vw,520px)}
 .travel svg{width:15px;height:15px;color:var(--c);flex:0 0 auto}
 .travel #travel-txt{min-width:0;overflow:hidden;text-overflow:ellipsis}
@@ -360,9 +385,9 @@ dialog::backdrop{background:rgba(17,22,40,.35);backdrop-filter:blur(6px)}
 .polaroids figcaption small{display:block;font:500 10px var(--body);color:#6b7392}
 .polaroids figure button{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--ink);color:var(--bg);font-size:12px;line-height:20px;opacity:0;transition:.2s}
 .polaroids figure:hover button{opacity:1}
-.toast{position:fixed;left:50%;bottom:calc(var(--bar-h) + var(--sab) + 16px);transform:translate(-50%,16px);max-width:min(92vw,520px);text-align:center;z-index:80;padding:10px 16px;border-radius:999px;background:var(--ink);color:#fff;font:600 13px var(--body);opacity:0;pointer-events:none;transition:.35s}
+.toast{position:fixed;left:50%;top:auto;bottom:calc(var(--bar-h) + var(--sab) + 16px);height:auto;max-height:80px;width:max-content;max-width:min(92vw,520px);transform:translate(-50%,16px);text-align:center;z-index:80;padding:10px 16px;border-radius:999px;background:var(--ink);color:#fff;font:600 13px/1.35 var(--body);opacity:0;pointer-events:none;transition:.35s;overflow:hidden;text-overflow:ellipsis}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-@media (max-width:899px){ .toast{bottom:auto;top:calc(var(--top-h) + var(--sat) + 64px);width:max-content} body:has(.presence.show) .toast{top:calc(var(--top-h) + var(--sat) + 128px)} .travel.show~.toast{top:calc(var(--top-h) + var(--sat) + 110px)} body:has(.travel.show):has(.presence.show) .toast{top:calc(var(--top-h) + var(--sat) + 174px)} }
+@media (max-width:899px){ .toast{bottom:auto;top:calc(var(--top-h) + var(--sat) + 64px)} .toast.lower{top:calc(var(--top-h) + var(--sat) + 128px)} }
 .no3d #stage{background:radial-gradient(90% 70% at 50% 35%,#fbe4ec,#e9ecf7 55%,#f5f6fa 85%)}
 :root[data-theme="dark"].no3d #stage{background:radial-gradient(90% 70% at 50% 35%,#2a2240,#141a2c 60%)}
 .no3d #stage canvas{display:none}
@@ -679,7 +704,6 @@ html{background:var(--bg)}
   .start{justify-content:center;padding:0 8vw;background:linear-gradient(to right,rgba(251,228,236,.94) 0,rgba(251,228,236,.86) 30%,rgba(251,228,236,.35) 50%,rgba(251,228,236,0) 64%)}
   .start .in{margin:0;max-width:640px}
   .start h1{font-size:clamp(64px,7vw,110px)}
-  .toast{bottom:32px}
   .dlg{left:50%;right:auto;bottom:auto;top:50%;width:min(620px,92vw);transform:translate(-50%,-50%);border-radius:26px;max-height:86vh}
   @keyframes up{from{transform:translate(-50%,calc(-50% + 30px));opacity:0}}
   .travel{top:auto;bottom:40px;left:calc((100vw - 478px)/2)}
@@ -795,6 +819,7 @@ html{background:var(--bg)}
 
 <aside class="sheet" id="sheet"><div class="grab" id="sheet-grab"></div><div class="handle"></div><div class="scroll" id="sheet-scroll"></div></aside>
 
+<div class="peek" id="peek" aria-live="polite"></div>
 <div class="travel" id="travel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M13 4v16M13 4l-5 6M13 20l5-6"/></svg><span id="travel-txt"></span></div>
 
 <footer class="bar" id="bar">
@@ -955,7 +980,7 @@ function sigil(day){
 function renderDay(i){
   const d=DAYS[i], h=HOTELS[d.base];
   daycard.style.setProperty("--c",CITYC[d.city]);
-  daycard.innerHTML=`<div class="num">${pad2(i+1)}</div>
+  daycard.innerHTML=`<button class="dc-close" aria-label="Hide the plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button><div class="num">${pad2(i+1)}</div>
     <div class="k"><b>${d.city}</b><span>·</span><span>${fmtDay(d.date)}</span>${i===todayIdx?'<span>·</span><span style="color:var(--gold)">Today</span>':""}${(()=>{ const a=d.items.filter(it=>rv(it,"her")).length; return a?`<span>·</span><span class="ans">♥ ${role==="her"?a+"/"+d.items.length+" answered":names.her+" "+a+"/"+d.items.length}</span>`:""; })()}</div>
     <h2>${esc(d.title)}</h2>
     <p class="stay">Staying at <a href="${placeUrl(h)}" target="_blank" rel="noopener">${esc(h.title)}</a>${d.sunset?` · sunset ≈${d.sunset}`:""} · ${wxOf(d)}</p>
@@ -964,7 +989,7 @@ function renderDay(i){
       return `<li style="--i:${k}" class="${isDone?"done":""}${o?" choice":""}${isFood(it)?" food":""}${sk?" skip":""}"><button data-k="${k}"><span class="tm">${esc(it.t)}</span><span class="tt">${esc(o?p.title:it.title)}${mini?`<span class="mini">${mini}</span>`:""}${o?`<small>${o.length} options · ${esc(it.title)}</small>`:""}</span></button></li>`; }).join("")}</ol>
     ${sigil(d)}
     <div class="row"><button class="btn primary" id="day-start">Start the day <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>`;
-  $("day-start").onclick=()=>go(i,0);
+  $("day-start").onclick=()=>go(i,0); const dcc=daycard.querySelector(".dc-close"); if(dcc) dcc.onclick=()=>{ daycard.classList.remove("show"); buzz(4); };
   if(daycard.classList.contains("show")){ daycard.querySelectorAll(".k,h2,.stay,.row").forEach((el,j)=>{ el.classList.add("swap-in"); el.style.animationDelay=(j*40)+"ms"; }); }
   daycard.querySelectorAll(".tl button").forEach(b=>b.onclick=()=>go(i,+b.dataset.k,"jump"));
 }
@@ -1040,23 +1065,37 @@ function renderPolaroids(){ let el=sheetScroll.querySelector(".polaroids"); cons
 /* ---------- bottom bar ---------- */
 function renderBar(){
   const s=APP.state; if(s.mode==="start"||s.mode==="pick"){ bar.classList.remove("show"); return; }
-  bar.classList.add("show"); bar.classList.toggle("travel",s.mode==="travel");
+  bar.classList.add("show"); bar.classList.toggle("moving",s.mode==="travel");
   const d=DAYS[s.day]; root.style.setProperty("--c",CITYC[d.city]);
   btnPrev.disabled=(s.day===0&&s.stop<=-1&&s.mode!=="travel"); btnNext.disabled=(s.day===DAYS.length-1&&s.stop===d.items.length-1);
-  midA.textContent="Day "+(s.day+1)+" · "+fmtDay(d.date)+" · "+d.city;
+  midA.textContent="Day "+(s.day+1)+" · "+fmtDay(d.date)+" · "+d.city; const midEl=bar.querySelector(".mid"); if(midEl){ const tap=PHONE&&s.mode==="stop"&&!sheet.classList.contains("show"); midEl.classList.toggle("tap",tap); midEl.onclick=tap?openSheet:null; }
   const nb=s.mode==="day"?d.title:(s.mode==="travel"?travelTxt.textContent:placeOf(d.items[s.stop]).title||d.items[s.stop].title); if(nb!==midB.textContent){ midB.textContent=nb; midB.classList.remove("flip"); void midB.offsetWidth; midB.classList.add("flip"); }
   dotsEl.innerHTML=d.items.map((it,k)=>{ const h=rv(it,"her"); return `<i class="${k===s.stop?"on":(k<s.stop?"past":"")}${h&&h.s==="heart"?" love":""}${effSkip(it)?" skip":""}"></i>`; }).join("");
   rail.querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-current",+b.dataset.i===s.day)); const cb=rail.querySelector('[aria-current="true"]'); if(cb) cb.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"});
 }
 
+/* ---------- staged phone flow: full-screen scene with one floating action; the info sheet is pulled up on demand ---------- */
+const PHONE=matchMedia("(max-width:899px)").matches, peekEl=$("peek");
+function openSheet(){ if(APP.state.mode!=="stop") return; sheet.classList.remove("still"); sheet.classList.add("show"); buzz(4); }
+function putDown(){ sheet.classList.remove("show","full"); buzz(4); }
+function renderPeek(){ if(!PHONE||!peekEl) return; const s=APP.state; let html="";
+  if(s.mode==="day"&&!daycard.classList.contains("show")){ const d=DAYS[s.day]; html=`<button class="alt" id="peek-plan"><span class="ic">🗺️</span><span class="tx"><b>Day ${s.day+1} plan</b></span></button><button class="go" id="peek-go"><span class="tx"><b>Start the day</b><small>${esc(d.title)}</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>`; }
+  else if(s.mode==="stop"&&!s.quiz&&!sheet.classList.contains("show")){ const it=DAYS[s.day].items[s.stop], o=optionsOf(it), my=rv(it,role); html=`<button id="peek-info"><span class="ic">${my?(my.s==="heart"?"💗":"⤼"):"✨"}</span><span class="tx"><b>${esc(placeOf(it).title||it.title)}</b><small>${o?o.length+" options · ":""}photos, info${my?"":" · ♥ or skip"} · pull up</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button>`; }
+  const changed=html!==peekEl.dataset.html; if(!html){ peekEl.classList.remove("show","pop"); peekEl.dataset.html=""; return; }
+  if(changed){ peekEl.innerHTML=html; peekEl.dataset.html=html; const pl=$("peek-plan"), pg=$("peek-go"), pi=$("peek-info"); if(pl) pl.onclick=()=>{ daycard.classList.add("show"); buzz(4); }; if(pg) pg.onclick=()=>{ buzz(6); go(s.day,0); }; if(pi) pi.onclick=openSheet; peekEl.classList.remove("pop"); void peekEl.offsetWidth; peekEl.classList.add("pop"); }
+  peekEl.classList.add("show"); }
+if(PHONE){ new MutationObserver(()=>renderPeek()).observe(sheet,{attributes:true,attributeFilter:["class"]}); new MutationObserver(()=>renderPeek()).observe(daycard,{attributes:true,attributeFilter:["class"]}); }
+APP.openSheet=openSheet; APP.putDown=putDown;
+if(PHONE){ const stg=$("stage"); let sd=null; stg.addEventListener("pointerdown",e=>{ sd={x:e.clientX,y:e.clientY,t:performance.now()}; },{passive:true}); stg.addEventListener("pointerup",e=>{ if(!sd) return; const ok=Math.hypot(e.clientX-sd.x,e.clientY-sd.y)<8&&performance.now()-sd.t<400; sd=null; if(ok&&APP.state.mode==="stop"&&sheet.classList.contains("show")) putDown(); },{passive:true}); }
 /* ---------- navigation ---------- */
 let arriveTimer=null, moveSeq=0;
 function setHash(){ if(location.hash) history.replaceState(null,"",location.pathname+location.search); }
 function go(day,stop,kind){
   const s=APP.state, prev={mode:s.mode,day:s.day,stop:s.stop}; const seq=++moveSeq;
   startEl.hidden=true; clearTimeout(arriveTimer); closePick();
+  const fromHill=prev.mode==="start"||prev.mode==="pick"; APP.lastKind=kind||null;
   if(stop<0){ s.mode="day"; s.day=day; s.stop=-1; setEvening(false); renderDay(day); sheet.classList.remove("show"); travelEl.classList.remove("show");
-    requestAnimationFrame(()=>daycard.classList.add("show")); renderBar(); setHash(); APP.emit("move",{kind:kind||"intro",day,stop:-1,prev}); return; }
+    requestAnimationFrame(()=>{ if(!PHONE) daycard.classList.add("show"); renderPeek(); }); renderBar(); setHash(); emitMove(fromHill,{kind:kind||"intro",day,stop:-1,prev}); return; }
   const it=DAYS[day].items[stop], p=placeOf(it);
   const k=kind||(prev.mode==="day"&&prev.day===day?"descend":(prev.day===day&&prev.stop>=0?"walk":"jump"));
   s.mode="travel"; s.day=day; s.stop=stop; daycard.classList.remove("show"); sheet.classList.remove("show");
@@ -1065,11 +1104,13 @@ function go(day,stop,kind){
   const verb=k!=="walk"?"Arriving at ":(back?"Back to ":(cm.vehicle==="train"?"On the KTX to ":(cm.vehicle==="taxi"?"Taxi to ":"Walking to ")));
   travelTxt.textContent=verb+(p.title||it.title); travelEl.classList.add("show");
   renderBar(); setHash();
-  const dur=APP.travelDuration?APP.travelDuration(day,prev,stop,k):1400;
-  APP.emit("move",{kind:k,day,stop,prev,dur,vehicle:cm.vehicle});
-  arriveTimer=setTimeout(()=>{ if(seq===moveSeq) APP.arrive(); },dur+300);
+  const dur=APP.travelDuration?APP.travelDuration(day,prev,stop,k):1400; renderPeek();
+  emitMove(fromHill,{kind:k,day,stop,prev,dur,vehicle:cm.vehicle});
+  arriveTimer=setTimeout(()=>{ if(seq===moveSeq) APP.arrive(); },dur+300+(fromHill?360:0));
 }
-APP.arrive=function(){ const s=APP.state; if(s.mode!=="travel") return; clearTimeout(arriveTimer); s.mode="stop"; APP.quick=false; APP.arrivals=(APP.arrivals||0)+1; firstHints(); travelEl.classList.remove("show"); progEl.style.width="0"; renderBar(); sheet.classList.add("show"); APP.emit("arrive",s); };
+/* leaving the welcome hill: fade the scene out, let the 3D camera cut to the city, fade back in */
+function emitMove(fade,m){ if(!fade){ APP.emit("move",m); return; } const st=$("stage"); st.classList.add("fade"); setTimeout(()=>{ APP.emit("move",m); setTimeout(()=>st.classList.remove("fade"),140); },340); }
+APP.arrive=function(){ const s=APP.state; if(s.mode!=="travel") return; clearTimeout(arriveTimer); s.mode="stop"; const autoOpen=!PHONE||APP.quick; APP.quick=false; APP.arrivals=(APP.arrivals||0)+1; travelEl.classList.remove("show"); progEl.style.width="0"; renderBar(); if(autoOpen){ sheet.classList.add("show"); firstHints(); } renderPeek(); APP.emit("arrive",s); };
 APP.progress=p=>{ progEl.style.width=(p*100).toFixed(1)+"%"; };
 APP.go=go;
 function next(){ const s=APP.state; if(s.mode==="travel"||s.mode==="start") return; const d=DAYS[s.day]; if(s.mode==="day") return go(s.day,0); if(s.stop<d.items.length-1) return go(s.day,s.stop+1); if(s.day<DAYS.length-1) go(s.day+1,-1); }
@@ -1100,7 +1141,7 @@ $("bookdlg").addEventListener("click",e=>{ if(e.target===$("bookdlg")) $("bookdl
 
 /* ---------- share + toast ---------- */
 const toastEl=$("toast"); let toastT;
-const toast=msg=>{ toastEl.textContent=msg; toastEl.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>toastEl.classList.remove("show"),2200); };
+const toast=msg=>{ toastEl.textContent=msg; const pres=document.getElementById("presence"); toastEl.classList.toggle("lower",!!((pres&&pres.classList.contains("show"))||document.getElementById("travel").classList.contains("show"))); toastEl.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>toastEl.classList.remove("show"),2200); };
 APP.toast=toast;
 async function share(){
   const url=herLink();
@@ -1164,7 +1205,7 @@ function reviewBar(it,curOpt,i,k){
 function bindReview(scope,it,i,k,curOpt){
   const hb=scope.querySelector(".rv.heart"), sb=scope.querySelector(".rv.skip"); if(!hb) return;
   hb.onclick=()=>{ const on=setReview(it,"heart",curOpt&&curOpt.id); if(on===null) return; const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; renderBar(); APP.emit("choice",{day:i,stop:k}); if(on){ buzz(14); const b=sheetScroll.querySelector(".rv.heart"); if(b){ b.classList.add("pop","bump"); } toast(role==="her"?"Marked as Киця's pick 💗":"Marked as your pick 💗"); } };
-  const nx=scope.querySelector(".rbar .rnext"); if(nx) nx.onclick=()=>{ APP.quick=true; buzz(5); next(); };
+  const nx=scope.querySelector(".rbar .rnext"); if(nx) nx.onclick=()=>{ APP.quick=!PHONE; buzz(5); next(); };
   const ag=scope.querySelector(".prop .agree"); if(ag) ag.onclick=()=>{ const o=other(role), x=rv(it,o); if(!x) return; const r=review[it.id]=review[it.id]||{}; r[role]={s:"heart",pick:x.pick||null,ts:Date.now()}; syncSet(["review",it.id,role],r[role]); delete choice[it.id]; saveK("sbtrip-choice-v1",choice); saveK("sbtrip-review-v1",review); updateSum(); APP.emit("review",{item:it,state:"heart",who:role}); const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; renderBar(); APP.emit("choice",{day:i,stop:k}); buzz([10,30,10]); toast("You both picked this 💞"); };
   const again=()=>{ const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; };
   scope.querySelectorAll(".rps .hands button[data-c]").forEach(b=>b.onclick=()=>{ (rps[it.id]=rps[it.id]||{})[role]={c:b.dataset.c,at:Date.now()}; saveK("sbtrip-rps-v1",rps); syncSet(["rps",it.id,role],rps[it.id][role]); buzz(8); if(APP.sound&&APP.sound.on) APP.sound.pop(1.2); again(); });
@@ -1296,8 +1337,8 @@ const FBK="sbtrip-fb-v1", FB_VER="10.12.4"; const fb={cfg:null,embedded:false,mo
 (function(){ try{ const e=JSON.parse(document.getElementById("firebase-config").textContent); if(e&&e.projectId){ fb.cfg=e; fb.embedded=true; } }catch(err){}
   const u=qs.get("fb"); if(u&&!fb.cfg){ try{ const c=JSON.parse(decodeURIComponent(escape(atob(u.replace(/-/g,"+").replace(/_/g,"/"))))); if(c&&c.projectId){ fb.cfg=c; saveK(FBK,c); } }catch(err){} }
   if(!fb.cfg) fb.cfg=store(FBK,null);
-  fb.trip=/^[\w-]{1,60}$/.test(qs.get("trip")||"")?qs.get("trip"):null; // ?trip=xyz → separate Firestore doc (testing)
-  if(qs.has("fb")||qs.has("as")){ history.replaceState(null,"",location.pathname+location.hash); } })();
+  fb.trip=/^[\w-]{1,60}$/.test(qs.get("trip")||"")?qs.get("trip"):null; // ?trip=xyz → separate Firestore doc (testing); kept in the URL so a reload never falls back to the real plan
+  if(qs.has("fb")||qs.has("as")){ history.replaceState(null,"",location.pathname+(fb.trip?"?trip="+fb.trip:"")+location.hash); } })();
 const b64=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 function setSync(st,msg){ fb.status=st; fb.msg=msg||""; const d=$("sync-dot"); d.className="sync "+(st==="live"?"live":st==="wait"?"wait":st==="err"?"err":""); d.title=st==="live"?"Live sync on":st==="wait"?"Connecting…":st==="err"?"Sync error: "+fb.msg:"Local only";
   const s=$("sync-st"), sub=$("sync-sub"); if(s){ s.textContent=st==="live"?"Live":st==="wait"?"…":st==="err"?"Error":"Off"; s.classList.toggle("live",st==="live"); } if(sub) sub.textContent=st==="live"?`Synced with ${fb.cfg.projectId}`:st==="err"?fb.msg:"Local only — set up live sync"; if($("syncdlg").open) renderSyncDlg(); }
@@ -1410,10 +1451,11 @@ $("syncdlg").addEventListener("click",e=>{ if(e.target===$("syncdlg")) $("syncdl
   const down=e=>{ if(e.pointerType==="mouse"&&e.button!==0) return; src=e.currentTarget; if(src===sheetScroll&&(sheetScroll.scrollTop>2||!e.target.closest(".photo"))) { src=null; return; } sy=e.clientY; dy=0; startFull=sheet.classList.contains("full"); startH=sheet.offsetHeight; dragging=true; t0=performance.now(); sheet.classList.add("drag"); try{ src.setPointerCapture(e.pointerId); }catch(err){} };
   const move=e=>{ if(!dragging) return; dy=e.clientY-sy; let h=startH-dy; const F=fullPx(), H=halfPx(); if(h>F) h=F+(h-F)*.2; if(h<H*.55) h=H*.55; sheet.style.height=h+"px"; };
   const up=e=>{ if(!dragging) return; dragging=false; sheet.classList.remove("drag"); sheet.style.height=""; const v=dy/Math.max(1,performance.now()-t0);
-    if(Math.abs(dy)<6&&src===grab) sheet.classList.toggle("full"); else if(dy<-40||v<-.5) sheet.classList.add("full"); else if(dy>40||v>.5){ if(startFull) sheet.classList.remove("full"); else { sheet.classList.remove("full"); go(APP.state.day,-1,"intro"); } } buzz(4); };
+    if(Math.abs(dy)<6&&src===grab) sheet.classList.toggle("full"); else if(dy<-40||v<-.5) sheet.classList.add("full"); else if(dy>40||v>.5){ if(startFull) sheet.classList.remove("full"); else putDown(); } buzz(4); };
   [grab,sheetScroll].forEach(el=>{ el.addEventListener("pointerdown",down); el.addEventListener("pointermove",move); el.addEventListener("pointerup",up); el.addEventListener("pointercancel",up); });
   const st=document.createElement("style"); st.textContent=".sheet .photo{touch-action:pan-x}"; document.head.appendChild(st); })();
 APP.on("move",()=>sheet.classList.remove("full"));
+if(PHONE) new MutationObserver(()=>renderBar()).observe(sheet,{attributes:true,attributeFilter:["class"]});
 
 APP.buildKml=buildKml; APP.paperHtml=paperHtml; APP.syncStatus=()=>fb.status; importPicks();
 renderRoles(); updateSum(); setSync(fb.cfg?"wait":"off"); if(fb.cfg) syncStart();
@@ -1461,7 +1503,7 @@ $("pick-prev").onclick=()=>cyclePick(-1); $("pick-next").onclick=()=>cyclePick(1
 addEventListener("keydown",e=>{ if(APP.state.mode!=="pick") return; if(e.key==="ArrowLeft") cyclePick(-1); else if(e.key==="ArrowRight") cyclePick(1); else if(e.key==="Enter") $("pick-go").click(); });
 (function(){ let sx=0,st=0; pickEl.addEventListener("touchstart",e=>{ sx=e.touches[0].clientX; st=Date.now(); },{passive:true}); pickEl.addEventListener("touchend",e=>{ const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>50&&Date.now()-st<700) cyclePick(dx<0?1:-1); },{passive:true}); })();
 APP.pickSelect=r=>setPickSel(r,false,PICK_ORDER.indexOf(r)>PICK_ORDER.indexOf(pickSel||"her")?1:-1);
-$("pick-go").onclick=()=>{ if(!pickSel) return; role=pickSel; saveK("sbtrip-role",role); renderRoles(); toast(role==="her"?"Привіт, Киця 💗":"Hi Mykola"); const u=undecided().length, tot=ALL_ITEMS.length; if(u>0&&u<tot) continueReview(); else go(0,-1); };
+$("pick-go").onclick=()=>{ if(!pickSel) return; role=pickSel; saveK("sbtrip-role",role); renderRoles(); toast(role==="her"?"Привіт, Киця 💗":"Hi Mykola"); const u=undecided().length, tot=ALL_ITEMS.length; if(u>0&&u<tot){ if(PHONE){ const [,i,k]=undecided()[0]; go(i,k,"jump"); } else continueReview(); } else go(0,-1); };
 $("pick-back").onclick=()=>{ closePick(); startEl.hidden=false; APP.state.mode="start"; APP.emit("move",{kind:"start",day:-1,stop:-1,prev:APP.state}); };
 
 /* ---------- deep link / boot ---------- */
@@ -2115,8 +2157,10 @@ let travel=null; // {day,fromU,toU,t,dur}
 const mid=V((CITY.Seoul.ox+CITY.Busan.ox)/2,0,(CITY.Seoul.oz+CITY.Busan.oz)/2);
 const lerpAngle=(a,b,k)=>{ let d=b-a; while(d>Math.PI) d-=Math.PI*2; while(d<-Math.PI) d+=Math.PI*2; return a+d*k; };
 function placeCouple(day,stop){ const t=trails[day]; couple.position.copy(t.curve.getPointAt(t.stopU[stop])); const tg=t.curve.getTangentAt(Math.min(.999,t.stopU[stop]+.002)); if(tg.lengthSq()>1e-6) yaw=Math.atan2(tg.x,tg.z); }
+let vOff=0;
+const panelUp=()=>document.getElementById('sheet').classList.contains('show')||document.getElementById('daycard').classList.contains('show')||!!document.querySelector('.quiz.show');
 function resize(){ const w=innerWidth,h=innerHeight; renderer.setSize(w,h); cam.aspect=w/h;
-  if(mobileQ.matches) cam.setViewOffset(w,h,0,h*.26,w,h); else cam.setViewOffset(w,h,w*.17,0,w,h); cam.updateProjectionMatrix(); if(typeof pMat!=='undefined') pMat.uniforms.uScale.value=h; }
+  if(mobileQ.matches){ vOff=h*(panelUp()?.26:.04); cam.setViewOffset(w,h,0,vOff,w,h); } else cam.setViewOffset(w,h,w*.17,0,w,h); cam.updateProjectionMatrix(); if(typeof pMat!=='undefined') pMat.uniforms.uScale.value=h; }
 addEventListener('resize',resize); resize();
 
 A.on('move',m=>{
@@ -2613,6 +2657,7 @@ function frame(){
       if(Math.abs(P[j]-cx)>90) P[j]=cx-(P[j]-cx)*.9; if(Math.abs(P[j+2]-cz)>90) P[j+2]=cz-(P[j+2]-cz)*.9; }
     leafGeo.attributes.position.needsUpdate=true; leaves.material.opacity=camMode==='follow'?leafBase:.3; }
   updateEnv(dt,t);
+  if(mobile&&camMode==='follow'){ const want=innerHeight*(panelUp()?.26:.04); if(Math.abs(want-vOff)>.5){ vOff+=(want-vOff)*Math.min(1,dt*3.5); cam.setViewOffset(innerWidth,innerHeight,0,vOff,innerWidth,innerHeight); cam.updateProjectionMatrix(); } }
   renderer.render(scene,cam);
 }
 A.boot();
