@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f5f6fa">
-<meta name="build" content="20261001-131310">
+<meta name="build" content="20261001-131939">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
@@ -1023,7 +1023,7 @@ function renderStop(i,k){
   const oc=sheetScroll.querySelector(".ocards"); if(oc){ const sel=oc.querySelector('[aria-selected="true"]'); if(sel&&matchMedia("(max-width:899px)").matches) oc.scrollLeft=Math.max(0,sel.offsetLeft-10); }
   sheetScroll.querySelectorAll(".ocards .ocard").forEach(b=>b.onclick=()=>{ const j=+b.dataset.j; if(j===si) return; choice[it.id]=opts[j].id; saveK("sbtrip-choice-v1",choice); const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; const ph=sheetScroll.querySelector(".photo"); if(ph) ph.animate([{opacity:.35},{opacity:1}],{duration:500,easing:"ease-out"}); renderBar(); APP.emit("choice",{day:i,stop:k}); buzz(4); });
   const sn=sheetScroll.querySelector(".snap"); if(sn) sn.onclick=()=>APP.emit("snap"); const qb=$("quiz-open"); if(qb) qb.onclick=()=>openQuiz(i,k); renderPolaroids(); bindReview(sheetScroll,it,i,k,opts?opts[si]:null);
-  sheetScroll.querySelectorAll(".tick").forEach(b=>b.onclick=()=>{ if(done[id]) delete done[id]; else done[id]=1; saveK("sbtrip-done-v1",done); const on=!!done[id]; b.setAttribute("aria-pressed",on); b.textContent=on?"✓ Done":"Mark done"; sheet.classList.toggle("done",on); APP.emit("tick",on); });
+  sheetScroll.querySelectorAll(".tick").forEach(b=>b.onclick=()=>{ if(done[id]) delete done[id]; else done[id]=1; saveK("sbtrip-done-v1",done); const on=!!done[id]; if(typeof syncSet==="function") syncSet(["done",id],on?1:null); b.setAttribute("aria-pressed",on); b.textContent=on?"✓ Done":"Mark done"; sheet.classList.toggle("done",on); APP.emit("tick",on); });
 }
 APP.on("wiki",()=>{ const s=APP.state; if(s.mode!=="stop"&&s.mode!=="travel") return; const p=placeOf(DAYS[s.day].items[s.stop]), w=p.wiki&&wiki[p.wiki]; if(!w) return;
   const ph=$("photo"); if(ph&&!ph.querySelector("img")){ ph.insertAdjacentHTML("afterbegin",photoBlock(p,DAYS[s.day])); const sk=ph.querySelector(".ph.skeleton"); if(sk) sk.classList.remove("skeleton"); fillGallery(p); }
@@ -1085,13 +1085,13 @@ $("cta-begin").onclick=()=>openPick();
 function renderBook(){
   const left=T.book.filter((b,k)=>!done["book-"+k]).length; $("book-dot").style.display=left?"block":"none";
   $("bookdlg-in").innerHTML=`<button class="close" id="dlg-close" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-    <p class="eyebrow" style="color:#9a6d0a">Before you go</p><h2>${left?left+" left to book":"Everything is booked"}</h2><p class="sub">Tick each one once it's confirmed. Ticks are saved on this device.</p>
+    <p class="eyebrow" style="color:#9a6d0a">Before you go</p><h2>${left?left+" left to book":"Everything is booked"}</h2><p class="sub">Tick each one once it's confirmed — ticks show up on both phones.</p>
     <ul class="blist">${T.book.map((b,k)=>{ const id="book-"+k, on=!!done[id]; return `<li class="bk${on?" done":""}"><button class="chk" data-id="${id}" aria-pressed="${on}" aria-label="Booked: ${esc(b.what)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></button>
       <div><p class="bt">${esc(b.what)}</p><p class="bf">For ${esc(b["for"])}</p><p class="bw">${esc(b.when)}</p>${b.url?`<a href="${b.url}" target="_blank" rel="noopener">Open booking site ↗</a>`:""}</div></li>`; }).join("")}</ul>
     <h3 class="hotels-h">Hotels</h3><ul class="blist">${Object.values(HOTELS).map(h=>`<li class="bk hotel"><div class="hm">${esc(h.city[0])}</div><div><p class="bt">${esc(h.title)}</p><p class="bf">${esc(h.nights)} · ${esc(h.city)}</p><p class="bw">${esc(h.hours)}${h.warn?` — <b>${esc(h.warn)}</b>`:""}</p><a href="${placeUrl(h)}" target="_blank" rel="noopener">Google Maps ↗</a></div></li>`).join("")}</ul>
     <div class="tipsbox"><h3>Good to know</h3>${T.tips.map(t=>`<p><b>${esc(t.h)}.</b> ${esc(t.p)}</p>`).join("")}</div>`;
   $("dlg-close").onclick=()=>$("bookdlg").close();
-  $("bookdlg-in").querySelectorAll(".chk").forEach(b=>b.onclick=()=>{ const id=b.dataset.id; if(done[id]) delete done[id]; else done[id]=1; saveK("sbtrip-done-v1",done); renderBook(); APP.emit("tick",!!done[id]); });
+  $("bookdlg-in").querySelectorAll(".chk").forEach(b=>b.onclick=()=>{ const id=b.dataset.id; if(done[id]) delete done[id]; else done[id]=1; saveK("sbtrip-done-v1",done); if(typeof syncSet==="function") syncSet(["done",id],done[id]?1:null); renderBook(); APP.emit("tick",!!done[id]); });
 }
 renderBook();
 const openBook=()=>{ renderBook(); $("bookdlg").showModal(); };
