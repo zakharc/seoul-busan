@@ -85,8 +85,10 @@ fi
 # ---- 6. wait until the live site serves this build -------------------------
 STAMP="$(cat .build-stamp)"
 say "Waiting for $SITE to serve build $STAMP (usually 30–120 s; the very first build can take ~5 min)…"
+HEAD_SHA="$(git rev-parse HEAD)"
 for i in $(seq 1 120); do
-  if curl -fsSL "${SITE}index.html?nocache=$RANDOM" 2>/dev/null | grep -q "name=\"build\" content=\"$STAMP\""; then
+  LIVE_SHA="$(gh api "repos/$REPO/pages/builds/latest" -q 'select(.status=="built") | .commit' 2>/dev/null || true)"
+  if [[ "$LIVE_SHA" == "$HEAD_SHA" ]] || curl -fsSL -H 'Cache-Control: no-cache' "${SITE}index.html?nocache=$RANDOM" 2>/dev/null | grep -q "name=\"build\" content=\"$STAMP\""; then
     echo; ok "Live: $SITE"
     echo
     printf "   Your link:   %s\n" "$SITE"
