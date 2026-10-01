@@ -1,0 +1,86 @@
+#!/usr/bin/env python3
+"""Build step: inject data/*.json into index.html (single self-contained page) and write the KML."""
+import json, os, re, html
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.join(HERE, "..")
+DATA = os.path.join(ROOT, "data")
+
+meta = json.load(open(os.path.join(DATA, "meta.json")))
+days = json.load(open(os.path.join(DATA, "days-a.json"))) + json.load(open(os.path.join(DATA, "days-b.json")))
+commutes = json.load(open(os.path.join(DATA, "commutes.json")))
+trip = dict(meta, days=days, commutes=commutes)
+
+# ---- inject into index.html
+idx_path = os.path.join(ROOT, "index.html")
+src = open(idx_path, encoding="utf-8").read()
+blob = json.dumps(trip, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+new = re.sub(r'(<script type="application/json" id="trip-data">).*?(</script>)', lambda m: m.group(1) + blob + m.group(2), src, count=1, flags=re.S)
+assert new != src or blob in src, "trip-data block not found in index.html"
+open(idx_path, "w", encoding="utf-8").write(new)
+print("index.html:", len(new), "bytes")
+
+# ---- KML
+hotels = meta["hotels"]
+def resolve(o):
+    if "place" in o:
+        return dict(hotels[o["place"]], **{k: v for k, v in o.items() if k != "place"})
+    return o
+def fmt_day(d):
+    import datetime
+    return datetime.date.fromisoformat(d).strftime("%a %d %b")
+COL = {"Seoul": "ff e6 5f 4f".replace(" ", ""), "Busan": "ffa79a0e"}  # aabbggrr
+def esc(s): return html.escape(str(s or ""), quote=False)
+
+stays = []  # group consecutive days by base
+for d in days:
+    if stays and stays[-1]["base"] == d["base"]:
+        stays[-1]["days"].append(d)
+    else:
+        stays.append({"base": d["base"], "days": [d]})
+
+out = ['<?xml version="1.0" encoding="UTF-8"?>', '<kml xmlns="http://www.opengis.net/kml/2.2"><Document>',
+       f'<name>{esc(meta["title"])} for two, 28 Oct – 7 Nov 2026</name>',
+       f'<description>{esc(meta["budgetLine"])} Options are marked "(option)" / "(food option)".</description>']
+for city, col in COL.items():
+    out.append(f'<Style id="{city}"><IconStyle><color>{col}</color><scale>1.1</scale><Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>')
+    out.append(f'<Style id="{city}-opt"><IconStyle><color>{col}</color><scale>0.9</scale><Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon></IconStyle></Style>')
+    out.append(f'<Style id="{city}-food"><IconStyle><color>ff17 9a d5</color><scale>0.9</scale><Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-circle.png</href></Icon></IconStyle></Style>'.replace(" ", ""))
+out.append('<Style id="hotel"><IconStyle><color>ff2a2a2a</color><scale>1.2</scale><Icon><href>https://maps.google.com/mapfiles/kml/paddle/wht-stars.png</href></Icon></IconStyle></Style>')
+
+def placemark(p, name, style, desc):
+    return (f'<Placemark><name>{esc(name)}</name><styleUrl>#{style}</styleUrl>'
+            f'<description><![CDATA[{desc}]]></description>'
+            f'<Point><coordinates>{p["lng"]},{p["lat"]},0</coordinates></Point></Placemark>')
+
+for st in stays:
+    h = hotels[st["base"]]
+    d0, d1 = st["days"][0], st["days"][-1]
+    out.append(f'<Folder><name>{esc(h["city"])} · {esc(h["title"])} ({esc(h["nights"])})</name>')
+    out.append(placemark(h, f'Hotel: {h["title"]}', "hotel", f'<b>{esc(h["nights"])}</b><br>{esc(h.get("about"))}<br>{esc(h.get("hours"))}' + (f'<br><i>{esc(h.get("warn"))}</i>' if h.get("warn") else "")))
+    for d in st["days"]:
+        for it in d["items"]:
+            opts = it.get("options")
+            for o in (opts or [it]):
+                p = resolve(o)
+                if "lat" not in p: continue
+                is_food = (it.get("kind") == "food") or (o.get("type", "").split("·")[0].strip().lower() in ("korean", "seafood", "busan", "street food", "bakery-café", "food hall", "food court", "market food", "korean bbq", "korean pub food", "picnic", "chinese-korean", "korean bistro", "instant noodles"))
+                suffix = "" if not opts else (" (food option)" if is_food else " (option)")
+                name = f'{fmt_day(d["date"])} {it["t"]} · {p.get("title", it["title"])}{suffix}'
+                style = ("Seoul" if d["city"] == "Seoul" else "Busan") + ("" if not opts else ("-food" if is_food else "-opt"))
+                desc = []
+                if opts: desc.append(f'<b>Choice:</b> {esc(it["title"])}')
+                if p.get("type"): desc.append(f'<b>{esc(p["type"])}</b>')
+                if p.get("price"): desc.append(f'<b>Price:</b> {esc(p["price"])}')
+                if p.get("about"): desc.append(esc(p["about"]))
+                if p.get("cool"): desc.append(f'<i>{esc(p["cool"])}</i>')
+                if p.get("booking"): desc.append(f'<b>Booking:</b> {esc(p["booking"])}')
+                if p.get("hours"): desc.append(f'<b>Hours:</b> {esc(p["hours"])}' + (f' · <b>Closed:</b> {esc(p["closed"])}' if p.get("closed") else ""))
+                if p.get("tips"): desc.append("<br>".join("• " + esc(t) for t in p["tips"]))
+                if p.get("ko"): desc.append(f'Naver: {esc(p["ko"])}')
+                out.append(placemark(p, name, style, "<br>".join(desc)))
+    out.append("</Folder>")
+out.append("</Document></kml>")
+kml_path = os.path.join(ROOT, "seoul-busan-trip.kml")
+open(kml_path, "w", encoding="utf-8").write("\n".join(out))
+print("kml:", kml_path, sum(1 for l in out if l.startswith("<Placemark")), "placemarks")

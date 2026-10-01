@@ -1,0 +1,1164 @@
+[
+{
+"date": "2026-10-28",
+"city": "Seoul",
+"title": "Arrive, Namsan at night",
+"base": "h1",
+"sunset": "17:40",
+"items": [
+{
+"id": "d1s1",
+"t": "15:00",
+"title": "Check in at 57 Myeongdong Hostel",
+"kind": "stay",
+"place": "h1",
+"fixed": "From Incheon: the airport limousine bus (6015 to Myeongdong, ≈70–90 min, ≈₩17k pp) is the easy choice with bags — it drops you two minutes from the hostel. AREX + Line 4 is cheaper but means stairs and a change; a taxi is ≈₩70–80k.",
+"tips": [
+"Arriving early? Leave the bags at reception.",
+"Buy a T-money card (₩4,000 + top-up) at the first convenience store you see.",
+"Nearest metro: Myeongdong (Line 4) exit 8."
+],
+"landmark": "hotel"
+},
+{
+"id": "d1s2",
+"t": "16:30",
+"title": "Namsan Cable Car",
+"kind": "sight",
+"name": "Namsan Cable Car",
+"ko": "남산케이블카",
+"pid": "ChIJP_jRlleifDUR5h_KAraBtAc",
+"lat": 37.5565908,
+"lng": 126.9839744,
+"wiki": "Namsan Cable Car",
+"about": "A 605 m aerial tramway running since 1962 that lifts you from the edge of Myeongdong to the top of Namsan in about three minutes.",
+"fixed": "Walk ≈10 min uphill from the hostel (Sopa-ro), or take the free glass elevator from Hoehyeon to the lower station.",
+"price": "≈₩15,000 return · ₩12,000 one way",
+"hours": "10:00–23:00",
+"need": "3 min ride · queue 20–60 min near sunset",
+"tips": [
+"Be in line by 16:30 — the queue balloons before sunset.",
+"Stand on the right side going up for the city view.",
+"Buy a return: the walk down is 30 min in the dark."
+],
+"landmark": "cablecar"
+},
+{
+"id": "d1s3",
+"t": "17:20",
+"title": "N Seoul Tower & love locks",
+"kind": "sight",
+"name": "N Seoul Tower",
+"ko": "N서울타워",
+"pid": "ChIJqWqOqFeifDURpYJ5LnxX-Fw",
+"lat": 37.5511694,
+"lng": 126.9882266,
+"wiki": "N Seoul Tower",
+"about": "Seoul's landmark broadcast tower on the 243 m Namsan peak. The open terrace and the fences of love locks are free; the observatory sits 236 m above the mountain.",
+"fixed": "Cable car + a 5 min walk up to the plaza.",
+"price": "Terrace free · observatory ≈₩21,000",
+"hours": "10:30–22:30 (Fri–Sat to 23:00)",
+"need": "1–1.5 h · sunset 17:40",
+"tips": [
+"Bring a padlock from a stationery shop (≈₩3,000); on the terrace they cost more.",
+"Be up by 17:00 for the blue hour, stay until the city lights come on.",
+"The tower's colour shows the air quality — blue means clean."
+],
+"landmark": "tower"
+},
+{
+"id": "d1s4",
+"t": "19:30",
+"title": "Dinner after the tower",
+"kind": "food",
+"fixed": "Ride the cable car back down (last car 23:00). Donkatsu 101 is 3 min from the lower station; Myeongdong Kyoja and the street stalls are a 10–12 min walk downhill; Euljiro's Nogari Alley is 15 min on foot or a 5-min taxi.",
+"options": [
+{
+"id": "d1s4a",
+"title": "Namsan Donkatsu 101",
+"type": "Korean · giant pork cutlet",
+"price": "≈₩13–16k per person, food only",
+"name": "101번지남산돈까스",
+"ko": "101번지남산돈까스",
+"lat": 37.5571,
+"lng": 126.9829,
+"wiki": "Tonkatsu",
+"about": "Namsan's famous wang-donkkaseu — a plate-sized, thin, crisp cutlet in sweet brown sauce — right below the cable-car station. Seoul taxi drivers have eaten here for 30 years.",
+"cool": "The original of the Namsan cutlet houses; huge portions, pickled radish refills.",
+"booking": "No reservations; short queue on weekends.",
+"hours": "≈10:30–21:30",
+"tips": [
+"One cutlet each is more than enough; share a side of udon.",
+"Card accepted."
+],
+"landmark": "shop:noodle"
+},
+{
+"id": "d1s4b",
+"title": "Myeongdong Kyoja",
+"type": "Korean · kalguksu noodle soup & mandu",
+"price": "≈₩11–16k per person, food only",
+"name": "Myeongdong Kyoja",
+"ko": "명동교자 본점",
+"lat": 37.5627,
+"lng": 126.9857,
+"wiki": "Kal-guksu",
+"about": "Knife-cut noodles in a rich chicken broth and plump dumplings — a Michelin Bib Gourmand institution since 1966, famous for its fiercely garlicky kimchi.",
+"cool": "Only four dishes on the menu; the kimchi is legendary.",
+"booking": "No reservations, fast turnover — 10–20 min queue at peak.",
+"hours": "10:30–21:00",
+"tips": [
+"Kalguksu ₩11k, mandu ₩13k — split both.",
+"Two branches 100 m apart; the smaller one has shorter lines."
+],
+"landmark": "shop:noodle"
+},
+{
+"id": "d1s4c",
+"title": "Myeongdong street food",
+"type": "Street food · grazing",
+"price": "≈₩10–15k per person, food only",
+"name": "명동거리",
+"ko": "명동거리",
+"lat": 37.5636,
+"lng": 126.9853,
+"wiki": "Tteokbokki",
+"about": "Korea's busiest shopping street turns into an open-air food market at night. Graze from stall to stall.",
+"cool": "Tornado potato, tteokbokki, egg bread (gyeranppang), hotteok, grilled cheese lobster if you're feeling flush.",
+"booking": "None — just walk.",
+"hours": "Stalls ≈16:00–23:00",
+"tips": [
+"Skip the ₩15k lobster tails if you're watching the budget.",
+"Cards work at most stalls; cash is quicker."
+],
+"landmark": "market"
+},
+{
+"id": "d1s4d",
+"title": "Euljiro Nogari Alley",
+"type": "Korean pub food · dried pollack & draught beer",
+"price": "≈₩10–15k per person, food only",
+"name": "을지로 노가리골목",
+"ko": "을지로 노가리골목",
+"lat": 37.5665,
+"lng": 126.9915,
+"wiki": "Euljiro",
+"about": "An alley of 1980s beer halls where the whole street sits at plastic tables over grilled dried pollack (nogari, ₩1–2k each) and cheap draught beer — 'Hip-jiro' at its most retro.",
+"cool": "Manseon Hof is the original; the street itself is a registered 'Seoul Future Heritage'.",
+"booking": "None; grab any free table.",
+"hours": "≈15:00–24:00 · quieter on Sundays",
+"tips": [
+"Order nogari + a plate of fried chicken gizzards or golbaengi to share.",
+"Drinks are extra: draught ≈₩4k."
+],
+"landmark": "shop:pub"
+}
+]
+}
+]
+},
+{
+"date": "2026-10-29",
+"city": "Seoul",
+"title": "Palaces, dumplings & lanterns",
+"base": "h1",
+"sunset": "17:39",
+"items": [
+{
+"id": "d2s1",
+"t": "09:30",
+"title": "Gyeongbokgung Palace",
+"kind": "sight",
+"name": "Gyeongbokgung Palace",
+"ko": "경복궁",
+"pid": "ChIJod7tSseifDUR9hXHLFNGMIs",
+"lat": 37.579617,
+"lng": 126.977041,
+"wiki": "Gyeongbokgung",
+"about": "The main royal palace of the Joseon dynasty (1395), restored after its demolition under Japanese rule. Grand halls, pavilion ponds and a mountain backdrop — the postcard image of Seoul.",
+"metro": "Line 4 Myeongdong → Chungmuro, Line 3 → Gyeongbokgung (exit 5), ≈20 min.",
+"price": "₩3,000",
+"hours": "09:00–18:00 (Sep–Oct) · last entry 1 h before",
+"closed": "Tuesdays",
+"need": "1.5–2 h",
+"tips": [
+"Royal guard changing at 10:00 at Gwanghwamun gate — arrive by 09:50.",
+"Free English tours at 11:00 and 13:30 from the info centre.",
+"Photo spots: Gyeonghoeru pavilion pond, Hyangwonjeong."
+],
+"landmark": "palace"
+},
+{
+"id": "d2s2",
+"t": "11:15",
+"title": "National Folk Museum of Korea",
+"kind": "sight",
+"name": "National Folk Museum of Korea",
+"ko": "국립민속박물관",
+"lat": 37.5815,
+"lng": 126.9785,
+"wiki": "National Folk Museum of Korea",
+"about": "Inside the palace grounds: three galleries on how Koreans lived, worked and celebrated for the last 600 years, plus an open-air street of 1970s shopfronts.",
+"price": "Free",
+"hours": "09:00–18:00",
+"need": "1 h",
+"tips": [
+"Enter from inside Gyeongbokgung — no extra ticket.",
+"The outdoor 'Street of Memories' is a fun quick photo stop."
+],
+"landmark": "folkmuseum"
+},
+{
+"id": "d2s3",
+"t": "12:30",
+"title": "Lunch by the palace",
+"kind": "food",
+"options": [
+{
+"id": "d2s3a",
+"title": "Tosokchon Samgyetang",
+"type": "Korean · ginseng chicken soup",
+"price": "≈₩20–25k per person, food only",
+"name": "Tosokchon Samgyetang",
+"ko": "토속촌삼계탕",
+"lat": 37.577,
+"lng": 126.9713,
+"wiki": "Samgye-tang",
+"about": "A whole young chicken stuffed with rice, ginseng, jujube and garlic, simmered in a hanok courtyard restaurant that presidents have eaten in.",
+"cool": "The most famous samgyetang in Seoul; comes with a shot of ginseng liquor.",
+"booking": "No reservations; 15–30 min queue at lunch — arrive by 12:15.",
+"hours": "10:00–22:00",
+"tips": [
+"One bowl each (₩20k); the black-chicken version is ₩5k more.",
+"Gyeongbokgung station exit 2, 5 min west of the palace."
+],
+"landmark": "shop:soup"
+},
+{
+"id": "d2s3b",
+"title": "Samcheongdong Sujebi",
+"type": "Korean · hand-torn dough soup",
+"price": "≈₩12–16k per person, food only",
+"name": "삼청동수제비",
+"ko": "삼청동수제비",
+"lat": 37.585,
+"lng": 126.9812,
+"wiki": "Sujebi",
+"about": "A 40-year institution on the Samcheong-dong lane: chewy hand-torn dough in an anchovy-clam broth, with a giant kimchi pancake to share.",
+"cool": "Cash-only feel, tiny tables, exactly two things worth ordering.",
+"booking": "None; short queue 12:30–13:30.",
+"hours": "11:00–20:30",
+"tips": [
+"Sujebi ≈₩9k each + one kimchi-jeon (₩12k) between you.",
+"10 min walk north from the museum along the palace wall."
+],
+"landmark": "shop:soup"
+}
+]
+},
+{
+"id": "d2s4",
+"t": "14:00",
+"title": "Afternoon in Bukchon",
+"kind": "activity",
+"options": [
+{
+"id": "d2s4a",
+"title": "Pottery-painting class in Bukchon",
+"type": "Workshop · 1.5–2 h",
+"price": "≈₩30–45k per person",
+"book": true,
+"name": "북촌 도자기 페인팅 공방",
+"ko": "북촌 도자기 페인팅",
+"lat": 37.5812,
+"lng": 126.9862,
+"wiki": "Korean pottery and porcelain",
+"about": "Paint your own cups or plates in a small hanok studio; pieces are glazed and fired and can be collected in a few days or shipped.",
+"cool": "You leave with matching cups you made together.",
+"booking": "Book a 14:00 slot a few days ahead via Naver or Klook; several studios sit around Bukchon-ro and Gye-dong.",
+"hours": "Slots ≈11:00–18:00",
+"tips": [
+"Ask about pick-up before Nov 6, or shipping to your last hotel.",
+"Wear nothing precious — glaze stains."
+],
+"landmark": "pottery"
+},
+{
+"id": "d2s4b",
+"title": "Wander the Bukchon lanes",
+"type": "Stroll · free",
+"price": "Free",
+"name": "Bukchon Hanok Village",
+"ko": "북촌한옥마을",
+"pid": "ChIJT8H4r9qifDURmuXJ_6m6vM0",
+"lat": 37.5814696,
+"lng": 126.9849519,
+"wiki": "Bukchon Hanok Village",
+"about": "A 600-year-old neighbourhood of hanok (traditional wooden houses) on the hill between the two palaces, still home to Seoulites.",
+"cool": "Bukchon-ro 11-gil: tiled roofs with the skyline behind them.",
+"booking": "None.",
+"hours": "Visitor hours 10:00–17:00 · residential lanes closed Sundays",
+"tips": [
+"People live here: quiet voices, no music.",
+"Fines apply in restricted lanes outside visitor hours."
+],
+"landmark": "hanok"
+}
+]
+},
+{
+"id": "d2s5",
+"t": "16:00",
+"title": "Tea or temple",
+"kind": "activity",
+"options": [
+{
+"id": "d2s5a",
+"title": "Insadong tea house & Ssamziegil",
+"type": "Tea & crafts",
+"price": "Tea ≈₩8–12k · Ssamziegil free",
+"name": "Ssamziegil, Insadong",
+"ko": "인사동 쌈지길",
+"pid": "ChIJQRutlcKifDURiMoaUPYmWX4",
+"lat": 37.5743024,
+"lng": 126.9849036,
+"wiki": "Insa-dong",
+"about": "Seoul's traditional arts street: antique shops, galleries, teahouses and the spiralling Ssamziegil craft arcade.",
+"cool": "Order omija (five-flavour berry) or yuja tea in a traditional teahouse.",
+"booking": "None.",
+"hours": "Ssamziegil 10:30–20:30",
+"tips": [
+"Good gifts: hanji paper, ceramics, tea.",
+"Shin Old Tea House hides in an alley off the main street."
+],
+"landmark": "teahouse"
+},
+{
+"id": "d2s5b",
+"title": "Jogyesa Temple",
+"type": "Temple · free",
+"price": "Free",
+"name": "Jogyesa Temple",
+"ko": "조계사",
+"lat": 37.574,
+"lng": 126.9818,
+"wiki": "Jogyesa",
+"about": "Head temple of Korean Buddhism's Jogye Order, hidden behind Insadong: a 500-year-old white pine, a main hall with three huge golden Buddhas, and thousands of hanging lanterns.",
+"cool": "Chrysanthemum festival displays usually fill the courtyard in late October / early November.",
+"booking": "None; walk in.",
+"hours": "≈04:00–21:00",
+"tips": [
+"Take your shoes off to sit inside the hall for a few minutes.",
+"Two minutes from Insadong's main street."
+],
+"landmark": "temple"
+}
+]
+},
+{
+"id": "d2s6",
+"t": "18:00",
+"title": "Early dinner",
+"kind": "food",
+"options": [
+{
+"id": "d2s6a",
+"title": "Koong — Gaeseong dumplings",
+"type": "Korean · North-Korean-style dumplings",
+"price": "≈₩13–18k per person, food only",
+"name": "궁 인사동",
+"ko": "개성만두 궁 인사동본점",
+"lat": 37.5734,
+"lng": 126.9861,
+"wiki": "Mandu (food)",
+"about": "Fist-sized Gaeseong-style dumplings, dumpling soup and pyeonsu (square summer dumplings) from a family recipe that's been served in Insadong for over 40 years.",
+"cool": "Michelin Bib Gourmand; the dumplings are hand-pleated in the window.",
+"booking": "None needed at 18:00.",
+"hours": "11:30–21:00 · last orders 20:30",
+"tips": [
+"Mandu-guk (₩14k) + a plate of steamed mandu (₩15k) to share.",
+"Five minutes from Ssamziegil and Jogyesa."
+],
+"landmark": "shop:dumpling"
+},
+{
+"id": "d2s6b",
+"title": "Woo Lae Oak — cold noodles only",
+"type": "Korean · Pyongyang naengmyeon",
+"price": "≈₩17–20k per person, food only",
+"name": "Woo Lae Oak",
+"ko": "우래옥 본점",
+"lat": 37.5672,
+"lng": 126.998,
+"wiki": "Naengmyeon",
+"about": "Seoul's most storied restaurant (1946): delicate Pyongyang-style buckwheat noodles in a clear, cold beef broth, served in a grand old dining room.",
+"cool": "The naengmyeon that Seoul food critics measure all others by.",
+"booking": "No reservations; queue at 18:00 is short. Closed Mondays.",
+"hours": "11:30–21:30",
+"closed": "Mondays",
+"tips": [
+"Budget tip: order naengmyeon only (≈₩17k) — the bulgogi is ₩50k+.",
+"Euljiro 4-ga station exit 4; taxi 7 min from Insadong."
+],
+"landmark": "shop:noodle"
+}
+]
+},
+{
+"id": "d2s7",
+"t": "19:30",
+"title": "Evening event",
+"kind": "show",
+"options": [
+{
+"title": "Moonlight Lotus Show at Changgyeonggung",
+"name": "Changgyeonggung Palace",
+"ko": "창경궁",
+"lat": 37.5788,
+"lng": 126.995,
+"wiki": "Changgyeonggung",
+"about": "An evening of light on the palace's lotus pond (Chundangji) and the Victorian glasshouse — reserved-entry sessions with the whole palace lit after dark.",
+"price": "Reserved entry · ≈₩1,000–3,000",
+"hours": "Sessions 19:00 / 19:30 / 20:00",
+"need": "1 h",
+"tips": [
+"Foreigners book via Creatrip — the Korean sites need a Korean phone number.",
+"Enter through Honghwamun, the main gate on Changgyeonggung-ro.",
+"Taxi back to Myeongdong ≈15 min, ≈₩9k."
+],
+"id": "d2s7a",
+"type": "Night event · reserved entry",
+"book": true,
+"cool": "The lotus pond and the 1909 glasshouse lit from the water; almost silent.",
+"booking": "Reserved sessions 19:00 / 19:30 / 20:00 — foreigners book via Creatrip.",
+"landmark": "pond",
+"fx": "lanterns"
+},
+{
+"id": "d2s7b",
+"title": "Cheonggyecheon by night & Gwanghwamun",
+"type": "Night walk · free",
+"price": "Free",
+"name": "청계광장",
+"ko": "청계광장",
+"lat": 37.569,
+"lng": 126.978,
+"wiki": "Cheonggyecheon",
+"about": "The sunken stream lit after dark from Cheonggye Plaza east, then up to Gwanghwamun Square with the palace gate and the mountains floodlit behind it.",
+"cool": "Candle-lit waterfall at the plaza; the lantern festival sometimes runs here in early November.",
+"booking": "None.",
+"hours": "24 h · lights until ≈23:00",
+"tips": [
+"Start at Cheonggye Plaza (Line 5 Gwanghwamun exit 5) and walk 20 min east, then back.",
+"Ten minutes on foot to Myeongdong afterwards."
+],
+"landmark": "river",
+"fx": "sparkle"
+},
+{
+"id": "d2s7c",
+"title": "Jongno 3-ga pocha street",
+"type": "Street tents · drinks & snacks",
+"price": "≈₩15–25k per person, food & drinks",
+"name": "종로3가 포차거리",
+"ko": "종로3가 포장마차 거리",
+"lat": 37.5712,
+"lng": 126.9918,
+"wiki": "Pojangmacha",
+"about": "After 19:00 the lane behind Jongno 3-ga station fills with orange tents and plastic stools: grilled clams, eomuk, soju and the whole city's office crowd.",
+"cool": "The most Seoul night out there is, for the price of two drinks.",
+"booking": "None — sit wherever there's a stool.",
+"hours": "≈18:00–02:00",
+"tips": [
+"Order one dish per tent and move along.",
+"Line 1/3/5 Jongno 3-ga, exit 6."
+],
+"landmark": "shop:pocha"
+}
+]
+}
+]
+},
+{
+"date": "2026-10-30",
+"city": "Seoul",
+"title": "Slow morning, river sunset",
+"base": "h1",
+"sunset": "17:38",
+"items": [
+{
+"id": "d3s1",
+"t": "10:30",
+"title": "Brunch",
+"kind": "food",
+"options": [
+{
+"id": "d3s1a",
+"title": "Hadongkwan — gomtang",
+"type": "Korean · clear beef soup",
+"price": "≈₩18k per person, food only",
+"name": "Hadongkwan Myeongdong",
+"ko": "하동관 명동점",
+"lat": 37.5638,
+"lng": 126.9828,
+"wiki": "Gomtang",
+"about": "Since 1939: a bowl of clear beef-and-tripe soup over rice, seasoned at the table with salt and spring onion. Seoul's classic morning-after breakfast.",
+"cool": "They close when the broth runs out — often by mid-afternoon.",
+"booking": "None; walk in before 12:00.",
+"hours": "07:00–16:00",
+"closed": "Sundays",
+"tips": [
+"'Botong' (regular, ≈₩18k) is plenty; add kimchi juice to the broth like the regulars.",
+"Two minutes from the hostel."
+],
+"landmark": "shop:soup"
+},
+{
+"id": "d3s1b",
+"title": "Myeongdong Kyoja",
+"type": "Korean · kalguksu noodle soup & mandu",
+"price": "≈₩11–16k per person, food only",
+"name": "Myeongdong Kyoja",
+"ko": "명동교자 본점",
+"lat": 37.5627,
+"lng": 126.9857,
+"wiki": "Kal-guksu",
+"about": "Knife-cut noodles in chicken broth and plump dumplings at the 1966 Bib Gourmand institution — quiet and quick at 10:30.",
+"cool": "The garlic kimchi is legendary.",
+"booking": "None.",
+"hours": "10:30–21:00",
+"tips": [
+"Kalguksu ₩11k, mandu ₩13k — split both."
+],
+"landmark": "shop:noodle"
+}
+]
+},
+{
+"id": "d3s2",
+"t": "11:45",
+"title": "Hanok or shopping",
+"kind": "activity",
+"options": [
+{
+"id": "d3s2a",
+"title": "Namsangol Hanok Village",
+"type": "Heritage · free",
+"price": "Free",
+"name": "Namsangol Hanok Village",
+"ko": "남산골한옥마을",
+"lat": 37.5594,
+"lng": 126.9943,
+"wiki": "Namsangol Hanok Village",
+"about": "Five restored aristocratic hanok moved here from around Seoul, set in a traditional garden at the foot of Namsan with a time capsule buried for the year 2394.",
+"cool": "Quiet courtyards, free traditional-games corner, autumn colour in the garden.",
+"booking": "None.",
+"hours": "09:00–21:00 · closed Mondays",
+"tips": [
+"Chungmuro station exit 3–4.",
+"Free tea ceremony demos some afternoons."
+],
+"landmark": "hanok"
+},
+{
+"id": "d3s2b",
+"title": "Myeongdong shopping & K-beauty",
+"type": "Shopping",
+"price": "Free to wander",
+"name": "Myeongdong Street",
+"ko": "명동거리",
+"lat": 37.5636,
+"lng": 126.9853,
+"wiki": "Myeong-dong",
+"about": "Olive Young's flagship, Innisfree, Etude and every K-beauty brand within four blocks — quieter before noon.",
+"cool": "Tax refund at the counter for purchases over ₩15k with your passport.",
+"booking": "None.",
+"hours": "Shops ≈10:30–22:00",
+"tips": [
+"Sheet masks make light gifts.",
+"Skip the tourist-trap cosmetics touts on the main drag."
+],
+"landmark": "market"
+}
+]
+},
+{
+"id": "d3s3",
+"t": "13:30",
+"title": "Deoksugung Palace & stone-wall road",
+"kind": "sight",
+"name": "Deoksugung Palace",
+"ko": "덕수궁",
+"pid": "ChIJMcWZMY2ifDUR2NLv8F3Togc",
+"lat": 37.5658862,
+"lng": 126.9749017,
+"wiki": "Deoksugung",
+"about": "The smallest of Seoul's palaces mixes Korean halls with early-20th-century Western buildings; the stone-wall road outside is the city's most famous autumn walk.",
+"price": "₩1,000",
+"hours": "09:00–21:00 · last entry 20:00",
+"closed": "Mondays",
+"need": "1–1.5 h",
+"tips": [
+"Guard ceremony at Daehanmun gate 11:00, 14:00, 15:30.",
+"Local legend says couples who walk the stone-wall road break up — hold hands and ignore it.",
+"Ginkgo trees on Doldam-gil turn gold at the end of October."
+],
+"landmark": "palace"
+},
+{
+"id": "d3s4",
+"t": "16:00",
+"title": "Yeouido Hangang Park",
+"kind": "sight",
+"name": "Yeouido Hangang Park",
+"ko": "여의도한강공원",
+"pid": "ChIJ77fEAzuffDURLEWNv56G2KQ",
+"lat": 37.5267106,
+"lng": 126.9347112,
+"wiki": "Yeouido",
+"about": "The busiest stretch of the Han River park, on the island that holds the National Assembly — grass, bike paths and the riverside promenade.",
+"metro": "Metro: Line 2 City Hall → Chungjeongno, Line 5 → Yeouinaru (exit 2–3), ≈25 min.",
+"price": "Free",
+"hours": "24 h",
+"need": "1 h before boarding",
+"tips": [
+"Tandem bikes rent for ≈₩10,000/h.",
+"The cruise pier is a 5-min walk from the station."
+],
+"landmark": "river"
+},
+{
+"id": "d3s5",
+"t": "17:00",
+"title": "Sunset on the river",
+"kind": "show",
+"options": [
+{
+"title": "Sunset Han River cruise",
+"name": "이랜드크루즈 여의도",
+"ko": "이랜드크루즈 여의도",
+"lat": 37.5289,
+"lng": 126.9322,
+"wiki": "Hangang Park",
+"about": "Cruises leave the Yeouido pier and loop under the bridges — at sunset you get the 63 Building, Namsan and the bridge lights all at once.",
+"price": "≈₩17–30k per person by cruise type",
+"hours": "Sunset sailing ≈16:40–17:40",
+"need": "40–70 min",
+"tips": [
+"Book the sailing closest to the 17:38 sunset.",
+"The open upper deck is cold in November — bring a layer."
+],
+"id": "d3s5a",
+"type": "River cruise · 40–70 min",
+"book": true,
+"cool": "The 63 Building, Namsan and the bridge lights from the water.",
+"booking": "Book the sailing closest to the 17:38 sunset a week ahead.",
+"landmark": "river",
+"fx": "sparkle"
+},
+{
+"id": "d3s5b",
+"title": "Banpo Bridge Moonlight Rainbow Fountain",
+"type": "Night show · free",
+"price": "Free",
+"name": "반포대교 달빛무지개분수",
+"ko": "반포대교 달빛무지개분수",
+"lat": 37.5125,
+"lng": 126.9966,
+"wiki": "Banpo Bridge",
+"about": "The longest bridge fountain in the world: 380 jets along both sides of Banpo Bridge, lit in colour and set to music, watched from the grass of Banpo Hangang Park.",
+"cool": "Late October is the very end of the season — the last shows of the year.",
+"booking": "None. Evening shows usually 20:00, 20:30, 21:00 (20 min each); check the Hangang park site for the day.",
+"hours": "Shows ≈20:00–21:00 (Apr–Oct)",
+"tips": [
+"Taxi ≈15 min from Yeouido (≈₩10k) or Line 9 to Sinbanggyo.",
+"Eat first on Yeouido — the fountain is a show, not a dinner spot."
+],
+"landmark": "bridge",
+"fx": "fountain"
+}
+]
+},
+{
+"id": "d3s6",
+"t": "19:00",
+"title": "Dinner by the river",
+"kind": "food",
+"options": [
+{
+"id": "d3s6a",
+"title": "River ramyeon at the convenience store",
+"type": "Instant noodles · Seoul classic",
+"price": "≈₩5–8k per person, food only",
+"name": "CU 여의나루역점",
+"ko": "여의도한강공원 편의점",
+"lat": 37.5272,
+"lng": 126.9362,
+"wiki": "Instant noodle",
+"about": "Cooking instant noodles at a Han River convenience store is a Seoul rite of passage — cheap, warm and strangely romantic.",
+"cool": "Self-cook ramyeon machines, riverside tables, bridge lights.",
+"booking": "None — 24 h.",
+"hours": "24 h",
+"tips": [
+"Add a triangle kimbap and a can of Cass — that's the date.",
+"Taxi back to Myeongdong ≈20 min, ≈₩15k."
+],
+"landmark": "shop:convenience"
+},
+{
+"id": "d3s6b",
+"title": "The Hyundai Seoul — B1 food hall",
+"type": "Food hall · everything",
+"price": "≈₩12–18k per person, food only",
+"name": "The Hyundai Seoul",
+"ko": "더현대 서울",
+"lat": 37.5259,
+"lng": 126.9285,
+"wiki": "The Hyundai Seoul",
+"about": "Seoul's most beautiful department store: an indoor forest under a glass roof, and a basement food hall of Seoul's trendiest bakeries, ramen, gimbap and dessert counters.",
+"cool": "Sounds Forest on the 5th floor is worth the escalator ride before you eat.",
+"booking": "None; food hall open till 20:30 on Fridays.",
+"hours": "10:30–20:30 (Fri)",
+"tips": [
+"Five minutes' walk west from Yeouinaru; pick two counters and share.",
+"Taxi home ≈20 min, or Line 5 → Line 2 back to Euljiro."
+],
+"landmark": "shop:foodhall"
+}
+]
+}
+]
+},
+{
+"date": "2026-10-31",
+"city": "Seoul",
+"title": "Move to Seongsu, drones over the river",
+"base": "h2",
+"sunset": "17:37",
+"items": [
+{
+"id": "d4s1",
+"t": "11:00",
+"title": "Check out, drop bags at Haru Forest",
+"kind": "stay",
+"place": "h2",
+"metro": "Metro: Line 2 Euljiro 1-ga → Konkuk Univ. (≈20 min, 8 stops), or a taxi ≈25 min.",
+"tips": [
+"Korean listings show overnight check-in 20:00 / checkout 13:00 — confirm check-in and drop the bags at 11:30.",
+"Konkuk Univ. station (Lines 2 & 7) is 5 min from the hotel."
+],
+"landmark": "hotel"
+},
+{
+"id": "d4s2",
+"t": "12:30",
+"title": "Lunch in Seongsu",
+"kind": "food",
+"options": [
+{
+"id": "d4s2a",
+"title": "Seongsu Jokbal",
+"type": "Korean · braised pig's trotters",
+"price": "≈₩20–23k per person, food only",
+"name": "성수족발",
+"ko": "성수족발",
+"lat": 37.5449,
+"lng": 127.0556,
+"wiki": "Jokbal",
+"about": "Seongsu's landmark for 40 years: soy-braised trotters sliced thin, wrapped in lettuce with garlic and salted shrimp sauce.",
+"cool": "Order the 'half-half' — original and spicy — with a bowl of cold bean-sprout soup.",
+"booking": "None; lunch queues are short.",
+"hours": "11:30–22:00",
+"tips": [
+"A medium (≈₩40k) feeds two comfortably.",
+"Seongsu station exit 4."
+],
+"landmark": "shop:soup"
+},
+{
+"id": "d4s2b",
+"title": "Cafe Onion Seongsu",
+"type": "Bakery-café · pastries & brunch",
+"price": "≈₩10–14k per person, food only",
+"name": "Cafe Onion Seongsu",
+"ko": "카페 어니언 성수",
+"lat": 37.5445,
+"lng": 127.0575,
+"wiki": "Seongsu-dong",
+"about": "A bombed-out 1970s factory turned into Seoul's most photographed bakery: raw concrete, an open courtyard and trays of pandoro dusted with sugar.",
+"cool": "The pandoro 'snow mountain' pastry and the rooftop.",
+"booking": "None; weekends queue at the counter.",
+"hours": "08:00–22:00 (Sat–Sun 10:00–)",
+"tips": [
+"Two pastries + two coffees ≈₩25k total.",
+"Seongsu station exit 2, 3 min."
+],
+"landmark": "shop:cafe"
+}
+]
+},
+{
+"id": "d4s3",
+"t": "14:30",
+"title": "Make something or ride",
+"kind": "activity",
+"options": [
+{
+"id": "d4s3a",
+"title": "Perfume-making workshop",
+"type": "Workshop · 1.5 h",
+"price": "≈₩40–60k per person",
+"book": true,
+"name": "성수 향수공방",
+"ko": "성수 향수 공방",
+"lat": 37.544,
+"lng": 127.0548,
+"wiki": "Perfume",
+"about": "Blend your own 50 ml fragrance from 40-odd notes with a perfumer's guidance in one of the studios around Seongsu station — you each leave with a bottle named by the other.",
+"cool": "A very Seoul date; the bottles make the best souvenir.",
+"booking": "Book a 14:30 Saturday slot 1–2 weeks ahead via Naver or Klook.",
+"hours": "Slots ≈11:00–19:00",
+"tips": [
+"Most studios speak enough English; Klook listings are in English.",
+"Bottles are liquid — pack them in checked luggage."
+],
+"landmark": "perfume"
+},
+{
+"id": "d4s3b",
+"title": "Han River bike ride on Seoul Bike",
+"type": "Active · 1.5 h",
+"price": "₩1,000 per hour (Ttareungyi app)",
+"name": "뚝섬한강공원 따릉이 대여소",
+"ko": "따릉이 뚝섬유원지",
+"lat": 37.531,
+"lng": 127.0665,
+"wiki": "Seoul Bike",
+"about": "Rent the green city bikes (Ttareungyi) and ride the riverside path from Ttukseom to Jamsil Bridge and back — flat, car-free and golden in late October.",
+"cool": "The path passes under Cheongdam Bridge with the Lotte Tower ahead.",
+"booking": "None; register in the Seoul Bike app with a foreign card.",
+"hours": "24 h",
+"tips": [
+"Return to any dock; 1-hour passes can be renewed.",
+"Helmets are not provided — ride slowly."
+],
+"landmark": "bike"
+}
+]
+},
+{
+"id": "d4s4",
+"t": "16:30",
+"title": "Seoul Forest",
+"kind": "sight",
+"name": "Seoul Forest Park",
+"ko": "서울숲",
+"pid": "ChIJK_b0UX2jfDURmkYPvmWYm90",
+"lat": 37.5443878,
+"lng": 127.0374424,
+"wiki": "Seoul Forest",
+"about": "A 1.2 km² park on a former racecourse — wetlands, a deer enclosure and, at the end of October, an avenue of gold ginkgo.",
+"price": "Free",
+"hours": "24 h",
+"need": "1 h · golden hour 16:30–17:30",
+"tips": [
+"Deer park and the ginkgo path are near the main gate.",
+"A footbridge over the tracks leads on to the river park."
+],
+"landmark": "forest"
+},
+{
+"id": "d4s5",
+"t": "18:00",
+"title": "Picnic at Ttukseom: chicken & beer",
+"kind": "food",
+"name": "Ttukseom Hangang Park",
+"ko": "뚝섬한강공원",
+"pid": "ChIJJ2rJzH6lfDURExW5AGd7Nok",
+"lat": 37.5293507,
+"lng": 127.0699562,
+"wiki": "Chimaek",
+"about": "Riverside park with delivery zones and picnic mats for rent — where Seoulites do chimaek (chicken and beer) on the grass. Tonight the sky show is here too.",
+"type": "Picnic · fried chicken & beer",
+"price": "≈₩12–15k per person, food only",
+"hours": "Delivery to the park until ≈23:00",
+"need": "1.5 h",
+"tips": [
+"Order from a delivery kiosk or app and give them your pillar number.",
+"Halloween night: avoid Itaewon and Hongdae — the river is the right place to be.",
+"Mats rent for ≈₩5k; bring a layer, it's cold by the water."
+],
+"landmark": "shop:chicken"
+},
+{
+"id": "d4s6",
+"t": "19:30",
+"title": "Hangang Drone Light Show — Marvel finale",
+"kind": "show",
+"name": "뚝섬한강공원 드론라이트쇼",
+"ko": "뚝섬한강공원",
+"lat": 37.53,
+"lng": 127.069,
+"wiki": "Drone light show",
+"about": "The season finale of Seoul's Hangang drone light show: 2,000 drones over the river in a Marvel-themed programme, 19:30–21:25 with the main show around 20:30.",
+"fixed": "You're already there — stay on the grass with a view over the water. Afterwards, walk home ≈25 min along Ttukseom-ro to the hotel (or a 7-min taxi).",
+"price": "Free",
+"hours": "19:30–21:25 · main show ≈20:30",
+"need": "2 h",
+"tips": [
+"Sat 31 Oct is the finale — expect crowds; claim your spot by 19:00.",
+"Walk home ≈25 min; taxis are scarce right after the show."
+],
+"landmark": "river",
+"fx": "drones"
+}
+]
+},
+{
+"date": "2026-11-01",
+"city": "Seoul",
+"title": "Lake & skyline",
+"base": "h2",
+"sunset": "17:35",
+"items": [
+{
+"id": "d5s1",
+"t": "10:00",
+"title": "Slow Sunday morning",
+"kind": "activity",
+"options": [
+{
+"id": "d5s1a",
+"title": "Sleep in",
+"type": "Rest",
+"price": "Free",
+"place": "h2",
+"name": "하루포레스트호텔 성수&건대점",
+"ko": "하루포레스트호텔 성수&건대점",
+"lat": 37.5405,
+"lng": 127.0697,
+"wiki": "Seongsu-dong",
+"about": "No alarm. Coffee from the convenience store, a lie-in, and out by noon.",
+"cool": "It's Sunday.",
+"booking": "None.",
+"hours": "—",
+"landmark": "hotel"
+},
+{
+"id": "d5s1b",
+"title": "Korean sauna at Siloam Sauna, Junggok-dong",
+"type": "Jjimjilbang · 1.5–2 h",
+"price": "≈₩10–15k per person",
+"name": "실로암사우나 중곡동",
+"ko": "중곡동 실로암사우나",
+"lat": 37.5628,
+"lng": 127.0829,
+"wiki": "Jjimjilbang",
+"about": "A basic neighbourhood Korean bathhouse: hot and cold pools, a dry sauna and a scrub station, with separate men's and women's baths.",
+"cool": "The real, unglamorous Korean Sunday-morning ritual.",
+"booking": "None; entry fee at the desk includes towels and clothes.",
+"hours": "≈05:00–22:00",
+"tips": [
+"Baths are naked and gender-separated; meet again in the mixed jjimjil room in the sauna clothes.",
+"Taxi ≈10 min from the hotel."
+],
+"landmark": "spa"
+}
+]
+},
+{
+"id": "d5s2",
+"t": "12:30",
+"title": "Brunch near Konkuk",
+"kind": "food",
+"options": [
+{
+"id": "d5s2a",
+"title": "Common Ground",
+"type": "Food court · burgers, pasta, Korean",
+"price": "≈₩12–18k per person, food only",
+"name": "Common Ground",
+"ko": "커먼그라운드",
+"lat": 37.541,
+"lng": 127.0662,
+"wiki": "Konkuk University",
+"about": "Two hundred blue shipping containers stacked into a mall of small brands, with a food terrace of burgers, pasta and Korean bowls on the top deck.",
+"cool": "Sunday market stalls in the courtyard.",
+"booking": "None.",
+"hours": "11:00–22:00",
+"tips": [
+"Five minutes' walk from the hotel.",
+"Good coffee at the ground-floor cafés."
+],
+"landmark": "shop:containers"
+},
+{
+"id": "d5s2b",
+"title": "Cafe Onion Seongsu",
+"type": "Bakery-café · pastries & brunch",
+"price": "≈₩10–14k per person, food only",
+"name": "Cafe Onion Seongsu",
+"ko": "카페 어니언 성수",
+"lat": 37.5445,
+"lng": 127.0575,
+"wiki": "Seongsu-dong",
+"about": "The factory-turned-bakery of Seongsu; if you missed it yesterday, Sunday brunch here is the move.",
+"cool": "Pandoro pastry and the courtyard.",
+"booking": "None; queue at the counter on Sundays.",
+"hours": "10:00–22:00 (Sun)",
+"tips": [
+"Two pastries + two coffees ≈₩25k total."
+],
+"landmark": "shop:cafe"
+}
+]
+},
+{
+"id": "d5s3",
+"t": "14:30",
+"title": "Lake or lone tree",
+"kind": "activity",
+"options": [
+{
+"id": "d5s3a",
+"title": "Seokchon Lake Park",
+"type": "Park · 2.5 km loop",
+"price": "Free",
+"name": "Seokchon Lake Park",
+"ko": "석촌호수",
+"pid": "ChIJEzjZYKGlfDURzLkDglpa074",
+"lat": 37.5113096,
+"lng": 127.1051525,
+"wiki": "Seokchon Lake",
+"about": "Two lakes ringed by a promenade in Songpa, with Lotte World's castle on one side and the 555 m tower above everything.",
+"cool": "Cherry trees turning red in early November.",
+"booking": "None.",
+"hours": "24 h",
+"metro": "Line 2 Konkuk Univ. → Jamsil, 4 stops (≈10 min), exit 2–3.",
+"tips": [
+"Walk the east lake, then the tower is a 5-min stroll."
+],
+"landmark": "lake"
+},
+{
+"id": "d5s3b",
+"title": "Olympic Park lone tree",
+"type": "Park · walk",
+"price": "Free",
+"name": "올림픽공원 나홀로나무",
+"ko": "올림픽공원 나홀로나무",
+"lat": 37.5188,
+"lng": 127.1265,
+"wiki": "Olympic Park, Seoul",
+"about": "A single tree on a vast lawn inside the 1988 Olympic Park — Seoul's favourite couple-photo spot, ringed by the ancient earthen Mongchon fortress.",
+"cool": "Wild-flower hill and the fortress walk if you have energy.",
+"booking": "None.",
+"hours": "05:00–22:00",
+"metro": "Line 2 → Jamsil, Line 8 → Mongchontoseong (exit 1) + 15 min walk.",
+"tips": [
+"From the tree, the tower is a 15-min taxi or Line 8 back to Jamsil."
+],
+"landmark": "lonetree"
+}
+]
+},
+{
+"id": "d5s4",
+"t": "16:45",
+"title": "Seoul Sky",
+"kind": "activity",
+"options": [
+{
+"id": "d5s4a",
+"title": "Seoul Sky observatory",
+"type": "Observatory · 500 m up",
+"price": "≈₩31k per person (online ≈₩29k)",
+"book": true,
+"name": "Seoul Sky",
+"ko": "서울스카이",
+"pid": "ChIJu7dpc45FezURhLMS5U5eaJk",
+"lat": 37.5125295,
+"lng": 127.102305,
+"wiki": "Lotte World Tower",
+"about": "The observatory of Lotte World Tower — the world's fifth-tallest building — occupies floors 117–123, up to 500 m above the lake.",
+"cool": "Sky Deck glass floor on the 118th; café on the 123rd.",
+"booking": "Book the 16:45 slot online to skip the ticket queue.",
+"hours": "10:30–22:00 (Fri–Sat to 23:00)",
+"tips": [
+"Go up 45 min before the 17:35 sunset and stay for the lights."
+],
+"landmark": "observatory"
+},
+{
+"id": "d5s4b",
+"title": "Seoul Sky + Sky Bridge Tour",
+"type": "Observatory + outdoor bridge walk",
+"price": "≈₩100k per person (includes observatory)",
+"book": true,
+"name": "Seoul Sky Bridge Tour",
+"ko": "서울스카이 스카이브릿지",
+"lat": 37.5125295,
+"lng": 127.102305,
+"wiki": "Lotte World Tower",
+"about": "A harnessed walk across the open-air bridge between the tower's two spires at 541 m — the highest building bridge in the world — then the observatory.",
+"cool": "Only a handful of slots a day; you get the photos and a certificate.",
+"booking": "Book well ahead on the Seoul Sky site; weather-dependent, refunds if cancelled.",
+"hours": "Tours ≈10:00–19:00",
+"tips": [
+"Splurge option — it's ≈€60 each; the standard observatory is ₩31k.",
+"No loose items on the bridge; phones go in a provided case."
+],
+"landmark": "observatory"
+}
+]
+},
+{
+"id": "d5s5",
+"t": "19:00",
+"title": "Dinner",
+"kind": "food",
+"options": [
+{
+"id": "d5s5a",
+"title": "Geumgeum, Songridan-gil",
+"type": "Korean bistro · rice bowls & small plates",
+"price": "≈₩15–22k per person, food only",
+"name": "금금 송리단길",
+"ko": "금금 송리단길",
+"lat": 37.5085,
+"lng": 127.1062,
+"wiki": "Songpa District",
+"about": "A cosy neighbourhood spot in the low-rise lanes east of Seokchon Lake — Songridan-gil is Seoul's answer to Tokyo's back alleys, full of small kitchens and wine bars.",
+"cool": "Ten-minute walk from the tower; the whole street is worth a wander after.",
+"booking": "Walk in; check the Naver page for today's menu and hours.",
+"hours": "≈17:00–22:00",
+"tips": [
+"Line 2 back to Konkuk Univ., 4 stops."
+],
+"landmark": "shop:bbq"
+},
+{
+"id": "d5s5b",
+"title": "Konkuk lamb-skewer street",
+"type": "Chinese-Korean · lamb skewers grilled at the table",
+"price": "≈₩18–25k per person, food only",
+"name": "건대 양꼬치거리",
+"ko": "건대 양꼬치 거리",
+"lat": 37.5396,
+"lng": 127.0683,
+"wiki": "Chuan (food)",
+"about": "Behind Konkuk Univ. station, a whole street of yangkkochi houses: cumin-dusted lamb skewers turning on automatic grills, with Tsingtao and stir-fried lotus root.",
+"cool": "Loud, cheap, student energy — and it's next to your hotel.",
+"booking": "None.",
+"hours": "≈17:00–02:00",
+"tips": [
+"10 skewers (≈₩15k) + one fried dish between two is plenty.",
+"Konkuk Univ. station exit 5, 3 min."
+],
+"landmark": "shop:skewer"
+}
+]
+}
+]
+}
+]

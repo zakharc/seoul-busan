@@ -1,0 +1,171 @@
+{
+ "title": "Seoul ⇄ Busan",
+ "subtitle": "a journey for two, one place at a time",
+ "start": "2026-10-28",
+ "end": "2026-11-07",
+ "budgetLine": "Every restaurant here stays under ≈₩38,000 (≈€23–25) per person for food.",
+ "hotels": {
+  "h1": {
+   "id": "h1",
+   "title": "57 Myeongdong Hostel",
+   "city": "Seoul",
+   "nights": "28–31 Oct",
+   "name": "57 Myeongdong Hostel",
+   "ko": "57명동호스텔",
+   "pid": "ChIJwQbCIfGifDURAYPSlU8eeTw",
+   "lat": 37.5609967,
+   "lng": 126.9834441,
+   "wiki": "Myeong-dong",
+   "about": "A small, well-rated hostel in the middle of Myeongdong — a short walk from the Namsan cable car and the evening street-food stalls.",
+   "hours": "Check-in from 15:00 · out 11:00",
+   "landmark": "hotel"
+  },
+  "h2": {
+   "id": "h2",
+   "title": "Haru Forest Hotel Seongsu & Konkuk",
+   "city": "Seoul",
+   "nights": "31 Oct – 2 Nov",
+   "name": "하루포레스트호텔 성수&건대점",
+   "ko": "하루포레스트호텔 성수&건대점",
+   "lat": 37.5405,
+   "lng": 127.0697,
+   "wiki": "Seongsu-dong",
+   "about": "Your base for two nights in Seongsu–Konkuk (광진구 화양동 23-21), about 5 min on foot from Konkuk Univ. station — the east-side neighbourhood of converted factories, bakeries and the Common Ground container mall.",
+   "hours": "Korean listings show overnight check-in 20:00 · checkout 13:00",
+   "warn": "Confirm the check-in time with the hotel and ask to drop bags at 11:30.",
+   "landmark": "hotel"
+  },
+  "h3": {
+   "id": "h3",
+   "title": "Hotel Aqua Palace",
+   "city": "Busan",
+   "nights": "2–5 Nov",
+   "name": "Hotel Aqua Palace",
+   "ko": "아쿠아팰리스호텔",
+   "pid": "ChIJL8ODxi7taDURTYsPKs4ilig",
+   "lat": 35.1540793,
+   "lng": 129.1188051,
+   "wiki": "Gwangalli Beach",
+   "about": "A Gwangalli beachfront hotel with a Korean bathhouse; the 21st-floor deck faces the Gwangan Bridge.",
+   "hours": "Check-in 15:00 · out 11:00",
+   "landmark": "hotel"
+  },
+  "h4": {
+   "id": "h4",
+   "title": "glue hotel",
+   "city": "Seoul",
+   "nights": "5–7 Nov",
+   "name": "glue hotel",
+   "ko": "글루호텔",
+   "pid": "ChIJM9gvYS-jfDURAiRJGXn8BpU",
+   "lat": 37.5758065,
+   "lng": 127.0039779,
+   "wiki": "Daehangno",
+   "about": "A design hotel at 228 Yulgok-ro, Jongno, at the foot of Naksan — theatre district by day, fortress wall by night. Live music in the lounge ≈20:00–22:00.",
+   "hours": "Check-in 15:00 · out 11:00",
+   "landmark": "hotel"
+  }
+ },
+ "book": [
+  {
+   "what": "Sky Capsule, Mipo → Cheongsapo",
+   "for": "Tue 3 Nov, 10:00",
+   "when": "Opens Tue 6 Oct, 09:00 KST = 02:00 Munich. Sells out fast.",
+   "url": "https://www.bluelinepark.com/"
+  },
+  {
+   "what": "Moonlight Lotus Show, Changgyeonggung",
+   "for": "Thu 29 Oct, 19:30 session",
+   "when": "Reserved entry; sessions 19:00 / 19:30 / 20:00. Foreigners book via Creatrip.",
+   "url": "https://www.creatrip.com/"
+  },
+  {
+   "what": "KTX Seoul → Busan",
+   "for": "Mon 2 Nov, 10:00",
+   "when": "Sales open ≈1 month ahead on Korail; book as soon as they open.",
+   "url": "https://www.letskorail.com/"
+  },
+  {
+   "what": "KTX Busan → Seoul",
+   "for": "Thu 5 Nov, 11:30",
+   "when": "Same as above.",
+   "url": "https://www.letskorail.com/"
+  },
+  {
+   "what": "Changdeokgung Secret Garden tour",
+   "for": "Fri 6 Nov, 10:00",
+   "when": "Timed slots, released 6 days ahead (50 online / 50 on-site).",
+   "url": "https://royal.khs.go.kr/"
+  },
+  {
+   "what": "Night yacht, Suyeongman Bay",
+   "for": "Mon 2 Nov, 20:00",
+   "when": "Weekday sailings hourly 18:00–21:00. Book on Trazy or Klook.",
+   "url": "https://www.trazy.com/"
+  },
+  {
+   "what": "Seoul Sky (+ Sky Bridge if chosen)",
+   "for": "Sun 1 Nov, 16:45",
+   "when": "Online, a few days ahead. Sky Bridge Tour has few slots per day.",
+   "url": "https://seoulsky.lotteworld.com/"
+  },
+  {
+   "what": "Han River sunset cruise",
+   "for": "Fri 30 Oct, ≈17:00",
+   "when": "A week ahead is usually fine.",
+   "url": ""
+  },
+  {
+   "what": "Pottery-painting class, Bukchon (if chosen)",
+   "for": "Thu 29 Oct, 14:00",
+   "when": "A few days ahead via Naver or Klook.",
+   "url": ""
+  },
+  {
+   "what": "Perfume workshop, Seongsu (if chosen)",
+   "for": "Sat 31 Oct, 14:30",
+   "when": "Weekend slots fill: book 1–2 weeks ahead.",
+   "url": ""
+  },
+  {
+   "what": "Confirm Haru Forest check-in time & bag drop",
+   "for": "Sat 31 Oct, 11:30",
+   "when": "Korean listings show 20:00 check-in / 13:00 checkout — message the hotel.",
+   "url": ""
+  }
+ ],
+ "tips": [
+  {
+   "h": "Choice cards & hearts",
+   "p": "Some stops are a choice: dashed cards with 2–4 options. Tap an option to preview it, then press ♥ Киця's pick to make it hers — the pick is marked with a heart and her name, and the directions to the next stop start from it. Skip marks a stop you'd rather leave out; it drops out of the map and the itinerary. Meal choices have a small ginkgo-yellow dot."
+  },
+  {
+   "h": "Two phones, one plan",
+   "p": "With live sync on (⋯ → Sync between phones), hearts, skips, ticks and the final approval appear on both phones within a second and survive reloads. Without it, each phone keeps its own copy."
+  },
+  {
+   "h": "The final plan",
+   "p": "Open ♥ Our picks to see what's decided. Once Киця approves, export the chosen stops as a Google My Maps file, or open the illustrated itinerary to save it as a PDF or send it by email."
+  },
+  {
+   "h": "Getting around",
+   "p": "T-money card from any convenience store: ≈₩1,550 per metro ride in Seoul. For taxis use Kakao T or Uber; fares here are per car, and rise 20–40% after 22:00."
+  },
+  {
+   "h": "Times",
+   "p": "Walking and taxi times are computed from real road routes at a relaxed pace; rush hour (08–09:30, 18–19:30) adds 10–15 min to taxi legs."
+  },
+  {
+   "h": "Shows",
+   "p": "Your Busan nights are Mon–Thu, so you miss Busan's Saturday drone show and the 7 Nov fireworks — but you get Seoul's Hangang drone-show finale on Sat 31 Oct, and the Gwangan Bridge is lit every night."
+  },
+  {
+   "h": "Maps",
+   "p": "Google Maps is fine for metro and bus routes, but weak for walking. Use the Naver button for walking directions and exact station exits."
+  },
+  {
+   "h": "Prices",
+   "p": "Prices and hours are approximate (autumn 2026). Every restaurant here stays under ≈₩38,000 (≈€23–25) per person for food; drinks are extra."
+  }
+ ]
+}
