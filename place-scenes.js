@@ -183,7 +183,7 @@ export function createPlaceScenes(T, helpers) {
       if(i<5)g.add(box(1.8,.07,.07,C.black,x+side*.9,.85,6),box(1.8,.07,.07,C.black,x+side*.9,1.4,6));
       for(let j=0;j<6;j++){const color=material([0xecc249,0xe5757d,0x59afbd,0xcc847b][(j+i)%4]);g.add(box(.18,.25,.14,color,x+(seed(i,j)-.5)*1.4,.45+seed(j,i)*.7,6.08));}
     }
-    for(let i=0;i<10;i++)tree(g,(i%2?1:-1)*(18+seed(i)*7),-25+seed(i,4)*40,1.1,i%3?C.ochre:C.rust);
+    for(let i=0;i<4;i++)tree(g,(i%2?1:-1)*(22+seed(i)*5),-30-seed(i,4)*10,1.1,i%3?C.ochre:C.rust); // only behind the tower, never between camera and couple
     sign(g,'N서울타워',-10,3,6,5,1.2);lamp(g,-13,14);lamp(g,13,14);
     configure(g,'d1s3a',[24,14,65],[0,14,-8],'#72c7e5',{zen:0x142548,hor:0xc38681},{sun:0xbccdfd,ambient:.9,key:1.35});
   }
