@@ -1,0 +1,25 @@
+# Seoul ⇄ Busan · a journey for two
+
+A single-file trip companion (`index.html`) with a 3D trail, choice cards with ♥ picks for two people, live sync (Firebase), Google My Maps export and an illustrated itinerary.
+
+## Deploy / redeploy (one command)
+
+```bash
+./deploy.sh                 # build → check → commit → push → wait until live
+./deploy.sh "Added day 3"   # same, with your own commit message
+./deploy.sh --check         # build + syntax check only
+```
+
+The first run logs you into GitHub in the browser, creates the public repo `seoul-busan` and switches GitHub Pages on. Every later run just pushes your changes and prints the live URL once the new build is served.
+
+Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=her` (copy it from ⋯ → Sync inside the app so it carries the sync key).
+
+## Editing
+
+- Content lives in `data/meta.json`, `data/days-a.json`, `data/days-b.json`. After changing stops/options run `python3 tools/commutes.py` (OSRM routing, cached) and then deploy.
+- UI/3D code is in `index.html`. `tools/build.py` injects the data and stamps the build; `deploy.sh` runs it for you.
+- Local preview: `python3 -m http.server 8765` → http://127.0.0.1:8765/index.html
+
+## Live sync
+
+In the app: ⋯ → **Sync between phones** → follow the 4 steps (free Firebase project, Firestore, rules, paste `firebaseConfig`). Then **Copy her link** and send it.

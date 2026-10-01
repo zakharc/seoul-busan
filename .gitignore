@@ -1,3 +1,4 @@
 *.bak
 files.zip
 .DS_Store
+.build-stamp

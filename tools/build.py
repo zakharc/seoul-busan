@@ -17,8 +17,12 @@ src = open(idx_path, encoding="utf-8").read()
 blob = json.dumps(trip, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 new = re.sub(r'(<script type="application/json" id="trip-data">).*?(</script>)', lambda m: m.group(1) + blob + m.group(2), src, count=1, flags=re.S)
 assert new != src or blob in src, "trip-data block not found in index.html"
+import datetime as _dt
+stamp = _dt.datetime.now(_dt.timezone.utc).strftime("%Y%m%d-%H%M%S")
+new = re.sub(r'<meta name="build" content="[^"]*">', f'<meta name="build" content="{stamp}">', new, count=1)
 open(idx_path, "w", encoding="utf-8").write(new)
-print("index.html:", len(new), "bytes")
+open(os.path.join(ROOT, ".build-stamp"), "w").write(stamp)
+print("index.html:", len(new), "bytes · build", stamp)
 
 # ---- KML
 hotels = meta["hotels"]
