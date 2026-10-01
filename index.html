@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f5f6fa">
-<meta name="build" content="20261001-143651">
+<meta name="build" content="20261001-155544">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
@@ -341,6 +341,24 @@ dialog::backdrop{animation:fadein .35s ease-out}
 .bar.moving .prog{display:block}.bar.moving .dots{display:none}
 .bar.moving .nbtn{pointer-events:none;opacity:.5}
 
+/* ---------- interlude: hello Busan — a cliff above the bay, azure sliding to gold ---------- */
+.inter{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;justify-content:flex-end;padding:0 24px calc(var(--sab) + 30px);pointer-events:none;opacity:0;transition:opacity 1.2s var(--ease),background 5s ease;
+  background:linear-gradient(to top,rgba(224,246,250,.96) 0,rgba(224,246,250,.86) 24%,rgba(224,246,250,.3) 46%,rgba(224,246,250,0) 60%)}
+.inter[hidden]{display:none}
+.inter.show{opacity:1}
+.inter.warm{background:linear-gradient(to top,rgba(255,236,220,.96) 0,rgba(255,236,220,.86) 24%,rgba(255,236,220,.3) 46%,rgba(255,236,220,0) 60%)}
+.inter .fin-in{max-width:560px;margin:0 auto;width:100%;pointer-events:auto;color:#143544}
+.i-eyebrow{font:600 11.5px/1 var(--body);letter-spacing:.22em;text-transform:uppercase;color:#0e9aa7;margin:0 0 10px}
+.i-h2{font:700 clamp(21px,5.4vw,32px)/1.15 var(--display);letter-spacing:-.02em;margin:0 0 14px}
+.i-big{font:800 clamp(48px,13vw,96px)/.95 var(--display);letter-spacing:-.04em;margin:0 0 14px}
+.i-big span{display:inline-block;opacity:0;animation:fin-word 1.5s cubic-bezier(.2,.9,.2,1) forwards;animation-delay:var(--d);background-image:linear-gradient(90deg,#0e9aa7,#3ac7d3 45%,#f6a524);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% 100%}
+.i-big span:last-child{animation:fin-word 1.5s cubic-bezier(.2,.9,.2,1) forwards,fin-shimmer 5s linear 7s infinite;animation-delay:var(--d),7s}
+.i-stats{font:500 15px/1.45 var(--body);margin:0 0 8px}
+.i-stats b{font-weight:700}
+.i-sub{font:500 15.5px/1.45 var(--body);margin:0;opacity:.95}
+.inter .f-row .btn.primary{background:linear-gradient(135deg,#0e9aa7,#1b2140);color:#fff}
+.inter.warm .f-row .btn.primary{background:linear-gradient(135deg,#f6a524,#e4534a)}
+@media (min-width:900px){ .inter{justify-content:center;padding:84px 8vw 24px;background:linear-gradient(to right,rgba(224,246,250,.94) 0,rgba(224,246,250,.86) 30%,rgba(224,246,250,.3) 50%,rgba(224,246,250,0) 64%)} .inter.warm{background:linear-gradient(to right,rgba(255,236,220,.94) 0,rgba(255,236,220,.86) 30%,rgba(255,236,220,.3) 50%,rgba(255,236,220,0) 64%)} .inter .fin-in{margin:0;max-width:640px} .i-big{font-size:clamp(64px,8vw,120px)} }
 /* ---------- finale: back on the blossom hill, golden hour sliding into a starry night ---------- */
 .finale{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;justify-content:flex-end;padding:0 24px calc(var(--sab) + 30px);pointer-events:none;opacity:0;transition:opacity 1.2s var(--ease);
   background:linear-gradient(to top,rgba(251,228,236,.96) 0,rgba(251,228,236,.86) 24%,rgba(251,228,236,.3) 46%,rgba(251,228,236,0) 60%)}
@@ -372,7 +390,7 @@ dialog::backdrop{animation:fadein .35s ease-out}
 .finale.night .f-row .btn.primary{background:linear-gradient(135deg,#ffd36e,#f49ac1);color:#2b1f2e}
 .f-row .btn.ghost{height:52px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.85);color:#2b1f2e}
 .finale.night .f-row .btn.ghost{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22);color:#fff}
-@media (min-width:900px){ .finale{justify-content:center;padding:0 8vw;background:linear-gradient(to right,rgba(251,228,236,.94) 0,rgba(251,228,236,.86) 30%,rgba(251,228,236,.3) 50%,rgba(251,228,236,0) 64%)} .finale.night{background:linear-gradient(to right,rgba(20,16,36,.94) 0,rgba(20,16,36,.84) 30%,rgba(20,16,36,.3) 50%,rgba(20,16,36,0) 64%)} .finale .fin-in{margin:0;max-width:640px} .f-big{font-size:clamp(56px,6.6vw,96px)} }
+@media (min-width:900px){ .finale{justify-content:center;padding:84px 8vw 24px;background:linear-gradient(to right,rgba(251,228,236,.94) 0,rgba(251,228,236,.86) 30%,rgba(251,228,236,.3) 50%,rgba(251,228,236,0) 64%)} .finale.night{background:linear-gradient(to right,rgba(20,16,36,.94) 0,rgba(20,16,36,.84) 30%,rgba(20,16,36,.3) 50%,rgba(20,16,36,0) 64%)} .finale .fin-in{margin:0;max-width:640px} .f-big{font-size:clamp(56px,6.6vw,96px)} }
 /* ---------- moments: a little romantic scene at every special place ---------- */
 .moment{position:fixed;left:50%;top:calc(var(--top-h) + var(--sat) + 70px);transform:translate(-50%,-14px) scale(.96);z-index:24;display:flex;gap:12px;align-items:center;width:min(92vw,440px);padding:12px 16px 12px 12px;border-radius:22px;background:color-mix(in srgb,var(--surface) 92%,transparent);border:1px solid color-mix(in srgb,var(--rose) 40%,transparent);box-shadow:0 24px 60px -24px color-mix(in srgb,var(--rose) 55%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .45s var(--ease),transform .6s var(--ease)}
 .moment.show{opacity:1;transform:translate(-50%,0) scale(1);pointer-events:auto}
@@ -869,6 +887,16 @@ html{background:var(--bg)}
   </div>
 </section>
 
+<section class="inter" id="inter" hidden aria-live="polite">
+  <div class="fin-in">
+    <p class="i-eyebrow f-line" style="--d:.5s">Day 6 · the KTX slows down…</p>
+    <h2 class="i-h2 f-line" style="--d:1.9s">Seoul, that was lovely.<br>Now the sea.</h2>
+    <h1 class="i-big" aria-label="Hello, Busan"><span style="--d:4.4s">Hello,</span> <span style="--d:4.9s">Busan.</span></h1>
+    <p class="i-stats f-line" style="--d:6.8s" id="i-stats"></p>
+    <p class="i-sub f-line" style="--d:8.4s">Salt air, a bridge that changes colour, cliffs, a yacht at night — the second half of the story is by the water. 🌊</p>
+    <div class="f-row f-line" style="--d:9.6s"><button class="btn primary" id="i-go">Step off the train →</button></div>
+  </div>
+</section>
 <section class="finale" id="finale" hidden aria-live="polite">
   <div class="fin-in">
     <p class="f-eyebrow f-line" style="--d:.6s">The end of the trail…</p>
@@ -1053,8 +1081,8 @@ function renderDay(i){
       const mini=["her","me"].filter(w=>r[w]&&r[w].s==="heart").map(w=>`<i class="${w}" title="${esc(names[w])}">♥</i>`).join("");
       return `<li style="--i:${k}" class="${isDone?"done":""}${o?" choice":""}${isFood(it)?" food":""}${sk?" skip":""}"><button data-k="${k}"><span class="tm">${esc(it.t)}</span><span class="tt">${esc(o?p.title:it.title)}${mini?`<span class="mini">${mini}</span>`:""}${o?`<small>${o.length} options · ${esc(it.title)}</small>`:""}</span></button></li>`; }).join("")}</ol>
     ${sigil(d)}
-    <div class="row"><button class="btn primary" id="day-start">Start the day <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>`;
-  $("day-start").onclick=()=>go(i,0); const dcc=daycard.querySelector(".dc-close"); if(dcc) dcc.onclick=()=>{ daycard.classList.remove("show"); buzz(4); };
+    <div class="row">${d.city==="Busan"?'<button class="btn ghost" id="day-inter" title="Replay the Busan intro">🌊</button>':""}<button class="btn primary" id="day-start">Start the day <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>`;
+  $("day-start").onclick=()=>go(i,0); const di=$("day-inter"); if(di) di.onclick=()=>startInterlude({day:i,stop:-1}); const dcc=daycard.querySelector(".dc-close"); if(dcc) dcc.onclick=()=>{ daycard.classList.remove("show"); buzz(4); };
   if(daycard.classList.contains("show")){ daycard.querySelectorAll(".k,h2,.stay,.row").forEach((el,j)=>{ el.classList.add("swap-in"); el.style.animationDelay=(j*40)+"ms"; }); }
   daycard.querySelectorAll(".tl button").forEach(b=>b.onclick=()=>go(i,+b.dataset.k,"jump"));
 }
@@ -1130,7 +1158,7 @@ function renderPolaroids(){ let el=sheetScroll.querySelector(".polaroids"); cons
   el.querySelectorAll("button").forEach(b=>b.onclick=()=>{ APP.photos.splice(+b.dataset.i,1); try{ sessionStorage.setItem("sbtrip-photos-v1",JSON.stringify(APP.photos)); }catch(e){} renderPolaroids(); }); }
 /* ---------- bottom bar ---------- */
 function renderBar(){
-  const s=APP.state; if(s.mode==="start"||s.mode==="pick"||s.mode==="finale"){ bar.classList.remove("show"); return; }
+  const s=APP.state; if(s.mode==="start"||s.mode==="pick"||s.mode==="finale"||s.mode==="interlude"){ bar.classList.remove("show"); return; }
   bar.classList.add("show"); bar.classList.toggle("moving",s.mode==="travel");
   const d=DAYS[s.day]; root.style.setProperty("--c",CITYC[d.city]);
   btnPrev.disabled=(s.day===0&&s.stop<=-1&&s.mode!=="travel"); btnNext.disabled=false;
@@ -1223,6 +1251,19 @@ function scheduleMoment(){ clearTimeout(momentTimer); const s=APP.state; if(s.mo
 function momentHtml(it,curOpt){ const m=momentFor(it,curOpt); if(!m) return ""; const seen=!!momentSeen[m.id]; return `<div class="mcard"><span class="me">${m.e}</span><span><b>${esc(m.b)}</b><small>${esc(m.t)}</small></span><button class="${seen?"seen":""}">${seen?"Replay":"💞 Play"}</button></div>`; }
 APP.momentFor=momentFor; APP.playMoment=()=>playMoment(APP.state.day,APP.state.stop,true); APP.hasMoment=()=>{ const s=APP.state; if(s.mode!=="stop") return false; const it=DAYS[s.day].items[s.stop], opts=optionsOf(it); return !!momentFor(it,opts?opts[selIdx(it)]:null); };
 APP.on("arrive",scheduleMoment); APP.on("move",()=>{ clearTimeout(momentTimer); if(momentEl) momentEl.classList.remove("show"); });
+/* ---------- interlude: the first step into Busan ---------- */
+const interEl=$("inter"); let interTimers=[], interPending=null, busanEntered=false, interSeen=!!sessionStorage.getItem("sbtrip-inter");
+const isBusanPlace=p=>!!(p&&p.lat&&p.lat<36.5);
+function startInterlude(pending){ const s=APP.state; if(s.mode==="interlude") return; const prev={mode:s.mode,day:s.day,stop:s.stop}; interPending=pending; clearTimeout(arriveTimer); clearTimeout(momentTimer); if(momentEl) momentEl.classList.remove("show");
+  s.mode="interlude"; s.day=-1; s.stop=-1; sheet.classList.remove("show","full"); daycard.classList.remove("show"); travelEl.classList.remove("show"); closeQuiz(); document.querySelectorAll("dialog[open]").forEach(d=>d.close()); renderBar(); if(typeof renderPeek==="function") renderPeek();
+  const bd=DAYS.filter(d=>d.city==="Busan").length, bp=new Set(allPlaces().filter(isBusanPlace).map(p=>p.title)).size;
+  $("i-stats").innerHTML=`<b>${bd} days</b> by the sea · <b>${bp} places</b> · one bay, one bridge, two of us.`;
+  interEl.hidden=false; interEl.classList.remove("show","warm"); interEl.querySelectorAll(".f-line,.i-big span").forEach(el=>{ el.style.animation="none"; void el.offsetWidth; el.style.animation=""; });
+  $("i-go").onclick=()=>{ buzz(8); const pg=interPending; interPending=null; interSeen=true; try{ sessionStorage.setItem("sbtrip-inter","1"); }catch(e){} endInterlude(); if(pg) go(pg.day,pg.stop,pg.kind||"jump"); else go(5,-1); };
+  interTimers.forEach(clearTimeout); interTimers=[setTimeout(()=>interEl.classList.add("warm"),11000), setTimeout(()=>buzz([10,30,10]),4400)];
+  emitMove(true,{kind:"interlude",day:pending?pending.day:5,stop:-1,prev}); setTimeout(()=>interEl.classList.add("show"),400); buzz(6); }
+function endInterlude(){ interTimers.forEach(clearTimeout); interEl.classList.remove("show"); setTimeout(()=>{ if(!interEl.classList.contains("show")) interEl.hidden=true; },900); }
+APP.interlude=()=>startInterlude({day:5,stop:-1});
 /* ---------- finale ---------- */
 const finaleEl=$("finale"); let finaleTimers=[];
 function startFinale(){ const s=APP.state; if(s.mode==="finale") return; const prev={mode:s.mode,day:s.day,stop:s.stop}; clearTimeout(arriveTimer); clearTimeout(momentTimer); if(momentEl) momentEl.classList.remove("show");
@@ -1255,7 +1296,8 @@ function setHash(){ if(location.hash) history.replaceState(null,"",location.path
 function go(day,stop,kind){
   const s=APP.state, prev={mode:s.mode,day:s.day,stop:s.stop}; const seq=++moveSeq;
   startEl.hidden=true; clearTimeout(arriveTimer); closePick();
-  const fromHill=prev.mode==="start"||prev.mode==="pick"||prev.mode==="finale"; APP.lastKind=kind||null; if(prev.mode==="finale") endFinale();
+  if(stop>=0){ const tgtB=isBusanPlace(placeOf(DAYS[day].items[stop])); if(tgtB&&!busanEntered&&!interSeen&&prev.mode!=="interlude"){ startInterlude({day,stop,kind}); return; } busanEntered=tgtB; }
+  const fromHill=prev.mode==="start"||prev.mode==="pick"||prev.mode==="finale"||prev.mode==="interlude"; APP.lastKind=kind||null; if(prev.mode==="finale") endFinale(); if(prev.mode==="interlude") endInterlude();
   if(stop<0){ if(prev.mode==="finale"&&typeof renderPeek==="function"){ /* fall through */ } s.mode="day"; s.day=day; s.stop=-1; setEvening(false); renderDay(day); sheet.classList.remove("show"); travelEl.classList.remove("show");
     requestAnimationFrame(()=>{ if(!PHONE) daycard.classList.add("show"); renderPeek(); }); renderBar(); setHash(); emitMove(fromHill,{kind:kind||"intro",day,stop:-1,prev}); return; }
   const it=DAYS[day].items[stop], p=placeOf(it);
@@ -1275,8 +1317,8 @@ function emitMove(fade,m){ if(!fade){ APP.emit("move",m); return; } const st=$("
 APP.arrive=function(){ const s=APP.state; if(s.mode!=="travel") return; clearTimeout(arriveTimer); s.mode="stop"; const autoOpen=!PHONE||APP.quick; APP.quick=false; APP.arrivals=(APP.arrivals||0)+1; travelEl.classList.remove("show"); progEl.style.width="0"; renderBar(); if(autoOpen){ sheet.classList.add("show"); firstHints(); } renderPeek(); APP.emit("arrive",s); };
 APP.progress=p=>{ progEl.style.width=(p*100).toFixed(1)+"%"; };
 APP.go=go;
-function next(){ const s=APP.state; if(s.mode==="travel"||s.mode==="start"||s.mode==="finale") return; const d=DAYS[s.day]; if(s.mode==="day") return go(s.day,0); if(s.stop<d.items.length-1) return go(s.day,s.stop+1); if(s.day<DAYS.length-1) go(s.day+1,-1); else startFinale(); }
-function prev(){ const s=APP.state; if(s.mode==="travel"||s.mode==="start") return; if(s.mode==="finale"){ go(DAYS.length-1,DAYS[DAYS.length-1].items.length-1,"jump"); return; } if(s.mode==="day"){ if(s.day>0) go(s.day-1,DAYS[s.day-1].items.length-1,"jump"); return; } if(s.stop>0) go(s.day,s.stop-1); else go(s.day,-1); }
+function next(){ const s=APP.state; if(s.mode==="interlude"){ $("i-go").onclick(); return; } if(s.mode==="travel"||s.mode==="start"||s.mode==="finale") return; const d=DAYS[s.day]; if(s.mode==="day") return go(s.day,0); if(s.stop<d.items.length-1) return go(s.day,s.stop+1); if(s.day<DAYS.length-1) go(s.day+1,-1); else startFinale(); }
+function prev(){ const s=APP.state; if(s.mode==="interlude"){ interPending=null; go(5,1,"jump"); return; } if(s.mode==="travel"||s.mode==="start") return; if(s.mode==="finale"){ go(DAYS.length-1,DAYS[DAYS.length-1].items.length-1,"jump"); return; } if(s.mode==="day"){ if(s.day>0) go(s.day-1,DAYS[s.day-1].items.length-1,"jump"); return; } if(s.stop>0) go(s.day,s.stop-1); else go(s.day,-1); }
 btnNext.onclick=next; btnPrev.onclick=prev;
 addEventListener("keydown",e=>{ if(e.target.matches("textarea,input")) return; if(e.key==="ArrowRight") next(); else if(e.key==="ArrowLeft") prev(); else if(e.key==="Escape"){ document.querySelectorAll("dialog[open]").forEach(d=>d.close()); $("doc").classList.remove("show"); closeQuiz(); } });
 let tx=0,ty=0,tt=0;
@@ -1755,7 +1797,7 @@ function rainSound(level){ level=Math.max(0,Math.min(1,level||0)); if(!S.ctx||!S
 const btns=[document.getElementById("btn-sound"),document.getElementById("btn-sound-top")].filter(Boolean);
 function setOn(on){ if(!S.ctx) init(); S.on=on; btns.forEach(b=>b.setAttribute("aria-pressed",on)); const st=document.getElementById("sound-st"); if(st) st.textContent=on?"On":"Off"; S.ctx.resume(); S.master.gain.setTargetAtTime(on?.9:0,now(),on?.8:.4); if(on){ applyScene(true); select(); A.toast("Sound on · headphones recommended"); } try{ localStorage.setItem("sbtrip-sound",on?"1":"0"); }catch(e){} }
 btns.forEach(b=>b.onclick=()=>setOn(!S.on));
-A.on("move",m=>{ const was=S.scene; S.scene=(m.kind==="start"||m.kind==="pick"||m.kind==="finale")?"blossom":"city"; if(m.day>=0) S.city=A.days[m.day].city; applyScene(false); if(m.kind==="intro"||m.kind==="jump") whoosh(); else if(m.kind==="pick") select(); });
+A.on("move",m=>{ const was=S.scene; S.scene=(m.kind==="start"||m.kind==="pick"||m.kind==="finale")?"blossom":"city"; if(m.day>=0) S.city=A.days[m.day].city; applyScene(false); if(m.kind==="intro"||m.kind==="jump"||m.kind==="interlude") whoosh(); else if(m.kind==="pick") select(); });
 A.on("theme",dark=>{ S.dark=!!dark; applyScene(false); });
 A.on("arrive",s=>chime(s.stop));
 A.on("tick",tick);
@@ -2294,7 +2336,7 @@ function burst(){ const cx=fxCenter.x+(Math.random()-.5)*34, cy=fxCenter.y+20+Ma
     pPos[i*3]=cx; pPos[i*3+1]=cy; pPos[i*3+2]=cz; pVel[i*3]=Math.sin(ph)*Math.cos(th)*v; pVel[i*3+1]=Math.cos(ph)*v; pVel[i*3+2]=Math.sin(ph)*Math.sin(th)*v; pLife[i]=0; pMax[i]=1.4+Math.random()*.7; setCol(i,col); pSize[i]=1.4; pAlpha[i]=1; placed++; }
   pGeo.attributes.aColor.needsUpdate=true; if(A.sound&&A.sound.on&&A.sound.boom) A.sound.boom(); }
 const HEART=(k,n)=>{ const a=k/n*Math.PI*2, x=16*Math.pow(Math.sin(a),3), y=13*Math.cos(a)-5*Math.cos(2*a)-2*Math.cos(3*a)-Math.cos(4*a); return [x*.95,y*.95+8]; };
-function updateFx(dt,t){ if(!fxActive){ parts.visible=false; return; } fxT+=dt; const standingNow=(arrived&&!travel)||camMode==='finale'; parts.visible=standingNow||fxActive==='sparkle'; if(!parts.visible) return;
+function updateFx(dt,t){ if(!fxActive){ parts.visible=false; return; } fxT+=dt; const standingNow=(arrived&&!travel)||camMode==='finale'||camMode==='interlude'; parts.visible=standingNow||fxActive==='sparkle'; if(!parts.visible) return;
   if(fxActive==='fireworks'){ fxBurstT-=dt; if(fxBurstT<=0){ burst(); fxBurstT=.7+Math.random()*.9; }
     for(let i=0;i<PN;i++){ if(pLife[i]<0) continue; pLife[i]+=dt; const f=pLife[i]/pMax[i]; if(f>=1){ pLife[i]=-1; pAlpha[i]=0; continue; } pVel[i*3+1]-=7*dt; pVel[i*3]*=1-dt*.9; pVel[i*3+2]*=1-dt*.9; pVel[i*3+1]*=1-dt*.5; pPos[i*3]+=pVel[i*3]*dt; pPos[i*3+1]+=pVel[i*3+1]*dt; pPos[i*3+2]+=pVel[i*3+2]*dt; pAlpha[i]=(1-f)*(f<.1?f*10:1)*(.7+.3*Math.sin(t*30+i)); pSize[i]=1.4*(1-f*.5); } }
   else if(fxActive==='drones'){ droneT+=dt; if(droneT>6){ droneT=0; droneShape=(droneShape+1)%3; } const k=1-Math.exp(-dt*2.2), N=360;
@@ -2342,10 +2384,11 @@ addEventListener('resize',resize); resize();
 A.on('move',m=>{
   moveT=performance.now(); arrived=false; travel=null;
   startFx(null,fxCenter);
-  if(m.kind==='start'){ camMode='start'; activeDay=-1; activeStop=-1; couple.position.set(W0.x,W0.y+WY,W0.z); yaw=-Math.PI/2+.55; appear=0; pin.visible=false; showProps(0,-1); welcome.visible=true; petals.visible=true; setGesture('lean'); gestNext=4; pickReset(); return; }
-  if(m.kind==='finale'){ camMode='finale'; finaleT=0; activeDay=-1; activeStop=-1; arrived=true; couple.position.set(W0.x,W0.y+WY,W0.z); yaw=Math.PI*.62; appear=0; pin.visible=false; showProps(0,-1); welcome.visible=true; petals.visible=true; pickReset(); gestQueue=['hands','forehead','kiss','lantern','hug','twirl','sway','kiss']; setGesture('lean'); gestNext=3.2; finaleCue=[[5,'lanterns'],[9.5,'hearts'],[15,'fireworks'],[21,'hearts'],[30,'hearts']]; return; }
-  if(m.kind==='pick'){ camMode='pick'; activeDay=-1; activeStop=-1; couple.position.set(W0.x,W0.y+WY,W0.z); yaw=Math.PI/2; pin.visible=false; showProps(0,-1); welcome.visible=true; petals.visible=true; setGesture('idle'); pickReset(); return; }
-  welcome.visible=false; petals.visible=false; pickReset();
+  if(m.kind==='start'){ camMode='start'; activeDay=-1; activeStop=-1; couple.position.set(W0.x,W0.y+WY,W0.z); yaw=-Math.PI/2+.55; appear=0; pin.visible=false; showProps(0,-1); welcome.visible=true; petals.visible=true; busan.visible=false; setGesture('lean'); gestNext=4; pickReset(); return; }
+  if(m.kind==='interlude'){ camMode='interlude'; interT=0; activeDay=-1; activeStop=-1; arrived=true; couple.position.set(B0.x,B0.y+BY,B0.z); yaw=0; appear=0; pin.visible=false; showProps(0,-1); welcome.visible=false; petals.visible=false; busan.visible=true; pickReset(); gestQueue=['admire','pose','hands','selfie','kiss','sway','hug','admire']; setGesture('admire'); gestNext=4.5; interCue=[[3,'sparkle'],[9,'hearts'],[18,'hearts']]; return; }
+  if(m.kind==='finale'){ camMode='finale'; finaleT=0; activeDay=-1; activeStop=-1; arrived=true; couple.position.set(W0.x,W0.y+WY,W0.z); yaw=Math.PI*.62; appear=0; pin.visible=false; showProps(0,-1); welcome.visible=true; petals.visible=true; busan.visible=false; pickReset(); gestQueue=['hands','forehead','kiss','lantern','hug','twirl','sway','kiss']; setGesture('lean'); gestNext=3.2; finaleCue=[[5,'lanterns'],[9.5,'hearts'],[15,'fireworks'],[21,'hearts'],[30,'hearts']]; return; }
+  if(m.kind==='pick'){ camMode='pick'; activeDay=-1; activeStop=-1; couple.position.set(W0.x,W0.y+WY,W0.z); yaw=Math.PI/2; pin.visible=false; showProps(0,-1); welcome.visible=true; petals.visible=true; busan.visible=false; setGesture('idle'); pickReset(); return; }
+  welcome.visible=false; petals.visible=false; busan.visible=false; pickReset();
   activeDay=m.day; ensureProps(m.day); pin.userData.mat.color.copy(CITY[DAYS[m.day].city].col);
   if(m.kind==='intro'){ camMode='overview'; activeStop=-1; if(m.prev.day!==m.day||m.prev.stop!==0){ appear=0; placeCouple(m.day,0); } pin.visible=false; showProps(m.day,-1); return; }
   camMode='follow'; activeStop=m.stop;
@@ -2360,7 +2403,7 @@ A.on('choice',({day,stop})=>{ const wasA=trailMats[day].uniforms.uAlpha.value, w
   else if(activeDay===day&&activeStop===stop-1&&!travel){ const nxt=trails[day].stops[stop]; pin.position.copy(nxt); }
   if(activeDay===day&&activeStop===stop&&props[day][stop]){ const pg=props[day][stop]; startFx(pg.userData.fx,pg.position); } });
 A.on('arrive',()=>{ arrived=true; const it=activeDay>=0&&activeStop>=0?DAYS[activeDay].items[activeStop]:null; gestKind=it?(it.kind||'sight'):'sight'; arriveScript(); });
-let celebT=0, quizOn=false, quizOrbit=0, finaleT=0, finaleCue=[];
+let celebT=0, quizOn=false, quizOrbit=0, finaleT=0, finaleCue=[], interT=0, interCue=[];
 /* together: the other phone pokes us, we're at the same place, a 가위바위보 result */
 let togetherOn=false, togetherT=0;
 A.on('poke',p=>{ if(p.kind==='tap'){ if(camMode!=='follow'||p.x==null) return; ripple.position.set(p.x,.09,p.z); rippleT=0; sparkleBurst(new THREE.Vector3(p.x,.6,p.z),SPARK_GOLD,16,2.4); if(A.sound.on) A.sound.pop(.9); return; }
@@ -2388,12 +2431,14 @@ const ENVK={
   day:   {bg:0xf5f6fa,hor:0xe9eef9,zen:0xcfe0fb,land:0xf7f8fc,water:0xe4eefb,line:0xd9dded,wave:0xc4d8f0,lo:0xe6e8f2,hi:0xffffff,soft:0xdfe3fb,sunC:0xffffff,sunI:1.4,hemiS:0xffffff,hemiG:0xdfe3f0,hemiI:1.1,night:0},
   golden:{bg:0xf9e8d6,hor:0xffc98a,zen:0xd9c4e6,land:0xfaf0e4,water:0xf0dcc8,line:0xe3cfbf,wave:0xf4c9a0,lo:0xefe0d2,hi:0xfff6ea,soft:0xf3c76e,sunC:0xffa860,sunI:1.3,hemiS:0xffd9b0,hemiG:0xe8d8c8,hemiI:1.0,night:.06},
   dusk:  {bg:0x3b3660,hor:0xd8738c,zen:0x1c1f45,land:0x3d3a5c,water:0x2d2f55,line:0x514c74,wave:0x7a5a7e,lo:0x3f3b5e,hi:0x5a5680,soft:0xf3c76e,sunC:0xff8a70,sunI:.6,hemiS:0x6b5f99,hemiG:0x2a2740,hemiI:.7,night:.72}};
+ENVK.sea={bg:0xe4f5f9,hor:0xd9f2f5,zen:0x6fbfe6,land:0xf2efe6,water:0x5bc0d6,line:0xdde9e6,wave:0x9fe0ea,lo:0xe8eef0,hi:0xffffff,soft:0xdff6f8,sunC:0xfff4dc,sunI:1.45,hemiS:0xf3fbff,hemiG:0xd7e9ec,hemiI:1.15,night:0};
 ENVK.bloom={bg:0xfbe4ec,hor:0xffc3a6,zen:0xc9b7f2,land:0xf8eef2,water:0xf3d9ea,line:0xe8d4de,wave:0xf5c9d9,lo:0xf4dde5,hi:0xffffff,soft:0xffd3de,sunC:0xffb37c,sunI:1.45,hemiS:0xffe4ed,hemiG:0xe9d6e2,hemiI:1.1,night:0};
 const ENVC=['bg','hor','zen','land','water','line','wave','lo','hi','soft','sunC','hemiS','hemiG'], ENVN=['sunI','hemiI','night'];
 const envCur={}, envTgt={}; for(const k of ENVC){ envCur[k]=new THREE.Color(ENVK.day[k]); envTgt[k]=new THREE.Color(ENVK.day[k]); } for(const k of ENVN){ envCur[k]=ENVK.day[k]; envTgt[k]=ENVK.day[k]; }
 let themeForce=null, envHour=13, envSunset=17.6;
 const hourOf=(day,stop)=>{ if(day<0) return 13; const d=DAYS[day]; const m=stop>=0?/^(\d\d):(\d\d)$/.exec(d.items[stop].t||''):null; const ss=/^(\d\d):(\d\d)$/.exec(d.sunset||''); envSunset=ss?(+ss[1])+(+ss[2])/60:17.6; return m?(+m[1])+(+m[2])/60:13; };
 function envTargets(){ let h=envHour; if(themeForce==='dark') h=21; else if(themeForce==='light') h=13; const ss=envSunset; if(camMode==='start'||camMode==='pick'){ for(const k of ENVC) envTgt[k].setHex(ENVK.bloom[k]); for(const k of ENVN) envTgt[k]=ENVK.bloom[k]; return; }
+  if(camMode==='interlude'){ const f=Math.min(1,interT/24), sm=x=>x<=0?0:x>=1?1:x*x*(3-2*x); for(const k of ENVC) envTgt[k].setHex(ENVK.sea[k]).lerp(new THREE.Color(ENVK.golden[k]),sm((f-.35)/.65)*.85); for(const k of ENVN) envTgt[k]=ENVK.sea[k]+(ENVK.golden[k]-ENVK.sea[k])*sm((f-.35)/.65)*.85; return; }
   if(camMode==='finale'){ const f=Math.min(1,finaleT/26), sm=x=>x<=0?0:x>=1?1:x*x*(3-2*x), mixk=(a,b,q)=>{ for(const k of ENVC) envTgt[k].setHex(ENVK[a][k]).lerp(new THREE.Color(ENVK[b][k]),q); for(const k of ENVN) envTgt[k]=ENVK[a][k]+(ENVK[b][k]-ENVK[a][k])*q; }; if(f<.45) mixk('bloom','dusk',sm(f/.45)); else mixk('dusk','night',sm((f-.45)/.55)*.9); return; } const mix=(a,b,f)=>{ for(const k of ENVC) envTgt[k].setHex(ENVK[a][k]).lerp(new THREE.Color(ENVK[b][k]),f); for(const k of ENVN) envTgt[k]=ENVK[a][k]+(ENVK[b][k]-ENVK[a][k])*f; };
   const s=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
   if(h<5.5) mix('night','night',0); else if(h<7) mix('night','dawn',s((h-5.5)/1.5)); else if(h<9) mix('dawn','day',s((h-7)/2)); else if(h<ss-1.6) mix('day','day',0);
@@ -2526,7 +2571,7 @@ function updateEnv(dt,t){
   PM.water.color.setHex(0xbfe0f5).lerp(new THREE.Color(0x1d2b4d),night); PM.water.emissive.copy(PM.water.color); PM.water.emissiveIntensity=.05+.08*Math.sin(t*1.3)*.5+.04;
   PM.gold.emissiveIntensity=.2+.7*night; PM.white.emissiveIntensity=.12*night; bulbI.material.emissiveIntensity=.15+1.1*night; svNight(night); cars.forEach(c=>c.userData.hl.forEach(l=>l.material.emissiveIntensity=.2+1.2*night));
   hemi.color.copy(envCur.hemiS); hemi.groundColor.copy(envCur.hemiG); hemi.intensity=envCur.hemiI; sun.color.copy(envCur.sunC); sun.intensity=envCur.sunI; shadowPlane.material.opacity=.14+.16*night; leafBase=.85-.7*night;
-  const hh=camMode==='finale'?17.15+Math.min(1,finaleT/26)*4.6:(camMode==='start'||camMode==='pick')?17.15:themeForce==='dark'?21:themeForce==='light'?13:envHour; sunDirFor(hh); if(night>.6) sunDir.lerp(moonDir,(night-.6)/.4);
+  const hh=camMode==='interlude'?14.2+Math.min(1,interT/24)*3.1:camMode==='finale'?17.15+Math.min(1,finaleT/26)*4.6:(camMode==='start'||camMode==='pick')?17.15:themeForce==='dark'?21:themeForce==='light'?13:envHour; sunDirFor(hh); if(night>.6) sunDir.lerp(moonDir,(night-.6)/.4);
   placeSun(); shadowPlane.position.set(couple.position.x,.06,couple.position.z);
   skyMat.uniforms.uNight.value=night; sky.position.copy(camPos);
   clouds.forEach((s,i)=>{ const u=s.userData; u.ox+=dt*u.sp; if(u.ox>280) u.ox=-280; s.position.set(camPos.x+u.ox,u.y,camPos.z+u.oz); s.material.opacity=(.5-.3*night)*(camMode==='follow'?1:.7); });
@@ -2602,6 +2647,61 @@ const WY=hillY(0,0);
   welcome.visible=false;
 })();
 /* the app always boots on the welcome hill: start the camera just above it so the intro glide settles in ~3 s instead of flying in from the city */
+/* ---------- Busan vista: a camellia cliff above Suyeongman Bay ---------- */
+const B0=new THREE.Vector3(-2600,0,2600), busan=new THREE.Group(); busan.position.copy(B0); scene.add(busan); busan.visible=false;
+const vAnims=[]; const hillB=(x,z)=>{ const q=42*42-(x/1.25)*(x/1.25)-z*z; return q>0?Math.max(0,.17*Math.sqrt(q)-.4):0; }; const BY=hillB(0,0);
+const seaMat=new THREE.ShaderMaterial({fog:true,uniforms:Object.assign(fogU(),{uTime:{value:0},uDeep:{value:new THREE.Color(0x2f93b9)},uShallow:{value:new THREE.Color(0x8fe0e8)},uFoam:{value:new THREE.Color(0xffffff)},uSun:{value:new THREE.Color(0xfff1cf)},uShore:{value:B0.z-26},uWarm:{value:0}}),
+  vertexShader:`varying vec3 vW; varying float vH; uniform float uTime;
+    #include <fog_pars_vertex>
+    void main(){ vec3 p=position; float w=sin(p.x*0.08+uTime*1.1)*0.18+sin(p.y*0.11-uTime*0.9)*0.14+sin((p.x+p.y)*0.05+uTime*0.6)*0.1; p.z+=w; vH=w; vec4 wp=modelMatrix*vec4(p,1.0); vW=wp.xyz; vec4 mvPosition=viewMatrix*wp; gl_Position=projectionMatrix*mvPosition;
+    #include <fog_vertex>
+    }`,
+  fragmentShader:`uniform vec3 uDeep,uShallow,uFoam,uSun; uniform float uTime,uShore,uWarm; varying vec3 vW; varying float vH;
+    #include <fog_pars_fragment>
+    void main(){ float d=uShore-vW.z; float sh=1.0-smoothstep(0.0,70.0,d); vec3 col=mix(uDeep,uShallow,sh*0.85+vH*0.25);
+      float foam=smoothstep(0.0,1.0,1.0-smoothstep(0.0,7.0,d))*(0.55+0.45*sin(d*1.6-uTime*2.2+vW.x*0.05)); col=mix(col,uFoam,foam*0.85);
+      float glint=pow(max(0.0,sin(vW.x*0.9+uTime*1.7)*sin(vW.z*1.3-uTime*1.1)),24.0)*(1.0-sh*0.6); col+=uSun*glint*(0.5+uWarm*0.8);
+      col=mix(col,vec3(1.0,0.72,0.45),uWarm*0.22*(1.0-sh));
+      gl_FragColor=vec4(col,1.0);
+    #include <fog_fragment>
+    }`});
+(function buildBusan(){
+  const std=(c,e=.08,r=.9)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:0,emissive:c,emissiveIntensity:e});
+  const sea=new THREE.Mesh(new THREE.PlaneGeometry(1100,900,70,56),seaMat); sea.rotation.x=-Math.PI/2; sea.position.set(0,.04,-26-450+60); busan.add(sea);
+  // the cliff the couple stands on, with camellias and pines
+  const hill=new THREE.Mesh(new THREE.SphereGeometry(42,52,26,0,Math.PI*2,0,Math.PI/2),std(0xcfe3c4,.08)); hill.scale.set(1.25,.17,1); hill.position.y=-.4; hill.receiveShadow=true; busan.add(hill);
+  const rock=new THREE.Mesh(new THREE.SphereGeometry(44,40,20,0,Math.PI*2,0,Math.PI/2),std(0x9aa3a8,.03)); rock.scale.set(1.2,.11,.9); rock.position.set(0,-.6,-6); busan.add(rock);
+  const grass=new THREE.Mesh(new THREE.CircleGeometry(420,64),std(0xdfeacc,.05)); grass.rotation.x=-Math.PI/2; grass.position.set(0,.03,120); busan.add(grass);
+  const cam=[0xe4534a,0xf49ac1,0xc93b4f,0xff8f8f].map(c=>std(c,.25,.8)), leaf=std(0x3f7f52,.04);
+  for(let i=0;i<16;i++){ const a=i/16*Math.PI*2, r=14+hash(i,2)*18, x=Math.cos(a)*r*1.25, z=Math.sin(a)*r; if(Math.abs(x)<5&&Math.abs(z)<5) continue; const b=new THREE.Mesh(new THREE.SphereGeometry(1.1+hash(i,3)*.9,10,8),leaf); b.position.set(x,hillB(x,z)+.7,z); b.scale.y=.8; busan.add(b); for(let k=0;k<4;k++){ const f=new THREE.Mesh(new THREE.SphereGeometry(.18,6,5),cam[(i+k)%4]); const aa=hash(i+k,9)*6.28; f.position.set(x+Math.cos(aa)*1.0,hillB(x,z)+1.1+hash(k,i)*.5,z+Math.sin(aa)*1.0); busan.add(f); } }
+  [[-22,-14,1.1],[26,-10,1.3],[-30,8,1.0],[34,14,.9],[12,-24,.8]].forEach(([x,z,s])=>{ const g=new THREE.Group(); g.position.y=hillB(x,z); busan.add(g); pine(g,x,z,s*1.6); });
+  const bench=box(2.4,.12,.6,PM.wood,0,0,0); bench.position.set(-4.5,BY+.5,2.5); bench.rotation.y=.2; busan.add(bench,box(2.2,.5,.1,PM.wood,-4.5,BY+.6,2.8),box(2.0,.45,.12,PM.slate,-4.5,BY,2.5));
+  const rail=new THREE.Group(); for(let i=-5;i<=5;i++) rail.add(cyl(.05,.06,1.0,PM.white,i*1.6,0,0,6)); rail.add(box(17,.06,.06,PM.white,0,.95,0),box(17,.05,.05,PM.white,0,.55,0)); rail.position.set(0,BY,-5.2); busan.add(rail);
+  // Gwangan Bridge across the bay, lamps that cycle colour as the light warms
+  const bridge=new THREE.Group(); bridge.position.set(0,0,-180); busan.add(bridge); const deckM=std(0xe8ecf2,.05), pyM=std(0xf4f6fa,.06);
+  bridge.add(box(520,2.2,11,deckM,0,22,0)); [-110,110].forEach(x=>{ [-4,4].forEach(z=>bridge.add(box(3.2,66,3.2,pyM,x,0,z))); bridge.add(box(12,3,11,pyM,x,62,0),box(12,3,11,pyM,x,38,0)); });
+  const cable=(x0,y0,x1,y1)=>{ const d=Math.hypot(x1-x0,y1-y0); const c=new THREE.Mesh(new THREE.CylinderGeometry(.18,.18,d,5),PM.slate); c.position.set((x0+x1)/2,(y0+y1)/2,0); c.rotation.z=Math.atan2(x1-x0,y1-y0)*-1; return c; };
+  [[-110,65,-250,24],[-110,65,0,30],[110,65,250,24],[110,65,0,30]].forEach(([a,b,c,d])=>bridge.add(cable(a,b,c,d)));
+  for(let x=-240;x<=240;x+=8){ const y=x<-110?24+(x+110)*(x+110)/490:(x>110?24+(x-110)*(x-110)/490:30-(x*x)/2016*6); [[-110,65],[110,65]].forEach(([px,py])=>{ if(Math.abs(x-px)<110&&Math.abs(x-px)>6&&((x<0)===(px<0))) bridge.add(cable(x,y,px,py)); }); }
+  const lampM=new THREE.MeshStandardMaterial({color:0xffffff,emissive:0x8fe0ff,emissiveIntensity:.3}); const lamps=[]; for(let x=-250;x<=250;x+=14){ const l=new THREE.Mesh(new THREE.SphereGeometry(.9,8,6),lampM); l.position.set(x,24.4,5.8); bridge.add(l); lamps.push(l); }
+  vAnims.push((dt,t)=>{ const w=seaMat.uniforms.uWarm.value; lampM.emissiveIntensity=.25+w*1.4; lampM.emissive.setHSL(((t*.05)%1),.75,.6); });
+  // Marine City / Haeundae skyline to the right, X the Sky, cliffs and a lighthouse to the left
+  const glassM=std(0xd7ecf6,.14,.35), wM=std(0xffffff,.06,.8);
+  for(let i=0;i<34;i++){ const h=hash(i,21), x=150+hash(i,3)*190, z=-300+hash(i,5)*120; const H=16+h*58, w=7+hash(i,7)*8; const b=box(w,H,w,i%3?glassM:wM,x,0,z); b.castShadow=false; busan.add(b); }
+  const xsky=makeLandmark('xsky'); xsky.scale.setScalar(3.6); xsky.position.set(255,0,-215); busan.add(xsky);
+  const marina=makeLandmark('marina'); marina.scale.setScalar(2.4); marina.position.set(150,0,-150); marina.rotation.y=.4; busan.add(marina); if(marina.userData.anim) vAnims.push(...marina.userData.anim);
+  [[-150,-120,36,20],[-210,-150,48,26],[-120,-170,30,16]].forEach(([x,z,r,h])=>{ const c=new THREE.Mesh(new THREE.ConeGeometry(r,h,9),std(0xa9c4a0,.05)); c.position.set(x,h/2,z); c.scale.z=.8; busan.add(c); });
+  const pier=new THREE.Group(); pier.position.set(-70,0,-70); busan.add(pier); pier.add(box(26,1.4,6,PM.stone,0,0,0)); pier.add(cyl(.9,1.2,7,PM.white,-9,1.4,0,12),cyl(.9,1.2,7,PM.red,9,1.4,0,12),cyl(1.1,1.1,.6,PM.slate,-9,8.4,0,12),cyl(1.1,1.1,.6,PM.slate,9,8.4,0,12));
+  const beacons=[[-9,0xffffff],[9,0xff6060]].map(([x,c])=>{ const b=new THREE.Mesh(new THREE.SphereGeometry(.5,10,8),new THREE.MeshStandardMaterial({color:c,emissive:c,emissiveIntensity:.4})); b.position.set(x,9.3,0); pier.add(b); return b; }); vAnims.push((dt,t)=>beacons.forEach((b,i)=>b.material.emissiveIntensity=.3+Math.max(0,Math.sin(t*1.6+i*Math.PI))*1.6));
+  // beach to the right with umbrellas and tiny people, Blueline capsule along the shore
+  const sand=new THREE.Mesh(new THREE.CircleGeometry(60,48),std(0xf3e6cf,.05)); sand.rotation.x=-Math.PI/2; sand.scale.set(1.6,.5,1); sand.position.set(100,.035,-14); busan.add(sand);
+  for(let i=0;i<7;i++){ const x=58+i*14+(hash(i,4)-.5)*6, z=-10+(hash(i,6)-.5)*10; const u=new THREE.Mesh(new THREE.ConeGeometry(2.2,.9,10),[PM.red,PM.pink,PM.gold,PM.white][i%4]); u.position.set(x,2.6,z); busan.add(u,cyl(.06,.06,2.6,PM.slate,x,0,z,6)); const pp=tinyPerson(PCOL[i%PCOL.length]); pp.position.set(x+1.6,0,z+1.2); pp.scale.setScalar(1.1); busan.add(pp); }
+  const caps=makeLandmark('capsule'); caps.scale.setScalar(1.5); caps.position.set(120,0,-52); busan.add(caps); if(caps.userData.pods) vAnims.push((dt)=>caps.userData.pods.forEach(p=>{ p.position.x=((p.position.x+dt*1.2+9)%18)-9; const w=caps.children[caps.children.indexOf(p)+1]; if(w) w.position.x=p.position.x; }));
+  // boats, a yacht, gulls
+  for(let i=0;i<4;i++){ const b=sailboat(busan,-60+i*40,-90-hash(i,8)*60,1.6+hash(i,2)); const ph=i*1.7, sp=(i%2?1:-1)*1.6; vAnims.push((dt,t)=>{ b.position.x+=sp*dt; if(b.position.x>160) b.position.x=-160; if(b.position.x<-160) b.position.x=160; b.position.y=.1+Math.sin(t*1.3+ph)*.12; b.rotation.z=Math.sin(t*1.1+ph)*.04; b.rotation.y=sp>0?0:Math.PI; }); }
+  const yacht=new THREE.Group(); yacht.add(box(7,1.2,2.4,PM.white,0,.3,0),box(4,1.2,2,PM.white,-.4,1.5,0),box(3.6,.8,2.1,PM.glass,-.4,2.7,0)); const yl=new THREE.Mesh(new THREE.SphereGeometry(.3,8,6),new THREE.MeshStandardMaterial({color:0xfff1c0,emissive:0xf3c76e,emissiveIntensity:.8})); yl.position.set(3,2,0); yacht.add(yl); yacht.position.set(20,.1,-120); busan.add(yacht); vAnims.push((dt,t)=>{ yacht.position.x=20+Math.sin(t*.12)*40; yacht.rotation.y=Math.cos(t*.12)*.4; yacht.position.y=.1+Math.sin(t*1.5)*.1; });
+  for(let i=0;i<9;i++){ const g=new THREE.Sprite(new THREE.SpriteMaterial({map:gullTex,transparent:true,depthWrite:false})); g.scale.set(2.4,1.2,1); busan.add(g); const ph=hash(i,5)*100, r=18+hash(i,7)*40, y=10+hash(i,9)*16, sp=(.25+hash(i,11)*.2)*(i%2?1:-1); vAnims.push((dt,t)=>{ const a=t*sp+ph; g.position.set(Math.cos(a)*r*1.3,y+Math.sin(t*1.1+ph)*1.6,-30+Math.sin(a)*r); g.scale.y=1.2*(.7+.3*Math.abs(Math.sin(t*7+ph))); }); }
+})();
 camPos.set(W0.x+70,W0.y+WY+80,W0.z+40); look.set(W0.x-200,W0.y+WY-7,W0.z-6);
 /* petals */
 const PTN=320, ptPos=new Float32Array(PTN*3), ptVel=new Float32Array(PTN*3), ptPh=new Float32Array(PTN), ptSz=new Float32Array(PTN), ptCol=new Float32Array(PTN*3);
@@ -2791,7 +2891,7 @@ function frame(){
   const standing=arrived&&!travel&&camMode==='follow';
   if(togetherOn&&standing){ togetherT+=dt; if(togetherT>5.5){ togetherT=0; sparkleBurst(couple.position,[[1,.55,.7],[1,.85,.9]],14,2.6); } }
   if(standing&&!reduced){ gestT+=dt; if(gestT>gestNext){ if(gest==='idle') pickGesture(); else { setGesture('idle'); gestNext=fxActive?1.2:(gestQueue.length?.9:1.6+Math.random()*2.2); } } }
-  else if((camMode==='start'||camMode==='finale')&&!reduced){ gestT+=dt; if(gestT>gestNext){ let g=gestQueue.length?gestQueue.shift():WELCOME_GESTS[Math.floor(Math.random()*WELCOME_GESTS.length)]; if(g===gest) g='lean'; setGesture(g); gestNext=(G[g]&&G[g].hold||3)+(camMode==='finale'?1.2:2.5); } }
+  else if((camMode==='start'||camMode==='finale'||camMode==='interlude')&&!reduced){ gestT+=dt; if(gestT>gestNext){ let g=gestQueue.length?gestQueue.shift():WELCOME_GESTS[Math.floor(Math.random()*WELCOME_GESTS.length)]; if(g===gest) g='lean'; setGesture(g); gestNext=(G[g]&&G[g].hold||3)+(camMode==='finale'?1.2:2.5); } }
   else if(gest!=='idle'){ setGesture('idle'); gestNext=2.5; gestQueue=[]; }
   // critically-damped springs: no hitches when a new pose starts mid-motion
   PKEYS.forEach(k=>{ const w=POMEGA[k]||3.0, x=P[k], v=PV[k], acc=w*w*(Pto[k]-x)-2*w*v; PV[k]=v+acc*dt; P[k]=x+PV[k]*dt; });
@@ -2843,11 +2943,15 @@ function frame(){
   if(rippleT<3){ rippleT+=dt; const f=rippleT/1.2; ripple.scale.setScalar(1+f*6); ripple.material.opacity=Math.max(0,.6*(1-f)); }
   if(tapFx>0&&!fxActive){ tapFx-=dt; parts.visible=true; fxActive='fireworks'; fxBurstT=99; updateFx(dt,t); fxActive=null; if(tapFx<=0) parts.visible=false; }
   if(welcome.visible){ wAnims.forEach(fn=>fn(dt,t)); updatePetals(dt,t); petalMat.uniforms.uScale.value=innerHeight; }
+  if(busan.visible){ vAnims.forEach(fn=>fn(dt,t)); seaMat.uniforms.uTime.value=t; seaMat.uniforms.uWarm.value=Math.min(1,Math.max(0,(interT-9)/14)); }
+  if(camMode==='interlude'){ interT+=dt; while(interCue.length&&interT>=interCue[0][0]){ const [,what]=interCue.shift(); const c=couple.position; if(what==='sparkle') startFx('sparkle',new THREE.Vector3(c.x,c.y-4,c.z-60)); else if(what==='hearts'){ heartBurst(c,.08); sparkleBurst(c,[[1,.85,.5],[.6,.95,1],[1,1,1]],30,3.4); } } }
   if(camMode==='finale'){ finaleT+=dt; while(finaleCue.length&&finaleT>=finaleCue[0][0]){ const [,what]=finaleCue.shift(); const c=couple.position; if(what==='lanterns') startFx('lanterns',c); else if(what==='fireworks'){ startFx('fireworks',new THREE.Vector3(W0.x-120,W0.y+WY+10,W0.z-60)); } else if(what==='hearts'){ heartBurst(c,.08); sparkleBurst(c,[[1,.55,.7],[1,.85,.9],[1,1,1]],30,3.4); } }
     petalMat.uniforms.uA.value=Math.max(.35,1-envCur.night*.7); }
   updateWeather(dt,t);
   // camera
   if(camMode==='start'){ const sw=Math.sin(t*.11), bob=Math.sin(t*.17); const C=mobile?WCAM.mob:WCAM.desk; want.set(W0.x+C.x+sw*2.5,W0.y+WY+C.y+bob*.5,W0.z+C.z+Math.cos(t*.09)*3); wantLook.set(W0.x+C.lx,W0.y+WY+C.ly,W0.z+C.lz); fogWant=.0011; }
+  else if(camMode==='interlude'){ const f=Math.min(1,interT/22), e=1-Math.pow(1-f,2.4); const c=couple.position; const a=.16+Math.sin(interT*.05)*.3-e*.3, R=(mobile?38:32)-e*(mobile?18:20), h=(mobile?18:13)-e*(mobile?12.6:9.6);
+    want.set(c.x+Math.sin(a)*R,c.y+h,c.z+Math.cos(a)*R); wantLook.set(c.x,c.y+(mobile?.4:1.6)+(1-e)*(mobile?6:2.6),c.z-(1-e)*80); if(!mobile){ /* caption sits in the left column on wide screens: nudge the look target left so the couple lands right of it */ tmp.set(Math.cos(a),0,-Math.sin(a)); wantLook.addScaledVector(tmp,-e*(innerWidth>=900?5.5:0)); } fogWant=.0008; }
   else if(camMode==='finale'){ const f=Math.min(1,finaleT/30), e=1-Math.pow(1-f,3); const a=Math.PI*.42+Math.sin(finaleT*.045)*.55+finaleT*.012, R=(mobile?30:26)-e*(mobile?12:10), h=(mobile?9:7)-e*(mobile?3.6:2.6); const c=couple.position;
     want.set(c.x+Math.sin(a)*R,c.y+h,c.z+Math.cos(a)*R); wantLook.set(c.x,c.y+(mobile?3.4:1.6)+e*(mobile?1.4:.4),c.z); fogWant=.0011; }
   else if(camMode==='pick'){ const C=mobile?PCAM.mob:PCAM.desk; want.set(W0.x+C.x,W0.y+WY+C.y+Math.sin(t*.4)*.04,W0.z+C.z+Math.sin(t*.23)*.22); wantLook.set(W0.x+C.lx,W0.y+WY+C.ly,W0.z+C.lz); fogWant=.0011; }
@@ -2859,9 +2963,9 @@ function frame(){
     want.set(p.x+Math.sin(a)*r*zoom,p.y+h*zoom*(1+pitch),p.z+Math.cos(a)*r*zoom); wantLook.set(p.x,p.y+1.5+((mobile?6:9)-1.5)*lift,p.z); fogWant=flying?.0006:.0014;
     if(quizOn&&activeDay>=0&&activeStop>=0&&props[activeDay][activeStop]){ const pg=props[activeDay][activeStop]; const lh=Math.min(16,pg.userData.h||6); const mid=pg.position.clone().lerp(p,.5); const rq=(mobile?34:40)+lh*1.3; want.set(mid.x+Math.sin(a)*rq,(mobile?14:20)+lh*.6,mid.z+Math.cos(a)*rq); wantLook.set(mid.x,lh*.35+1,mid.z); if(!mobile){ const sx=Math.cos(a)*rq*.55, sz=-Math.sin(a)*rq*.55; want.x-=sx; want.z-=sz; wantLook.x-=sx; wantLook.z-=sz; } }
     if(travel){ const sp=Math.min(1,vel/40); want.y+=sp*(mobile?60:40); } }
-  const dist=camPos.distanceTo(want); want.y+=(camMode==='start'||camMode==='pick'||camMode==='finale'?0:Math.min(dist*.45,340))+(camMode==='follow'?occlLift:0);
+  const dist=camPos.distanceTo(want); want.y+=(camMode==='start'||camMode==='pick'||camMode==='finale'||camMode==='interlude'?0:Math.min(dist*.45,340))+(camMode==='follow'?occlLift:0);
   if(dist>2500&&camMode!=='start'&&camMode!=='pick'){ camPos.copy(want); camPos.y+=70; look.copy(wantLook); camVel.set(0,0,0); lookVel.set(0,0,0); } // leaving the welcome hill: drop in from above instead of a 4 km flight through empty sky
-  spring(camPos,camVel,want,travel?3.0:(camMode==='finale'?1.1:2.1),dt); spring(look,lookVel,wantLook,travel?3.4:(camMode==='finale'?1.3:2.6),dt); cam.position.copy(camPos); cam.lookAt(look); if(camMode==='follow'){ const right=new THREE.Vector3().crossVectors(cam.getWorldDirection(tmp),cam.up).normalize(); cam.position.addScaledVector(right,parX*1.6); cam.position.y-=parY*1.0; cam.lookAt(look); } occlusion(dt);
+  spring(camPos,camVel,want,travel?3.0:(camMode==='finale'||camMode==='interlude'?1.1:2.1),dt); spring(look,lookVel,wantLook,travel?3.4:(camMode==='finale'||camMode==='interlude'?1.3:2.6),dt); cam.position.copy(camPos); cam.lookAt(look); if(camMode==='follow'){ const right=new THREE.Vector3().crossVectors(cam.getWorldDirection(tmp),cam.up).normalize(); cam.position.addScaledVector(right,parX*1.6); cam.position.y-=parY*1.0; cam.lookAt(look); } occlusion(dt);
   scene.fog.density+=(fogWant-scene.fog.density)*Math.min(1,dt*2);
   if(!arrived&&!travel&&camMode==='follow'&&performance.now()-moveT>700&&dist<6) A.arrive();
 
