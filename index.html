@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f5f6fa">
-<meta name="build" content="20261001-113327">
+<meta name="build" content="20261001-114352">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Seoul ⇄ Busan · a journey for two</title>
@@ -354,7 +354,10 @@ dialog::backdrop{background:rgba(17,22,40,.35);backdrop-filter:blur(6px)}
 .polaroids figure:hover button{opacity:1}
 .toast{position:fixed;left:50%;bottom:calc(var(--bar-h) + var(--sab) + 16px);transform:translate(-50%,16px);max-width:min(92vw,520px);text-align:center;z-index:80;padding:10px 16px;border-radius:999px;background:var(--ink);color:#fff;font:600 13px var(--body);opacity:0;pointer-events:none;transition:.35s}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-.no3d #stage{background:radial-gradient(80% 60% at 50% 40%,#e9ecf7,#f5f6fa 70%)}
+.no3d #stage{background:radial-gradient(90% 70% at 50% 35%,#fbe4ec,#e9ecf7 55%,#f5f6fa 85%)}
+:root[data-theme="dark"].no3d #stage{background:radial-gradient(90% 70% at 50% 35%,#2a2240,#141a2c 60%)}
+.no3d #stage canvas{display:none}
+html{background:var(--bg)}
 
 /* ---------- review: hearts, skips, people ---------- */
 .ibtn .ring{position:absolute;inset:-1px;border-radius:14px;padding:1.5px;background:conic-gradient(var(--rose) calc(var(--p,0)*1%),color-mix(in srgb,var(--rose) 18%,transparent) 0);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;transition:--p .6s}
@@ -832,7 +835,10 @@ async function wikiFetchAll(){
 }
 
 /* ---------- app state ---------- */
-const APP=window.APP={state:{mode:"start",day:-1,stop:-1},hooks:{},days:DAYS,hotels:HOTELS,cityColor:{Seoul:0x4f5fe6,Busan:0x0e9aa7},placeOf,resolve,
+const DBG=[]; const dbgLog=m=>{ DBG.push(new Date().toISOString().slice(11,19)+" "+m); const el=document.getElementById("dbg"); if(el) el.textContent=DBG.slice(-14).join("\n"); };
+addEventListener("error",e=>dbgLog("ERR "+(e.message||e.type)+(e.filename?" @"+e.lineno:""))); addEventListener("unhandledrejection",e=>dbgLog("REJ "+(e.reason&&e.reason.message||e.reason)));
+if(new URLSearchParams(location.search).has("debug")){ const el=document.createElement("pre"); el.id="dbg"; el.style.cssText="position:fixed;left:8px;right:8px;bottom:8px;z-index:999;margin:0;padding:8px 10px;border-radius:10px;background:rgba(0,0,0,.78);color:#9f9;font:11px/1.35 ui-monospace,Menlo,monospace;white-space:pre-wrap;pointer-events:none;max-height:40vh;overflow:hidden"; document.addEventListener("DOMContentLoaded",()=>{ document.body.appendChild(el); el.textContent=DBG.slice(-14).join("\n"); }); dbgLog("UA "+navigator.userAgent.slice(0,90)); }
+const APP=window.APP={state:{mode:"start",day:-1,stop:-1},hooks:{},dbgLog,days:DAYS,hotels:HOTELS,cityColor:{Seoul:0x4f5fe6,Busan:0x0e9aa7},placeOf,resolve,
   on(ev,fn){ (this.hooks[ev]=this.hooks[ev]||[]).push(fn); }, emit(ev,...a){ (this.hooks[ev]||[]).forEach(f=>f(...a)); }, travelDuration:null};
 const rail=$("rail"), daycard=$("daycard"), sheet=$("sheet"), sheetScroll=$("sheet-scroll"), bar=$("bar"), startEl=$("start");
 const btnPrev=$("btn-prev"), btnNext=$("btn-next"), midA=$("mid-a"), midB=$("mid-b"), dotsEl=$("dots"), progEl=$("prog"), travelEl=$("travel"), travelTxt=$("travel-txt");
@@ -918,7 +924,7 @@ function photoBlock(p,d){
   const w=p.wiki&&wiki[p.wiki];
   return `<div class="ph${p.wiki&&!w?" skeleton":""}">${sigil(d)}</div>`+(w&&w.img?`<div class="gal" id="gal"><div class="gi"><img alt="" src="${esc(w.img)}" onload="this.classList.add('on')"></div></div>`:"")+(w?`<a class="credit" href="${esc(w.url)}" target="_blank" rel="noopener">Photos · Wikipedia</a>`:"");
 }
-const whyOf=p=>{ const c=p.cool||(p.about?p.about.split(/(?<=\.)\s/)[0]:""); return c?`<div class="why">${I.star}<span>${esc(c)}</span></div>`:""; };
+const whyOf=p=>{ const c=p.cool||(p.about?p.about.replace(/\.\s+/g,".\u0001").split("\u0001")[0]:""); return c?`<div class="why">${I.star}<span>${esc(c)}</span></div>`:""; };
 /* more photos: every image on the Wikipedia article, filtered to real photos */
 const WG_KEY="sbwiki-g1"; let wgal={}; const wgPending=new Map();
 try{ const c=JSON.parse(localStorage.getItem(WG_KEY)||"null"); if(c&&Date.now()-c.ts<WK_TTL) wgal=c.data||{}; }catch(e){}
@@ -942,7 +948,7 @@ function renderStop(i,k){
   let acts="";
   if(p.name){ const from=prevPlaceOf(i,k); acts+=(from&&from.name!==p.name?`<a class="go" href="${dirUrl(from,p)}" target="_blank" rel="noopener">Route here</a>`:"")+`<a href="${placeUrl(p)}" target="_blank" rel="noopener">Google Maps</a><a href="${naverUrl(p)}" target="_blank" rel="noopener">Naver Map</a><a href="${kakaoUrl(p)}" target="_blank" rel="noopener">Kakao Map</a>`; }
   acts+=`<button class="snap">📷 Take a photo</button><button class="tick" data-id="${id}" aria-pressed="${isDone}">${isDone?"✓ Done":"Mark done"}</button>`;
-  const extract=w&&w.extract?w.extract.split(/(?<=\.)\s/).slice(0,2).join(" "):"";
+  const extract=w&&w.extract?w.extract.replace(/\.\s+/g,".\u0001").split("\u0001").slice(0,2).join(" "):"";
   const seg=opts?`<div class="pick"><div class="pick-h">${food?'<i class="gdot"></i>':""}Pick one · ${esc(it.title)}</div><div class="ocards" role="tablist">${opts.map((o,j)=>{ const r=resolve(o), ww=r.wiki&&wiki[r.wiki]; return `<button role="tab" class="ocard" style="--i:${j}" aria-selected="${j===si}" data-j="${j}" data-wiki="${esc(r.wiki||"")}"><span class="oimg"${ww&&ww.img?` style="background-image:url('${esc(ww.img)}')"`:""}></span><span class="otit">${esc(o.title)}</span><span class="osub">${esc([r.type,r.price&&!(r.type||"").toLowerCase().includes((r.price||"").toLowerCase())?r.price:null].filter(Boolean).join(" · "))}</span>${r.cool?`<span class="ocool">${esc(r.cool)}</span>`:(r.about?`<span class="ocool">${esc(r.about)}</span>`:"")}${hb(o)}</button>`; }).join("")}</div><p class="pick-hint">Tap a card to explore it · press ♥ below to make it ${role==="her"?"Киця's":role==="me"?"Mykola's":"your"} pick</p>${food?`<p class="budget">${esc(T.budgetLine)}</p>`:""}</div>`:"";
   const tags=`<div class="tags"><span class="tag">${d.city}</span>${p.type?`<span class="tag type">${food?'<i class="gdot"></i>':""}${esc(p.type)}</span>`:""}${(it.book||p.book)?'<span class="tag gold">Book ahead</span>':""}${(it.long||p.long)?'<span class="tag">Train ride</span>':""}</div>`;
   sheetScroll.innerHTML=`<figure class="photo" id="photo" data-wiki="${esc(p.wiki||"")}">${photoBlock(p,d)}<div class="grad"></div>${whyOf(p)}
@@ -972,7 +978,7 @@ function renderStop(i,k){
 APP.on("wiki",()=>{ const s=APP.state; if(s.mode!=="stop"&&s.mode!=="travel") return; const p=placeOf(DAYS[s.day].items[s.stop]), w=p.wiki&&wiki[p.wiki]; if(!w) return;
   const ph=$("photo"); if(ph&&!ph.querySelector("img")){ ph.insertAdjacentHTML("afterbegin",photoBlock(p,DAYS[s.day])); const sk=ph.querySelector(".ph.skeleton"); if(sk) sk.classList.remove("skeleton"); fillGallery(p); }
   sheetScroll.querySelectorAll(".ocard[data-wiki]").forEach(b=>{ const ww=b.dataset.wiki&&wiki[b.dataset.wiki]; const im=b.querySelector(".oimg"); if(ww&&ww.img&&im&&!im.style.backgroundImage) im.style.backgroundImage=`url('${ww.img}')`; });
-  const ab=$("about"); if(ab&&!ab.textContent&&w.extract) ab.innerHTML=esc(w.extract.split(/(?<=\.)\s/).slice(0,2).join(" "))+` <a href="${esc(w.url)}" target="_blank" rel="noopener">Wikipedia ↗</a>`; });
+  const ab=$("about"); if(ab&&!ab.textContent&&w.extract) ab.innerHTML=esc(w.extract.replace(/\.\s+/g,".\u0001").split("\u0001").slice(0,2).join(" "))+` <a href="${esc(w.url)}" target="_blank" rel="noopener">Wikipedia ↗</a>`; });
 
 /* ---------- polaroids ---------- */
 APP.photos=[]; try{ const sp=JSON.parse(sessionStorage.getItem("sbtrip-photos-v1")||"null"); if(sp) APP.photos=sp; }catch(e){}
@@ -995,7 +1001,7 @@ function renderBar(){
 
 /* ---------- navigation ---------- */
 let arriveTimer=null, moveSeq=0;
-function setHash(){ const s=APP.state; const h=s.mode==="start"?"":(s.stop>=0?"#d"+(s.day+1)+"s"+(s.stop+1):"#d"+(s.day+1)); if(location.hash!==h) history.replaceState(null,"",location.pathname+location.search+h); }
+function setHash(){ if(location.hash) history.replaceState(null,"",location.pathname+location.search); }
 function go(day,stop,kind){
   const s=APP.state, prev={mode:s.mode,day:s.day,stop:s.stop}; const seq=++moveSeq;
   startEl.hidden=true; clearTimeout(arriveTimer); closePick();
@@ -1047,7 +1053,7 @@ const toastEl=$("toast"); let toastT;
 const toast=msg=>{ toastEl.textContent=msg; toastEl.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>toastEl.classList.remove("show"),2200); };
 APP.toast=toast;
 async function share(){
-  const s=APP.state, url=herLink()+(s.mode==="start"?"":(s.stop>=0?"#d"+(s.day+1)+"s"+(s.stop+1):"#d"+(s.day+1)));
+  const url=herLink();
   const data={title:"Seoul ⇄ Busan · a journey for two",text:role==="her"?"My picks are in — have a look 💗":"Eleven days, two cities, one trail. Tap ♥ on what you love, skip what you don't — I'll see it on my phone.",url};
   if(navigator.share){ try{ await navigator.share(data); return; }catch(e){ if(e.name==="AbortError") return; } }
   try{ await navigator.clipboard.writeText(url); toast("Link copied — send it to your person"); }catch(e){ prompt("Copy this link",url); }
@@ -1365,9 +1371,8 @@ $("pick-go").onclick=()=>{ if(!pickSel) return; role=pickSel; saveK("sbtrip-role
 $("pick-back").onclick=()=>{ closePick(); startEl.hidden=false; APP.state.mode="start"; APP.emit("move",{kind:"start",day:-1,stop:-1,prev:APP.state}); };
 
 /* ---------- deep link / boot ---------- */
-function applyHash(){ const m=/^#d(\d+)(?:s(\d+))?$/.exec(location.hash); if(!m) return false; const d=Math.min(DAYS.length,Math.max(1,+m[1]))-1; const s=m[2]?Math.min(DAYS[d].items.length,Math.max(1,+m[2]))-1:-1; go(d,s,s>=0?"jump":"intro"); return true; }
-APP.boot=function(){ APP.booted=true; applyTheme(theme); wikiFetchAll(); if(!applyHash()) APP.emit("move",{kind:"start",day:-1,stop:-1,prev:APP.state}); };
-addEventListener("hashchange",()=>{ const m=/^#d(\d+)(?:s(\d+))?$/.exec(location.hash); if(!m) return; const d=+m[1]-1, s=m[2]?+m[2]-1:-1; if(d!==APP.state.day||s!==APP.state.stop) applyHash(); });
+/* deep links are intentionally ignored: the trail always opens on the welcome screen; picks, hearts and quiz scores are restored from storage/sync */
+APP.boot=function(){ APP.booted=true; applyTheme(theme); wikiFetchAll(); setHash(); APP.emit("move",{kind:"start",day:-1,stop:-1,prev:APP.state}); };
 setTimeout(()=>{ if(!APP.driven) APP.boot(); },1500); setTimeout(()=>{ if(!APP.driven) root.classList.add("no3d"); },7000);
 })();
 </script>
@@ -1468,9 +1473,12 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.m
 try{
 const A=window.APP, DAYS=A.days, stage=document.getElementById('stage');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches, mobileQ=matchMedia('(max-width: 899px)');
-let renderer; try{ renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'}); }catch(e){ document.body.classList.add('no3d'); throw e; }
-A.driven=true;
-renderer.setPixelRatio(Math.min(devicePixelRatio,1.75)); renderer.toneMapping=THREE.NoToneMapping; stage.appendChild(renderer.domElement);
+const lowEnd=mobileQ.matches||(navigator.hardwareConcurrency||8)<=4;
+let renderer; try{ renderer=new THREE.WebGLRenderer({antialias:!lowEnd,powerPreference:lowEnd?'default':'high-performance',stencil:false,alpha:false,failIfMajorPerformanceCaveat:false}); }catch(e){ document.documentElement.classList.add('no3d'); A.dbgLog&&A.dbgLog('WebGL unavailable: '+e.message); throw e; }
+A.driven=true; A.dbgLog&&A.dbgLog('WebGL ok · lowEnd='+lowEnd+' · dpr='+devicePixelRatio);
+renderer.domElement.addEventListener('webglcontextlost',e=>{ e.preventDefault(); document.documentElement.classList.add('no3d'); A.dbgLog&&A.dbgLog('WebGL context lost'); },false);
+renderer.domElement.addEventListener('webglcontextrestored',()=>{ document.documentElement.classList.remove('no3d'); A.dbgLog&&A.dbgLog('WebGL context restored'); },false);
+renderer.setPixelRatio(Math.min(devicePixelRatio,lowEnd?1.5:1.75)); renderer.toneMapping=THREE.NoToneMapping; stage.appendChild(renderer.domElement);
 const BG=new THREE.Color(0xf5f6fa), scene=new THREE.Scene(); scene.background=BG; scene.fog=new THREE.FogExp2(BG,0.0012);
 const cam=new THREE.PerspectiveCamera(46,1,0.5,7000);
 
@@ -1594,7 +1602,7 @@ const pin=new THREE.Group(); { const m=new THREE.MeshStandardMaterial({color:0x4
 /* ---------- lights ---------- */
 const hemi=new THREE.HemisphereLight(0xffffff,0xdfe3f0,1.1); scene.add(hemi);
 const sun=new THREE.DirectionalLight(0xffffff,1.4); sun.position.set(-60,120,80); scene.add(sun); scene.add(sun.target);
-renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFShadowMap; sun.castShadow=true; sun.shadow.mapSize.set(mobileQ.matches?1024:1536,mobileQ.matches?1024:1536);
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFShadowMap; sun.castShadow=true; sun.shadow.mapSize.set(mobileQ.matches?768:1536,mobileQ.matches?768:1536);
 sun.shadow.camera.left=-48; sun.shadow.camera.right=48; sun.shadow.camera.top=48; sun.shadow.camera.bottom=-48; sun.shadow.camera.near=10; sun.shadow.camera.far=260; sun.shadow.bias=-.0006; sun.shadow.normalBias=.03; sun.shadow.radius=3;
 const shadowPlane=new THREE.Mesh(new THREE.PlaneGeometry(220,220),new THREE.ShadowMaterial({opacity:.14})); shadowPlane.rotation.x=-Math.PI/2; shadowPlane.position.y=.03; shadowPlane.receiveShadow=true; scene.add(shadowPlane);
 
@@ -1918,8 +1926,11 @@ const camAngle=(day,k)=>-.7+trails[day].stopU[k]*1.1;
 function buildProps(day){ const d=DAYS[day], t=trails[day]; return d.items.map((it,k)=>{ const p=A.placeOf(it), type=p.landmark||(it.kind==='food'?'shop:noodle':'hotel'), g=makeLandmark(type);
   const pos=t.stops[k], a0=camAngle(day,k), D=LM_DEPTH[type]||11; g.position.set(pos.x-Math.sin(a0)*D,0,pos.z-Math.cos(a0)*D); g.rotation.y=a0;
   g.userData.fx=p.fx||null; g.userData.stopPos=pos.clone(); g.userData.h=new THREE.Box3().setFromObject(g).getSize(new THREE.Vector3()).y; g.visible=false; scene.add(g); return g; }); }
-for(let i=0;i<DAYS.length;i++) props[i]=buildProps(i);
-function rebuildProps(day){ props[day].forEach(g=>scene.remove(g)); props[day]=buildProps(day); showProps(activeDay,activeStop); }
+for(let i=0;i<DAYS.length;i++) props[i]=[];
+function disposeGroup(g){ scene.remove(g); g.traverse(c=>{ if(c.isMesh&&c.geometry&&!c.isInstancedMesh){ try{ c.geometry.dispose(); }catch(e){} } }); }
+function ensureProps(day){ if(day<0||day>=DAYS.length) return; if(!props[day].length) props[day]=buildProps(day);
+  const keep=lowEnd?1:2; props.forEach((list,i)=>{ if(list.length&&Math.abs(i-day)>keep){ list.forEach(disposeGroup); props[i]=[]; } }); }
+function rebuildProps(day){ props[day].forEach(disposeGroup); props[day]=buildProps(day); showProps(activeDay,activeStop); }
 /* only the active day's landmarks exist on screen; neighbours that would overlap the current one are hidden */
 function showProps(day,stop){ props.forEach((list,i)=>list.forEach((g,k)=>{ let vis=i===day; if(vis&&stop>=0&&k!==stop){ const cur=list[stop]; if(g.position.distanceTo(cur.position)<34||g.userData.stopPos.distanceTo(cur.userData.stopPos)<26) vis=false; } g.visible=vis; })); }
 function animateProps(dt,t){ const list=activeDay>=0?props[activeDay]:[]; list.forEach(g=>{ const u=g.userData; const boost=u.pokeT!=null&&(u.lt||0)-u.pokeT<9?3.2:1; u.lt=(u.lt||0)+dt*boost; if(u.anim) u.anim.forEach(fn=>fn(dt*boost,u.lt));
@@ -2008,19 +2019,19 @@ A.on('move',m=>{
   if(m.kind==='start'){ camMode='start'; activeDay=-1; activeStop=-1; couple.position.set(W0.x,W0.y+WY,W0.z); yaw=-Math.PI/2+.55; appear=0; pin.visible=false; showProps(0,-1); welcome.visible=true; petals.visible=true; setGesture('lean'); gestNext=4; pickReset(); return; }
   if(m.kind==='pick'){ camMode='pick'; activeDay=-1; activeStop=-1; couple.position.set(W0.x,W0.y+WY,W0.z); yaw=Math.PI/2; pin.visible=false; showProps(0,-1); welcome.visible=true; petals.visible=true; setGesture('idle'); pickReset(); return; }
   welcome.visible=false; petals.visible=false; pickReset();
-  activeDay=m.day; pin.userData.mat.color.copy(CITY[DAYS[m.day].city].col);
+  activeDay=m.day; ensureProps(m.day); pin.userData.mat.color.copy(CITY[DAYS[m.day].city].col);
   if(m.kind==='intro'){ camMode='overview'; activeStop=-1; if(m.prev.day!==m.day||m.prev.stop!==0){ appear=0; placeCouple(m.day,0); } pin.visible=false; showProps(m.day,-1); return; }
   camMode='follow'; activeStop=m.stop;
   vehicle=m.kind==='walk'?(m.vehicle||'walk'):'walk';
   if(m.kind==='walk'){ const t=trails[m.day]; travel={day:m.day,fromU:t.stopU[m.prev.stop],toU:t.stopU[m.stop],t:0,dur:m.dur/1000}; }
   else { if(m.kind==='jump'||m.prev.day!==m.day){ appear=0; } placeCouple(m.day,m.stop); }
   const nxt=m.stop+1<trails[m.day].stops.length?trails[m.day].stops[m.stop+1]:null; pin.visible=!!nxt; if(nxt) pin.position.copy(nxt);
-  const pg=props[m.day][m.stop]; startFx(pg.userData.fx,pg.position); showProps(m.day,m.stop);
+  const pg=props[m.day][m.stop]; if(pg) startFx(pg.userData.fx,pg.position); showProps(m.day,m.stop);
 });
-A.on('choice',({day,stop})=>{ const wasA=trailMats[day].uniforms.uAlpha.value, wasP=trailMats[day].uniforms.uProgress.value; rebuildTrail(day); rebuildProps(day); trailMats[day].uniforms.uAlpha.value=wasA; trailMats[day].uniforms.uProgress.value=wasP;
+A.on('choice',({day,stop})=>{ const wasA=trailMats[day].uniforms.uAlpha.value, wasP=trailMats[day].uniforms.uProgress.value; rebuildTrail(day); if(props[day].length) rebuildProps(day); trailMats[day].uniforms.uAlpha.value=wasA; trailMats[day].uniforms.uProgress.value=wasP;
   if(activeDay===day&&activeStop===stop&&!travel){ placeCouple(day,stop); appear=0; const nxt=stop+1<trails[day].stops.length?trails[day].stops[stop+1]:null; pin.visible=!!nxt; if(nxt) pin.position.copy(nxt); }
   else if(activeDay===day&&activeStop===stop-1&&!travel){ const nxt=trails[day].stops[stop]; pin.position.copy(nxt); }
-  if(activeDay===day&&activeStop===stop){ const pg=props[day][stop]; startFx(pg.userData.fx,pg.position); } });
+  if(activeDay===day&&activeStop===stop&&props[day][stop]){ const pg=props[day][stop]; startFx(pg.userData.fx,pg.position); } });
 A.on('arrive',()=>{ arrived=true; const it=activeDay>=0&&activeStop>=0?DAYS[activeDay].items[activeStop]:null; gestKind=it?(it.kind||'sight'):'sight'; arriveScript(); });
 let celebT=0, quizOn=false, quizOrbit=0;
 A.on('quiz',q=>{ quizOn=!!q.on&&!q.finished; if(q.on&&q.answer==null&&!q.finished){ gestQueue=[]; setGesture('think'); gestNext=9; quizOrbit=0; }
@@ -2359,7 +2370,7 @@ function frame(){
     markers[i].forEach((g,k)=>{ const cur=active&&k===activeStop, reached=active&&k<=activeStop; const ra=cur?.95:(reached?.6:.3);
       g.userData.ring.material.opacity+=(ra-g.userData.ring.material.opacity)*Math.min(1,dt*4); g.userData.ring.scale.setScalar(cur?1+Math.sin(t*3)*.12:1); }); });
 
-  if(celebT>0){ celebT-=dt; if(celebT<=0&&activeDay>=0&&activeStop>=0){ const pg=props[activeDay][activeStop]; startFx(pg.userData.fx,pg.position); } }
+  if(celebT>0){ celebT-=dt; if(celebT<=0&&activeDay>=0&&activeStop>=0&&props[activeDay][activeStop]){ const pg=props[activeDay][activeStop]; startFx(pg.userData.fx,pg.position); } }
   orbit+=(orbitT-orbit)*Math.min(1,dt*5); pitch+=(pitchT-pitch)*Math.min(1,dt*5); zoom+=(zoomT-zoom)*Math.min(1,dt*4); gazeAmt*=Math.exp(-dt*.45); updateSparks(dt);
   if(rippleT<3){ rippleT+=dt; const f=rippleT/1.2; ripple.scale.setScalar(1+f*6); ripple.material.opacity=Math.max(0,.6*(1-f)); }
   if(tapFx>0&&!fxActive){ tapFx-=dt; parts.visible=true; fxActive='fireworks'; fxBurstT=99; updateFx(dt,t); fxActive=null; if(tapFx<=0) parts.visible=false; }
@@ -2374,7 +2385,7 @@ function frame(){
     const lift=showing?1:(tall?.65:0), p=couple.position, a=-.7+(activeStop>=0?trails[activeDay].stopU[activeStop]:0)*1.1+Math.sin(t*.15)*.06+orbit+quizOrbit;
     const cz=1-.22*P.close, r=((mobile?42:30)+((mobile?60:34)-(mobile?42:30))*lift)*cz, h=((mobile?40:24)+((mobile?30:12)-(mobile?40:24))*lift)*cz;
     want.set(p.x+Math.sin(a)*r*zoom,p.y+h*zoom*(1+pitch),p.z+Math.cos(a)*r*zoom); wantLook.set(p.x,p.y+1.5+((mobile?6:9)-1.5)*lift,p.z); fogWant=flying?.0006:.0014;
-    if(quizOn&&activeDay>=0&&activeStop>=0){ const pg=props[activeDay][activeStop]; const lh=Math.min(16,pg.userData.h||6); const mid=pg.position.clone().lerp(p,.5); const rq=(mobile?34:40)+lh*1.3; want.set(mid.x+Math.sin(a)*rq,(mobile?14:20)+lh*.6,mid.z+Math.cos(a)*rq); wantLook.set(mid.x,lh*.35+1,mid.z); if(!mobile){ const sx=Math.cos(a)*rq*.55, sz=-Math.sin(a)*rq*.55; want.x-=sx; want.z-=sz; wantLook.x-=sx; wantLook.z-=sz; } }
+    if(quizOn&&activeDay>=0&&activeStop>=0&&props[activeDay][activeStop]){ const pg=props[activeDay][activeStop]; const lh=Math.min(16,pg.userData.h||6); const mid=pg.position.clone().lerp(p,.5); const rq=(mobile?34:40)+lh*1.3; want.set(mid.x+Math.sin(a)*rq,(mobile?14:20)+lh*.6,mid.z+Math.cos(a)*rq); wantLook.set(mid.x,lh*.35+1,mid.z); if(!mobile){ const sx=Math.cos(a)*rq*.55, sz=-Math.sin(a)*rq*.55; want.x-=sx; want.z-=sz; wantLook.x-=sx; wantLook.z-=sz; } }
     if(travel){ const sp=Math.min(1,vel/40); want.y+=sp*(mobile?60:40); } }
   const dist=camPos.distanceTo(want); want.y+=Math.min(dist*.45,340)+(camMode==='follow'?occlLift:0);
   spring(camPos,camVel,want,travel?3.0:2.1,dt); spring(look,lookVel,wantLook,travel?3.4:2.6,dt); cam.position.copy(camPos); cam.lookAt(look); if(camMode==='follow'){ const right=new THREE.Vector3().crossVectors(cam.getWorldDirection(tmp),cam.up).normalize(); cam.position.addScaledVector(right,parX*1.6); cam.position.y-=parY*1.0; cam.lookAt(look); } occlusion(dt);
@@ -2392,7 +2403,7 @@ function frame(){
 }
 A.boot();
 frame();
-}catch(e){ console.error('3D failed',e); document.documentElement.classList.add('no3d'); if(!A.booted) A.boot(); }
+}catch(e){ console.error('3D failed',e); A.dbgLog&&A.dbgLog('3D failed: '+(e&&e.message||e)); document.documentElement.classList.add('no3d'); if(!A.booted) A.boot(); }
 </script>
 </body>
 </html>
