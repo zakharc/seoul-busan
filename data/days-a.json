@@ -716,7 +716,7 @@
      {
       "id": "d3s3b",
       "title": "Seoul Museum of Art & Jeongdong-gil",
-      "type": "Art museum · free walk",
+      "type": "Art museum · free walk (special shows ≈₩5k)",
       "name": "서울시립미술관 서소문본관",
       "ko": "서울시립미술관",
       "lat": 37.5641,
@@ -724,7 +724,7 @@
       "wiki": "Seoul Museum of Art",
       "about": "The city art museum in a 1928 courthouse at the end of the Deoksugung stone-wall road, with Jeongdong's old churches and the Chungdong Theatre lanes around it.",
       "cool": "Free exhibitions in a gorgeous building, then the prettiest 400 m of street in central Seoul.",
-      "price": "Free (special shows ≈₩5k)",
+      "price": "Free",
       "hours": "10:00–20:00 · closed Mon",
       "need": "1.5 h",
       "tips": [
