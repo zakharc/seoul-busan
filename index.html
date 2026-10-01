@@ -3,22 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-<meta name="theme-color" content="#f5f6fa">
-<meta name="build" content="20261001-191305">
+<meta name="theme-color" content="#f7f0e5">
+<meta property="og:title" content="roameo · Seoul ⇄ Busan"><meta property="og:description" content="Two leaves. One shared adventure. Eleven days, two cities, one trail — for the two of us."><meta property="og:image" content="https://zakharc.github.io/seoul-busan/icons/og.png"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
+<meta name="build" content="20261001-193210">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="roameo">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Seoul⇄Busan">
-<title>Seoul ⇄ Busan · a journey for two</title>
+<title>roameo · Seoul ⇄ Busan</title>
 <meta property="og:title" content="Seoul ⇄ Busan · a journey for two">
 <meta property="og:description" content="28 Oct – 7 Nov 2026. Eleven days, two cities, one trail. Walk it with me, stop by stop.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Outfit:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#f5f6fa; --surface:#ffffff; --ink:#111628; --muted:#6b7392; --line:rgba(17,22,40,.08); --soft:#f0f2f8;
@@ -862,6 +864,48 @@ html{background:var(--bg)}
 .bk.hotel .hm{width:26px;height:26px;border-radius:9px;background:var(--ink);color:var(--bg);font:700 12px/26px var(--display);text-align:center}
 @media (min-width:900px){.daycard .tl{max-height:none}}
 </style>
+<style id="brand-css">
+/* ---------- roameo brand splash ---------- */
+.roameo{position:fixed;inset:0;z-index:95;background:#f7f0e5;color:#47362f;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(var(--sat) + 24px) 24px calc(var(--sab) + 28px);text-align:center;overflow:hidden;transition:opacity .7s var(--ease),transform .7s var(--ease);font-family:"Nunito",var(--body)}
+.roameo[hidden]{display:none}
+.roameo.out{opacity:0;transform:scale(1.04);pointer-events:none}
+.roameo .bg{position:absolute;inset:-20%;background:radial-gradient(60% 50% at 30% 25%,rgba(231,183,157,.55),transparent 60%),radial-gradient(50% 45% at 75% 80%,rgba(119,123,87,.22),transparent 60%);animation:brandbg 18s ease-in-out infinite alternate}
+@keyframes brandbg{from{transform:translate(0,0) rotate(0)}to{transform:translate(-3%,2%) rotate(3deg)}}
+.roameo .kit{position:absolute;left:24px;top:calc(var(--sat) + 22px);font:800 11px/1 "Nunito",var(--body);letter-spacing:.14em;text-transform:uppercase;color:#b96143;opacity:0;animation:brandin 1s var(--ease) .2s both}
+.roameo .logo{position:relative;width:min(52vw,240px);height:min(50vw,230px);margin-bottom:14px}
+.roameo .logo svg{width:100%;height:100%;overflow:visible}
+.roameo .leaf{transform-origin:50% 100%;opacity:0;animation:leafin 1.3s cubic-bezier(.2,1.2,.3,1) both}
+.roameo .leaf.l{animation-delay:.25s}.roameo .leaf.r{animation-delay:.45s}
+.roameo .leaf.sway{animation:leafsway 6s ease-in-out infinite alternate}
+.roameo .leaf.l.sway{animation-delay:0s}.roameo .leaf.r.sway{animation-delay:-3s}
+@keyframes leafin{0%{opacity:0;transform:scale(.3) rotate(-25deg) translateY(30px)}60%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes leafsway{from{transform:rotate(-1.6deg)}to{transform:rotate(1.6deg)}}
+.roameo .vein{stroke:#f7f0e5;stroke-width:3.2;fill:none;stroke-linecap:round;stroke-dasharray:200;stroke-dashoffset:200;animation:vein 1.4s var(--ease) .9s forwards}
+@keyframes vein{to{stroke-dashoffset:0}}
+.roameo .glow{position:absolute;inset:-18%;border-radius:50%;background:radial-gradient(circle,rgba(231,183,157,.55),transparent 65%);filter:blur(6px);z-index:-1;animation:glow 4s ease-in-out infinite alternate}
+@keyframes glow{from{transform:scale(.9);opacity:.6}to{transform:scale(1.1);opacity:1}}
+.roameo h1{margin:0;font:900 clamp(64px,19vw,112px)/.9 "Nunito",var(--body);letter-spacing:-.045em;color:#47362f;opacity:0;animation:brandin 1.1s var(--ease) .7s both}
+.roameo h1 span{display:inline-block;animation:letter .9s cubic-bezier(.2,1.3,.3,1) both;animation-delay:calc(.75s + var(--i) * 55ms)}
+@keyframes letter{0%{opacity:0;transform:translateY(22px) scale(.9)}100%{opacity:1;transform:none}}
+.roameo .motto{margin:14px 0 0;font:700 clamp(16px,4.6vw,21px)/1.3 "Nunito",var(--body);color:#47362f;opacity:0;animation:brandin 1s var(--ease) 1.25s both}
+.roameo .sub{margin:8px 0 0;font:600 13px/1.5 "Nunito",var(--body);letter-spacing:.06em;text-transform:uppercase;color:#777b57;opacity:0;animation:brandin 1s var(--ease) 1.45s both}
+@keyframes brandin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.roameo .go{position:relative;margin-top:38px;height:62px;padding:0 30px 0 26px;border-radius:999px;background:#b96143;color:#f7f0e5;font:800 18px "Nunito",var(--body);display:inline-flex;align-items:center;gap:14px;box-shadow:0 22px 50px -18px rgba(185,97,67,.7);opacity:0;animation:brandin 1s var(--ease) 1.7s both;transition:transform .35s var(--ease),box-shadow .35s;isolation:isolate;overflow:hidden}
+.roameo .go::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%);transform:translateX(-120%);animation:shine 3.2s ease-in-out 2.6s infinite}
+@keyframes shine{0%{transform:translateX(-120%)}40%,100%{transform:translateX(120%)}}
+.roameo .go::after{content:"";position:absolute;inset:-6px;border-radius:inherit;border:2px solid rgba(185,97,67,.55);animation:pulse 2.4s ease-out 2.4s infinite;z-index:-1}
+@keyframes pulse{0%{transform:scale(.92);opacity:.9}100%{transform:scale(1.22);opacity:0}}
+.roameo .go:hover{transform:translateY(-2px);box-shadow:0 28px 56px -18px rgba(185,97,67,.8)}
+.roameo .go:active{transform:scale(.97)}
+.roameo .go .ic{width:34px;height:34px;border-radius:50%;background:#f7f0e5;display:inline-grid;place-items:center;color:#b96143;transition:transform .35s var(--ease)}
+.roameo .go:hover .ic{transform:translateX(3px)}
+.roameo .go .ic svg{width:18px;height:18px}
+.roameo.out .go{transform:scale(1.5);opacity:0;transition:transform .7s var(--ease),opacity .5s}
+.roameo .foot{position:absolute;bottom:calc(var(--sab) + 18px);left:0;right:0;font:700 11px/1 "Nunito",var(--body);letter-spacing:.14em;text-transform:uppercase;color:#b96143;opacity:0;animation:brandin 1s var(--ease) 2s both}
+.roameo .petal{position:absolute;top:-6%;width:12px;height:16px;border-radius:60% 60% 60% 60%/70% 70% 50% 50%;background:#e7b79d;opacity:0;animation:petal linear infinite}
+@keyframes petal{0%{opacity:0;transform:translate(0,0) rotate(0)}10%{opacity:.85}100%{opacity:0;transform:translate(var(--dx),112vh) rotate(var(--rot))}}
+@media (prefers-reduced-motion:reduce){ .roameo *{animation-duration:.01s!important;animation-delay:0s!important} .roameo .go::before,.roameo .go::after,.roameo .petal{display:none} }
+</style>
 <style id="xp-css">
 /* ---------- explore: 20 more in Seoul, 5 more in Busan ---------- */
 :root{--seal:#d23b2f;--seal-ink:rgba(210,59,47,.18);--xp-easy:#2f9e6e}
@@ -1017,7 +1061,7 @@ html.visual-preview body{margin:0;overflow:hidden}
 <div class="vignette"></div>
 
 <header class="top">
-  <div class="brand">Seoul ⇄ Busan <span>· for two</span></div>
+  <div class="brand">roameo <span>· Seoul ⇄ Busan</span></div>
   <nav class="rail" id="rail" aria-label="Days"></nav>
   <div class="tools">
     <button class="ibtn snd" id="btn-sound-top" aria-pressed="false" title="Sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path class="w1" d="M15.5 8.5a5 5 0 0 1 0 7"/><path class="w2" d="M19 5a10 10 0 0 1 0 14"/></svg></button>
@@ -1027,6 +1071,23 @@ html.visual-preview body{margin:0;overflow:hidden}
   </div>
 </header>
 
+<section class="roameo" id="brand" aria-label="roameo">
+  <div class="bg" aria-hidden="true"></div>
+  <div class="logo" aria-hidden="true"><span class="glow"></span>
+    <svg viewBox="0 0 240 230">
+      <defs><clipPath id="lf-l"><path d="M118 222 C 40 212, 2 158, 8 104 C 12 66, 30 42, 52 26 C 90 50, 124 110, 118 222 Z"/></clipPath></defs>
+      <g class="leaf l"><path d="M118 222 C 40 212, 2 158, 8 104 C 12 66, 30 42, 52 26 C 90 50, 124 110, 118 222 Z" fill="#b96143"/>
+        <path class="vein" d="M114 214 C 96 176, 72 134, 50 92"/></g>
+      <g class="leaf r"><path d="M118 222 C 150 176, 200 128, 210 72 C 214 42, 200 16, 178 4 C 142 36, 108 110, 118 222 Z" fill="#777b57"/>
+        <path class="vein" d="M122 214 C 136 170, 158 122, 182 66"/></g>
+      <!-- where the olive leaf overlaps the rust one it reads as a darker shade -->
+      <path d="M118 222 C 150 176, 200 128, 210 72 C 214 42, 200 16, 178 4 C 142 36, 108 110, 118 222 Z" fill="#7a4631" opacity=".9" clip-path="url(#lf-l)"/>
+    </svg>
+  </div>
+  <h1 aria-label="roameo"><span style="--i:0">r</span><span style="--i:1">o</span><span style="--i:2">a</span><span style="--i:3">m</span><span style="--i:4">e</span><span style="--i:5">o</span></h1>
+  <p class="motto">Two leaves. One shared adventure.</p>
+  <button class="go" id="brand-go">Start the journey <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+</section>
 <section class="start" id="start">
   <div class="in">
     <p class="eyebrow">28 Oct — 7 Nov 2026 · eleven days · two cities</p>
@@ -2073,6 +2134,13 @@ APP.xpKml=()=>buildKml(); APP.xpPaper=()=>paperHtml(); APP.xpPlain=()=>plainText
 xpSnap=xpSnapshot();
 APP.explore=xpOpen;
 
+
+/* ---------- roameo splash: shown every launch, hands off to the welcome hill ---------- */
+(function(){ const b=$("brand"); if(!b) return; if(qs.has("visual-preview")){ b.hidden=true; return; }
+  if(!matchMedia("(prefers-reduced-motion: reduce)").matches){ for(let i=0;i<14;i++){ const p=document.createElement("i"); p.className="petal"; p.style.left=(Math.random()*100)+"%"; p.style.setProperty("--dx",(Math.random()*160-80)+"px"); p.style.setProperty("--rot",(Math.random()*720-360)+"deg"); p.style.animationDuration=(9+Math.random()*8)+"s"; p.style.animationDelay=(Math.random()*9)+"s"; p.style.background=["#e7b79d","#b96143","#777b57"][i%3]; p.style.opacity="0"; b.appendChild(p); } }
+  let gone=false; const leave=()=>{ if(gone) return; gone=true; buzz([8,24,10]); b.classList.add("out"); b.querySelectorAll('.petal,.leaf,.vein,.glow,.bg').forEach(el=>el.style.animationPlayState='paused'); setTimeout(()=>{ b.hidden=true; },760); try{ if(APP.sound&&APP.sound.on) APP.sound.select&&APP.sound.select(); }catch(e){} };
+  $("brand-go").onclick=leave; addEventListener("keydown",e=>{ if(!b.hidden&&(e.key==="Enter"||e.key===" ")&&document.activeElement!==$("brand-go")) leave(); },{once:false});
+  APP.brandLeave=leave; })();
 /* ---------- deep link / boot ---------- */
 /* deep links are intentionally ignored: the trail always opens on the welcome screen; picks, hearts and quiz scores are restored from storage/sync */
 APP.boot=function(){ APP.booted=true; applyTheme(theme); if(!visualPreview) wikiFetchAll(); setHash(); APP.emit("move",{kind:"start",day:-1,stop:-1,prev:APP.state}); };

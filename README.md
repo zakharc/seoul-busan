@@ -1,4 +1,8 @@
-# Seoul ⇄ Busan · a journey for two
+# roameo · Seoul ⇄ Busan
+
+*Two leaves. One shared adventure.* A single-file trip companion that opens on the roameo brand splash and hands off to the Seoul ⇄ Busan trail.
+
+**Version 1.2** — roameo branding: animated splash (two-leaf logo, Nunito wordmark, motto, Start button) before the welcome hill; roameo app icons, manifest, OG card.
 
 **Version 1.1** — twenty authored place scenes (external visual patch) merged: fade in/out on arrival, phone-aware framing that keeps the couple readable, clouds/stage handled, review gallery kept offline from live sync.
 
