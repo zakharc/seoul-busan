@@ -61,8 +61,27 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:poin
 .ibtn{position:relative}
 
 /* ---------- start screen ---------- */
-.start{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;justify-content:flex-end;padding:0 24px calc(var(--sab) + 34px);
-  background:linear-gradient(to top,rgba(245,246,250,.98) 30%,rgba(245,246,250,.6) 60%,rgba(245,246,250,0));transition:opacity .7s var(--ease),visibility .7s}
+.start{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;justify-content:flex-end;padding:0 24px calc(var(--sab) + 30px);
+  background:linear-gradient(to top,rgba(251,228,236,.96) 0,rgba(251,228,236,.86) 26%,rgba(251,228,236,.35) 48%,rgba(251,228,236,0) 62%);transition:opacity .7s var(--ease),visibility .7s}
+.start .in>*{animation:rise 1s var(--ease) both}
+.start .in>:nth-child(1){animation-delay:.2s}.start .in>:nth-child(2){animation-delay:.35s}.start .in>:nth-child(3){animation-delay:.5s}.start .in>:nth-child(4){animation-delay:.65s}.start .in>:nth-child(5){animation-delay:.8s}.start .in>:nth-child(6){animation-delay:.9s}.start .in>:nth-child(7){animation-delay:1s}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}}
+.start h1 em{color:#9a5c74}
+.start .eyebrow{color:#b06a86}
+.start p.lede{color:#6e5a66}
+:root[data-theme="dark"] .start h1 em{color:#f0a8c0}:root[data-theme="dark"] .start .eyebrow{color:#f0a8c0}:root[data-theme="dark"] .start p.lede{color:#c9b8c2}
+.start .btn.primary{background:linear-gradient(135deg,#1b2140,#3a2a4a);box-shadow:0 14px 30px -14px rgba(60,30,60,.6)}
+.lede .short{display:none}
+@media (max-width:899px){
+  .lede .long{display:none}.lede .short{display:inline}
+  .start h1{font-size:clamp(40px,10.5vw,64px)}
+  .start p.lede{font-size:14.5px;margin-top:12px}
+  .start .status{margin-top:12px;height:36px;padding:0 12px;font-size:13px}
+  .start .roles{margin-top:12px}.start .roles button{height:40px}
+  .start .hello{margin-top:8px;font-size:13px}
+  .start .row{margin-top:14px;gap:8px;display:grid;grid-template-columns:1fr 1fr}.start .row .btn{height:46px;padding:0 16px;font-size:14px}.start .row .btn.primary{grid-column:1/-1;height:50px}
+  .start{padding-bottom:calc(var(--sab) + 18px)}
+}
 .start[hidden]{display:flex;opacity:0;visibility:hidden;pointer-events:none}
 .start .in{max-width:560px;margin:0 auto;width:100%}
 .eyebrow{font:600 11px/1 var(--body);letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
@@ -427,7 +446,7 @@ dialog::backdrop{background:rgba(17,22,40,.35);backdrop-filter:blur(6px)}
   .daycard .tl{flex:1 1 auto;min-height:0;max-height:none}
   .daycard .row{margin-top:auto;padding-top:18px}
   .daycard .sig{bottom:22px}
-  .start{justify-content:center;padding:0 8vw}
+  .start{justify-content:center;padding:0 8vw;background:linear-gradient(to right,rgba(251,228,236,.94) 0,rgba(251,228,236,.86) 30%,rgba(251,228,236,.35) 50%,rgba(251,228,236,0) 64%)}
   .start .in{margin:0;max-width:640px}
   .start h1{font-size:clamp(64px,7vw,110px)}
   .toast{bottom:32px}
@@ -443,7 +462,8 @@ dialog::backdrop{background:rgba(17,22,40,.35);backdrop-filter:blur(6px)}
 :root[data-theme="light"] .vignette{--v:rgba(245,246,250,.9)}
 .vignette{background:linear-gradient(to bottom,var(--v,rgba(245,246,250,.9)),transparent 22%),linear-gradient(to top,var(--v,rgba(245,246,250,.9)),transparent 30%)}
 .chip,.ibtn,.tbtn{background:color-mix(in srgb,var(--surface) 75%,transparent)}
-.start{background:linear-gradient(to top,color-mix(in srgb,var(--bg) 98%,transparent) 30%,color-mix(in srgb,var(--bg) 60%,transparent) 60%,transparent)}
+:root[data-theme="dark"] .start{background:linear-gradient(to top,rgba(26,18,34,.96) 0,rgba(26,18,34,.85) 26%,rgba(26,18,34,.3) 48%,transparent 62%)}
+@media (min-width:900px){:root[data-theme="dark"] .start{background:linear-gradient(to right,rgba(26,18,34,.94) 0,rgba(26,18,34,.85) 30%,rgba(26,18,34,.3) 50%,transparent 64%)}}
 .daycard{background:color-mix(in srgb,var(--surface) 90%,transparent)}
 .bar,.travel{background:color-mix(in srgb,var(--surface) 90%,transparent)}
 .btn,.acts a,.acts button,.chk{background:var(--surface)}
@@ -520,7 +540,7 @@ dialog::backdrop{background:rgba(17,22,40,.35);backdrop-filter:blur(6px)}
   <div class="in">
     <p class="eyebrow">28 Oct — 7 Nov 2026 · eleven days · two cities</p>
     <h1>Seoul ⇄ Busan<em>a journey for two, one place at a time</em></h1>
-    <p class="lede">Palaces in hanbok, a river at sunset, a train to the sea, a capsule over the coast, a fortress wall at dusk. Tap through the trail with us — every stop has photos, prices, hours and the way to get there. Where there's a dashed card, pick the option you like best: press ♥ to make it yours — hearts and skips are saved, shared, and the route follows them.</p>
+    <p class="lede"><span class="long">Palaces in hanbok, a river at sunset, a train to the sea, a capsule over the coast, a fortress wall at dusk. Tap through the trail with us — every stop has photos, prices, hours and the way to get there. Where there's a dashed card, pick the option you like best: press ♥ to make it yours — hearts and skips are saved, shared, and the route follows them.</span><span class="short">Palaces, a river at sunset, a train to the sea. Walk the trail stop by stop — tap ♥ on what you love and the route follows.</span></p>
     <div class="status" id="status"><i></i><span></span></div>
     <div class="roles" id="roles" role="group" aria-label="Who is walking"></div>
     <p class="hello" id="hello"></p>
@@ -1651,7 +1671,8 @@ addEventListener('resize',resize); resize();
 A.on('move',m=>{
   moveT=performance.now(); arrived=false; travel=null;
   startFx(null,fxCenter);
-  if(m.kind==='start'){ camMode='start'; activeDay=-1; activeStop=-1; placeCouple(0,0); pin.visible=false; showProps(0,-1); return; }
+  if(m.kind==='start'){ camMode='start'; activeDay=-1; activeStop=-1; couple.position.set(W0.x,W0.y+WY,W0.z); yaw=-Math.PI/2+.55; appear=0; pin.visible=false; showProps(0,-1); welcome.visible=true; petals.visible=true; setGesture('lean'); gestNext=4; return; }
+  welcome.visible=false; petals.visible=false;
   activeDay=m.day; pin.userData.mat.color.copy(CITY[DAYS[m.day].city].col);
   if(m.kind==='intro'){ camMode='overview'; activeStop=-1; if(m.prev.day!==m.day||m.prev.stop!==0){ appear=0; placeCouple(m.day,0); } pin.visible=false; showProps(m.day,-1); return; }
   camMode='follow'; activeStop=m.stop;
@@ -1677,11 +1698,12 @@ const ENVK={
   day:   {bg:0xf5f6fa,hor:0xe9eef9,zen:0xcfe0fb,land:0xf7f8fc,water:0xe4eefb,line:0xd9dded,wave:0xc4d8f0,lo:0xe6e8f2,hi:0xffffff,soft:0xdfe3fb,sunC:0xffffff,sunI:1.4,hemiS:0xffffff,hemiG:0xdfe3f0,hemiI:1.1,night:0},
   golden:{bg:0xf9e8d6,hor:0xffc98a,zen:0xd9c4e6,land:0xfaf0e4,water:0xf0dcc8,line:0xe3cfbf,wave:0xf4c9a0,lo:0xefe0d2,hi:0xfff6ea,soft:0xf3c76e,sunC:0xffa860,sunI:1.3,hemiS:0xffd9b0,hemiG:0xe8d8c8,hemiI:1.0,night:.06},
   dusk:  {bg:0x3b3660,hor:0xd8738c,zen:0x1c1f45,land:0x3d3a5c,water:0x2d2f55,line:0x514c74,wave:0x7a5a7e,lo:0x3f3b5e,hi:0x5a5680,soft:0xf3c76e,sunC:0xff8a70,sunI:.6,hemiS:0x6b5f99,hemiG:0x2a2740,hemiI:.7,night:.72}};
+ENVK.bloom={bg:0xfbe4ec,hor:0xffc3a6,zen:0xc9b7f2,land:0xf8eef2,water:0xf3d9ea,line:0xe8d4de,wave:0xf5c9d9,lo:0xf4dde5,hi:0xffffff,soft:0xffd3de,sunC:0xffb37c,sunI:1.45,hemiS:0xffe4ed,hemiG:0xe9d6e2,hemiI:1.1,night:0};
 const ENVC=['bg','hor','zen','land','water','line','wave','lo','hi','soft','sunC','hemiS','hemiG'], ENVN=['sunI','hemiI','night'];
 const envCur={}, envTgt={}; for(const k of ENVC){ envCur[k]=new THREE.Color(ENVK.day[k]); envTgt[k]=new THREE.Color(ENVK.day[k]); } for(const k of ENVN){ envCur[k]=ENVK.day[k]; envTgt[k]=ENVK.day[k]; }
 let themeForce=null, envHour=13, envSunset=17.6;
 const hourOf=(day,stop)=>{ if(day<0) return 13; const d=DAYS[day]; const m=stop>=0?/^(\d\d):(\d\d)$/.exec(d.items[stop].t||''):null; const ss=/^(\d\d):(\d\d)$/.exec(d.sunset||''); envSunset=ss?(+ss[1])+(+ss[2])/60:17.6; return m?(+m[1])+(+m[2])/60:13; };
-function envTargets(){ let h=envHour; if(themeForce==='dark') h=21; else if(themeForce==='light') h=13; const ss=envSunset; const mix=(a,b,f)=>{ for(const k of ENVC) envTgt[k].setHex(ENVK[a][k]).lerp(new THREE.Color(ENVK[b][k]),f); for(const k of ENVN) envTgt[k]=ENVK[a][k]+(ENVK[b][k]-ENVK[a][k])*f; };
+function envTargets(){ let h=envHour; if(themeForce==='dark') h=21; else if(themeForce==='light') h=13; const ss=envSunset; if(camMode==='start'){ for(const k of ENVC) envTgt[k].setHex(ENVK.bloom[k]); for(const k of ENVN) envTgt[k]=ENVK.bloom[k]; return; } const mix=(a,b,f)=>{ for(const k of ENVC) envTgt[k].setHex(ENVK[a][k]).lerp(new THREE.Color(ENVK[b][k]),f); for(const k of ENVN) envTgt[k]=ENVK[a][k]+(ENVK[b][k]-ENVK[a][k])*f; };
   const s=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
   if(h<5.5) mix('night','night',0); else if(h<7) mix('night','dawn',s((h-5.5)/1.5)); else if(h<9) mix('dawn','day',s((h-7)/2)); else if(h<ss-1.6) mix('day','day',0);
   else if(h<ss-.2) mix('day','golden',s((h-(ss-1.6))/1.4)); else if(h<ss+.5) mix('golden','dusk',s((h-(ss-.2))/.7)); else if(h<ss+1.3) mix('dusk','night',s((h-(ss+.5))/.8)); else mix('night','night',0); }
@@ -1735,7 +1757,7 @@ function updateEnv(dt,t){
   PM.water.color.setHex(0xbfe0f5).lerp(new THREE.Color(0x1d2b4d),night); PM.water.emissive.copy(PM.water.color); PM.water.emissiveIntensity=.05+.08*Math.sin(t*1.3)*.5+.04;
   PM.gold.emissiveIntensity=.2+.7*night; PM.white.emissiveIntensity=.12*night; bulbI.material.emissiveIntensity=.15+1.1*night; cars.forEach(c=>c.userData.hl.forEach(l=>l.material.emissiveIntensity=.2+1.2*night));
   hemi.color.copy(envCur.hemiS); hemi.groundColor.copy(envCur.hemiG); hemi.intensity=envCur.hemiI; sun.color.copy(envCur.sunC); sun.intensity=envCur.sunI; shadowPlane.material.opacity=.14+.16*night; leafBase=.85-.25*night;
-  const hh=themeForce==='dark'?21:themeForce==='light'?13:envHour; sunDirFor(hh); if(night>.6) sunDir.lerp(moonDir,(night-.6)/.4);
+  const hh=camMode==='start'?17.15:themeForce==='dark'?21:themeForce==='light'?13:envHour; sunDirFor(hh); if(night>.6) sunDir.lerp(moonDir,(night-.6)/.4);
   sun.position.copy(couple.position).addScaledVector(sunDir,120); sun.target.position.copy(couple.position); sun.target.updateMatrixWorld(); shadowPlane.position.set(couple.position.x,.03,couple.position.z);
   skyMat.uniforms.uNight.value=night; sky.position.copy(camPos);
   clouds.forEach((s,i)=>{ const u=s.userData; u.ox+=dt*u.sp; if(u.ox>280) u.ox=-280; s.position.set(camPos.x+u.ox,u.y,camPos.z+u.oz); s.material.opacity=(.5-.3*night)*(camMode==='follow'?1:.7); });
@@ -1750,7 +1772,71 @@ function updateEnv(dt,t){
   parX+=(parTX-parX)*Math.min(1,dt*2); parY+=(parTY-parY)*Math.min(1,dt*2);
 }
 
-A.boot();
+
+/* ---------- welcome vista: a blossom hill above Seoul ---------- */
+const W0=new THREE.Vector3(-2600,0,-2600), welcome=new THREE.Group(); welcome.position.copy(W0); scene.add(welcome);
+const wAnims=[]; const hillY=(x,z)=>{ const q=60*60-(x/1.25)*(x/1.25)-z*z; return q>0?Math.max(0,.2*Math.sqrt(q)-.4):0; };
+const WY=hillY(0,0);
+(function buildWelcome(){
+  const std=(c,e=.08,r=.9)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:0,emissive:c,emissiveIntensity:e});
+  const meadow=new THREE.Mesh(new THREE.CircleGeometry(520,72),std(0xcfe6c9,.06)); meadow.rotation.x=-Math.PI/2; meadow.position.y=.03; meadow.receiveShadow=true; welcome.add(meadow);
+  const hill=new THREE.Mesh(new THREE.SphereGeometry(60,56,28,0,Math.PI*2,0,Math.PI/2),std(0xd9ecc9,.1)); hill.scale.set(1.25,.2,1); hill.position.y=-.4; hill.receiveShadow=true; welcome.add(hill);
+  for(let i=0;i<3;i++){ const h2=new THREE.Mesh(new THREE.SphereGeometry(30+i*14,40,20,0,Math.PI*2,0,Math.PI/2),std(0xd3e8c7,.06)); h2.scale.set(1.3,.16,1); h2.position.set(70+i*60,-.3,-110+i*90); welcome.add(h2); }
+  // path up the hill + blanket
+  const pv=[], pi=[]; for(let i=0;i<=30;i++){ const x=44-i*1.4, z=3+Math.sin(i*.42)*4.5, y=hillY(x,z)+.09; pv.push(x,y,z-1.1,x,y,z+1.1); if(i<30){ const a=i*2; pi.push(a,a+2,a+1,a+1,a+2,a+3); } }
+  const pg=new THREE.BufferGeometry(); pg.setAttribute('position',new THREE.Float32BufferAttribute(pv,3)); pg.setIndex(pi); pg.computeVertexNormals(); welcome.add(new THREE.Mesh(pg,new THREE.MeshStandardMaterial({color:0xf3e6d6,roughness:1,side:THREE.DoubleSide})));
+  const blanket=new THREE.Mesh(new THREE.BoxGeometry(4.2,.08,3.2),std(0xf6c9d4,.1)); blanket.position.set(-1.2,WY+.02,2.6); blanket.rotation.y=.2; blanket.receiveShadow=true; welcome.add(blanket);
+  const basket=new THREE.Mesh(new THREE.CylinderGeometry(.42,.34,.5,10),PM.wood); basket.position.set(-2.4,WY+.3,3.4); basket.castShadow=true; welcome.add(basket);
+  // blossom trees
+  const bloom=[0xffc4d6,0xffd6e2,0xf8b7cb,0xffe3ec].map(c=>std(c,.2,.85));
+  const blossomTree=(x,z,s)=>{ const g=new THREE.Group(); g.position.set(x,hillY(x,z),z); g.rotation.y=hash(x,z)*6;
+    g.add(cyl(.22*s,.34*s,2.4*s,PM.wood,0,0,0,8)); const b1=cyl(.1*s,.15*s,1.7*s,PM.wood,.7*s,1.9*s,.2*s,6); b1.rotation.z=-.65; const b2=cyl(.1*s,.15*s,1.5*s,PM.wood,-.6*s,2*s,-.3*s,6); b2.rotation.z=.7; g.add(b1,b2);
+    [[0,3.3,0,1.6],[1.3,3,.3,1.15],[-1.2,2.9,-.4,1.1],[.3,4.2,-.4,1.05],[-.5,2.5,.9,.85],[.9,3.9,.7,.8]].forEach(([dx,dy,dz,r],i)=>{ const m=new THREE.Mesh(new THREE.SphereGeometry(r*s,16,12),bloom[(i+Math.floor(hash(x,z)*4))%4]); m.position.set(dx*s,dy*s,dz*s); m.castShadow=true; g.add(m); });
+    const ph=hash(z,x)*6; wAnims.push((dt,t)=>{ g.rotation.z=Math.sin(t*.6+ph)*.014; g.rotation.x=Math.cos(t*.47+ph)*.01; }); welcome.add(g); return g; };
+  [[-15,7,1.4],[21,-17,1.2],[-9,-19,1],[23,11,1.05],[-28,-5,.9],[8,22,.95],[-20,20,.85],[62,44,1.5],[-74,34,1.4],[44,-66,1.3],[-50,-70,1.2],[96,-20,1.6],[-6,58,1.1],[78,76,1.3]].forEach(a=>blossomTree(...a));
+  for(let i=0;i<26;i++){ const a=i/26*Math.PI*2, r=95+hash(i,3)*60; tree(welcome,Math.cos(a)*r*1.3+60,Math.sin(a)*r-10,1.2+hash(i,7)*.9,bloom[i%4]); }
+  // Namsan with N Seoul Tower + a cable car
+  const mtn=new THREE.Group(); mtn.position.set(-330,0,-150); const m1=new THREE.Mesh(new THREE.ConeGeometry(70,46,9),std(0xbfd8b4,.05)); m1.position.y=23; m1.scale.set(1.4,1,1); const m2=new THREE.Mesh(new THREE.ConeGeometry(48,30,8),std(0xb6d1ad,.05)); m2.position.set(60,15,40); const m3=new THREE.Mesh(new THREE.ConeGeometry(40,24,8),std(0xc5dbb9,.05)); m3.position.set(-70,12,30); mtn.add(m1,m2,m3); welcome.add(mtn);
+  const tower=makeLandmark('tower'); tower.scale.setScalar(1.7); tower.position.set(-330,45,-150); welcome.add(tower); if(tower.userData.anim) wAnims.push(...tower.userData.anim);
+  const cabA=new THREE.Vector3(-46,hillY(-46,-34)+6,-34), cabB=new THREE.Vector3(-312,49,-142);
+  [cabA,cabB].forEach(p=>{ const base=p===cabA?hillY(-46,-34):43; const post=cyl(.35,.5,p.y-base,PM.slate,p.x,base,p.z,8); welcome.add(post); });
+  const cable=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,cabA.distanceTo(cabB),5),PM.slate); cable.position.copy(cabA).lerp(cabB,.5); cable.lookAt(cabB); cable.rotateX(Math.PI/2); welcome.add(cable);
+  const gondola=new THREE.Group(); gondola.add(box(2.2,1.6,1.6,PM.red,0,-1.9,0),box(1.6,.9,1.3,PM.glass,0,-1.75,0),cyl(.06,.06,1.2,PM.slate,0,-.6,0,5)); welcome.add(gondola);
+  wAnims.push((dt,t)=>{ const u=.5+.5*Math.sin(t*.09); gondola.position.copy(cabA).lerp(cabB,u); gondola.position.y-=Math.sin(u*Math.PI)*3; gondola.rotation.z=Math.sin(t*1.3)*.03; });
+  // palace, hanok roofs, skyline, Lotte-like tower
+  const put=(type,x,z,s,ry=0)=>{ const g=makeLandmark(type); g.scale.setScalar(s); g.position.set(x,hillY(x,z),z); g.rotation.y=ry; welcome.add(g); if(g.userData.anim) wAnims.push(...g.userData.anim.map(fn=>(dt,t)=>fn(dt,t))); return g; };
+  put('palace',-172,30,3.2,.3); put('hanok',-150,88,3,.5); put('hanok',-196,118,2.6,-.4); put('temple',-215,-100,2.8,.6); put('hanok',-74,-92,1.9,.9);
+  put('skyscraper',-205,150,3.4,.2); put('observatory',-275,180,4.4,0); put('xsky',-300,80,3,0); put('skyscraper',-330,-20,3.8,-.3);
+  const city=new THREE.Group(); const glassM=std(0xcfe0f4,.12,.4), wM=std(0xffffff,.05,.8);
+  for(let i=0;i<70;i++){ const h=hash(i,11), x=-150-h*230, z=-220+hash(i,5)*460; if(Math.hypot(x+330,z+150)<110||Math.abs(x+112)<34) continue; const H=6+hash(i,13)*34, w=5+hash(i,17)*7; const b=box(w,H,w,i%3?wM:glassM,x,0,z); b.castShadow=false; city.add(b); }
+  welcome.add(city);
+  // river, bridge, boats
+  const river=new THREE.Mesh(new THREE.PlaneGeometry(52,640),new THREE.MeshStandardMaterial({color:0xcfe2f7,roughness:.25,metalness:.1,emissive:0xffd8e4,emissiveIntensity:.12,transparent:true,opacity:.92})); river.rotation.x=-Math.PI/2; river.position.set(-112,.08,0); welcome.add(river);
+  for(let b=0;b<2;b++){ const zb=b?-130:46; welcome.add(box(70,1.4,7,PM.stone,-112,6,zb)); for(let i=-2;i<=2;i++){ welcome.add(box(2.6,6,3,PM.white,-112+i*14,0,zb)); } for(let i=-4;i<=4;i++) welcome.add(cyl(.12,.12,3,PM.slate,-112+i*8,6.7,zb+3.3,5),cyl(.12,.12,3,PM.slate,-112+i*8,6.7,zb-3.3,5));
+    for(let c=0;c<6;c++){ const car=box(2.2,.9,1.2,PM.pastel[c%5],0,7.1,zb+(c%2?1.6:-1.6)); car.castShadow=false; welcome.add(car); const off=hash(c,b)*60, sp=(c%2?1:-1)*(6+hash(c,9)*4); wAnims.push((dt,t)=>{ car.position.x=-112+(((off+t*sp)%70)+70)%70-35; }); } }
+  for(let i=0;i<3;i++){ const boat=new THREE.Group(); boat.add(box(3.2,.8,1.3,PM.white,0,.4,0),box(1.2,.9,.9,PM.slate,-.3,1.2,0)); boat.position.set(-112+(i-1)*12,.1,0); welcome.add(boat); const ph=i*2.1; wAnims.push((dt,t)=>{ boat.position.z=((t*3+ph*60)%600)-300; boat.position.y=.1+Math.sin(t*1.4+ph)*.08; boat.rotation.z=Math.sin(t*1.1+ph)*.03; }); }
+  // birds
+  for(let i=0;i<7;i++){ const bird=new THREE.Group(); const wl=box(1.6,.06,.4,PM.slate,-.8,0,0), wr=box(1.6,.06,.4,PM.slate,.8,0,0); bird.add(wl,wr); bird.scale.setScalar(.7+hash(i,2)*.6); welcome.add(bird); const ph=hash(i,4)*100, y=28+hash(i,6)*22, sp=4+hash(i,8)*3;
+    wAnims.push((dt,t)=>{ const z=((t*sp+ph)%420)-210; bird.position.set(-60-hash(i,1)*120+Math.sin(t*.3+ph)*12,y+Math.sin(t*.9+ph)*2,z); bird.rotation.y=Math.PI; const f=Math.sin(t*9+ph)*.55; wl.rotation.z=f; wr.rotation.z=-f; }); }
+  welcome.visible=false;
+})();
+/* petals */
+const PTN=320, ptPos=new Float32Array(PTN*3), ptVel=new Float32Array(PTN*3), ptPh=new Float32Array(PTN), ptSz=new Float32Array(PTN), ptCol=new Float32Array(PTN*3);
+const PETAL_COLS=[[1,.78,.86],[1,.86,.91],[.98,.72,.82],[1,.93,.95],[.99,.8,.7]];
+const petalGeo=new THREE.BufferGeometry(); petalGeo.setAttribute('position',new THREE.BufferAttribute(ptPos,3)); petalGeo.setAttribute('aPh',new THREE.BufferAttribute(ptPh,1)); petalGeo.setAttribute('aSz',new THREE.BufferAttribute(ptSz,1)); petalGeo.setAttribute('aCol',new THREE.BufferAttribute(ptCol,3));
+const petalMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{uT:{value:0},uScale:{value:innerHeight}},
+  vertexShader:`attribute float aPh; attribute float aSz; attribute vec3 aCol; varying vec3 vC; varying float vR; uniform float uT; uniform float uScale;
+    void main(){ vC=aCol; vR=aPh+uT*(1.4+fract(aPh)*1.2); vec4 mv=modelViewMatrix*vec4(position,1.0); gl_PointSize=aSz*uScale/max(1.0,-mv.z); gl_Position=projectionMatrix*mv; }`,
+  fragmentShader:`varying vec3 vC; varying float vR; void main(){ vec2 p=gl_PointCoord-0.5; float c=cos(vR), s=sin(vR); p=mat2(c,-s,s,c)*p; float sq=0.5+0.5*sin(vR*0.7); float d=length(p*vec2(1.0+sq*0.6,1.9-sq*0.4)); float a=smoothstep(0.5,0.36,d); if(a<0.02) discard; float sh=0.9+0.1*sin(vR*2.0); gl_FragColor=vec4(vC*sh,a*0.92); }`});
+const petals=new THREE.Points(petalGeo,petalMat); petals.frustumCulled=false; petals.visible=false; scene.add(petals);
+function spawnPetal(i,top){ const x=-70+Math.random()*130, z=-70+Math.random()*130; ptPos.set([W0.x+x,W0.y+(top?22+Math.random()*26:Math.random()*40),W0.z+z],i*3); ptVel.set([.6+Math.random()*1.2,-(1.1+Math.random()*1.3),.3+Math.random()*.9],i*3); ptPh[i]=Math.random()*20; ptSz[i]=.55+Math.random()*.55; ptCol.set(PETAL_COLS[Math.floor(Math.random()*PETAL_COLS.length)],i*3); }
+for(let i=0;i<PTN;i++) spawnPetal(i,false); petalGeo.attributes.aCol.needsUpdate=true;
+function updatePetals(dt,t){ petalMat.uniforms.uT.value=t; const gust=1+Math.sin(t*.37)*.6+Math.sin(t*1.9)*.25;
+  for(let i=0;i<PTN;i++){ const k=i*3, ph=ptPh[i]; ptPos[k]+=(ptVel[k]*gust+Math.sin(t*1.7+ph)*1.4)*dt; ptPos[k+1]+=(ptVel[k+1]+Math.sin(t*2.3+ph*1.3)*.9)*dt; ptPos[k+2]+=(ptVel[k+2]*gust+Math.cos(t*1.3+ph)*1.2)*dt;
+    const lx=ptPos[k]-W0.x, lz=ptPos[k+2]-W0.z; if(ptPos[k+1]<W0.y+hillY(lx,lz)+.2||lx>75||lz>75){ spawnPetal(i,true); } }
+  petalGeo.attributes.position.needsUpdate=true; petalGeo.attributes.aPh.needsUpdate=true; petalGeo.attributes.aSz.needsUpdate=true; petalGeo.attributes.aCol.needsUpdate=true; }
+const WCAM=A.wcam={mob:{x:30,y:5,z:0,lx:-200,ly:-7,lz:-6},desk:{x:21,y:8.5,z:14,lx:-80,ly:1.5,lz:1}}; A.dbgCouple=()=>{ const v=couple.position.clone(); v.y+=1.5; v.project(cam); return [(v.x+1)/2,(1-v.y)/2]; };
+const WELCOME_GESTS=['lean','hands','forehead','whisper','sway','kiss','glance','hug'];
 
 /* ---------- interactivity: drag to orbit, pinch/wheel to zoom, tap things ---------- */
 let orbitT=0, orbit=0, pitchT=0, pitch=0, zoomT=1, zoom=1, gazeYaw=0, gazeAmt=0, tapFx=0;
@@ -1820,6 +1906,7 @@ function frame(){
   // gestures (only while standing at a place)
   const standing=arrived&&!travel&&camMode==='follow';
   if(standing&&!reduced){ gestT+=dt; if(gestT>gestNext){ if(gest==='idle') pickGesture(); else { setGesture('idle'); gestNext=fxActive?1.2:(gestQueue.length?.9:1.6+Math.random()*2.2); } } }
+  else if(camMode==='start'&&!reduced){ gestT+=dt; if(gestT>gestNext){ let g=WELCOME_GESTS[Math.floor(Math.random()*WELCOME_GESTS.length)]; if(g===gest) g='lean'; setGesture(g); gestNext=(G[g]&&G[g].hold||3)+2.5; } }
   else if(gest!=='idle'){ setGesture('idle'); gestNext=2.5; gestQueue=[]; }
   // critically-damped springs: no hitches when a new pose starts mid-motion
   PKEYS.forEach(k=>{ const w=POMEGA[k]||3.0, x=P[k], v=PV[k], acc=w*w*(Pto[k]-x)-2*w*v; PV[k]=v+acc*dt; P[k]=x+PV[k]*dt; });
@@ -1862,8 +1949,9 @@ function frame(){
   orbit+=(orbitT-orbit)*Math.min(1,dt*5); pitch+=(pitchT-pitch)*Math.min(1,dt*5); zoom+=(zoomT-zoom)*Math.min(1,dt*4); gazeAmt*=Math.exp(-dt*.45); updateSparks(dt);
   if(rippleT<3){ rippleT+=dt; const f=rippleT/1.2; ripple.scale.setScalar(1+f*6); ripple.material.opacity=Math.max(0,.6*(1-f)); }
   if(tapFx>0&&!fxActive){ tapFx-=dt; parts.visible=true; fxActive='fireworks'; fxBurstT=99; updateFx(dt,t); fxActive=null; if(tapFx<=0) parts.visible=false; }
+  if(welcome.visible){ wAnims.forEach(fn=>fn(dt,t)); updatePetals(dt,t); petalMat.uniforms.uScale.value=innerHeight; }
   // camera
-  if(camMode==='start'){ const c=CITY.Seoul, a=t*.04+.8; want.set(c.ox+Math.sin(a)*560,320+Math.sin(t*.2)*20,c.oz+Math.cos(a)*560); wantLook.set(c.ox,20,c.oz); fogWant=.0006; }
+  if(camMode==='start'){ const sw=Math.sin(t*.11), bob=Math.sin(t*.17); const C=mobile?WCAM.mob:WCAM.desk; want.set(W0.x+C.x+sw*2.5,W0.y+WY+C.y+bob*.5,W0.z+C.z+Math.cos(t*.09)*3); wantLook.set(W0.x+C.lx,W0.y+WY+C.ly,W0.z+C.lz); fogWant=.0011; }
   else if(camMode==='overview'){ const tr=trails[activeDay], R=tr.radius*(mobile?2.6:2.1), a0=-.9+Math.sin(t*.1)*.15; want.set(tr.center.x+Math.sin(a0)*R*.7,R*1.05,tr.center.z+Math.cos(a0)*R*.7); wantLook.copy(tr.center); fogWant=Math.min(.0006,.05/R); }
   else { const showing=fxActive&&arrived&&!travel&&fxActive!=='sparkle', lmType=activeDay>=0&&activeStop>=0&&props[activeDay][activeStop]?props[activeDay][activeStop].userData.type:null, tall=arrived&&!travel&&/tower|skyscraper|observatory|xsky|bridge|cablecar|folkmuseum|cantilever|marina/.test(lmType||'');
     const lift=showing?1:(tall?.65:0), p=couple.position, a=-.7+(activeStop>=0?trails[activeDay].stopU[activeStop]:0)*1.1+Math.sin(t*.15)*.06+orbit;
@@ -1884,6 +1972,7 @@ function frame(){
   updateEnv(dt,t);
   renderer.render(scene,cam);
 }
+A.boot();
 frame();
 </script>
 </body>
