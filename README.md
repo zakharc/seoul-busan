@@ -1,5 +1,7 @@
 # Seoul ⇄ Busan · a journey for two
 
+**Version 1.0** — shared with Киця 💗. Set-dressing keeps a clear corridor between camera and couple (no more props in front of their faces), Common Ground sign fixed, umbrella held above both heads, shared data reset for a fresh start.
+
 **Version 0.3** — Explore more places (찜): 20 extra Seoul + 5 Busan ideas with the catch, fit, cost and route; auto-shown once per session when each city's trail is done; marks sync between phones and appear in the summary, itinerary and My Maps export.
 
 **Version 0.2** — visual direction pass: per-entry scene overrides (127), painted horizon backdrops with day/night cross-fade, neighbourhood kits (Myeongdong neon, Seongsu brick, hanok lanes, Gamcheon/Ihwa hill houses), real Hangul venue signs, the chosen dish at every meal, low three-quarter arrival camera, autumn welcome hill.
