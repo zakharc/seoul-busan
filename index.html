@@ -86,6 +86,17 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:poin
 .daycard.show{transform:none;opacity:1;visibility:visible}
 .daycard .k{display:flex;align-items:center;gap:10px;font:600 11px/1 var(--body);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 .daycard .k b{color:var(--c)}
+.daycard .k .ans{color:var(--rose)}
+.swap-in{animation:swapin .5s var(--ease) both}
+@keyframes swapin{from{opacity:0;transform:translateY(10px)}}
+.daycard .tl li{animation:swapin .5s var(--ease) both;animation-delay:calc(var(--i,0)*45ms)}
+.mid .b.flip{animation:flip .35s var(--ease)}
+@keyframes flip{from{opacity:0;transform:translateY(5px)}}
+.chip{transition:transform .35s var(--ease),background .35s,color .35s,box-shadow .35s}
+.chip[aria-current="true"]{transform:translateY(-1px) scale(1.04)}
+.sheet .body>*{animation:swapin .55s var(--ease) both}
+.sheet.still .body>*{animation:none}
+.sheet .photo img.on{transition:opacity .9s,transform 2.2s var(--ease)}
 .daycard .num{position:absolute;right:20px;top:10px;font:800 88px/1 var(--display);letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1.5px var(--c);opacity:.5}
 .daycard h2{font:800 clamp(28px,7vw,40px)/1.05 var(--display);letter-spacing:-.03em;margin:12px 0 8px;max-width:78%}
 .daycard .stay{color:var(--muted);font-size:14px;margin:0}
@@ -107,11 +118,13 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:poin
 .sheet.show{transform:none}
 @media (max-width:899px){
   .photo{height:176px}
+  .toast{bottom:auto;top:calc(var(--top-h) + var(--sat) + 60px);transform:translate(-50%,-10px)}
+  .toast.show{transform:translate(-50%,0)}
   :root{--sheet-full:calc(100dvh - var(--bar-h) - var(--sab) - var(--top-h) - var(--sat) - 6px)}
-  .sheet{height:var(--sheet-full);transform:translateY(110%)}
-  .sheet.show{transform:translateY(calc(var(--sheet-full) - var(--sheet-h)))}
-  .sheet.show.full{transform:none}
-  .sheet.drag{transition:none}
+  .sheet{height:var(--sheet-h);transition:transform .65s var(--ease),height .5s var(--ease);will-change:transform,height}
+  .sheet.show{transform:none}
+  .sheet.show.full{height:var(--sheet-full)}
+  .sheet.drag{transition:transform .65s var(--ease)}
   .sheet .grab{position:absolute;left:0;right:0;top:0;height:34px;z-index:4;touch-action:none;cursor:grab}
 }
 @media (min-width:900px){.sheet .grab{display:none}}
@@ -216,7 +229,7 @@ dialog::backdrop{background:rgba(17,22,40,.35);backdrop-filter:blur(6px)}
 .polaroids figcaption small{display:block;font:500 10px var(--body);color:#6b7392}
 .polaroids figure button{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--ink);color:var(--bg);font-size:12px;line-height:20px;opacity:0;transition:.2s}
 .polaroids figure:hover button{opacity:1}
-.toast{position:fixed;left:50%;bottom:calc(var(--bar-h) + var(--sab) + 16px);transform:translate(-50%,16px);z-index:80;padding:10px 16px;border-radius:999px;background:var(--ink);color:#fff;font:600 13px var(--body);opacity:0;pointer-events:none;transition:.35s}
+.toast{position:fixed;left:50%;bottom:calc(var(--bar-h) + var(--sab) + 16px);transform:translate(-50%,16px);max-width:min(92vw,520px);text-align:center;z-index:80;padding:10px 16px;border-radius:999px;background:var(--ink);color:#fff;font:600 13px var(--body);opacity:0;pointer-events:none;transition:.35s}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .no3d #stage{background:radial-gradient(80% 60% at 50% 40%,#e9ecf7,#f5f6fa 70%)}
 
@@ -226,6 +239,12 @@ dialog::backdrop{background:rgba(17,22,40,.35);backdrop-filter:blur(6px)}
 .ibtn .sync{position:absolute;right:7px;bottom:7px;width:7px;height:7px;border-radius:50%;background:#b8bdd0;box-shadow:0 0 0 2px var(--surface)}
 .ibtn .sync.live{background:#2fbf71}.ibtn .sync.wait{background:var(--gold);animation:pulse 1.2s infinite}.ibtn .sync.err{background:#e05252}
 @keyframes pulse{50%{opacity:.35}}
+.rbar{position:sticky;bottom:0;z-index:5;display:flex;gap:8px;padding:10px 14px calc(10px + var(--sab));margin-top:-6px;background:color-mix(in srgb,var(--surface) 86%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line)}
+.rbar .rnext{flex:0 0 auto;width:54px;height:46px;border-radius:14px;background:var(--c);color:#fff;display:inline-flex;align-items:center;justify-content:center;animation:rin .45s var(--ease)}
+.rbar .rnext svg{width:20px;height:20px}
+.rbar .rnext.day{width:auto;padding:0 14px;font:700 13px var(--body);gap:6px}
+@keyframes rin{from{transform:translateX(16px) scale(.8);opacity:0}}
+.rbar .saved{display:none}
 .review{display:flex;gap:8px;margin:14px 0 0}
 .rv{flex:1 1 0;display:inline-flex;align-items:center;justify-content:center;gap:7px;height:46px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);font:700 14px var(--body);transition:transform .25s var(--ease),background .25s,border-color .25s,color .25s;position:relative;overflow:visible}
 .rv svg{width:18px;height:18px}
@@ -403,8 +422,11 @@ dialog::backdrop{background:rgba(17,22,40,.35);backdrop-filter:blur(6px)}
   .sheet.show{transform:none}
   .photo{height:240px}
   .bar{left:auto;right:24px;bottom:24px;width:430px;border-radius:22px;border:1px solid var(--line);height:var(--bar-h);padding:10px 12px}
-  .daycard{left:6vw;right:auto;width:460px;bottom:auto;top:50%;transform:translateY(calc(-50% + 30px))}
-  .daycard.show{transform:translateY(-50%)}
+  .daycard{left:6vw;right:auto;width:460px;bottom:auto;top:calc(var(--top-h) + 52px);height:min(640px,calc(100vh - var(--top-h) - 52px - 96px));display:flex;flex-direction:column;transform:translateY(24px)}
+  .daycard.show{transform:none}
+  .daycard .tl{flex:1 1 auto;min-height:0;max-height:none}
+  .daycard .row{margin-top:auto;padding-top:18px}
+  .daycard .sig{bottom:22px}
   .start{justify-content:center;padding:0 8vw}
   .start .in{margin:0;max-width:640px}
   .start h1{font-size:clamp(64px,7vw,110px)}
@@ -477,7 +499,7 @@ dialog::backdrop{background:rgba(17,22,40,.35);backdrop-filter:blur(6px)}
 .daycard h2{max-width:74%}
 .hotels-h{font:700 16px var(--display);margin:22px 0 8px}
 .bk.hotel .hm{width:26px;height:26px;border-radius:9px;background:var(--ink);color:var(--bg);font:700 12px/26px var(--display);text-align:center}
-@media (min-width:900px){.daycard .tl{max-height:40vh}}
+@media (min-width:900px){.daycard .tl{max-height:none}}
 </style>
 </head>
 <body>
@@ -666,15 +688,16 @@ function renderDay(i){
   const d=DAYS[i], h=HOTELS[d.base];
   daycard.style.setProperty("--c",CITYC[d.city]);
   daycard.innerHTML=`<div class="num">${pad2(i+1)}</div>
-    <div class="k"><b>${d.city}</b><span>·</span><span>${fmtDay(d.date)}</span>${i===todayIdx?'<span>·</span><span style="color:var(--gold)">Today</span>':""}</div>
+    <div class="k"><b>${d.city}</b><span>·</span><span>${fmtDay(d.date)}</span>${i===todayIdx?'<span>·</span><span style="color:var(--gold)">Today</span>':""}${(()=>{ const a=d.items.filter(it=>rv(it,"her")).length; return a?`<span>·</span><span class="ans">♥ ${role==="her"?a+"/"+d.items.length+" answered":names.her+" "+a+"/"+d.items.length}</span>`:""; })()}</div>
     <h2>${esc(d.title)}</h2>
     <p class="stay">Staying at <a href="${placeUrl(h)}" target="_blank" rel="noopener">${esc(h.title)}</a>${d.sunset?` · sunset ≈${d.sunset}`:""}</p>
     <ol class="tl">${d.items.map((it,k)=>{ const o=optionsOf(it), p=placeOf(it), isDone=!!done[d.date+"-"+k], r=review[it.id]||{}, sk=effSkip(it);
       const mini=["her","me"].filter(w=>r[w]&&r[w].s==="heart").map(w=>`<i class="${w}" title="${esc(names[w])}">♥</i>`).join("");
-      return `<li class="${isDone?"done":""}${o?" choice":""}${isFood(it)?" food":""}${sk?" skip":""}"><button data-k="${k}"><span class="tm">${esc(it.t)}</span><span class="tt">${esc(o?p.title:it.title)}${mini?`<span class="mini">${mini}</span>`:""}${o?`<small>${o.length} options · ${esc(it.title)}</small>`:""}</span></button></li>`; }).join("")}</ol>
+      return `<li style="--i:${k}" class="${isDone?"done":""}${o?" choice":""}${isFood(it)?" food":""}${sk?" skip":""}"><button data-k="${k}"><span class="tm">${esc(it.t)}</span><span class="tt">${esc(o?p.title:it.title)}${mini?`<span class="mini">${mini}</span>`:""}${o?`<small>${o.length} options · ${esc(it.title)}</small>`:""}</span></button></li>`; }).join("")}</ol>
     ${sigil(d)}
     <div class="row"><button class="btn primary" id="day-start">Start the day <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>`;
   $("day-start").onclick=()=>go(i,0);
+  if(daycard.classList.contains("show")){ daycard.querySelectorAll(".k,h2,.stay,.row").forEach((el,j)=>{ el.classList.add("swap-in"); el.style.animationDelay=(j*40)+"ms"; }); }
   daycard.querySelectorAll(".tl button").forEach(b=>b.onclick=()=>go(i,+b.dataset.k,"jump"));
 }
 
@@ -710,9 +733,9 @@ function renderStop(i,k){
       ${p.warn?`<p class="warn">${esc(p.warn)}</p>`:""}
       ${extract?`<p class="about" id="about">${esc(extract)} <a href="${esc(w.url)}" target="_blank" rel="noopener">Wikipedia ↗</a></p>`:(p.wiki?`<p class="about" id="about"></p>`:"")}
       <div class="acts">${acts}</div>
-    </div>`;
+    </div>${reviewBar(it,opts?opts[si]:null,i,k)}`;
   sheetScroll.scrollTop=0;
-  sheetScroll.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{ const j=+b.dataset.j; choice[it.id]=opts[j].id; saveK("sbtrip-choice-v1",choice); renderStop(i,k); renderBar(); APP.emit("choice",{day:i,stop:k}); });
+  sheetScroll.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{ const j=+b.dataset.j; if(j===si) return; choice[it.id]=opts[j].id; saveK("sbtrip-choice-v1",choice); const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; const ph=sheetScroll.querySelector(".photo"); if(ph) ph.animate([{opacity:.35},{opacity:1}],{duration:500,easing:"ease-out"}); renderBar(); APP.emit("choice",{day:i,stop:k}); buzz(4); });
   const sn=sheetScroll.querySelector(".snap"); if(sn) sn.onclick=()=>APP.emit("snap"); renderPolaroids(); bindReview(sheetScroll,it,i,k,opts?opts[si]:null);
   sheetScroll.querySelectorAll(".tick").forEach(b=>b.onclick=()=>{ if(done[id]) delete done[id]; else done[id]=1; saveK("sbtrip-done-v1",done); const on=!!done[id]; b.setAttribute("aria-pressed",on); b.textContent=on?"✓ Done":"Mark done"; sheet.classList.toggle("done",on); APP.emit("tick",on); });
 }
@@ -734,7 +757,7 @@ function renderBar(){
   const d=DAYS[s.day]; root.style.setProperty("--c",CITYC[d.city]);
   btnPrev.disabled=(s.day===0&&s.stop<=-1&&s.mode!=="travel"); btnNext.disabled=(s.day===DAYS.length-1&&s.stop===d.items.length-1);
   midA.textContent="Day "+(s.day+1)+" · "+fmtDay(d.date)+" · "+d.city;
-  midB.textContent=s.mode==="day"?d.title:(s.mode==="travel"?travelTxt.textContent:placeOf(d.items[s.stop]).title||d.items[s.stop].title);
+  const nb=s.mode==="day"?d.title:(s.mode==="travel"?travelTxt.textContent:placeOf(d.items[s.stop]).title||d.items[s.stop].title); if(nb!==midB.textContent){ midB.textContent=nb; midB.classList.remove("flip"); void midB.offsetWidth; midB.classList.add("flip"); }
   dotsEl.innerHTML=d.items.map((it,k)=>{ const h=rv(it,"her"); return `<i class="${k===s.stop?"on":(k<s.stop?"past":"")}${h&&h.s==="heart"?" love":""}${effSkip(it)?" skip":""}"></i>`; }).join("");
   rail.querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-current",+b.dataset.i===s.day)); const cb=rail.querySelector('[aria-current="true"]'); if(cb) cb.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"});
 }
@@ -750,7 +773,7 @@ function go(day,stop,kind){
   const it=DAYS[day].items[stop], p=placeOf(it);
   const k=kind||(prev.mode==="day"&&prev.day===day?"descend":(prev.day===day&&prev.stop>=0?"walk":"jump"));
   s.mode="travel"; s.day=day; s.stop=stop; daycard.classList.remove("show"); sheet.classList.remove("show");
-  setEvening(isEvening(day,stop)); renderStop(day,stop);
+  setEvening(isEvening(day,stop)); sheet.classList.remove("still"); renderStop(day,stop);
   const cm=commuteFor(day,stop), back=k==="walk"&&prev.stop>stop;
   const verb=k!=="walk"?"Arriving at ":(back?"Back to ":(cm.vehicle==="train"?"On the KTX to ":(cm.vehicle==="taxi"?"Taxi to ":"Walking to ")));
   travelTxt.textContent=verb+(p.title||it.title); travelEl.classList.add("show");
@@ -759,7 +782,7 @@ function go(day,stop,kind){
   APP.emit("move",{kind:k,day,stop,prev,dur,vehicle:cm.vehicle});
   arriveTimer=setTimeout(()=>{ if(seq===moveSeq) APP.arrive(); },dur+300);
 }
-APP.arrive=function(){ const s=APP.state; if(s.mode!=="travel") return; clearTimeout(arriveTimer); s.mode="stop"; travelEl.classList.remove("show"); progEl.style.width="0"; renderBar(); sheet.classList.add("show"); APP.emit("arrive",s); };
+APP.arrive=function(){ const s=APP.state; if(s.mode!=="travel") return; clearTimeout(arriveTimer); s.mode="stop"; APP.quick=false; APP.arrivals=(APP.arrivals||0)+1; firstHints(); travelEl.classList.remove("show"); progEl.style.width="0"; renderBar(); sheet.classList.add("show"); APP.emit("arrive",s); };
 APP.progress=p=>{ progEl.style.width=(p*100).toFixed(1)+"%"; };
 APP.go=go;
 function next(){ const s=APP.state; if(s.mode==="travel"||s.mode==="start") return; const d=DAYS[s.day]; if(s.mode==="day") return go(s.day,0); if(s.stop<d.items.length-1) return go(s.day,s.stop+1); if(s.day<DAYS.length-1) go(s.day+1,-1); }
@@ -821,6 +844,7 @@ function setReview(it,s,optId){
   if(cur&&cur.s===s&&(s!=="heart"||cur.pick===optId)){ delete r[role]; if(!Object.keys(r).length) delete review[it.id]; syncSet(["review",it.id,role],null); on=false; }
   else { r[role]={s,pick:optId||null,ts:Date.now()}; syncSet(["review",it.id,role],r[role]); if(s==="heart"&&optId){ delete choice[it.id]; saveK("sbtrip-choice-v1",choice); } }
   saveK("sbtrip-review-v1",review); updateSum();
+  if(on&&role==="her"&&!undecided().length&&!approved) setTimeout(()=>{ toast("That was the last one 💗 — open ♥ to approve the plan"+(fb.status==="live"?"":" and send your picks to Mykola")); },1400);
   APP.emit("review",{item:it,state:on?s:null,who:role}); return on;
 }
 function whoBadges(it,curOptId){
@@ -841,18 +865,39 @@ function reviewHtml(it,curOpt){
   const my=rv(it,role), opts=optionsOf(it);
   const heartOn=!!(my&&my.s==="heart"&&(!opts||my.pick===(curOpt&&curOpt.id))), skipOn=!!(my&&my.s==="skip");
   const nm=role?names[role]:"My";
-  return `<div class="review"><button class="rv heart" aria-pressed="${heartOn}">${heartOn?HEARTF.replace("<svg",'<svg fill="currentColor"'):HEART}<span>${esc(nm)}'s pick${heartOn?" ✓":""}</span><i class="fl" aria-hidden="true">💗</i><i class="fl" aria-hidden="true">💗</i><i class="fl" aria-hidden="true">💗</i></button><button class="rv skip" aria-pressed="${skipOn}">${SKIP}<span>${skipOn?"Skipped":"Skip"}</span></button></div>`+proposalHtml(it,curOpt)+whoBadges(it,curOpt&&curOpt.id)+(effSkip(it)?`<p class="skipnote">${SKIP}<span>${esc(names[eff(it)===rv(it,"her")?"her":"me"])} would rather skip this — the plan carries on from the previous stop.</span></p>`:"");
+  return proposalHtml(it,curOpt)+whoBadges(it,curOpt&&curOpt.id)+(effSkip(it)?`<p class="skipnote">${SKIP}<span>${esc(names[eff(it)===rv(it,"her")?"her":"me"])} would rather skip this — the plan carries on from the previous stop.</span></p>`:"");
+}
+function reviewBar(it,curOpt,i,k){
+  const my=rv(it,role), opts=optionsOf(it), d=DAYS[i];
+  const heartOn=!!(my&&my.s==="heart"&&(!opts||my.pick===(curOpt&&curOpt.id))), skipOn=!!(my&&my.s==="skip"), answered=!!my;
+  const nm=role?names[role]:"My", lbl=opts?`${esc(nm)}'s pick`:`${esc(nm)} loves it`;
+  const last=k===d.items.length-1, nextLbl=last?(i<DAYS.length-1?`Day ${i+2}`:"Done"):"";
+  return `<div class="rbar"><button class="rv heart" aria-pressed="${heartOn}">${heartOn?HEARTF.replace("<svg",'<svg fill="currentColor"'):HEART}<span>${heartOn?lbl+" ✓":lbl}</span><i class="fl" aria-hidden="true">💗</i><i class="fl" aria-hidden="true">💗</i><i class="fl" aria-hidden="true">💗</i></button><button class="rv skip" aria-pressed="${skipOn}">${SKIP}<span>${skipOn?"Skipped":"Skip"}</span></button>${answered&&!(last&&i===DAYS.length-1)?`<button class="rnext${last?" day":""}" aria-label="Next">${last?esc(nextLbl):""}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>`:""}</div>`;
 }
 function bindReview(scope,it,i,k,curOpt){
   const hb=scope.querySelector(".rv.heart"), sb=scope.querySelector(".rv.skip"); if(!hb) return;
-  hb.onclick=()=>{ const on=setReview(it,"heart",curOpt&&curOpt.id); if(on===false) return; renderStop(i,k); renderBar(); APP.emit("choice",{day:i,stop:k}); if(on){ buzz(14); const b=sheetScroll.querySelector(".rv.heart"); if(b){ b.classList.add("pop","bump"); } if(window.APP.sound&&APP.sound.on) APP.sound.pop(1.2); toast(role==="her"?"Marked as Киця's pick 💗":"Marked as your pick 💗"); } };
-  const ag=scope.querySelector(".prop .agree"); if(ag) ag.onclick=()=>{ const o=other(role), x=rv(it,o); if(!x) return; const r=review[it.id]=review[it.id]||{}; r[role]={s:"heart",pick:x.pick||null,ts:Date.now()}; syncSet(["review",it.id,role],r[role]); delete choice[it.id]; saveK("sbtrip-choice-v1",choice); saveK("sbtrip-review-v1",review); updateSum(); APP.emit("review",{item:it,state:"heart",who:role}); renderStop(i,k); renderBar(); APP.emit("choice",{day:i,stop:k}); buzz([10,30,10]); toast("You both picked this 💞"); };
-  sb.onclick=()=>{ const on=setReview(it,"skip"); if(on===false) return; renderStop(i,k); renderBar(); if(on){ buzz(8); const b=sheetScroll.querySelector(".rv.skip"); if(b) b.classList.add("bump"); } };
+  hb.onclick=()=>{ const on=setReview(it,"heart",curOpt&&curOpt.id); if(on===false) return; const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; renderBar(); APP.emit("choice",{day:i,stop:k}); if(on){ buzz(14); const b=sheetScroll.querySelector(".rv.heart"); if(b){ b.classList.add("pop","bump"); } if(window.APP.sound&&APP.sound.on) APP.sound.pop(1.2); toast(role==="her"?"Marked as Киця's pick 💗":"Marked as your pick 💗"); } };
+  const nx=scope.querySelector(".rbar .rnext"); if(nx) nx.onclick=()=>{ APP.quick=true; buzz(5); next(); };
+  const ag=scope.querySelector(".prop .agree"); if(ag) ag.onclick=()=>{ const o=other(role), x=rv(it,o); if(!x) return; const r=review[it.id]=review[it.id]||{}; r[role]={s:"heart",pick:x.pick||null,ts:Date.now()}; syncSet(["review",it.id,role],r[role]); delete choice[it.id]; saveK("sbtrip-choice-v1",choice); saveK("sbtrip-review-v1",review); updateSum(); APP.emit("review",{item:it,state:"heart",who:role}); const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; renderBar(); APP.emit("choice",{day:i,stop:k}); buzz([10,30,10]); toast("You both picked this 💞"); };
+  sb.onclick=()=>{ const on=setReview(it,"skip"); if(on===false) return; const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; renderBar(); if(on){ buzz(8); const b=sheetScroll.querySelector(".rv.skip"); if(b) b.classList.add("bump"); } };
 }
 const roleBtns=`<button class="her" data-r="her">💗 Киця</button><button data-r="me">Mykola</button>`;
 function renderRoles(){ ["roles","roles2"].forEach(id=>{ const el=$(id); if(!el) return; el.innerHTML=roleBtns; el.querySelectorAll("button").forEach(b=>{ b.setAttribute("aria-pressed",b.dataset.r===role); b.onclick=()=>{ role=b.dataset.r; saveK("sbtrip-role",role); renderRoles(); rerender(); buzz(6); toast(role==="her"?"Привіт, Киця 💗":"Hi Mykola"); }; }); });
+  const cta=$("cta-begin"); if(cta){ const u=undecided().length, tot=ALL_ITEMS.length; const cont=role&&u<tot&&u>0; cta.innerHTML=(cont?`Continue · ${u} left`:"Begin the journey")+' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'; cta.onclick=cont?continueReview:()=>go(0,-1); }
   const h=$("hello"), mh=ALL_ITEMS.filter(([it])=>{ const x=rv(it,"me"); return x&&x.s==="heart"; }).length; if(h) h.innerHTML=role==="her"?`Привіт, <b>Киця</b> 💗 — tap <b>♥ Киця's pick</b> on the places and dishes you love, and <b>Skip</b> what you don't. ${mh?`Mykola has already hearted <b>${mh}</b> thing${mh===1?"":"s"} — look for his blue badge and tap <b>Agree</b> if you like them too.`:"Everything you choose is saved and appears on Mykola's phone."}`:(role==="me"?`You're walking as <b>Mykola</b>. Send Киця her link from ⋯ → Share so her picks land here.`:`Who's walking? Tap your name — hearts and skips are saved under it.`); }
-function rerender(){ const s=APP.state; renderRoles(); updateSum(); if(s.mode==="day") renderDay(s.day); else if(s.mode==="stop"||s.mode==="travel"){ const st=sheetScroll.scrollTop; renderStop(s.day,s.stop); sheetScroll.scrollTop=st; } if(s.mode!=="start") renderBar(); if($("sumdlg").open) renderSum(); if($("bookdlg").open) renderBook(); }
+const undecided=()=>ALL_ITEMS.filter(([it])=>!rv(it,role||"her"));
+function continueReview(){ const u=undecided(); if(!u.length){ openSum(); return; } const [,i,k]=u[0]; APP.quick=true; go(i,k,"jump"); }
+function firstHints(){ if(role!=="her") return; const n=APP.arrivals||0; if(n===1&&!localStorage.getItem("sbtrip-hint-her")){ localStorage.setItem("sbtrip-hint-her","1"); setTimeout(()=>toast("Tap ♥ if you love it, Skip if not — then → to carry on"),900); } }
+const compactPicks=()=>{ const r={}; Object.keys(review).forEach(id=>{ const x=review[id].her; if(x) r[id]=[x.s==="heart"?1:0,x.pick||0]; }); return {v:1,r,a:approved&&approved.by==="her"?1:0}; };
+const picksLink=()=>location.href.split("#")[0].split("?")[0]+"?as=me&p="+b64(compactPicks())+(fb.cfg&&!fb.embedded?"&fb="+b64(fb.cfg):"");
+async function sendPicks(){ const n=Object.keys(compactPicks().r).length; const url=picksLink(), data={title:"Seoul ⇄ Busan · Киця's picks",text:`My picks are in — ${n} answered 💗 Open this on your phone and they'll land in your plan.`,url};
+  if(navigator.share){ try{ await navigator.share(data); return; }catch(e){ if(e.name==="AbortError") return; } }
+  try{ await navigator.clipboard.writeText(url); toast("Link with your picks copied — send it to Mykola"); }catch(e){ prompt("Copy this link",url); } }
+function importPicks(){ const raw=qs.get("p"); if(!raw) return; try{ const d=JSON.parse(decodeURIComponent(escape(atob(raw.replace(/-/g,"+").replace(/_/g,"/"))))); if(!d||!d.r) return; let n=0;
+    Object.keys(d.r).forEach(id=>{ if(!IDX[id]) return; const [sv,pk]=d.r[id], v={s:sv?"heart":"skip",pick:pk||null,ts:Date.now()}; const cur=(review[id]||{}).her; if(cur&&cur.s===v.s&&cur.pick===v.pick) return; (review[id]=review[id]||{}).her=v; delete choice[id]; n++; setTimeout(()=>syncSet(["review",id,"her"],v),1500); });
+    if(d.a&&!approved){ approved={by:"her",name:names.her,ts:Date.now()}; saveK("sbtrip-approved-v1",approved); setTimeout(()=>syncSet(["approved"],approved),1500); }
+    saveK("sbtrip-review-v1",review); saveK("sbtrip-choice-v1",choice); if(n) setTimeout(()=>toast(`💗 ${names.her}'s picks arrived — ${n} new`),1200); }catch(e){} }
+function rerender(){ const s=APP.state; renderRoles(); updateSum(); if(s.mode==="day") renderDay(s.day); else if(s.mode==="stop"||s.mode==="travel"){ const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(s.day,s.stop); sheetScroll.scrollTop=st; } if(s.mode!=="start") renderBar(); if($("sumdlg").open) renderSum(); if($("bookdlg").open) renderBook(); }
 function updateSum(){ const tot=ALL_ITEMS.length, her=ALL_ITEMS.filter(([it])=>rv(it,"her")).length, pct=Math.round(her/tot*100); $("sum-ring").style.setProperty("--p",pct); $("btn-sum").title=`Киця has looked at ${her} of ${tot} stops`; }
 
 /* ---------- more menu ---------- */
@@ -878,6 +923,8 @@ function renderSum(){
     ${DAYS.map((d,i)=>{ const items=d.items; const cnt=items.map(it=>{ const x=rv(it,"her"); return `<i class="${x?(x.s==="heart"?"love":"skip"):(heartPick(it)?"pick":"")}"></i>`; }).join("");
       return `<details class="sumday" style="--dc:${CITYC[d.city]}"${i===APP.state.day?" open":""}><summary><span class="n">${i+1}</span><span><b>${esc(d.title)}</b><small>${fmtDay(d.date)} · ${d.city} · ${items.length} stops</small></span><span class="cnt">${cnt}</span></summary><ul>${items.map((it,k)=>sumItem(it,i,k)).join("")}</ul></details>`; }).join("")}
     <div class="final">
+      ${(!approved&&role&&undecided().length&&undecided().length<tot)?`<button class="btn primary" id="sum-cont"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span>Continue where ${role==="her"?"you":"Киця"} left off<small>${undecided().length} stop${undecided().length===1?"":"s"} without an answer yet</small></span></button>`:""}
+      ${role==="her"?`<button class="btn${fb.status==="live"?"":" rose"}" id="sum-send">${HEARTF.replace("<svg",'<svg fill="currentColor"')}<span>Send my picks to Mykola<small>${fb.status==="live"?"Already syncing live — this is just a backup link":"Shares a link that carries all your hearts and skips"}</small></span></button>`:""}
       ${approved?"":`<button class="btn rose" id="sum-approve">${HEARTF.replace("<svg",'<svg fill="currentColor"')}<span>${role==="her"?"Approve — I love this plan":"Mark the plan as approved"}<small>${done100?"Everything is answered. Seal it with a heart.":"You can approve now or finish the remaining stops first."}</small></span></button>`}
       <button class="btn${approved?" primary":""}" id="sum-kml">${I.metro}<span>Google My Maps file<small>Download .kml · import at mymaps.google.com</small></span></button>
       <button class="btn" id="sum-doc">${I.book}<span>Illustrated itinerary<small>Day by day with photos · email · save as PDF</small></span></button>
@@ -885,7 +932,7 @@ function renderSum(){
     </div>`;
   $("sum-close").onclick=()=>$("sumdlg").close();
   $("sumdlg-in").querySelectorAll(".sumday li").forEach(li=>li.onclick=()=>{ $("sumdlg").close(); go(+li.dataset.i,+li.dataset.k,"jump"); });
-  const ap=$("sum-approve"); if(ap) ap.onclick=approve;
+  const ap=$("sum-approve"); if(ap) ap.onclick=approve; const sc=$("sum-cont"); if(sc) sc.onclick=()=>{ $("sumdlg").close(); continueReview(); }; const ss=$("sum-send"); if(ss) ss.onclick=sendPicks;
   $("sum-kml").onclick=downloadKml; $("sum-doc").onclick=()=>{ $("sumdlg").close(); openDoc(); }; $("sum-share").onclick=share;
 }
 const openSum=()=>{ renderSum(); $("sumdlg").showModal(); };
@@ -1003,16 +1050,17 @@ $("syncdlg").addEventListener("click",e=>{ if(e.target===$("syncdlg")) $("syncdl
 
 /* ---------- phone: draggable sheet (half ⇄ full) ---------- */
 (function(){ const mq=matchMedia("(max-width:899px)"); if(!mq.matches) return; const grab=$("sheet-grab"); let sy=0, dy=0, startFull=false, dragging=false, t0=0, src=null;
-  const halfPx=()=>Math.min(innerHeight*.58,560), offPx=()=>sheet.offsetHeight-halfPx();
-  const down=e=>{ if(e.pointerType==="mouse"&&e.button!==0) return; src=e.currentTarget; if(src===sheetScroll&&(sheetScroll.scrollTop>2||!e.target.closest(".photo"))) { src=null; return; } sy=e.clientY; dy=0; startFull=sheet.classList.contains("full"); dragging=true; t0=performance.now(); sheet.classList.add("drag"); try{ src.setPointerCapture(e.pointerId); }catch(err){} };
-  const move=e=>{ if(!dragging) return; dy=e.clientY-sy; let y=(startFull?0:offPx())+dy; if(y<0) y*=.25; if(y>offPx()) y=offPx()+(y-offPx())*.35; sheet.style.transform=`translateY(${y}px)`; };
-  const up=e=>{ if(!dragging) return; dragging=false; sheet.classList.remove("drag"); sheet.style.transform=""; const v=dy/Math.max(1,performance.now()-t0);
+  const halfPx=()=>Math.min(innerHeight*.58,560); let startH=0;
+  const fullPx=()=>{ const r=getComputedStyle(document.documentElement); return innerHeight-parseFloat(r.getPropertyValue("--bar-h"))-parseFloat(r.getPropertyValue("--top-h"))-6-(parseFloat(r.getPropertyValue("--sab"))||0)-(parseFloat(r.getPropertyValue("--sat"))||0); };
+  const down=e=>{ if(e.pointerType==="mouse"&&e.button!==0) return; src=e.currentTarget; if(src===sheetScroll&&(sheetScroll.scrollTop>2||!e.target.closest(".photo"))) { src=null; return; } sy=e.clientY; dy=0; startFull=sheet.classList.contains("full"); startH=sheet.offsetHeight; dragging=true; t0=performance.now(); sheet.classList.add("drag"); try{ src.setPointerCapture(e.pointerId); }catch(err){} };
+  const move=e=>{ if(!dragging) return; dy=e.clientY-sy; let h=startH-dy; const F=fullPx(), H=halfPx(); if(h>F) h=F+(h-F)*.2; if(h<H*.55) h=H*.55; sheet.style.height=h+"px"; };
+  const up=e=>{ if(!dragging) return; dragging=false; sheet.classList.remove("drag"); sheet.style.height=""; const v=dy/Math.max(1,performance.now()-t0);
     if(Math.abs(dy)<6&&src===grab) sheet.classList.toggle("full"); else if(dy<-40||v<-.5) sheet.classList.add("full"); else if(dy>40||v>.5){ if(startFull) sheet.classList.remove("full"); else { sheet.classList.remove("full"); go(APP.state.day,-1,"intro"); } } buzz(4); };
   [grab,sheetScroll].forEach(el=>{ el.addEventListener("pointerdown",down); el.addEventListener("pointermove",move); el.addEventListener("pointerup",up); el.addEventListener("pointercancel",up); });
   const st=document.createElement("style"); st.textContent=".sheet .photo{touch-action:none}"; document.head.appendChild(st); })();
 APP.on("move",()=>sheet.classList.remove("full"));
 
-APP.buildKml=buildKml; APP.paperHtml=paperHtml; APP.syncStatus=()=>fb.status;
+APP.buildKml=buildKml; APP.paperHtml=paperHtml; APP.syncStatus=()=>fb.status; importPicks();
 renderRoles(); updateSum(); setSync(fb.cfg?"wait":"off"); if(fb.cfg) syncStart();
 
 /* ---------- deep link / boot ---------- */
@@ -1097,7 +1145,7 @@ function makeTrail(i){ const d=DAYS[i];
 }
 const trails=DAYS.map((d,i)=>makeTrail(i));
 const allStopPoints=name=>DAYS.flatMap(d=>d.items.flatMap(it=>(it.options||[it]).map(o=>A.resolve(o)))).filter(p=>p&&p.lat).map(p=>toWorld(p.lat,p.lng)).filter(p=>cityAt(p)===name);
-A.travelDuration=(day,prev,stop,kind)=>{ if(kind==='walk'){ const t=trails[day], len=Math.abs(t.stopU[stop]-t.stopU[prev.stop])*t.total; return Math.round(1200+Math.min(3600,len*10)); } return kind==='descend'?1500:1900; };
+A.travelDuration=(day,prev,stop,kind)=>{ let d; if(kind==='walk'){ const t=trails[day], len=Math.abs(t.stopU[stop]-t.stopU[prev.stop])*t.total; d=Math.round(1200+Math.min(3600,len*10)); } else d=kind==='descend'?1500:1900; return A.quick?Math.min(d,kind==='walk'?1900:1300):d; };
 
 const hash=(x,y)=>{ const s=Math.sin(x*127.1+y*311.7)*43758.5453; return s-Math.floor(s); };
 function vnoise(x,y){ const ix=Math.floor(x),iy=Math.floor(y),fx=x-ix,fy=y-iy; const a=hash(ix,iy),b=hash(ix+1,iy),c=hash(ix,iy+1),d=hash(ix+1,iy+1); const ux=fx*fx*(3-2*fx),uy=fy*fy*(3-2*fy); return a+(b-a)*ux+(c-a)*uy+(a-b-c+d)*ux*uy; }
@@ -1742,7 +1790,7 @@ const flashEl=document.getElementById('flash');
 A.on('snap',()=>{ if(camMode!=='follow'||travel) return; gestQueue=[]; setGesture('pose'); gestNext=4; setTimeout(()=>{ flashEl.classList.remove('go'); void flashEl.offsetWidth; flashEl.classList.add('go'); if(A.sound.on) A.sound.shutter();
     renderer.render(scene,cam); const src=renderer.domElement.toDataURL('image/jpeg',.7); const d=DAYS[activeDay], p=A.placeOf(d.items[activeStop]); A.addPhoto({src,title:p.title||d.items[activeStop].title,sub:'Day '+(activeDay+1)+' · '+d.items[activeStop].t,ts:Date.now()}); },1000); });
 /* one-time hint */
-if(!localStorage.getItem('sbtrip-hint-v1')){ const h=()=>{ if(activeStop<1) return; A.toast('Drag to look around · tap the couple or the place · pinch to zoom'); localStorage.setItem('sbtrip-hint-v1','1'); A.hooks.arrive=A.hooks.arrive.filter(f=>f!==h); }; A.on('arrive',h); }
+if(!localStorage.getItem('sbtrip-hint-v1')){ const h=()=>{ if((A.arrivals||0)<3) return; A.toast('Drag to look around · tap the couple or the place · pinch to zoom'); localStorage.setItem('sbtrip-hint-v1','1'); A.hooks.arrive=A.hooks.arrive.filter(f=>f!==h); }; A.on('arrive',h); }
 
 const FREEZE=+(new URLSearchParams(location.search).get('freeze')||0); // dev: pause a ride at a fraction
 const clock=new THREE.Clock();
