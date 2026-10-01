@@ -1,5 +1,7 @@
 # Seoul ⇄ Busan · a journey for two
 
+**Version 0.2** — visual direction pass: per-entry scene overrides (127), painted horizon backdrops with day/night cross-fade, neighbourhood kits (Myeongdong neon, Seongsu brick, hanok lanes, Gamcheon/Ihwa hill houses), real Hangul venue signs, the chosen dish at every meal, low three-quarter arrival camera, autumn welcome hill.
+
 **Version 0.1** — first complete release (Oct 2026): full 11-day trail, character pick, per-stop stages and moments, quiz, live two-phone sync, Busan interlude, finale.
 
 A single-file trip companion (`index.html`) with a 3D trail, choice cards with ♥ picks for two people, live sync (Firebase), Google My Maps export and an illustrated itinerary.
@@ -35,13 +37,15 @@ In the app: ⋯ → **Sync between phones** → follow the 4 steps (free Firebas
 
 ### Finale
 
-After the last stop (→ at the airport, the ✨ pill, or ♥ → *Roll the credits*) the camera returns to the blossom hill from the welcome screen: golden hour slides into a starry night while the couple plays through their gestures, lanterns rise, a heart blooms, fireworks go up over Seoul, and the words build up to **An amazing trip is coming.**
+After the last stop (→ at the airport, the ✨ pill, or ♥ → *Roll the credits*) the camera returns to the autumn hill from the welcome screen: golden hour slides into a starry night while the couple plays through their gestures, lanterns rise, a heart blooms, fireworks go up over Seoul, and the words build up to **An amazing trip is coming.**
 
 ### Hello, Busan (interlude)
 
 The first time the trail reaches a Busan place (the KTX on day 6) the app cuts to a camellia cliff above Gwangalli: the sea shader slides from azure to gold, the Gwangan bridge cycles its lamp colours, gulls and sailboats drift by, and **Hello, Busan.** builds up word by word. *Step off the train →* carries on to the stop you were heading for. It plays once per session; the 🌊 button on any Busan day card replays it.
 
 ### Stages
+
+Each of the 127 selectable entries has a scene override in `SCENE` (`index.html`): a painted horizon backdrop (Bugaksan ridge, Namsan forest, Seoul/Busan skylines, Han River bridges, Gwangan bridge over the sea, Gamcheon hill houses, Jagalchi harbour, Seongsu brick), a neighbourhood kit, and — for every meal — the actual dish on a table beside the couple (cutlet, kalguksu, gukbap, dumplings, BBQ, skewers, chimaek, clams, grilled fish, eomuk, tteokbokki, bindaetteok, yukhoe…). Restaurants and shops carry their real Hangul sign. Backdrops cross-fade between day and night versions.
 
 Every stop gets its own little environment (`STAGE_KIT` in `index.html`): a themed ground (flagstones, grass, sand, rock, boardwalk, market tiles, café brick, city paving — canvas textures, three variants each) and a ring of set dressing chosen by the place type — stone lanterns, onggi jars and pines at palaces and temples; picnic blankets, flower beds, a kite, butterflies by day and fireflies after dark in parks; umbrellas, buoys, a sandcastle and gulls on beaches; railings, a life ring, bunting and bobbing boats on waterfronts; food carts with steam and string lights at markets; café tables with people and a cat at restaurants. Only the current stop's stage (plus the one you are walking from) is built and animated.
 
