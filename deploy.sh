@@ -84,8 +84,8 @@ fi
 
 # ---- 6. wait until the live site serves this build -------------------------
 STAMP="$(cat .build-stamp)"
-say "Waiting for $SITE to serve build $STAMP (usually 20–90 s)…"
-for i in $(seq 1 60); do
+say "Waiting for $SITE to serve build $STAMP (usually 30–120 s; the very first build can take ~5 min)…"
+for i in $(seq 1 120); do
   if curl -fsSL "${SITE}index.html?nocache=$RANDOM" 2>/dev/null | grep -q "name=\"build\" content=\"$STAMP\""; then
     echo; ok "Live: $SITE"
     echo
