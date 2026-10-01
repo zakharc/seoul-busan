@@ -4,9 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f5f6fa">
-<meta name="build" content="20261001-123425">
+<meta name="build" content="20261001-130310">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Seoul⇄Busan">
 <title>Seoul ⇄ Busan · a journey for two</title>
 <meta property="og:title" content="Seoul ⇄ Busan · a journey for two">
 <meta property="og:description" content="28 Oct – 7 Nov 2026. Eleven days, two cities, one trail. Walk it with me, stop by stop.">
@@ -263,7 +268,7 @@ dialog::backdrop{animation:fadein .35s ease-out}
 .photo .meta{position:absolute;z-index:3;left:18px;right:18px;bottom:14px;color:#fff;display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
 .photo .tm{font:700 13px/1 var(--display);letter-spacing:.06em;padding:7px 10px;border-radius:9px;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);font-variant-numeric:tabular-nums}
 .photo .idx{font:600 11px/1 var(--body);letter-spacing:.16em;text-transform:uppercase;opacity:.9}
-.photo .credit{position:absolute;z-index:3;right:10px;top:10px;font:500 10px/1 var(--body);color:#fff;background:rgba(10,14,30,.35);padding:5px 8px;border-radius:999px;text-decoration:none;backdrop-filter:blur(6px)}
+.photo .credit{position:absolute;z-index:3;right:10px;top:10px;font:500 10px/1 var(--body);color:#fff;background:rgba(10,14,30,.35);padding:8px 10px;min-height:28px;display:inline-flex;align-items:center;border-radius:999px;text-decoration:none;backdrop-filter:blur(6px)}
 .body{padding:18px 18px calc(18px + var(--sab))}
 .body h2{font:700 clamp(21px,5.6vw,26px)/1.2 var(--display);letter-spacing:-.02em;margin:0}
 .tags{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
@@ -314,7 +319,9 @@ dialog::backdrop{animation:fadein .35s ease-out}
 /* ---------- travel label ---------- */
 .travel{position:fixed;left:50%;top:calc(var(--top-h) + var(--sat) + 18px);transform:translate(-50%,-10px);z-index:21;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,.85);border:1px solid var(--line);
   backdrop-filter:blur(12px);font:600 13px var(--body);opacity:0;transition:.4s var(--ease);white-space:nowrap;display:flex;gap:8px;align-items:center}
-.travel svg{width:15px;height:15px;color:var(--c)}
+.travel{max-width:min(92vw,520px)}
+.travel svg{width:15px;height:15px;color:var(--c);flex:0 0 auto}
+.travel #travel-txt{min-width:0;overflow:hidden;text-overflow:ellipsis}
 .travel.show{opacity:1;transform:translate(-50%,0)}
 
 /* ---------- bookings dialog ---------- */
@@ -329,7 +336,8 @@ dialog::backdrop{background:rgba(17,22,40,.35);backdrop-filter:blur(6px)}
 .dlg .sub{color:var(--muted);margin:0 0 18px;font-size:14px}
 .blist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .bk{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;padding:14px;border-radius:16px;background:var(--soft)}
-.chk{width:26px;height:26px;border-radius:9px;border:1.5px solid var(--muted);position:relative;margin-top:2px;background:#fff;transition:.25s}
+.chk{width:28px;height:28px;border-radius:9px;border:1.5px solid var(--muted);position:relative;margin-top:0;background:#fff;transition:.25s}
+.chk::before{content:"";position:absolute;inset:-8px} /* 44px touch target */
 .chk svg{position:absolute;inset:0;margin:auto;width:16px;height:16px;color:#fff;opacity:0;transform:scale(.5);transition:.25s}
 .bk.done .chk{background:var(--gold);border-color:var(--gold)}.bk.done .chk svg{opacity:1;transform:none}
 .bt{font:700 15.5px/1.3 var(--display);margin:0}.bk.done .bt{text-decoration:line-through;color:var(--muted)}
@@ -354,6 +362,7 @@ dialog::backdrop{background:rgba(17,22,40,.35);backdrop-filter:blur(6px)}
 .polaroids figure:hover button{opacity:1}
 .toast{position:fixed;left:50%;bottom:calc(var(--bar-h) + var(--sab) + 16px);transform:translate(-50%,16px);max-width:min(92vw,520px);text-align:center;z-index:80;padding:10px 16px;border-radius:999px;background:var(--ink);color:#fff;font:600 13px var(--body);opacity:0;pointer-events:none;transition:.35s}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:899px){ .toast{bottom:auto;top:calc(var(--top-h) + var(--sat) + 64px);width:max-content} body:has(.presence.show) .toast{top:calc(var(--top-h) + var(--sat) + 128px)} .travel.show~.toast{top:calc(var(--top-h) + var(--sat) + 110px)} body:has(.travel.show):has(.presence.show) .toast{top:calc(var(--top-h) + var(--sat) + 174px)} }
 .no3d #stage{background:radial-gradient(90% 70% at 50% 35%,#fbe4ec,#e9ecf7 55%,#f5f6fa 85%)}
 :root[data-theme="dark"].no3d #stage{background:radial-gradient(90% 70% at 50% 35%,#2a2240,#141a2c 60%)}
 .no3d #stage canvas{display:none}
@@ -376,10 +385,10 @@ html{background:var(--bg)}
 .presence b{color:var(--rose)}
 .travel.show~.presence.show{top:calc(var(--top-h) + var(--sat) + 60px)}
 /* together: presence dock, poke tray, flying emoji, 가위바위보 */
-.presence{overflow:visible}
+.presence{overflow:visible;padding:5px 6px 5px 14px}
 .presence.show{pointer-events:auto}
 .presence .pt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.presence .pbtn{height:28px;padding:0 10px;border-radius:999px;background:var(--rose);color:#fff;font:700 12px var(--body);display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;transition:transform .25s var(--ease),box-shadow .25s}
+.presence .pbtn{height:34px;min-width:40px;justify-content:center;padding:0 11px;border-radius:999px;background:var(--rose);color:#fff;font:700 12px var(--body);display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;transition:transform .25s var(--ease),box-shadow .25s}
 .presence .pbtn.alt{background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink)}
 .presence .pbtn[aria-expanded="true"]{box-shadow:0 0 0 3px color-mix(in srgb,var(--rose) 28%,transparent)}
 .presence .pbtn:active{transform:scale(.94)}
@@ -555,7 +564,8 @@ html{background:var(--bg)}
 .qcard.swap{animation:qswap .45s var(--ease)}
 @keyframes qswap{0%{opacity:0;transform:translateY(18px) scale(.98)}}
 .qk{display:flex;align-items:center;gap:8px;font:700 11px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--c)}
-.qk .qn{color:var(--muted)}
+.qk .qn{color:var(--muted);white-space:nowrap;margin-left:auto;flex:0 0 auto}
+.qk>span:first-child{min-width:0}
 .qq{font:800 clamp(20px,5.4vw,26px)/1.2 var(--display);letter-spacing:-.02em;margin:10px 0 14px}
 .qa{display:grid;gap:8px}
 .qa button{position:relative;display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:center;text-align:left;padding:12px 14px;min-height:52px;border-radius:16px;background:var(--soft);border:1.5px solid transparent;font:600 15px/1.3 var(--body);color:var(--ink);transition:transform .25s var(--ease),background .3s,border-color .3s,opacity .4s;animation:swapin .5s var(--ease) both;animation-delay:calc(var(--i)*70ms)}
@@ -601,7 +611,8 @@ html{background:var(--bg)}
 .paper .cover h1{font:800 clamp(34px,8vw,56px)/.95 var(--display);letter-spacing:-.035em;margin:10px 0 0}
 .paper .cover h1 em{display:block;font-style:normal;font-weight:500;font-size:.38em;color:var(--muted);letter-spacing:0;margin-top:10px}
 .paper .cover .pair{position:absolute;right:18px;bottom:14px;width:120px;height:120px;opacity:.95}
-.paper .cover .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.paper .cover .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;padding-right:118px}
+@media (max-width:420px){ .paper .cover .pair{width:92px;height:92px;right:12px;bottom:10px} .paper .cover .meta{padding-right:92px} }
 .paper .cover .meta span{font:600 12px var(--body);padding:7px 10px;border-radius:9px;background:var(--surface);border:1px solid var(--line)}
 .paper .cover .meta span.rose{color:var(--rose);border-color:color-mix(in srgb,var(--rose) 40%,transparent)}
 .pday{margin-top:26px;break-inside:avoid-page}
@@ -1380,13 +1391,13 @@ function renderSyncDlg(){
   $("syncdlg-in").innerHTML=`<button class="close" id="sync-close" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     <p class="eyebrow">Live sync</p><h2>${fb.status==="live"?"Two phones, one plan":"Keep both phones in sync"}</h2>
     <p class="sub">${fb.status==="live"?`Hearts, skips, ticks, who's online and the approval are shared live through ${fb.embedded?"the built-in":"your"} Firebase project <b>${esc(fb.cfg.projectId)}</b>${fb.embedded?" — the plain link works on any phone, nothing to set up":""}. Works offline too — changes catch up when you're back online.`:(fb.status==="err"?`Could not connect: ${esc(fb.msg)}. Check the Firestore rules and the config below.`:"Without sync every phone keeps its own hearts. With a free Firebase project (≈5 minutes, no card) both phones share one plan in real time.")}</p>
-    ${on?`<div class="linkbox"><span><b>Her link</b> — includes the sync key, so Киця has nothing to set up:<br>${esc(herLink())}</span></div><div class="row"><button class="btn primary" id="sync-copy">Copy her link</button><button class="btn" id="sync-off">Disconnect this phone</button></div>`:""}
-    <ol><li>Open <b>console.firebase.google.com</b> → <b>Add project</b> (any name, Analytics off).</li><li><b>Build → Firestore Database → Create database</b> → location <i>eur3 (Europe)</i> → start in <b>production mode</b>.</li><li>In the <b>Rules</b> tab paste this and publish:<pre>${esc(RULES)}</pre></li><li><b>Project settings (⚙) → Your apps → Web (&lt;/&gt;)</b> → register → copy the <code>firebaseConfig</code> block and paste it here:</li></ol>
+    ${on?`<div class="linkbox"><span><b>${role==="her"?"Mykola's link":"Her link"}</b> — ${fb.embedded?"the plain page link; nothing to set up":"includes the sync key, so "+(role==="her"?"Mykola":"Киця")+" has nothing to set up"}:<br>${esc(herLink())}</span></div><div class="row"><button class="btn primary" id="sync-copy">Copy ${role==="her"?"his":"her"} link</button>${fb.embedded?"":`<button class="btn" id="sync-off">Disconnect this phone</button>`}</div>`:""}
+    ${fb.embedded&&on?`<p class="sub" style="margin:14px 0 0">Sync is built into this page — both phones always see the same hearts, skips and ticks. Nothing more to do here 💗</p>`:`<ol><li>Open <b>console.firebase.google.com</b> → <b>Add project</b> (any name, Analytics off).</li><li><b>Build → Firestore Database → Create database</b> → location <i>eur3 (Europe)</i> → start in <b>production mode</b>.</li><li>In the <b>Rules</b> tab paste this and publish:<pre>${esc(RULES)}</pre></li><li><b>Project settings (⚙) → Your apps → Web (&lt;/&gt;)</b> → register → copy the <code>firebaseConfig</code> block and paste it here:</li></ol>
     <textarea id="sync-cfg" placeholder="const firebaseConfig = { apiKey: '…', projectId: '…', … }">${on&&!fb.embedded?esc(JSON.stringify(fb.cfg,null,2)):""}</textarea>
-    <div class="row"><button class="btn primary" id="sync-save">${on?"Update & reconnect":"Connect"}</button></div>`;
+    <div class="row"><button class="btn primary" id="sync-save">${on?"Update & reconnect":"Connect"}</button></div>`}`;
   $("sync-close").onclick=()=>$("syncdlg").close();
-  $("sync-save").onclick=()=>{ const c=parseCfg($("sync-cfg").value); if(!c||!c.projectId||!c.apiKey){ toast("That doesn't look like a firebaseConfig block"); return; } fb.cfg=c; saveK(FBK,c); if(fb.unsub){ fb.unsub(); fb.unsub=null; } location.reload(); };
-  const cp=$("sync-copy"); if(cp) cp.onclick=async()=>{ try{ await navigator.clipboard.writeText(herLink()); toast("Her link copied 💗"); }catch(e){ prompt("Copy this link",herLink()); } };
+  if($("sync-save")) $("sync-save").onclick=()=>{ const c=parseCfg($("sync-cfg").value); if(!c||!c.projectId||!c.apiKey){ toast("That doesn't look like a firebaseConfig block"); return; } fb.cfg=c; saveK(FBK,c); if(fb.unsub){ fb.unsub(); fb.unsub=null; } location.reload(); };
+  const cp=$("sync-copy"); if(cp) cp.onclick=async()=>{ try{ await navigator.clipboard.writeText(herLink()); toast(role==="her"?"Link copied 💗":"Her link copied 💗"); }catch(e){ prompt("Copy this link",herLink()); } };
   const off=$("sync-off"); if(off) off.onclick=()=>{ if(fb.unsub) fb.unsub(); localStorage.removeItem(FBK); fb.cfg=null; location.reload(); };
 }
 $("btn-sync").onclick=()=>{ $("moredlg").close(); renderSyncDlg(); $("syncdlg").showModal(); };
@@ -2368,6 +2379,8 @@ const WY=hillY(0,0);
       kA.copy(flyer.position); kA.y+=1.1; kD.copy(kite.position).sub(kA); kStr.position.copy(kA).addScaledVector(kD,.5); kStr.scale.y=kD.length(); kStr.quaternion.setFromUnitVectors(UP,kD.normalize()); }); }
   welcome.visible=false;
 })();
+/* the app always boots on the welcome hill: start the camera just above it so the intro glide settles in ~3 s instead of flying in from the city */
+camPos.set(W0.x+70,W0.y+WY+80,W0.z+40); look.set(W0.x-200,W0.y+WY-7,W0.z-6);
 /* petals */
 const PTN=320, ptPos=new Float32Array(PTN*3), ptVel=new Float32Array(PTN*3), ptPh=new Float32Array(PTN), ptSz=new Float32Array(PTN), ptCol=new Float32Array(PTN*3);
 const PETAL_COLS=[[1,.78,.86],[1,.86,.91],[.98,.72,.82],[1,.93,.95],[.99,.8,.7]];
@@ -2383,9 +2396,9 @@ function updatePetals(dt,t){ petalMat.uniforms.uT.value=t; const gust=1+Math.sin
   for(let i=0;i<PTN;i++){ const k=i*3, ph=ptPh[i]; ptPos[k]+=(ptVel[k]*gust+Math.sin(t*1.7+ph)*1.4)*dt; ptPos[k+1]+=(ptVel[k+1]+Math.sin(t*2.3+ph*1.3)*.9)*dt; ptPos[k+2]+=(ptVel[k+2]*gust+Math.cos(t*1.3+ph)*1.2)*dt;
     const lx=ptPos[k]-W0.x, lz=ptPos[k+2]-W0.z; if(ptPos[k+1]<W0.y+hillY(lx,lz)+.2||lx>75||lz>75){ spawnPetal(i,true); } }
   petalGeo.attributes.position.needsUpdate=true; petalGeo.attributes.aPh.needsUpdate=true; petalGeo.attributes.aSz.needsUpdate=true; petalGeo.attributes.aCol.needsUpdate=true; }
-const WCAM=A.wcam={mob:{x:30,y:5,z:0,lx:-200,ly:-7,lz:-6},desk:{x:21,y:8.5,z:14,lx:-80,ly:1.5,lz:1}}; A.dbgSV=()=>({signs:signI.count,trees:trunkI.count,poles:poleI.count,lanterns:lantI.count,gates:pillarI.count/2,shrubs:shrubI.count}); A.dbg=()=>({gest,night:envCur.night,wx:Object.assign({},wx),lanA,lanternVisible:lantern.visible,ly:lantern.position.y,fx:fxActive,arrived,camMode}); A.dbgCouple=()=>{ const v=couple.position.clone(); v.y+=1.5; v.project(cam); return [(v.x+1)/2,(1-v.y)/2]; };
+const WCAM=A.wcam={mob:{x:30,y:5,z:0,lx:-200,ly:-7,lz:-6},desk:{x:21,y:8.5,z:14,lx:-80,ly:1.5,lz:1}}; A.dbgSV=()=>({signs:signI.count,trees:trunkI.count,poles:poleI.count,lanterns:lantI.count,gates:pillarI.count/2,shrubs:shrubI.count}); A.dbg=()=>({gest,night:envCur.night,wx:Object.assign({},wx),lanA,lanternVisible:lantern.visible,ly:lantern.position.y,fx:fxActive,arrived,camMode}); A.dbgCam=()=>({cam:cam.position.toArray().map(n=>+n.toFixed(1)),want:want.toArray().map(n=>+n.toFixed(1)),couple:couple.position.toArray().map(n=>+n.toFixed(1)),scale:+couple.scale.x.toFixed(2),vis:couple.visible,welcome:welcome.visible,aspect:+cam.aspect.toFixed(3),size:[renderer.domElement.width,renderer.domElement.height]}); A.dbgCouple=()=>{ const v=couple.position.clone(); v.y+=1.5; v.project(cam); return [(v.x+1)/2,(1-v.y)/2]; };
 /* character pick: stage state + cute moves */
-const PCAM=A.pcam={mob:{x:13,y:2.4,z:.3,lx:0,ly:4.6,lz:0},desk:{x:13.6,y:2.3,z:.8,lx:0,ly:.55,lz:3.6}};
+const PCAM=A.pcam={mob:{x:13,y:2.6,z:.3,lx:0,ly:5.7,lz:0},desk:{x:13.6,y:2.3,z:.8,lx:0,ly:.55,lz:3.6}};
 let pickSelI=-1, pickMove={name:'idle',t:0,fired:false}, pickHold=2.4, pickSpin=0, pickSpinT=1; const pk=[{x:-1.15,z:0,s:1},{x:1.15,z:0,s:1}]; const _wp=new THREE.Vector3();
 const PICK_MOVES=['wave','kiss','hop','pose','heart','twirl'];
 function pickReset(){ fA.scale.setScalar(1); fB.scale.setScalar(1); pk[0].x=-1.15; pk[1].x=1.15; pk[0].z=pk[1].z=0; pk[0].s=pk[1].s=1; pickMove={name:'idle',t:0,fired:false}; pickSpin=0; pickSpinT=1; }
@@ -2587,7 +2600,7 @@ function frame(){
     want.set(p.x+Math.sin(a)*r*zoom,p.y+h*zoom*(1+pitch),p.z+Math.cos(a)*r*zoom); wantLook.set(p.x,p.y+1.5+((mobile?6:9)-1.5)*lift,p.z); fogWant=flying?.0006:.0014;
     if(quizOn&&activeDay>=0&&activeStop>=0&&props[activeDay][activeStop]){ const pg=props[activeDay][activeStop]; const lh=Math.min(16,pg.userData.h||6); const mid=pg.position.clone().lerp(p,.5); const rq=(mobile?34:40)+lh*1.3; want.set(mid.x+Math.sin(a)*rq,(mobile?14:20)+lh*.6,mid.z+Math.cos(a)*rq); wantLook.set(mid.x,lh*.35+1,mid.z); if(!mobile){ const sx=Math.cos(a)*rq*.55, sz=-Math.sin(a)*rq*.55; want.x-=sx; want.z-=sz; wantLook.x-=sx; wantLook.z-=sz; } }
     if(travel){ const sp=Math.min(1,vel/40); want.y+=sp*(mobile?60:40); } }
-  const dist=camPos.distanceTo(want); want.y+=Math.min(dist*.45,340)+(camMode==='follow'?occlLift:0);
+  const dist=camPos.distanceTo(want); want.y+=(camMode==='start'||camMode==='pick'?0:Math.min(dist*.45,340))+(camMode==='follow'?occlLift:0);
   spring(camPos,camVel,want,travel?3.0:2.1,dt); spring(look,lookVel,wantLook,travel?3.4:2.6,dt); cam.position.copy(camPos); cam.lookAt(look); if(camMode==='follow'){ const right=new THREE.Vector3().crossVectors(cam.getWorldDirection(tmp),cam.up).normalize(); cam.position.addScaledVector(right,parX*1.6); cam.position.y-=parY*1.0; cam.lookAt(look); } occlusion(dt);
   scene.fog.density+=(fogWant-scene.fog.density)*Math.min(1,dt*2);
   if(!arrived&&!travel&&camMode==='follow'&&performance.now()-moveT>700&&dist<6) A.arrive();

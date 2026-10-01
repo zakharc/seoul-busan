@@ -1,0 +1,17 @@
+{
+  "name": "Seoul ⇄ Busan · a journey for two",
+  "short_name": "Seoul⇄Busan",
+  "description": "28 Oct – 7 Nov 2026. Eleven days, two cities, one trail — walk it with me, stop by stop.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f6fa",
+  "theme_color": "#f5f6fa",
+  "lang": "en",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
