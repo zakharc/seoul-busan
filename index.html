@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f5f6fa">
-<meta name="build" content="20261001-134927">
+<meta name="build" content="20261001-135843">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
@@ -808,7 +808,7 @@ html{background:var(--bg)}
   <div class="pick-bottom">
     <div class="pick-nav">
       <button class="parrow" id="pick-prev" aria-label="Previous character"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
-      <div class="pname" id="pname"><span class="pav">💗</span><b>Киця</b><small>picks the favourites</small><span class="pdots"><i class="on"></i><i></i></span></div>
+      <div class="pname" id="pname"><span class="pav">💗</span><b>Киця</b><span class="pdots"><i class="on"></i><i></i></span></div>
       <button class="parrow" id="pick-next" aria-label="Next character"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     </div>
     <div class="pick-go"><button class="btn primary" id="pick-go" disabled>Pick one to continue</button><button class="btn ghost" id="pick-back">Back</button></div>
@@ -1493,8 +1493,8 @@ const quizTotals=()=>{ const t={her:[0,0],me:[0,0]}; Object.keys(quizDone).forEa
 /* ---------- character pick ---------- */
 const pickEl=$("pick"); let pickSel=null;
 function closePick(){ if(pickEl.hidden) return; pickEl.classList.remove("show"); setTimeout(()=>{ if(!pickEl.classList.contains("show")) pickEl.hidden=true; },600); }
-const PICK_META={her:{av:"💗",sub:"picks the favourites"},me:{av:"🧭",sub:"plans the trail"}}; const PICK_ORDER=["her","me"];
-function setPickSel(r,silent,dir){ r=r||"her"; const changed=r!==pickSel; pickSel=r; const nm=$("pname"); if(nm){ const paint=()=>{ nm.className="pname "+r; nm.querySelector(".pav").textContent=PICK_META[r].av; nm.querySelector("b").textContent=names[r]; nm.querySelector("small").textContent=PICK_META[r].sub; nm.querySelectorAll(".pdots i").forEach((d,i)=>d.classList.toggle("on",PICK_ORDER[i]===r)); };
+const PICK_META={her:{av:"💗"},me:{av:"🧭"}}; const PICK_ORDER=["her","me"];
+function setPickSel(r,silent,dir){ r=r||"her"; const changed=r!==pickSel; pickSel=r; const nm=$("pname"); if(nm){ const paint=()=>{ nm.className="pname "+r; nm.querySelector(".pav").textContent=PICK_META[r].av; nm.querySelector("b").textContent=names[r];  nm.querySelectorAll(".pdots i").forEach((d,i)=>d.classList.toggle("on",PICK_ORDER[i]===r)); };
     if(changed&&!silent){ nm.classList.add(dir<0?"out-r":"out-l"); setTimeout(()=>{ paint(); nm.classList.remove("out-l","out-r"); nm.classList.add(dir<0?"in-l":"in-r"); setTimeout(()=>nm.classList.remove("in-l","in-r"),420); },180); } else paint(); }
   const g=$("pick-go"); g.disabled=false; g.innerHTML=`Continue as ${esc(names[r])} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`; pickEl.classList.add("has"); if(!silent&&changed) buzz(10); APP.emit("pick",r,!!silent||!changed); }
 function cyclePick(dir){ const i=PICK_ORDER.indexOf(pickSel||"her"); setPickSel(PICK_ORDER[(i+dir+PICK_ORDER.length)%PICK_ORDER.length],false,dir); }
@@ -1749,7 +1749,7 @@ sun.shadow.camera.left=-48; sun.shadow.camera.right=48; sun.shadow.camera.top=48
 const shadowPlane=new THREE.Mesh(new THREE.PlaneGeometry(220,220),new THREE.ShadowMaterial({opacity:.14})); shadowPlane.rotation.x=-Math.PI/2; shadowPlane.position.y=.06; /* above every ground patch (.012–.046) so nothing z-fights with the shadows */ shadowPlane.receiveShadow=true; scene.add(shadowPlane);
 
 /* ---------- the couple ---------- */
-const SKIN={skin:0xf1d3bf,manTop:0x4a5370,manLegs:0x2f3650,dress:0xd8a7a7,hairM:0x2a2326,hairW:0x3b2a2a,shoe:0x262a3a,blush:0xe8a0a0,scarf:0xe9dcc8,bag:0x6b7392};
+const SKIN={skin:0xf4dcc8,manTop:0x4a5370,manLegs:0x2f3650,dress:0xd8a7a7,hairM:0x8a6744,hairW:0x2b1f1d,eyeM:0x7f9a78,eyeW:0x6b4a33,shoe:0x262a3a,blush:0xeea4a4,scarf:0xe9dcc8,bag:0x6b7392};
 function mat(c,e){ return new THREE.MeshStandardMaterial({color:c,roughness:.62,metalness:0,emissive:c,emissiveIntensity:e==null?.07:e}); }
 function castAll(o){ o.traverse(c=>{ if(c.isMesh){ c.castShadow=true; } }); return o; }
 /* arm: shoulder pivot → upper arm → elbow pivot → forearm → hand */
@@ -1776,26 +1776,39 @@ function figure(kind){
   // neck, head, face
   const neck=new THREE.Mesh(new THREE.CylinderGeometry(.11,.13,.22,12),skin); neck.position.y=w?1.28:1.3; body.add(neck);
   const hr=w?.43:.46; headP.position.y=(w?1.3:1.32)+hr*.95; body.add(headP);
-  const head=new THREE.Mesh(new THREE.SphereGeometry(hr,32,24),skin); head.scale.set(1,1.04,.98); headP.add(head);
-  const nose=new THREE.Mesh(new THREE.SphereGeometry(.045,8,6),skin); nose.scale.set(.8,.9,1); nose.position.set(0,-.05,hr*.98); headP.add(nose);
+  const head=new THREE.Mesh(new THREE.SphereGeometry(hr,32,24),skin); head.scale.set(1.04,1.02,.98); headP.add(head);
+  const nose=new THREE.Mesh(new THREE.SphereGeometry(.036,8,6),skin); nose.scale.set(.85,.9,1); nose.position.set(0,-.06,hr*.99); headP.add(nose);
   const eyes=[], blushes=[];
-  [-1,1].forEach(s=>{ const eye=new THREE.Mesh(new THREE.SphereGeometry(.05,10,8),dark); eye.scale.set(1,1.3,.6); eye.position.set(s*.15,.04,hr*.9); headP.add(eye); eyes.push(eye);
-    const hl=new THREE.Mesh(new THREE.SphereGeometry(.016,6,5),mat(0xffffff,.6)); hl.position.set(s*.015,.02,.045); eye.add(hl);
-    if(w){ const lash=new THREE.Mesh(new THREE.BoxGeometry(.09,.016,.02),dark); lash.position.set(s*.165,.105,hr*.92); lash.rotation.z=s*-.35; headP.add(lash);
+  const irisM=mat(w?SKIN.eyeW:SKIN.eyeM,.12), white=mat(0xffffff,.35), er_=w?.072:.066;
+  [-1,1].forEach(s=>{ const eye=new THREE.Mesh(new THREE.SphereGeometry(er_,14,10),white); eye.scale.set(1,1.18,.5); eye.position.set(s*.16,.03,hr*.9); headP.add(eye); eyes.push(eye);
+    const iris=new THREE.Mesh(new THREE.SphereGeometry(er_*.62,12,8),irisM); iris.position.set(0,-.01,er_*.75); iris.scale.set(1,1,.5); eye.add(iris);
+    const pupil=new THREE.Mesh(new THREE.SphereGeometry(er_*.32,10,8),dark); pupil.position.set(0,0,er_*.5); pupil.scale.set(1,1,.5); iris.add(pupil);
+    const hl=new THREE.Mesh(new THREE.SphereGeometry(er_*.2,6,5),mat(0xffffff,.8)); hl.position.set(-s*er_*.22,er_*.26,er_*.9); eye.add(hl);
+    const hl2=new THREE.Mesh(new THREE.SphereGeometry(er_*.1,6,5),mat(0xffffff,.8)); hl2.position.set(s*er_*.25,-er_*.2,er_*.95); eye.add(hl2);
+    const lid=new THREE.Mesh(new THREE.SphereGeometry(er_*1.08,14,8,0,Math.PI*2,0,Math.PI*.42),skin); lid.scale.set(1,1.1,.5); lid.position.set(0,.012,0); eye.add(lid);
+    if(w){ const lash=new THREE.Mesh(new THREE.BoxGeometry(.12,.018,.02),dark); lash.position.set(s*.175,.11,hr*.92); lash.rotation.z=s*-.3; headP.add(lash);
+      const lash2=new THREE.Mesh(new THREE.BoxGeometry(.04,.014,.02),dark); lash2.position.set(s*.245,.085,hr*.9); lash2.rotation.z=s*-.9; headP.add(lash2);
       const er=new THREE.Mesh(new THREE.SphereGeometry(.035,8,6),mat(0xd59a17,.3)); er.position.set(s*hr*.96,-.1,0); headP.add(er); }
     else { const ear=new THREE.Mesh(new THREE.SphereGeometry(.07,8,6),skin); ear.scale.set(.5,1,.8); ear.position.set(s*hr*.97,-.02,0); headP.add(ear);
       const bl=new THREE.Mesh(new THREE.SphereGeometry(.07,8,6),mat(SKIN.blush,.12)); bl.scale.set(1,.5,.35); bl.position.set(s*.25,-.1,hr*.84); bl.visible=false; headP.add(bl); blushes.push(bl); }
-    const brow=new THREE.Mesh(new THREE.BoxGeometry(.12,.025,.02),hair); brow.position.set(s*.15,.17,hr*.92); brow.rotation.z=s*(w?-.12:.1); headP.add(brow);
+    const brow=new THREE.Mesh(new THREE.BoxGeometry(w?.13:.14,w?.022:.03,.02),w?dark:mat(0x6a4c30,.03)); brow.position.set(s*.16,w?.19:.18,hr*.92); brow.rotation.z=s*(w?-.14:.08); headP.add(brow);
     if(w){ const bl=new THREE.Mesh(new THREE.SphereGeometry(.075,8,6),mat(SKIN.blush,.12)); bl.scale.set(1,.55,.35); bl.position.set(s*.24,-.09,hr*.84); headP.add(bl); } });
-  const mouth=new THREE.Mesh(new THREE.TorusGeometry(.055,.014,6,12,Math.PI),mat(w?0xb85c6c:0x8a5a52,0)); mouth.rotation.z=Math.PI; mouth.position.set(0,-.14,hr*.93); headP.add(mouth); f.userData.mouth=mouth;
-  if(w){ const hairCap=new THREE.Mesh(new THREE.SphereGeometry(hr*1.06,28,18,0,Math.PI*2,0,1.9),hair); hairCap.position.set(0,.05,-.05); headP.add(hairCap);
-    const fringe=new THREE.Mesh(new THREE.SphereGeometry(hr*1.02,18,8,Math.PI*.15,Math.PI*.7,.35,.55),hair); fringe.position.set(0,.06,0); headP.add(fringe);
-    const tailP=new THREE.Group(); tailP.position.set(0,.05,-.42); headP.add(tailP); const tail=new THREE.Mesh(new THREE.CapsuleGeometry(.11,.6,4,10),hair); tail.position.y=-.4; tailP.add(tail); f.userData.tail=tailP;
-    const strand=new THREE.Mesh(new THREE.CapsuleGeometry(.04,.5,4,8),hair); strand.position.set(hr*.95,-.2,.1); strand.rotation.z=.12; headP.add(strand);
-    const bow=new THREE.Mesh(new THREE.SphereGeometry(.09,10,8),mat(0xd59a17,.3)); bow.scale.set(1.6,.9,.6); bow.position.set(.08,.3,-.3); headP.add(bow); }
-  else { const hairCap=new THREE.Mesh(new THREE.SphereGeometry(hr*1.05,28,16,0,Math.PI*2,0,1.25),hair); hairCap.position.set(0,.06,-.03); headP.add(hairCap);
-    const side=new THREE.Mesh(new THREE.SphereGeometry(hr*1.04,16,8,Math.PI*1.1,Math.PI*.8,.9,.55),hair); side.position.set(0,.02,0); headP.add(side);
-    const tuft=new THREE.Mesh(new THREE.SphereGeometry(.12,8,6),hair); tuft.position.set(.18,hr*.88,.22); tuft.scale.set(1,.6,1.2); headP.add(tuft); }
+  const mouth=new THREE.Mesh(new THREE.TorusGeometry(w?.06:.062,w?.02:.015,6,14,Math.PI),mat(w?0xc9646f:0x9a6358,0)); mouth.rotation.z=Math.PI; mouth.position.set(0,-.14,hr*.93); headP.add(mouth); f.userData.mouth=mouth;
+  if(w){ const hairCap=new THREE.Mesh(new THREE.SphereGeometry(hr*1.07,28,18,0,Math.PI*2,0,1.7),hair); hairCap.position.set(0,.08,-.05); headP.add(hairCap);
+    // side-parted fringe: a longer sweep on her left, a short one on her right
+    const fringeL=new THREE.Mesh(new THREE.SphereGeometry(hr*1.04,18,8,Math.PI*.05,Math.PI*.55,.3,.75),hair); fringeL.position.set(0,.07,0); fringeL.rotation.y=.25; headP.add(fringeL);
+    const fringeR=new THREE.Mesh(new THREE.SphereGeometry(hr*1.04,18,8,Math.PI*.62,Math.PI*.3,.3,.5),hair); fringeR.position.set(0,.07,0); headP.add(fringeR);
+    // long straight hair down the back and over both shoulders
+    const back=new THREE.Group(); back.position.set(0,.02,-.2); headP.add(back); f.userData.tail=back;
+    const bk=new THREE.Mesh(new THREE.CapsuleGeometry(.3,.78,6,14),hair); bk.scale.set(1,1,.55); bk.position.set(0,-.52,-.1); back.add(bk);
+    const bk2=new THREE.Mesh(new THREE.CylinderGeometry(.33,.38,.5,16),hair); bk2.scale.z=.5; bk2.position.set(0,-.95,-.1); back.add(bk2);
+    [-1,1].forEach(sd=>{ const strand=new THREE.Mesh(new THREE.CapsuleGeometry(.085,.78,4,10),hair); strand.position.set(sd*hr*.9,-.5,.14); strand.rotation.z=sd*.06; strand.rotation.x=.08; headP.add(strand);
+      const tip=new THREE.Mesh(new THREE.CapsuleGeometry(.07,.2,4,8),hair); tip.position.set(sd*hr*.95,-1.0,.2); headP.add(tip); }); }
+  else { const hairCap=new THREE.Mesh(new THREE.SphereGeometry(hr*1.05,28,16,0,Math.PI*2,0,1.18),hair); hairCap.position.set(0,.1,-.05); headP.add(hairCap);
+    const sides=new THREE.Mesh(new THREE.SphereGeometry(hr*1.04,20,8,Math.PI*.95,Math.PI*1.1,1.05,.4),hair); sides.position.set(0,.05,0); headP.add(sides);
+    // quiff swept up and to his right
+    [[-.02,.45,.28,.55,.5],[.12,.47,.24,.72,.35],[.24,.43,.17,.85,.2],[-.14,.43,.27,.4,.65]].forEach(([x,y,z,rz,rx],i)=>{ const q=new THREE.Mesh(new THREE.CapsuleGeometry(.075-i*.006,.2,4,8),hair); q.position.set(x,y,z); q.rotation.set(-rx,0,-rz); headP.add(q); });
+    const stubble=new THREE.Mesh(new THREE.SphereGeometry(hr*.985,20,12,0,Math.PI*2,Math.PI*.66,Math.PI*.2),mat(0xecd1bb,.03)); stubble.position.set(0,0,.015); headP.add(stubble); }
   // scarf + her handbag
   const sc=new THREE.Mesh(new THREE.TorusGeometry(w?.24:.27,.075,10,22),scarf); sc.rotation.x=Math.PI/2; sc.position.y=w?1.27:1.29; body.add(sc);
   const scTail=new THREE.Mesh(new THREE.CapsuleGeometry(.07,.3,4,8),scarf); scTail.position.set(w?.18:.22,1.05,w?.25:.3); scTail.rotation.x=.3; body.add(scTail); f.userData.scarfTail=scTail;
@@ -2608,7 +2621,7 @@ function frame(){
     if(u.scarfTail) u.scarfTail.rotation.x=.3+Math.sin(t*2.2+i)*.12+walk*.3;
     if(u.mouth) u.mouth.scale.setScalar(1+(gest==='cheer'||gest==='twirl'||gest==='wave'||(gest==='lantern'&&i===1)?.5:0)*Math.min(1,gestT));
     if(u.phone) u.phone.visible=P.phone>.5; if(u.cup){ u.cup.visible=P.cups>.3; u.cup.scale.setScalar(Math.max(.01,P.cups)); }
-    u.blinkT-=dt; if(u.blinkT<-.14) u.blinkT=2.6+Math.random()*2.5; const bl=u.blinkT<0?.12:1; u.eyes.forEach(e=>e.scale.y+=(1.3*bl-e.scale.y)*Math.min(1,dt*30));
+    u.blinkT-=dt; if(u.blinkT<-.14) u.blinkT=2.6+Math.random()*2.5; const bl=u.blinkT<0?.12:1; u.eyes.forEach(e=>e.scale.y+=(1.18*bl-e.scale.y)*Math.min(1,dt*30));
     if(u.blushes) u.blushes.forEach(b=>b.visible=gest==='kiss'||gest==='dip'||gest==='forehead'||gest==='whisper'||(gest==='lantern'&&i===1)||gest==='umbrella'); });
   if(camMode==='pick'){ const sel=pickSelI; if(pickSpinT<1){ pickSpinT+=dt/1.15; pickSpin=ease3(Math.min(1,pickSpinT))*Math.PI*2; } else pickSpin=0;
     [fA,fB].forEach((f,i)=>{ const u=f.userData, isSel=i===sel, side=i?1:-1, q=pk[i]; const tx=sel<0?side*1.15:(isSel?0:side*1.8), tz=sel<0?0:(isSel?.75:-1.25), ts=sel<0?1:(isSel?1.12:.82); const k=Math.min(1,dt*4.5);
