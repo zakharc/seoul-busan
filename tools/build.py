@@ -9,7 +9,9 @@ DATA = os.path.join(ROOT, "data")
 meta = json.load(open(os.path.join(DATA, "meta.json")))
 days = json.load(open(os.path.join(DATA, "days-a.json"))) + json.load(open(os.path.join(DATA, "days-b.json")))
 commutes = json.load(open(os.path.join(DATA, "commutes.json")))
-trip = dict(meta, days=days, commutes=commutes)
+quiz = json.load(open(os.path.join(DATA, "quiz.json")))
+for i, q in enumerate(quiz): q["id"] = f"q{i}"
+trip = dict(meta, days=days, commutes=commutes, quiz=quiz)
 
 # ---- inject into index.html
 idx_path = os.path.join(ROOT, "index.html")
