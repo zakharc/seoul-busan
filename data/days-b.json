@@ -177,7 +177,7 @@
      {
       "id": "d6s5a",
       "title": "Millak Waterside Park",
-      "type": "Waterfront · free",
+      "type": "Waterfront",
       "price": "Free",
       "name": "Millak Waterside Park",
       "ko": "민락수변공원",
@@ -298,7 +298,7 @@
      {
       "id": "d6s7b",
       "title": "Gwangalli beach night walk & bridge lights",
-      "type": "Night walk · free",
+      "type": "Night walk",
       "price": "Free · beer ≈₩4k",
       "name": "광안리해수욕장",
       "ko": "광안리해수욕장",
@@ -426,7 +426,7 @@
      {
       "id": "d7s2b",
       "title": "Cheongsapo harbour & twin lighthouses",
-      "type": "Harbour stroll · free",
+      "type": "Harbour stroll",
       "name": "청사포 등대",
       "ko": "청사포 쌍둥이등대",
       "lat": 35.1588,
@@ -521,7 +521,7 @@
      {
       "id": "d7s4b",
       "title": "Songjeong Beach & Jukdo Park",
-      "type": "Beach walk · free",
+      "type": "Beach walk",
       "name": "송정해수욕장",
       "ko": "송정해수욕장",
       "lat": 35.1786,
@@ -569,7 +569,7 @@
      {
       "id": "d7s5b",
       "title": "Dongbaekseom island walk",
-      "type": "Coastal loop · 1.5 km · free",
+      "type": "Coastal loop · 1.5 km",
       "price": "Free",
       "name": "Dongbaekseom Island",
       "ko": "동백섬",
@@ -665,7 +665,7 @@
      {
       "id": "d7s7b",
       "title": "Haeundae beach lights & Gunam-ro",
-      "type": "Night walk · free",
+      "type": "Night walk",
       "price": "Free",
       "name": "해운대해수욕장",
       "ko": "해운대해수욕장",
@@ -685,7 +685,7 @@
      {
       "id": "d7s7c",
       "title": "Busan Cinema Center LED roof",
-      "type": "Architecture · free",
+      "type": "Architecture",
       "price": "Free",
       "name": "영화의전당",
       "ko": "영화의전당",
@@ -745,7 +745,7 @@
      {
       "id": "d8s1b",
       "title": "Bosu-dong Book Alley & Bupyeong Kkangtong Market",
-      "type": "Old town walk · free",
+      "type": "Old town walk",
       "name": "보수동 책방골목",
       "ko": "보수동 책방골목",
       "lat": 35.1041,
@@ -1124,7 +1124,7 @@
      {
       "id": "d9s4b",
       "title": "Ihwa Mural Village lanes",
-      "type": "Hillside village · free",
+      "type": "Hillside village",
       "name": "이화벽화마을",
       "ko": "이화벽화마을",
       "lat": 37.5802,
@@ -1218,7 +1218,7 @@
      {
       "id": "d9s6b",
       "title": "DDP at night",
-      "type": "Architecture · free",
+      "type": "Architecture",
       "price": "Free",
       "name": "Dongdaemun Design Plaza",
       "ko": "동대문디자인플라자",
@@ -1486,7 +1486,7 @@
      {
       "id": "d10s5b",
       "title": "Cheonggyecheon stream walk",
-      "type": "Riverside walk · free",
+      "type": "Riverside walk",
       "name": "청계천",
       "ko": "청계천",
       "lat": 37.5695,
@@ -1563,7 +1563,7 @@
      {
       "id": "d10s7a",
       "title": "Namsan night view from Baekbeom Square",
-      "type": "Night view · free",
+      "type": "Night view",
       "price": "Free",
       "name": "백범광장",
       "ko": "남산공원 백범광장",
@@ -1584,7 +1584,7 @@
      {
       "id": "d10s7b",
       "title": "Gwanghwamun Square by night",
-      "type": "Night walk · free",
+      "type": "Night walk",
       "price": "Free",
       "name": "광화문광장",
       "ko": "광화문광장",

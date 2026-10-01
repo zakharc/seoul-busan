@@ -50,7 +50,7 @@
      {
       "id": "d1s2b",
       "title": "Walk up Namsan via the Oreumi elevator",
-      "type": "Walk · 35–40 min · free",
+      "type": "Walk · 35–40 min",
       "name": "남산 오르미",
       "ko": "남산 오르미",
       "lat": 37.5587,
@@ -99,7 +99,7 @@
      {
       "id": "d1s3b",
       "title": "Palgakjeong pavilion & the beacon mounds",
-      "type": "Viewpoint · free",
+      "type": "Viewpoint",
       "name": "남산 봉수대",
       "ko": "남산 봉수대",
       "lat": 37.5512,
@@ -248,7 +248,7 @@
      {
       "id": "d2s1b",
       "title": "Gwanghwamun Square & Cheonggyecheon stream",
-      "type": "Walk · free",
+      "type": "Walk",
       "name": "광화문광장",
       "ko": "광화문광장",
       "lat": 37.5759,
@@ -294,7 +294,7 @@
      {
       "id": "d2s2b",
       "title": "National Palace Museum of Korea",
-      "type": "Museum · free",
+      "type": "Museum",
       "name": "국립고궁박물관",
       "ko": "국립고궁박물관",
       "lat": 37.5765,
@@ -391,7 +391,7 @@
      {
       "id": "d2s4b",
       "title": "Wander the Bukchon lanes",
-      "type": "Stroll · free",
+      "type": "Stroll",
       "price": "Free",
       "name": "Bukchon Hanok Village",
       "ko": "북촌한옥마을",
@@ -441,7 +441,7 @@
      {
       "id": "d2s5b",
       "title": "Jogyesa Temple",
-      "type": "Temple · free",
+      "type": "Temple",
       "price": "Free",
       "name": "Jogyesa Temple",
       "ko": "조계사",
@@ -542,7 +542,7 @@
      {
       "id": "d2s7b",
       "title": "Cheonggyecheon by night & Gwanghwamun",
-      "type": "Night walk · free",
+      "type": "Night walk",
       "price": "Free",
       "name": "청계광장",
       "ko": "청계광장",
@@ -649,7 +649,7 @@
      {
       "id": "d3s2a",
       "title": "Namsangol Hanok Village",
-      "type": "Heritage · free",
+      "type": "Heritage",
       "price": "Free",
       "name": "Namsangol Hanok Village",
       "ko": "남산골한옥마을",
@@ -718,7 +718,7 @@
      {
       "id": "d3s3b",
       "title": "Seoul Museum of Art & Jeongdong-gil",
-      "type": "Art museum · free walk (special shows ≈₩5k)",
+      "type": "Art museum walk (special shows ≈₩5k)",
       "name": "서울시립미술관 서소문본관",
       "ko": "서울시립미술관",
       "lat": 37.5641,
@@ -766,7 +766,7 @@
      {
       "id": "d3s4b",
       "title": "Seonyudo Park — island garden",
-      "type": "Park · free",
+      "type": "Park",
       "name": "선유도공원",
       "ko": "선유도공원",
       "lat": 37.5436,
@@ -817,7 +817,7 @@
      {
       "id": "d3s5b",
       "title": "Banpo Bridge Moonlight Rainbow Fountain",
-      "type": "Night show · free",
+      "type": "Night show",
       "price": "Free",
       "name": "반포대교 달빛무지개분수",
       "ko": "반포대교 달빛무지개분수",
@@ -1130,7 +1130,7 @@
      {
       "id": "d4s6b",
       "title": "Same show from the quieter Jamsil bank",
-      "type": "Show · free · across the river",
+      "type": "Show · across the river",
       "name": "잠실한강공원",
       "ko": "잠실한강공원",
       "lat": 37.5178,
