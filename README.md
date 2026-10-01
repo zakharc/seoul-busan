@@ -41,7 +41,7 @@ The first time the trail reaches a Busan place (the KTX on day 6) the app cuts t
 
 ### Moments
 
-Every romantic place has a little scene (`MOMENTS` in `index.html`, keyed by option id, with fall-backs per landmark type): the figurines act it out in 3D (lock on the fence, coin into the stream, lantern release, leaf storm, selfie, dance, a toast…), a heart-shaped particle burst rises, and a caption card tells the story. It plays once on arrival, from the 💞 Play / Replay card in the sheet, or by tapping the couple.
+Every special place has a little scene (`MOMENTS` in `index.html`, keyed by option id, with fall-backs per landmark type): the figurines act it out in 3D (lock on the fence, coin into the stream, lantern release, leaf storm, selfie, a toast…) and a small caption tells something nice about the place itself. It starts about a second after arrival, repeats quietly every half-minute or so while you stand there, and can be triggered by tapping the couple. Hearts only appear at the handful of places marked `r:1` (Namsan locks, the lotus pond, Gwangalli at night…).
 
 ### When you're both online
 

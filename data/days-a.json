@@ -691,49 +691,51 @@
    {
     "id": "d3s3",
     "t": "13:30",
-    "title": "Jeongdong afternoon",
+    "title": "Quiet palace or sky garden",
     "kind": "sight",
     "options": [
      {
       "id": "d3s3a",
-      "title": "Deoksugung Palace & stone-wall road",
-      "name": "Deoksugung Palace",
-      "ko": "덕수궁",
-      "pid": "ChIJMcWZMY2ifDUR2NLv8F3Togc",
-      "lat": 37.5658862,
-      "lng": 126.9749017,
-      "wiki": "Deoksugung",
-      "about": "The smallest of Seoul's palaces mixes Korean halls with early-20th-century Western buildings; the stone-wall road outside is the city's most famous autumn walk.",
-      "price": "₩1,000",
-      "hours": "09:00–21:00 · last entry 20:00",
+      "title": "Gyeonghuigung Palace & Seoul Museum of History",
+      "type": "Palace · free",
+      "name": "Gyeonghuigung Palace",
+      "ko": "경희궁",
+      "lat": 37.5712,
+      "lng": 126.9683,
+      "wiki": "Gyeonghuigung",
+      "about": "The least-visited of Seoul's five palaces: a hillside of quiet halls behind the Seoul Museum of History, often almost empty on a weekday afternoon.",
+      "cool": "A palace with no queue and no crowds — and the city museum next door has a huge scale model of all of Seoul.",
+      "price": "Free",
+      "hours": "09:00–18:00 · last entry 17:30",
       "closed": "Mondays",
       "need": "1–1.5 h",
       "tips": [
-       "Guard ceremony at Daehanmun gate 11:00, 14:00, 15:30.",
-       "Local legend says couples who walk the stone-wall road break up — hold hands and ignore it.",
-       "Ginkgo trees on Doldam-gil turn gold at the end of October."
+       "Enter through Heunghwamun gate; the main hall Sungjeongjeon sits up the slope with a view back over the roofs.",
+       "Seoul Museum of History (free, 09:00–20:00) is in the same grounds — the 1:1500 model of the city is worth 20 minutes.",
+       "Gwanghwamun and the Cheonggyecheon spring are a 10-minute walk downhill."
       ],
       "landmark": "palace"
      },
      {
       "id": "d3s3b",
-      "title": "Seoul Museum of Art & Jeongdong-gil",
-      "type": "Art museum walk (special shows ≈₩5k)",
-      "name": "서울시립미술관 서소문본관",
-      "ko": "서울시립미술관",
-      "lat": 37.5641,
-      "lng": 126.9735,
-      "wiki": "Seoul Museum of Art",
-      "about": "The city art museum in a 1928 courthouse at the end of the Deoksugung stone-wall road, with Jeongdong's old churches and the Chungdong Theatre lanes around it.",
-      "cool": "Free exhibitions in a gorgeous building, then the prettiest 400 m of street in central Seoul.",
+      "title": "Seoullo 7017 sky garden",
+      "type": "Elevated garden walk · free",
+      "name": "Seoullo 7017",
+      "ko": "서울로 7017",
+      "lat": 37.5567,
+      "lng": 126.9705,
+      "wiki": "Seoullo 7017",
+      "about": "A 1970s motorway overpass turned into a kilometre-long garden floating above Seoul Station — 24,000 plants in giant pots, little cafés, foot baths and a view over the old station roof.",
+      "cool": "A garden in the sky over the trains; at dusk the whole walkway lights up blue.",
       "price": "Free",
-      "hours": "10:00–20:00 · closed Mon",
-      "need": "1.5 h",
+      "hours": "Open 24 h",
+      "need": "45 min–1 h",
       "tips": [
-       "Walk the stone-wall road first — the museum sits at its end.",
-       "Jeongdong Observatory (13F, free) looks straight down into Deoksugung."
+       "Start at the Namdaemun Market end and walk west — the sunset is over the station roof.",
+       "Namdaemun's hotteok and kalguksu alley is right below the east end.",
+       "Warm foot bath near the Malli-dong end (free, bring a small towel)."
       ],
-      "landmark": "folkmuseum"
+      "landmark": "garden"
      }
     ]
    },
