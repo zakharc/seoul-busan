@@ -24,3 +24,11 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 ## Live sync
 
 In the app: ⋯ → **Sync between phones** → follow the 4 steps (free Firebase project, Firestore, rules, paste `firebaseConfig`). Then **Copy her link** and send it.
+
+### When you're both online
+
+- A dock under the day chips shows where the other one is (**Join** jumps there) and a 💌 tray to send a kiss / wave / hug / lantern / fireworks — the figurines act it out on both phones, with sparkles and sound.
+- Standing at the same stop triggers a "You're both here 💞" moment; taps on the scene are mirrored.
+- Hearted different options at the same stop? A **가위바위보** (rock-paper-scissors) card appears — winner's pick becomes the plan once the other taps along.
+- Pokes sent while the other phone was closed are delivered on the next open ("…while you were away").
+- `?trip=some-id` points the app at a separate Firestore doc (handy for testing without touching the real plan).

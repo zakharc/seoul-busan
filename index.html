@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f5f6fa">
-<meta name="build" content="20261001-121215">
+<meta name="build" content="20261001-122814">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Seoul ⇄ Busan · a journey for two</title>
@@ -375,6 +375,45 @@ html{background:var(--bg)}
 .presence i{width:8px;height:8px;border-radius:50%;background:#2fbf71;box-shadow:0 0 0 3px rgba(47,191,113,.25);animation:pulse 1.6s infinite;flex:0 0 auto}
 .presence b{color:var(--rose)}
 .travel.show~.presence.show{top:calc(var(--top-h) + var(--sat) + 60px)}
+/* together: presence dock, poke tray, flying emoji, 가위바위보 */
+.presence{overflow:visible}
+.presence.show{pointer-events:auto}
+.presence .pt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.presence .pbtn{height:28px;padding:0 10px;border-radius:999px;background:var(--rose);color:#fff;font:700 12px var(--body);display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;transition:transform .25s var(--ease),box-shadow .25s}
+.presence .pbtn.alt{background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink)}
+.presence .pbtn[aria-expanded="true"]{box-shadow:0 0 0 3px color-mix(in srgb,var(--rose) 28%,transparent)}
+.presence .pbtn:active{transform:scale(.94)}
+.presence.together{border-color:color-mix(in srgb,var(--rose) 45%,transparent);box-shadow:0 12px 32px -14px var(--rose)}
+.pokes{position:fixed;left:50%;top:calc(var(--top-h) + var(--sat) + 62px);transform:translate(-50%,-6px) scale(.96);z-index:21;display:flex;gap:8px;padding:8px;border-radius:999px;background:color-mix(in srgb,var(--surface) 88%,transparent);border:1px solid var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:.35s var(--ease)}
+.pokes.show{opacity:1;pointer-events:auto;transform:translate(-50%,0) scale(1)}
+.travel.show~.pokes.show{top:calc(var(--top-h) + var(--sat) + 108px)}
+.pokes button{width:46px;height:46px;border-radius:50%;background:var(--surface);border:1px solid var(--line);font-size:22px;display:grid;place-items:center;transition:transform .25s var(--ease)}
+.pokes button:active{transform:scale(.86)}
+.pokes button.sent{animation:bump .5s var(--ease)}
+.pokefx{position:fixed;inset:0;pointer-events:none;z-index:85;overflow:hidden}
+.pokefx span{position:absolute;top:58%;font-size:38px;opacity:0;animation:pokefly 1.7s var(--ease) forwards;filter:drop-shadow(0 6px 12px rgba(0,0,0,.15))}
+@keyframes pokefly{0%{opacity:0;transform:translate(-50%,0) scale(.4)}15%{opacity:1;transform:translate(-50%,-30px) scale(1.15)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),-280px) scale(.9) rotate(var(--rot))}}
+.chip{position:relative}
+.chip .pdot{position:absolute;right:4px;top:4px;width:8px;height:8px;border-radius:50%;background:var(--rose);box-shadow:0 0 0 2px var(--surface);animation:pulse 1.6s infinite}
+.rps{margin:10px 0 0;padding:12px;border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--rose) 10%,var(--surface)),color-mix(in srgb,#f6a524 12%,var(--surface)));border:1px dashed color-mix(in srgb,var(--rose) 40%,transparent)}
+.rps b{display:block;font:700 13.5px var(--display)}
+.rps small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.rps .hands{display:flex;gap:8px;margin-top:10px}
+.rps .hands button{flex:1;height:52px;border-radius:14px;background:var(--surface);border:1px solid var(--line);font-size:26px;transition:transform .25s var(--ease),box-shadow .25s}
+.rps .hands button:not([disabled]):active{transform:scale(.92)}
+.rps .hands button[aria-pressed="true"]{border-color:var(--rose);box-shadow:0 0 0 3px color-mix(in srgb,var(--rose) 25%,transparent)}
+.rps .hands button[disabled]:not([aria-pressed="true"]){opacity:.45}
+.rps .duel{display:flex;align-items:flex-start;justify-content:center;gap:16px;margin-top:10px}
+.rps .duel i{font-style:normal;display:block;font-size:36px;text-align:center}
+.rps.reveal .duel i{animation:rpsshake .9s var(--ease)}
+.rps.reveal .duel>span:first-child i{animation-name:rpsshakeL}
+@keyframes rpsshake{0%,60%{transform:translateY(0) rotate(0)}15%,45%{transform:translateY(-14px) rotate(14deg)}30%{transform:translateY(0)}}
+@keyframes rpsshakeL{0%,60%{transform:translateY(0) rotate(0)}15%,45%{transform:translateY(-14px) rotate(-14deg)}30%{transform:translateY(0)}}
+.rps .duel .vs{font:700 12px var(--body);color:var(--muted);letter-spacing:.1em;align-self:center}
+.rps .duel .who{font:600 11px var(--body);color:var(--muted);display:block;text-align:center;margin-top:2px}
+.rps .res{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.rps .res button{height:36px;padding:0 12px;border-radius:12px;background:var(--rose);color:#fff;font:700 13px var(--body)}
+.rps .res button.alt{background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink)}
 .daycard .tl li.there .tt::after{content:"● here";margin-left:8px;font:700 10px var(--body);letter-spacing:.06em;text-transform:uppercase;color:#2fbf71}
 .livebox{margin:0 0 14px;padding:12px 14px;border-radius:16px;background:var(--soft)}
 .livehead{display:flex;gap:9px;align-items:center;font-size:13.5px;color:var(--muted)}
@@ -1102,7 +1141,7 @@ function reviewHtml(it,curOpt){
   const my=rv(it,role), opts=optionsOf(it);
   const heartOn=!!(my&&my.s==="heart"&&(!opts||my.pick===(curOpt&&curOpt.id))), skipOn=!!(my&&my.s==="skip");
   const nm=role?names[role]:"My";
-  return proposalHtml(it,curOpt)+whoBadges(it,curOpt&&curOpt.id)+(effSkip(it)?`<p class="skipnote">${SKIP}<span>${esc(names[eff(it)===rv(it,"her")?"her":"me"])} would rather skip this — the plan carries on from the previous stop.</span></p>`:"");
+  return proposalHtml(it,curOpt)+rpsHtml(it)+whoBadges(it,curOpt&&curOpt.id)+(effSkip(it)?`<p class="skipnote">${SKIP}<span>${esc(names[eff(it)===rv(it,"her")?"her":"me"])} would rather skip this — the plan carries on from the previous stop.</span></p>`:"");
 }
 function reviewBar(it,curOpt,i,k){
   const my=rv(it,role), opts=optionsOf(it), d=DAYS[i];
@@ -1116,6 +1155,10 @@ function bindReview(scope,it,i,k,curOpt){
   hb.onclick=()=>{ const on=setReview(it,"heart",curOpt&&curOpt.id); if(on===null) return; const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; renderBar(); APP.emit("choice",{day:i,stop:k}); if(on){ buzz(14); const b=sheetScroll.querySelector(".rv.heart"); if(b){ b.classList.add("pop","bump"); } toast(role==="her"?"Marked as Киця's pick 💗":"Marked as your pick 💗"); } };
   const nx=scope.querySelector(".rbar .rnext"); if(nx) nx.onclick=()=>{ APP.quick=true; buzz(5); next(); };
   const ag=scope.querySelector(".prop .agree"); if(ag) ag.onclick=()=>{ const o=other(role), x=rv(it,o); if(!x) return; const r=review[it.id]=review[it.id]||{}; r[role]={s:"heart",pick:x.pick||null,ts:Date.now()}; syncSet(["review",it.id,role],r[role]); delete choice[it.id]; saveK("sbtrip-choice-v1",choice); saveK("sbtrip-review-v1",review); updateSum(); APP.emit("review",{item:it,state:"heart",who:role}); const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; renderBar(); APP.emit("choice",{day:i,stop:k}); buzz([10,30,10]); toast("You both picked this 💞"); };
+  const again=()=>{ const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; };
+  scope.querySelectorAll(".rps .hands button[data-c]").forEach(b=>b.onclick=()=>{ (rps[it.id]=rps[it.id]||{})[role]={c:b.dataset.c,at:Date.now()}; saveK("sbtrip-rps-v1",rps); syncSet(["rps",it.id,role],rps[it.id][role]); buzz(8); if(APP.sound&&APP.sound.on) APP.sound.pop(1.2); again(); });
+  const rg=scope.querySelector(".rps .again"); if(rg) rg.onclick=()=>{ delete rps[it.id]; saveK("sbtrip-rps-v1",rps); syncSet(["rps",it.id],null); buzz(5); again(); };
+  const cc=scope.querySelector(".rps .concede"); if(cc) cc.onclick=()=>{ if(ag) ag.onclick(); else { const o=other(role), x=rv(it,o); if(!x) return; const r=review[it.id]=review[it.id]||{}; r[role]={s:"heart",pick:x.pick||null,ts:Date.now()}; syncSet(["review",it.id,role],r[role]); delete choice[it.id]; saveK("sbtrip-choice-v1",choice); saveK("sbtrip-review-v1",review); updateSum(); APP.emit("review",{item:it,state:"heart",who:role}); again(); renderBar(); APP.emit("choice",{day:i,stop:k}); buzz([10,30,10]); toast("You both picked this 💞"); } };
   sb.onclick=()=>{ const on=setReview(it,"skip"); if(on===null) return; const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; renderBar(); if(on){ buzz(8); const b=sheetScroll.querySelector(".rv.skip"); if(b) b.classList.add("bump"); } };
 }
 const roleBtns=`<button class="her" data-r="her">💗 Киця</button><button data-r="me">Mykola</button>`;
@@ -1242,6 +1285,7 @@ const FBK="sbtrip-fb-v1", FB_VER="10.12.4"; const fb={cfg:null,embedded:false,mo
 (function(){ try{ const e=JSON.parse(document.getElementById("firebase-config").textContent); if(e&&e.projectId){ fb.cfg=e; fb.embedded=true; } }catch(err){}
   const u=qs.get("fb"); if(u&&!fb.cfg){ try{ const c=JSON.parse(decodeURIComponent(escape(atob(u.replace(/-/g,"+").replace(/_/g,"/"))))); if(c&&c.projectId){ fb.cfg=c; saveK(FBK,c); } }catch(err){} }
   if(!fb.cfg) fb.cfg=store(FBK,null);
+  fb.trip=/^[\w-]{1,60}$/.test(qs.get("trip")||"")?qs.get("trip"):null; // ?trip=xyz → separate Firestore doc (testing)
   if(qs.has("fb")||qs.has("as")){ history.replaceState(null,"",location.pathname+location.hash); } })();
 const b64=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 function setSync(st,msg){ fb.status=st; fb.msg=msg||""; const d=$("sync-dot"); d.className="sync "+(st==="live"?"live":st==="wait"?"wait":st==="err"?"err":""); d.title=st==="live"?"Live sync on":st==="wait"?"Connecting…":st==="err"?"Sync error: "+fb.msg:"Local only";
@@ -1250,7 +1294,7 @@ function parseCfg(txt){ const m=String(txt||"").match(/\{[\s\S]*\}/); if(!m) ret
 async function syncStart(){ const cfg=fb.cfg; if(!cfg||!cfg.projectId||!cfg.apiKey) return; setSync("wait");
   try{ const [app,fs]=await Promise.all([import(`https://www.gstatic.com/firebasejs/${FB_VER}/firebase-app.js`),import(`https://www.gstatic.com/firebasejs/${FB_VER}/firebase-firestore.js`)]);
     fb.mods=fs; const a=app.getApps&&app.getApps().length?app.getApp():app.initializeApp(cfg); let db; try{ db=fs.initializeFirestore(a,{localCache:fs.persistentLocalCache({tabManager:fs.persistentMultipleTabManager()})}); }catch(e){ db=fs.getFirestore(a); }
-    fb.ref=fs.doc(db,"trips",cfg.tripId||"seoul-busan-2026"); fb.first=true;
+    fb.ref=fs.doc(db,"trips",fb.trip||cfg.tripId||"seoul-busan-2026"); fb.first=true;
     setTimeout(()=>{ if(fb.status==="wait") setSync("err","No answer from Firebase yet — check the config and the Firestore rules"); },20000);
     fb.unsub=fs.onSnapshot(fb.ref,{includeMetadataChanges:false},snap=>{ if(fb.status!=="live"){ setSync("live"); setTimeout(()=>heartbeat(false),800); } if(!snap.exists()){ fs.setDoc(fb.ref,{review,names,done,approved,updatedAt:fs.serverTimestamp()},{merge:true}).catch(e=>setSync("err",e.message)); return; } applyRemote(snap.data()||{},snap.metadata.hasPendingWrites); },err=>setSync("err",err.code||err.message));
   }catch(e){ setSync("err",e.message||String(e)); } }
@@ -1267,14 +1311,51 @@ function renderPresence(){ const o=role?other(role):"her", on=isOnline(o), x=pre
   const dot=$("sync-dot"); if(dot){ dot.classList.toggle("online",on); if(on) dot.title=`${names[o]} is online · looking at ${x.title||"the trail"}`; }
   const btn=$("btn-sum"); btn.classList.toggle("live",on);
   let pill=$("presence"); if(!pill){ pill=document.createElement("div"); pill.id="presence"; pill.className="presence"; document.body.appendChild(pill); }
-  if(on&&APP.state.mode!=="start"&&APP.state.mode!=="pick"){ pill.innerHTML=`<i></i><b>${esc(names[o])}</b> is here · ${x.day==null||x.day<0?"at the start":(x.day===APP.state.day?"same day":"Day "+(x.day+1))}${x.title&&x.day>=0?` · ${esc(x.title)}`:""}`; pill.classList.add("show"); } else pill.classList.remove("show");
+  if(on&&APP.state.mode!=="start"&&APP.state.mode!=="pick"){ const s=APP.state, same=x.stop>=0&&x.day===s.day&&x.stop===s.stop&&s.mode==="stop", canJoin=x.day>=0&&!(x.day===s.day&&x.stop===s.stop);
+    pill.innerHTML=`<i></i><span class="pt"><b>${esc(names[o])}</b> ${same?"is here with you 💞":`is here · ${x.day==null||x.day<0?"at the start":(x.day===s.day?"same day":"Day "+(x.day+1))}${x.title&&x.day>=0?` · ${esc(x.title)}`:""}`}</span>${canJoin?`<button class="pbtn alt" id="p-join" title="Jump to where ${esc(names[o])} is">Join</button>`:""}<button class="pbtn" id="p-poke" aria-expanded="${pokesOpen}" title="Send a little something">💌</button>`;
+    pill.classList.add("show"); pill.classList.toggle("together",same); $("p-poke").onclick=()=>{ pokesOpen=!pokesOpen; renderPokes(); $("p-poke").setAttribute("aria-expanded",pokesOpen); buzz(4); }; const j=$("p-join"); if(j) j.onclick=()=>{ buzz(6); joinOther(); };
+    const key=same?`${s.day}:${s.stop}`:null; if(key!==togetherKey){ togetherKey=key; if(key){ toast(`💞 You're both at ${x.title||"this place"}`); buzz([10,30,10,30,10]); } APP.emit("together",{on:!!key}); } }
+  else { pill.classList.remove("show","together"); pokesOpen=false; if(togetherKey){ togetherKey=null; APP.emit("together",{on:false}); } }
+  renderPokes();
+  rail.querySelectorAll(".chip").forEach((c,i)=>{ const want=on&&x.day===i&&APP.state.day!==i; let d=c.querySelector(".pdot"); if(want&&!d){ d=document.createElement("i"); d.className="pdot"; c.appendChild(d); } else if(!want&&d) d.remove(); });
   daycard.querySelectorAll(".tl li").forEach((li,k)=>li.classList.toggle("there",on&&x.day===APP.state.day&&x.stop===k));
   if($("sumdlg").open){ const el=$("sum-live"); if(el) el.innerHTML=liveHtml(); } }
 setInterval(renderPresence,10000);
+/* ---------- together: pokes, join, same-place moments, mirrored taps, 가위바위보 ---------- */
+const POKES=[["kiss","💋","a kiss"],["wave","👋","a wave"],["hug","🫂","a hug"],["lantern","🏮","a lantern"],["fireworks","🎆","fireworks"]];
+const POKE_MSG={kiss:"blew you a kiss 💋",wave:"waves at you 👋",hug:"sends you a hug 🫂",lantern:"lit a lantern for you 🏮",fireworks:"set off fireworks for you 🎆"};
+let pokeSeen=+(store("sbtrip-poke-seen",0)||0), pokeLastSent=0, pokesOpen=false, togetherKey=null;
+function pokeFx(kind,n){ let box=$("pokefx"); if(!box){ box=document.createElement("div"); box.id="pokefx"; box.className="pokefx"; document.body.appendChild(box); } const em=(POKES.find(q=>q[0]===kind)||[0,"💗"])[1];
+  for(let i=0;i<n;i++){ const sp=document.createElement("span"); sp.textContent=i%3===0?em:"💗"; sp.style.setProperty("--dx",(Math.random()*260-130)+"px"); sp.style.setProperty("--rot",(Math.random()*60-30)+"deg"); sp.style.left=(32+Math.random()*36)+"%"; sp.style.animationDelay=(i*.09)+"s"; box.appendChild(sp); setTimeout(()=>sp.remove(),2400); } }
+function playPoke(kind,who,pk,late){ if(kind==="tap"){ APP.emit("poke",{kind,who,x:pk.x,z:pk.z}); return; }
+  const mine=who===role, em=(POKES.find(q=>q[0]===kind)||[0,"💗"])[1];
+  toast(mine?`💌 Sent ${em} to ${names[other(role)]}`:`${names[who]} ${POKE_MSG[kind]||"says hi 💗"}${late?" — while you were away":""}`);
+  pokeFx(kind,mine?5:10); buzz(mine?6:[12,40,12]); APP.emit("poke",{kind,who,mine}); }
+function sendPoke(kind,extra){ if(!role) return; if(fb.status!=="live"){ toast("Live sync is off — nothing to send to"); return; } const now=Date.now(); if(kind!=="tap"&&now-pokeLastSent<1200) return; pokeLastSent=now; const st=APP.state;
+  syncSet(["pokes",role],Object.assign({kind,at:now,day:st.day,stop:st.stop},extra||{})); if(kind!=="tap") playPoke(kind,role); }
+function checkPokes(data){ if(!role) return; const o=other(role), pk=(data.pokes||{})[o]; if(!pk||!pk.at||pk.at<=pokeSeen) return; const age=Date.now()-pk.at; pokeSeen=pk.at; saveK("sbtrip-poke-seen",pokeSeen);
+  if(pk.kind==="tap"){ const st=APP.state; if(age<8000&&pk.day===st.day&&pk.stop===st.stop) playPoke("tap",o,pk); return; }
+  if(age<45000) playPoke(pk.kind,o,pk); else if(age<864e5) setTimeout(()=>playPoke(pk.kind,o,pk,true),1800); }
+function joinOther(){ const x=presence[other(role)]; if(!x||x.day==null||x.day<0) return; pokesOpen=false; APP.go(x.day,x.stop>=0?x.stop:-1,x.stop>=0?"jump":undefined); }
+function renderPokes(){ let row=$("pokes"); if(!row){ row=document.createElement("div"); row.id="pokes"; row.className="pokes"; document.body.appendChild(row); row.innerHTML=POKES.map(([k,e,l])=>`<button data-k="${k}" title="Send ${l}" aria-label="Send ${l}">${e}</button>`).join("");
+    row.querySelectorAll("button").forEach(b=>b.onclick=()=>{ sendPoke(b.dataset.k); b.classList.remove("sent"); void b.offsetWidth; b.classList.add("sent"); }); }
+  const pill=$("presence"); row.classList.toggle("show",pokesOpen&&!!pill&&pill.classList.contains("show")); }
+APP.pokeTap=pt=>{ if(togetherKey&&pt) sendPoke("tap",{x:+pt.x.toFixed(1),z:+pt.z.toFixed(1)}); };
+let rps=store("sbtrip-rps-v1",{}); const rpsSeen={};
+const RPSH={rock:"✊",paper:"✋",scissors:"✌️"}, RPS_K=["rock","paper","scissors"];
+const rpsWin=(a,b)=>a===b?0:((a==="rock"&&b==="scissors")||(a==="paper"&&b==="rock")||(a==="scissors"&&b==="paper")?1:-1);
+function rpsHtml(it){ if(!role||fb.status!=="live") return ""; const o=other(role), x=rv(it,o), my=rv(it,role), opts=optionsOf(it); if(!opts||!x||!my||x.s!=="heart"||my.s!=="heart"||x.pick===my.pick) return "";
+  const g=rps[it.id]||{}, mine=g[role]&&g[role].c, theirs=g[o]&&g[o].c, pickT=w=>{ const r=rv(it,w), q=r&&opts.find(z=>z.id===r.pick); return q?q.title:"their pick"; };
+  if(!mine||!theirs) return `<div class="rps"><b>Different picks — settle it with 가위바위보 ✊✋✌️</b><small>${mine?`You threw ${RPSH[mine]} — waiting for ${esc(names[o])}…`:(theirs?`${esc(names[o])} has already thrown. Your turn!`:"Rock, paper, scissors — the winner's pick becomes the plan.")}</small><div class="hands">${RPS_K.map(k=>`<button data-c="${k}" aria-pressed="${mine===k}"${mine?" disabled":""}>${RPSH[k]}</button>`).join("")}</div></div>`;
+  const w=rpsWin(mine,theirs), key=it.id+":"+g[role].at+":"+g[o].at, seenAt=rpsSeen[key], fresh=!seenAt||Date.now()-seenAt<2500; if(!seenAt){ rpsSeen[key]=Date.now(); setTimeout(()=>APP.emit("rps",{win:w}),700); }
+  const winner=w>0?role:(w<0?o:null);
+  return `<div class="rps${fresh?" reveal":""}"><b>${winner?`👑 ${esc(names[winner])} wins${winner===role?"!":" 😄"}`:"Draw!"}</b><small>${winner?`${esc(pickT(winner))} it is${winner===role?` — as soon as ${esc(names[o])} taps along`:""}.`:"Same hand — throw again."}</small><div class="duel"><span><i>${RPSH[mine]}</i><span class="who">${esc(names[role])}</span></span><span class="vs">VS</span><span><i>${RPSH[theirs]}</i><span class="who">${esc(names[o])}</span></span></div><div class="res">${winner?(winner===role?`<button class="alt again">Play again</button>`:`<button class="concede" data-pick="${esc(x.pick||"")}">Alright, ${esc(pickT(o))} 💞</button><button class="alt again">Best of three?</button>`):`<button class="again">Throw again</button>`}</div></div>`; }
 function liveHtml(){ const o=role?other(role):"her", on=isOnline(o), x=presence[o]||{}; const acts=[]; Object.keys(review).forEach(id=>{ const r=review[id]; ["her","me"].forEach(w=>{ if(r[w]&&r[w].ts){ const [i,k]=IDX[id]||[]; if(i==null) return; const it=DAYS[i].items[k], op=optionsOf(it)&&r[w].pick?optionsOf(it).find(z=>z.id===r[w].pick):null; acts.push({ts:r[w].ts,w,s:r[w].s,title:op?op.title:(placeOf(it).title||it.title),i,k}); } }); });
   acts.sort((a,b)=>b.ts-a.ts); const fmt=ts=>{ const m=Math.round((Date.now()-ts)/60000); return m<1?"just now":m<60?m+" min ago":m<1440?Math.round(m/60)+" h ago":new Date(ts).toLocaleDateString("en-GB",{day:"numeric",month:"short"}); };
   return `<div class="livehead"><i class="${on?"on":""}"></i>${on?`<b>${esc(names[o])} is online</b> — looking at ${esc(x.title||"the trail")}${x.day>=0?` (Day ${x.day+1})`:""}`:(x.at?`${esc(names[o])} was last here ${fmt(x.at)}`:`${esc(names[o])} hasn't opened the trail yet`)}</div>`+(acts.length?`<ul class="feed">${acts.slice(0,8).map(a=>`<li data-i="${a.i}" data-k="${a.k}"><i class="${a.s==="heart"?"love":"skip"} ${a.w}">${a.s==="heart"?"♥":"⤼"}</i><span><b>${esc(names[a.w])}</b> ${a.s==="heart"?"picked":"skipped"} ${esc(a.title)}</span><small>${fmt(a.ts)}</small></li>`).join("")}</ul>`:`<p class="sub" style="margin:8px 0 0">No hearts yet — they'll appear here live.</p>`); }
-function applyRemote(data,local){
+/* key-sorted stringify: Firestore hands back map keys in varying order between snapshots */
+const sj=o=>JSON.stringify(o,(k,v)=>v&&typeof v==="object"&&!Array.isArray(v)?Object.keys(v).sort().reduce((acc,kk)=>(acc[kk]=v[kk],acc),{}):v);
+function applyRemote(data,local){ const firstSnap=fb.first;
   if(fb.first){ fb.first=false; const rr=data.review||{}, dd=data.done||{}, add={}; let n=0;
     Object.keys(review).forEach(id=>Object.keys(review[id]).forEach(w=>{ if(!(rr[id]&&rr[id][w])){ (add.review=add.review||{})[id]=Object.assign(add.review[id]||{},{[w]:review[id][w]}); n++; } }));
     Object.keys(done).forEach(id=>{ if(!dd[id]){ (add.done=add.done||{})[id]=done[id]; n++; } });
@@ -1284,8 +1365,10 @@ function applyRemote(data,local){
     if(n){ data=JSON.parse(JSON.stringify(data)); data.review=Object.assign({},rr); Object.keys(add.review||{}).forEach(id=>data.review[id]=Object.assign({},rr[id]||{},add.review[id])); data.done=Object.assign({},dd,add.done||{}); if(add.approved) data.approved=add.approved; fb.mods.setDoc(fb.ref,add,{merge:true}).catch(e=>setSync("err",e.code||e.message)); } }
   const prev=review; review=data.review||{}; names=Object.assign(names,data.names||{}); approved=data.approved||null; if(data.done) done=data.done; if(data.quiz){ quizDone=data.quiz; saveK("sbtrip-quiz-v1",quizDone); }
   presence=data.presence||{}; if(role){ const o=other(role); const nowOn=isOnline(o); if(nowOn&&!presenceSeen[o]) toast(`💗 ${names[o]} is here now`); presenceSeen[o]=nowOn; } renderPresence();
+  rps=data.rps||{}; saveK("sbtrip-rps-v1",rps); checkPokes(data);
+  if(role&&!firstSnap&&!local){ const o=other(role); if(ALL_ITEMS.some(([it])=>{ const pa=(prev[it.id]||{})[o]||null, pb=(review[it.id]||{})[o]||null; return pb&&pb.ts&&Date.now()-pb.ts<60000&&sj(pa)!==sj(pb); })){ buzz(10); APP.emit("partner",{}); } }
   saveK("sbtrip-review-v1",review); saveK("sbtrip-names-v1",names); saveK("sbtrip-approved-v1",approved); saveK("sbtrip-done-v1",done);
-  const changedPicks=[]; ALL_ITEMS.forEach(([it,i,k])=>{ const a=JSON.stringify((prev[it.id]||{})), b=JSON.stringify(review[it.id]||{}); if(a!==b){ delete choice[it.id]; changedPicks.push([i,k]); if(!local&&role){ const o=other(role), x=(review[it.id]||{})[o], y=(prev[it.id]||{})[o]; if(x&&JSON.stringify(x)!==JSON.stringify(y)){ const p=optionsOf(it)&&x.pick?optionsOf(it).find(z=>z.id===x.pick):null; toast(x.s==="heart"?`💗 ${names[o]} picked ${p?p.title:(placeOf(it).title||it.title)}`:`${names[o]} skipped ${placeOf(it).title||it.title}`); } } } });
+  const changedPicks=[]; ALL_ITEMS.forEach(([it,i,k])=>{ const a=sj(prev[it.id]||{}), b=sj(review[it.id]||{}); if(a!==b){ delete choice[it.id]; changedPicks.push([i,k]); if(!local&&role){ const o=other(role), x=(review[it.id]||{})[o], y=(prev[it.id]||{})[o]; if(x&&sj(x)!==sj(y)){ const p=optionsOf(it)&&x.pick?optionsOf(it).find(z=>z.id===x.pick):null; toast(x.s==="heart"?`💗 ${names[o]} picked ${p?p.title:(placeOf(it).title||it.title)}`:`${names[o]} skipped ${placeOf(it).title||it.title}`); } } } });
   saveK("sbtrip-choice-v1",choice); rerender(); changedPicks.forEach(([i,k])=>{ if(optionsOf(DAYS[i].items[k])) APP.emit("choice",{day:i,stop:k}); });
 }
 function syncSet(path,value){ if(!fb.ref||!fb.mods) return; const fs=fb.mods;
@@ -2046,6 +2129,19 @@ A.on('choice',({day,stop})=>{ const wasA=trailMats[day].uniforms.uAlpha.value, w
   if(activeDay===day&&activeStop===stop&&props[day][stop]){ const pg=props[day][stop]; startFx(pg.userData.fx,pg.position); } });
 A.on('arrive',()=>{ arrived=true; const it=activeDay>=0&&activeStop>=0?DAYS[activeDay].items[activeStop]:null; gestKind=it?(it.kind||'sight'):'sight'; arriveScript(); });
 let celebT=0, quizOn=false, quizOrbit=0;
+/* together: the other phone pokes us, we're at the same place, a 가위바위보 result */
+let togetherOn=false, togetherT=0;
+A.on('poke',p=>{ if(p.kind==='tap'){ if(camMode!=='follow'||p.x==null) return; ripple.position.set(p.x,.06,p.z); rippleT=0; sparkleBurst(new THREE.Vector3(p.x,.6,p.z),SPARK_GOLD,16,2.4); if(A.sound.on) A.sound.pop(.9); return; }
+  if(camMode!=='follow'||travel) return; gestQueue=[];
+  if(p.kind==='kiss'){ setGesture('kiss'); gestNext=4; sparkleBurst(couple.position,[[1,.55,.7],[1,.85,.9],[1,1,1]],36,3.6); }
+  else if(p.kind==='wave'){ setGesture('wave'); gestNext=3.5; sparkleBurst(couple.position,SPARK_GOLD,18,3); }
+  else if(p.kind==='hug'){ setGesture('hug'); gestQueue=['forehead']; gestNext=4; sparkleBurst(couple.position,[[1,.55,.7],[1,1,1]],30,3.4); }
+  else if(p.kind==='lantern'){ startFx('lanterns',couple.position); setGesture('admire'); gestNext=5; }
+  else if(p.kind==='fireworks'){ startFx('fireworks',couple.position); setGesture('cheer'); gestQueue=['kiss']; gestNext=3; if(A.sound.on) A.sound.boom(); }
+  if(A.sound.on&&p.kind!=='fireworks') A.sound.heart(); });
+A.on('together',({on})=>{ togetherOn=on; togetherT=0; if(on&&camMode==='follow'&&!travel){ gestQueue=['selfie','hands']; setGesture('hug'); gestNext=3.5; sparkleBurst(couple.position,[[1,.55,.7],[1,.85,.9],[1,1,1]],40,3.8); if(A.sound.on) A.sound.heart(); } });
+A.on('rps',({win})=>{ if(camMode!=='follow'||travel) return; gestQueue=[]; if(win===0){ setGesture('shrug'); gestNext=2.5; } else { setGesture(win>0?'cheer':'glance'); gestQueue=[win>0?'twirl':'hug']; gestNext=2.5; sparkleBurst(couple.position,SPARK_GOLD,30,3.4); if(A.sound.on){ if(win>0) A.sound.fanfare(); else A.sound.pop(.8); } } });
+A.on('partner',()=>{ if(camMode!=='follow'||travel||gest!=='idle') return; setGesture('glance'); gestNext=2; });
 A.on('quiz',q=>{ quizOn=!!q.on&&!q.finished; if(q.on&&q.answer==null&&!q.finished){ gestQueue=[]; setGesture('think'); gestNext=9; quizOrbit=0; }
   if(q.answer===true){ gestQueue=['kiss']; setGesture('cheer'); gestNext=2.2; sparkleBurst(couple.position,[[1,.85,.4],[.6,1,.7],[1,1,1]],34,3.6); }
   else if(q.answer===false){ gestQueue=['think']; setGesture('shrug'); gestNext=2.4; }
@@ -2372,6 +2468,7 @@ function gazeTo(p){ const dx=p.x-couple.position.x, dz=p.z-couple.position.z; le
 function tapAt(hit){
   if(camMode==='pick'){ for(const [f,r] of [[fA,'me'],[fB,'her']]){ if(pick.intersectObject(f,true).length){ A.pickSelect(r); return; } } return; }
   if(!hit||camMode!=='follow'||travel) return;
+  if(A.pokeTap&&hit.point) A.pokeTap(hit.point);
   if(hit.kind==='couple'){ if(!arrived) return; const pool=['kiss','twirl','wave','hug','selfie','forehead']; let g=pool[Math.floor(Math.random()*pool.length)]; if(g===gest) g=pool[(pool.indexOf(g)+1)%pool.length]; gestQueue=[]; setGesture(g); gestNext=(G[g].hold||3)+1; sparkleBurst(couple.position,SPARK_GOLD); if(A.sound.on) A.sound.pop(); }
   else if(hit.kind==='landmark'){ const g=hit.g, u=g.userData; u.bounceT=0; u.pokeT=u.lt||0; if(u.poke) u.poke(); sparkleBurst(hit.point,SPARK_BLUE,14,2); if(A.sound.on) A.sound.pop(1.4); gazeTo(hit.point);
     if(/tower|skyscraper|observatory|xsky|marina|waterfront|bridge|plaza|square|cantilever/.test(u.type||'')){ const save=fxCenter.clone(); fxCenter.copy(g.position); const wasFx=fxActive; fxActive='fireworks'; for(let k=0;k<2;k++) burst(); fxActive=wasFx; fxCenter.copy(save); if(!fxActive) tapFx=2.2; } }
@@ -2419,6 +2516,7 @@ function frame(){
   if(A.sound&&A.sound.on&&walk>.2&&!flying&&Math.floor(phase/Math.PI)!==Math.floor(prevPhase/Math.PI)) A.sound.step();
   // gestures (only while standing at a place)
   const standing=arrived&&!travel&&camMode==='follow';
+  if(togetherOn&&standing){ togetherT+=dt; if(togetherT>5.5){ togetherT=0; sparkleBurst(couple.position,[[1,.55,.7],[1,.85,.9]],14,2.6); } }
   if(standing&&!reduced){ gestT+=dt; if(gestT>gestNext){ if(gest==='idle') pickGesture(); else { setGesture('idle'); gestNext=fxActive?1.2:(gestQueue.length?.9:1.6+Math.random()*2.2); } } }
   else if(camMode==='start'&&!reduced){ gestT+=dt; if(gestT>gestNext){ let g=WELCOME_GESTS[Math.floor(Math.random()*WELCOME_GESTS.length)]; if(g===gest) g='lean'; setGesture(g); gestNext=(G[g]&&G[g].hold||3)+2.5; } }
   else if(gest!=='idle'){ setGesture('idle'); gestNext=2.5; gestQueue=[]; }
