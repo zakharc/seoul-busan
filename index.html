@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f5f6fa">
-<meta name="build" content="20261001-135843">
+<meta name="build" content="20261001-141418">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
@@ -230,14 +230,14 @@ dialog::backdrop{animation:fadein .35s ease-out}
   /* staged phone flow: a floating action pill over the full-screen scene */
   .peek{position:fixed;left:50%;bottom:calc(var(--bar-h) + var(--sab) + 16px);transform:translate(-50%,24px);z-index:21;display:flex;gap:8px;align-items:center;max-width:calc(100vw - 24px);opacity:0;pointer-events:none;transition:opacity .4s var(--ease),transform .5s var(--ease)}
   .peek.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-  .peek button{height:54px;padding:0 18px 0 16px;border-radius:999px;background:var(--ink);color:#fff;display:inline-flex;align-items:center;gap:10px;min-width:0;box-shadow:0 18px 40px -16px rgba(17,22,40,.55);font:700 14.5px var(--body);transition:transform .25s var(--ease)}
+  .peek button{height:54px;padding:0 18px 0 16px;border-radius:999px;background:#1b2140;color:#fff;display:inline-flex;align-items:center;gap:10px;min-width:0;box-shadow:0 18px 40px -16px rgba(17,22,40,.55);font:700 14.5px var(--body);transition:transform .25s var(--ease)}
   .peek button:active{transform:scale(.96)}
   .peek button .tx{display:flex;flex-direction:column;align-items:flex-start;min-width:0;line-height:1.15}
   .peek button .tx b{font:700 14.5px var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:56vw}
   .peek button .tx small{font:600 11px var(--body);opacity:.72;letter-spacing:.04em;white-space:nowrap}
   .peek button .ic{font-size:18px;flex:0 0 auto}
   .peek button svg{width:18px;height:18px;flex:0 0 auto}
-  .peek button.alt{background:color-mix(in srgb,var(--surface) 90%,transparent);color:var(--ink);border:1px solid var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:0 16px;box-shadow:0 10px 30px -18px rgba(17,22,40,.4)}
+  .peek button.alt{background:color-mix(in srgb,var(--surface) 92%,transparent);color:var(--ink);border:1px solid var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:0 16px;box-shadow:0 10px 30px -18px rgba(17,22,40,.4)}
   .peek button.go{background:var(--c)}
   .peek.pop button{animation:peekpop .65s var(--ease) both}
   .peek button#peek-info{animation:peekpop .65s var(--ease) both,peekglow 2.6s ease-in-out 1s infinite}
@@ -341,6 +341,28 @@ dialog::backdrop{animation:fadein .35s ease-out}
 .bar.moving .prog{display:block}.bar.moving .dots{display:none}
 .bar.moving .nbtn{pointer-events:none;opacity:.5}
 
+/* ---------- moments: a little romantic scene at every special place ---------- */
+.moment{position:fixed;left:50%;top:calc(var(--top-h) + var(--sat) + 70px);transform:translate(-50%,-14px) scale(.96);z-index:24;display:flex;gap:12px;align-items:center;width:min(92vw,440px);padding:12px 16px 12px 12px;border-radius:22px;background:color-mix(in srgb,var(--surface) 92%,transparent);border:1px solid color-mix(in srgb,var(--rose) 40%,transparent);box-shadow:0 24px 60px -24px color-mix(in srgb,var(--rose) 55%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .45s var(--ease),transform .6s var(--ease)}
+.moment.show{opacity:1;transform:translate(-50%,0) scale(1);pointer-events:auto}
+.moment .me{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:linear-gradient(135deg,color-mix(in srgb,var(--rose) 22%,var(--surface)),color-mix(in srgb,var(--c) 18%,var(--surface)));flex:0 0 auto;animation:mbeat 1.6s ease-in-out infinite}
+@keyframes mbeat{0%,100%{transform:scale(1)}30%{transform:scale(1.12)}45%{transform:scale(1.02)}60%{transform:scale(1.1)}}
+.moment .tx{min-width:0}
+.moment .tx b{display:block;font:700 14.5px var(--display);color:var(--ink)}
+:root[data-theme="dark"] .moment{background:rgba(23,28,46,.94)} :root[data-theme="dark"] .moment .tx small{color:#c3c8dd}
+.moment .tx small{display:block;font:500 12.5px/1.35 var(--body);color:var(--muted);margin-top:2px}
+.moment .mx{width:30px;height:30px;border-radius:50%;background:color-mix(in srgb,var(--ink) 7%,transparent);display:grid;place-items:center;flex:0 0 auto;color:var(--muted)}
+.moment .mx svg{width:12px;height:12px}
+.moment.lower{top:calc(var(--top-h) + var(--sat) + 124px)}
+.mcard{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;margin:12px 0 0;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg,color-mix(in srgb,var(--rose) 10%,var(--surface)),color-mix(in srgb,var(--c) 8%,var(--surface)));border:1px solid color-mix(in srgb,var(--rose) 28%,transparent)}
+.mcard .me{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:20px;background:var(--surface);box-shadow:0 6px 18px -8px color-mix(in srgb,var(--rose) 60%,transparent)}
+.mcard b{display:block;font:700 13.5px var(--display)}
+.mcard small{display:block;color:var(--muted);font-size:12px;margin-top:2px;line-height:1.35}
+.mcard button{height:38px;padding:0 13px;border-radius:12px;background:var(--rose);color:#fff;font:700 13px var(--body);white-space:nowrap;display:inline-flex;align-items:center;gap:6px;transition:transform .25s var(--ease)}
+.mcard button:active{transform:scale(.95)}
+.mcard button.seen{background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink)}
+.moment-hearts{position:fixed;inset:0;pointer-events:none;z-index:85;overflow:hidden}
+.moment-hearts span{position:absolute;bottom:38%;font-size:22px;opacity:0;animation:mheart 2.6s var(--ease) forwards;filter:drop-shadow(0 4px 10px rgba(0,0,0,.12))}
+@keyframes mheart{0%{opacity:0;transform:translate(0,0) scale(.5) rotate(0)}12%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-46vh) scale(1.1) rotate(var(--rot))}}
 /* ---------- travel label ---------- */
 .travel{position:fixed;left:50%;top:calc(var(--top-h) + var(--sat) + 18px);transform:translate(-50%,-10px);z-index:21;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,.85);border:1px solid var(--line);
   backdrop-filter:blur(12px);font:600 13px var(--body);opacity:0;pointer-events:none;transition:.4s var(--ease);white-space:nowrap;display:flex;gap:8px;align-items:center}
@@ -1032,6 +1054,7 @@ function renderStop(i,k){
       ${seg}
       <h2>${esc(opts?p.title:it.title)}</h2>
       ${tags}
+      ${momentHtml(it,opts?opts[si]:null)}
       ${reviewHtml(it,opts?opts[si]:null)}
       ${p.about?`<p class="lead">${esc(p.about)}</p>`:""}
       ${p.cool?`<p class="cool">${I.star}<span><b>What's cool:</b> ${esc(p.cool)}</span></p>`:""}
@@ -1047,7 +1070,7 @@ function renderStop(i,k){
   sheetScroll.scrollTop=0; fillGallery(p);
   const oc=sheetScroll.querySelector(".ocards"); if(oc){ const sel=oc.querySelector('[aria-selected="true"]'); if(sel&&matchMedia("(max-width:899px)").matches) oc.scrollLeft=Math.max(0,sel.offsetLeft-10); }
   sheetScroll.querySelectorAll(".ocards .ocard").forEach(b=>b.onclick=()=>{ const j=+b.dataset.j; if(j===si) return; choice[it.id]=opts[j].id; saveK("sbtrip-choice-v1",choice); const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; const ph=sheetScroll.querySelector(".photo"); if(ph) ph.animate([{opacity:.35},{opacity:1}],{duration:500,easing:"ease-out"}); renderBar(); APP.emit("choice",{day:i,stop:k}); buzz(4); });
-  const sn=sheetScroll.querySelector(".snap"); if(sn) sn.onclick=()=>APP.emit("snap"); const qb=$("quiz-open"); if(qb) qb.onclick=()=>openQuiz(i,k); renderPolaroids(); bindReview(sheetScroll,it,i,k,opts?opts[si]:null);
+  const sn=sheetScroll.querySelector(".snap"); if(sn) sn.onclick=()=>APP.emit("snap"); const mbt=sheetScroll.querySelector(".mcard button"); if(mbt) mbt.onclick=()=>{ if(PHONE) putDown(); setTimeout(()=>playMoment(i,k,true),PHONE?450:0); }; const qb=$("quiz-open"); if(qb) qb.onclick=()=>openQuiz(i,k); renderPolaroids(); bindReview(sheetScroll,it,i,k,opts?opts[si]:null);
   sheetScroll.querySelectorAll(".tick").forEach(b=>b.onclick=()=>{ if(done[id]) delete done[id]; else done[id]=1; saveK("sbtrip-done-v1",done); const on=!!done[id]; if(typeof syncSet==="function") syncSet(["done",id],on?1:null); b.setAttribute("aria-pressed",on); b.textContent=on?"✓ Done":"Mark done"; sheet.classList.toggle("done",on); APP.emit("tick",on); });
 }
 APP.on("wiki",()=>{ const s=APP.state; if(s.mode!=="stop"&&s.mode!=="travel") return; const p=placeOf(DAYS[s.day].items[s.stop]), w=p.wiki&&wiki[p.wiki]; if(!w) return;
@@ -1074,6 +1097,89 @@ function renderBar(){
   rail.querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-current",+b.dataset.i===s.day)); const cb=rail.querySelector('[aria-current="true"]'); if(cb) cb.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"});
 }
 
+/* ---------- moments: one little romantic scene for every special place (by option id, with fall-backs by landmark type) ---------- */
+const MOMENTS={
+  d1s2a:{k:"lean",e:"🚡",b:"Three minutes in the air",t:"In the cable car Mykola pulls you closer as Seoul drops away under the window."},
+  d1s2b:{k:"leaves",e:"🍂",b:"Up through the woods",t:"He catches a maple leaf mid-air and tucks it behind your ear."},
+  d1s3a:{k:"locks",e:"🔒",b:"Our lock on Namsan",t:"Mykola clips a little lock with your names on the fence — and throws the key over the edge."},
+  d1s3b:{k:"lean",e:"🌇",b:"Sunset from the pavilion",t:"You lean on his shoulder while the city turns gold below the beacons."},
+  d2s1a:{k:"selfie",e:"📸",b:"Palace portrait",t:"Mykola squints at the phone, you fix his collar — one more, this time with Gwanghwamun behind you."},
+  d2s1b:{k:"wish",e:"🪙",b:"A coin into Cheonggyecheon",t:"He hands you a coin: make a wish, drop it in, don't tell."},
+  d2s4a:{k:"cups",e:"🏺",b:"Matching cups",t:"Two cups, two shaky paintbrushes — Mykola draws a tiny cat on yours."},
+  d2s4b:{k:"selfie",e:"📸",b:"Bukchon rooftops",t:"On the famous lane he turns you by the shoulders: 'Look — the roofs and the skyline. Smile.'"},
+  d2s5a:{k:"cups",e:"🍵",b:"Tea for two",t:"Warm cups, cold hands, a window onto the alley. He steals a bite of your yakgwa."},
+  d2s5b:{k:"wish",e:"🙏",b:"A quiet wish at Jogyesa",t:"You stand under the lanterns and each make a wish. Mykola says his is already true."},
+  d2s7a:{k:"lanterns",e:"🏮",b:"Moonlight over the lotus pond",t:"Mykola lights a paper lantern and you let it go together over the water."},
+  d2s7b:{k:"kiss",e:"✨",b:"Lights on the stream",t:"Under the candle-lit waterfall he pulls you in for a kiss."},
+  d3s2a:{k:"leaves",e:"🍁",b:"Hanok garden",t:"He twirls you under the ginkgo in the courtyard; leaves everywhere."},
+  d3s3a:{k:"lean",e:"🧱",b:"The stone-wall road",t:"Legend says couples who walk Deoksugung's wall break up. Mykola holds your hand tighter the whole way."},
+  d3s4a:{k:"leaves",e:"🚲",b:"Han River afternoon",t:"A tandem bike, one wobble, two laughs — and a leaf storm along the promenade."},
+  d3s4b:{k:"kiss",e:"🌿",b:"Island garden",t:"In the quiet of Seonyudo's old filter beds he kisses your forehead."},
+  d3s5a:{k:"lean",e:"⛴️",b:"Sunset on the Han",t:"Up on deck, his jacket over your shoulders, the bridges lighting up one by one."},
+  d3s5b:{k:"kiss",e:"🌈",b:"Rainbow fountain",t:"The fountain starts and the colours run across your faces. He dips you — then a kiss."},
+  d4s3a:{k:"perfume",e:"🌸",b:"Your scent",t:"Mykola leans in to smell the perfume you just made — and doesn't lean back."},
+  d4s3b:{k:"leaves",e:"🚲",b:"Riverside ride",t:"Two bikes, the river on your left, a shower of gold leaves from the ginkgo lane."},
+  d4s4a:{k:"leaves",e:"🍂",b:"The ginkgo avenue",t:"Seoul Forest's gold tunnel. He spins you once; a leaf lands in your hair and he leaves it there."},
+  d4s5a:{k:"cups",e:"🍗",b:"Chimaek on the grass",t:"Chicken, two cans, the river. He clinks his against yours: 'to us'."},
+  d4s5b:{k:"cups",e:"🍜",b:"Convenience-store picnic",t:"Cup ramyeon on the riverbank. He blows on yours first."},
+  d4s6a:{k:"dance",e:"🚁",b:"Hearts in the sky",t:"When the drones form a heart, Mykola spins you around under it."},
+  d4s6b:{k:"dance",e:"🚁",b:"Hearts in the sky",t:"Away from the crowd — when the drones form a heart, he spins you around under it."},
+  d5s3a:{k:"wish",e:"🪷",b:"Around Seokchon Lake",t:"At the quiet bend he hands you a coin for the lake: one wish each."},
+  d5s3b:{k:"kiss",e:"🌳",b:"The lone tree",t:"The most-photographed tree in Seoul, and he's looking at you instead."},
+  d5s4a:{k:"lean",e:"🏙️",b:"500 m above Seoul",t:"The whole city at sunset. You lean back on him, he rests his chin on your head."},
+  d5s4b:{k:"lean",e:"🌉",b:"Sky bridge",t:"On the glass bridge he holds your hand like he means it."},
+  d6s2a:{k:"sleep",e:"🚄",b:"KTX to the sea",t:"Somewhere past Daejeon you fall asleep on his shoulder. He doesn't move for an hour."},
+  d6s2b:{k:"sleep",e:"🚄",b:"SRT to the sea",t:"You fall asleep on his shoulder. He doesn't move for an hour."},
+  d6s5a:{k:"lean",e:"🌊",b:"First sunset by the sea",t:"On the stone steps at Millak the bridge lights up and he wraps both arms around you."},
+  d6s5b:{k:"lean",e:"🌊",b:"Igidae cliffs",t:"Wind, waves, the bridge across the bay. He stands behind you so you don't get cold."},
+  d6s7a:{k:"kiss",e:"⛵",b:"Yacht under the bridge",t:"Fireworks over Gwangan Bridge, champagne, and Mykola kisses you on the bow."},
+  d6s7b:{k:"kiss",e:"🌉",b:"Gwangalli by night",t:"Barefoot on the sand, the bridge lit in colours. He kisses you as the light show starts."},
+  d6s7c:{k:"lean",e:"🚂",b:"Beach train at night",t:"The sea on one side, his shoulder on the other."},
+  d7s1a:{k:"lean",e:"🚡",b:"Sky capsule for two",t:"A capsule to yourselves, the sea sliding past below. He holds your hand the whole way."},
+  d7s2a:{k:"lean",e:"🌊",b:"Over the waves",t:"On the glass walk he holds you from behind while the waves break underneath."},
+  d7s2b:{k:"kiss",e:"🗼",b:"Twin lighthouses",t:"A red and a white lighthouse — one each, he says, and kisses you."},
+  d7s4a:{k:"wish",e:"⛩️",b:"Temple by the sea",t:"You each toss a coin into the wishing pond. His lands first; so does his wish."},
+  d7s4b:{k:"leaves",e:"🏖️",b:"Songjeong beach",t:"Pine needles and sea wind on Jukdo — he runs ahead and turns to photograph you."},
+  d7s5a:{k:"lean",e:"🏙️",b:"100 floors up",t:"Haeundae at sunset from the 100th floor. His arms around you, the horizon going pink."},
+  d7s5b:{k:"kiss",e:"🌺",b:"Camellia island",t:"Under the camellias on Dongbaekseom he kisses you with the bridge behind."},
+  d7s7a:{k:"lean",e:"🌃",b:"The Bay 101",t:"Marine City's towers mirrored in the water. You lean back on him at the rail."},
+  d7s7b:{k:"kiss",e:"🏖️",b:"Haeundae lights",t:"Beach lights, the sound of the waves, and a slow kiss by the water."},
+  d7s7c:{k:"dance",e:"🎬",b:"Under the LED roof",t:"The roof comes alive with colour and Mykola twirls you under it."},
+  d8s1a:{k:"selfie",e:"🎨",b:"Little Prince seat",t:"You sit next to the Little Prince; Mykola takes the photo — then one of just you."},
+  d8s3a:{k:"lean",e:"🏘️",b:"Huinnyeoul coast path",t:"White walls, blue sea. He finds a bench and pulls you onto his knee."},
+  d8s3b:{k:"lean",e:"🚡",b:"Over the harbour",t:"Glass floor, boats below. He pretends not to be scared. You hold his hand anyway."},
+  d8s3c:{k:"lean",e:"🪨",b:"Taejongdae cliffs",t:"At the lighthouse you watch the horizon together, saying nothing."},
+  d8s4a:{k:"cups",e:"♨️",b:"Spa Land",t:"Two sikhye in the warm room, your heads touching, no plans."},
+  d8s4b:{k:"lean",e:"🌙",b:"Beach walk",t:"The last Busan night: his arm around you, the waves counting."},
+  d9s4a:{k:"lean",e:"🌇",b:"Fortress wall at sunset",t:"On the Naksan wall you watch Seoul blush. He puts his jacket on you."},
+  d9s4b:{k:"selfie",e:"🪽",b:"The wings mural",t:"The angel-wings mural: you stand in the middle and he takes the photo. Then he stands next to you."},
+  d9s6a:{k:"dance",e:"🎷",b:"Live music",t:"The band plays a slow one and he asks you to dance."},
+  d9s6b:{k:"dance",e:"🌌",b:"DDP lights",t:"In the LED rose garden he spins you between the lights."},
+  d10s1a:{k:"leaves",e:"🍁",b:"The Secret Garden",t:"In Huwon's autumn he catches a leaf for you and keeps it in his wallet."},
+  d10s1b:{k:"lean",e:"🏯",b:"Bukchon viewpoint",t:"Roofs and the skyline — his arms around you from behind."},
+  d10s2a:{k:"kiss",e:"🌿",b:"The glasshouse",t:"Between the palms in the 1909 glasshouse, a quiet kiss."},
+  d10s2b:{k:"cups",e:"☕",b:"Ikseon alleys",t:"A tiny hanok café: one dessert, two spoons."},
+  d10s4b:{k:"perfume",e:"🎁",b:"Last gifts",t:"He bought you something while you weren't looking."},
+  d10s5b:{k:"wish",e:"🪙",b:"One last coin",t:"The stream again, a coin again — same wish as day two."},
+  d10s7a:{k:"kiss",e:"🎆",b:"Last night on Namsan",t:"Back where it started. Fireworks over the city and he kisses you — the lock is still there."},
+  d10s7b:{k:"kiss",e:"🎆",b:"Gwanghwamun by night",t:"Lanterns, the palace lit, and the last kiss of the trip in the square."},
+  d10s7c:{k:"lean",e:"🏙️",b:"Rooftop",t:"The city below, a blanket, two glasses — he says it was the best trip of his life."}};
+const MOMENT_BY_LM={tower:"locks",river:"lean",waterfront:"lean",marina:"kiss",beach:"kiss",bridge:"kiss",observatory:"lean",xsky:"lean",cablecar:"lean",capsule:"lean",skywalk:"lean",cliff:"lean",island:"kiss",forest:"leaves",park:"leaves",garden:"leaves",lake:"wish",pond:"lanterns",temple:"wish",seatemple:"wish",village:"selfie",hanok:"selfie",teahouse:"cups","shop:cafe":"cups",wall:"lean",dome:"dance",cantilever:"dance",theatre:"dance",perfume:"perfume",station:"sleep",lonetree:"kiss",square:"kiss"};
+const MOMENT_KIND_TXT={feed:["🥢","The best piece","Mykola pushes the best piece onto your plate and pretends he didn't."],locks:["🔒","A lock for two","Mykola clips a little lock with your names on the fence."],lean:["🌇","Together, quietly","You lean on his shoulder and watch."],kiss:["💋","A kiss","He pulls you in."],leaves:["🍂","Leaf storm","He twirls you under the trees."],selfie:["📸","Our photo","Mykola takes the picture."],wish:["🪙","A wish","One coin, one wish each."],lanterns:["🏮","Lanterns","You let a lantern go together."],dance:["💃","A dance","He spins you around."],cups:["☕","Cheers to us","Two cups, one toast."],sleep:["😴","On his shoulder","You doze off on his shoulder."],perfume:["🌸","Close","He leans in."]};
+function momentFor(it,opt){ const o=opt||it, p=opt?resolve(opt):placeOf(it); let m=MOMENTS[o.id]||MOMENTS[it.id]; if(!m){ const lm=p.landmark||""; const k=MOMENT_BY_LM[lm]||(/^shop:/.test(lm)&&lm!=="shop:convenience"?"feed":null)||(p.fx?{fireworks:"kiss",lanterns:"lanterns",sparkle:"lean",drones:"dance",fountain:"kiss"}[p.fx]:null); if(!k) return null; const d=MOMENT_KIND_TXT[k]; m={k,e:d[0],b:d[1],t:d[2]}; } return Object.assign({id:o.id},m); }
+let momentSeen={}; try{ momentSeen=JSON.parse(sessionStorage.getItem("sbtrip-moments")||"{}"); }catch(e){}
+let momentTimer=null, momentEl=null, momentHideT=null;
+function momentHearts(e,n){ let box=$("moment-hearts"); if(!box){ box=document.createElement("div"); box.id="moment-hearts"; box.className="moment-hearts"; document.body.appendChild(box); }
+  for(let i=0;i<n;i++){ const sp=document.createElement("span"); sp.textContent=i%3===0?e:["💗","💕","🩷"][i%3]; sp.style.left=(30+Math.random()*40)+"%"; sp.style.setProperty("--dx",(Math.random()*160-80)+"px"); sp.style.setProperty("--rot",(Math.random()*50-25)+"deg"); sp.style.animationDelay=(i*.12)+"s"; box.appendChild(sp); setTimeout(()=>sp.remove(),3200); } }
+function showMomentCard(m){ if(!momentEl){ momentEl=document.createElement("div"); momentEl.id="moment"; momentEl.className="moment"; momentEl.innerHTML='<span class="me"></span><span class="tx"><b></b><small></small></span><button class="mx" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>'; document.body.appendChild(momentEl); momentEl.querySelector(".mx").onclick=()=>momentEl.classList.remove("show"); }
+  const prs=$("presence"); momentEl.classList.toggle("lower",!!(prs&&prs.classList.contains("show"))); momentEl.querySelector(".me").textContent=m.e; momentEl.querySelector("b").textContent=m.b; momentEl.querySelector("small").textContent=m.t; momentEl.classList.remove("show"); void momentEl.offsetWidth; momentEl.classList.add("show"); clearTimeout(momentHideT); momentHideT=setTimeout(()=>momentEl.classList.remove("show"),7500); }
+function playMoment(i,k,manual){ const s=APP.state; if(s.mode!=="stop"||s.day!==i||s.stop!==k) return; const it=DAYS[i].items[k], opts=optionsOf(it), m=momentFor(it,opts?opts[selIdx(it)]:null); if(!m) return;
+  momentSeen[m.id]=Date.now(); try{ sessionStorage.setItem("sbtrip-moments",JSON.stringify(momentSeen)); }catch(e){}
+  showMomentCard(m); momentHearts(m.e,manual?8:12); buzz(manual?[8,30,8]:[12,40,12,40,24]); APP.emit("moment",m); const mb=sheetScroll.querySelector(".mcard button"); if(mb){ mb.textContent="Replay"; mb.classList.add("seen"); } }
+function scheduleMoment(){ clearTimeout(momentTimer); const s=APP.state; if(s.mode!=="stop") return; const it=DAYS[s.day].items[s.stop], opts=optionsOf(it), m=momentFor(it,opts?opts[selIdx(it)]:null); if(!m||momentSeen[m.id]) return; const d=s.day, k=s.stop; momentTimer=setTimeout(()=>playMoment(d,k,false),3200); }
+function momentHtml(it,curOpt){ const m=momentFor(it,curOpt); if(!m) return ""; const seen=!!momentSeen[m.id]; return `<div class="mcard"><span class="me">${m.e}</span><span><b>${esc(m.b)}</b><small>${esc(m.t)}</small></span><button class="${seen?"seen":""}">${seen?"Replay":"💞 Play"}</button></div>`; }
+APP.momentFor=momentFor; APP.playMoment=()=>playMoment(APP.state.day,APP.state.stop,true); APP.hasMoment=()=>{ const s=APP.state; if(s.mode!=="stop") return false; const it=DAYS[s.day].items[s.stop], opts=optionsOf(it); return !!momentFor(it,opts?opts[selIdx(it)]:null); };
+APP.on("arrive",scheduleMoment); APP.on("move",()=>{ clearTimeout(momentTimer); if(momentEl) momentEl.classList.remove("show"); });
 /* ---------- staged phone flow: full-screen scene with one floating action; the info sheet is pulled up on demand ---------- */
 const PHONE=matchMedia("(max-width:899px)").matches, peekEl=$("peek");
 function openSheet(){ if(APP.state.mode!=="stop") return; sheet.classList.remove("still"); sheet.classList.add("show"); buzz(4); }
@@ -1141,7 +1247,7 @@ $("bookdlg").addEventListener("click",e=>{ if(e.target===$("bookdlg")) $("bookdl
 
 /* ---------- share + toast ---------- */
 const toastEl=$("toast"); let toastT;
-const toast=msg=>{ toastEl.textContent=msg; const pres=document.getElementById("presence"); toastEl.classList.toggle("lower",!!((pres&&pres.classList.contains("show"))||document.getElementById("travel").classList.contains("show"))); toastEl.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>toastEl.classList.remove("show"),2200); };
+const toast=msg=>{ toastEl.textContent=msg; const pres=document.getElementById("presence"); const mo=document.getElementById("moment"); toastEl.classList.toggle("lower",!!((pres&&pres.classList.contains("show"))||document.getElementById("travel").classList.contains("show")||(mo&&mo.classList.contains("show")))); toastEl.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>toastEl.classList.remove("show"),2200); };
 APP.toast=toast;
 async function share(){
   const url=herLink();
@@ -2479,7 +2585,7 @@ const wx={rain:0,cloud:0,wind:.3,fall:0}, wxT={rain:0,cloud:0,wind:.3,fall:0}; l
 function wxTargets(){ const d=activeDay; if(camMode!=='follow'&&camMode!=='overview'||d<0){ wxT.rain=0; wxT.cloud=0; wxT.wind=.3; wxT.fall=0; return; }
   const w=DAYS[d].wx||'clear', busan=DAYS[d].city==='Busan', h=envHour;
   wxT.rain=w==='showers'?(h<13.5?1:Math.max(0,1-(h-13.5)/1.5)):0; wxT.cloud=w==='cloudy'?1:(w==='showers'?Math.max(.45,wxT.rain):0); wxT.wind=w==='breeze'?1:(w==='showers'?.6:.3);
-  wxT.fall=camMode==='follow'&&couple.position.y<3?(busan?.3:1):0; }
+  wxT.fall=camMode==='follow'&&couple.position.y<3?(busan?.3:1):0; if(momentFall>0) wxT.fall=Math.min(2.2,wxT.fall+momentFall*1.8); }
 const OC={bg:0xdde2ea,hor:0xcdd5e1,zen:0x97a3b8,land:0xe4e7ee,lo:0xd6dbe5,hi:0xf3f5f9,sunC:0xd6dbe8,hemiS:0xdfe4ee,soft:0xd7dce8}; const _oc=new THREE.Color();
 function applyOvercast(){ const cl=wx.cloud*(1-envTgt.night*.75); if(cl<.01) return; for(const k in OC) envTgt[k].lerp(_oc.setHex(OC[k]),cl*.6); envTgt.sunI*=1-cl*.4; envTgt.hemiI*=1+cl*.15; }
 /* rain streaks */
@@ -2544,7 +2650,7 @@ function tapAt(hit){
   if(camMode==='pick'){ for(const [f,r] of [[fA,'me'],[fB,'her']]){ if(pick.intersectObject(f,true).length){ A.pickSelect(r); return; } } return; }
   if(!hit||camMode!=='follow'||travel) return;
   if(A.pokeTap&&hit.point) A.pokeTap(hit.point);
-  if(hit.kind==='couple'){ if(!arrived) return; const pool=['kiss','twirl','wave','hug','selfie','forehead']; let g=pool[Math.floor(Math.random()*pool.length)]; if(g===gest) g=pool[(pool.indexOf(g)+1)%pool.length]; gestQueue=[]; setGesture(g); gestNext=(G[g].hold||3)+1; sparkleBurst(couple.position,SPARK_GOLD); if(A.sound.on) A.sound.pop(); }
+  if(hit.kind==='couple'){ if(!arrived) return; if(A.hasMoment&&A.hasMoment()&&Math.random()<.6){ A.playMoment(); return; } const pool=['kiss','twirl','wave','hug','selfie','forehead']; let g=pool[Math.floor(Math.random()*pool.length)]; if(g===gest) g=pool[(pool.indexOf(g)+1)%pool.length]; gestQueue=[]; setGesture(g); gestNext=(G[g].hold||3)+1; sparkleBurst(couple.position,SPARK_GOLD); if(A.sound.on) A.sound.pop(); }
   else if(hit.kind==='landmark'){ const g=hit.g, u=g.userData; u.bounceT=0; u.pokeT=u.lt||0; if(u.poke) u.poke(); sparkleBurst(hit.point,SPARK_BLUE,14,2); if(A.sound.on) A.sound.pop(1.4); gazeTo(hit.point);
     if(/tower|skyscraper|observatory|xsky|marina|waterfront|bridge|plaza|square|cantilever/.test(u.type||'')){ const save=fxCenter.clone(); fxCenter.copy(g.position); const wasFx=fxActive; fxActive='fireworks'; for(let k=0;k<2;k++) burst(); fxActive=wasFx; fxCenter.copy(save); if(!fxActive) tapFx=2.2; } }
   else if(hit.kind==='ground'){ ripple.position.set(hit.point.x,.09,hit.point.z); rippleT=0; gazeTo(hit.point); if(A.sound.on) A.sound.pop(.7); } }
@@ -2559,8 +2665,41 @@ stage.addEventListener('wheel',e=>{ zoomT=Math.max(.78,Math.min(1.5,zoomT*(1+e.d
 A.on('move',()=>{ orbitT=0; pitchT=0; zoomT=1; gazeAmt=0; hoverG=null; });
 /* polaroid camera */
 const flashEl=document.getElementById('flash');
-A.on('snap',()=>{ if(camMode!=='follow'||travel) return; gestQueue=[]; setGesture('pose'); gestNext=4; setTimeout(()=>{ flashEl.classList.remove('go'); void flashEl.offsetWidth; flashEl.classList.add('go'); if(A.sound.on) A.sound.shutter();
-    renderer.render(scene,cam); const src=renderer.domElement.toDataURL('image/jpeg',.7); const d=DAYS[activeDay], p=A.placeOf(d.items[activeStop]); A.addPhoto({src,title:p.title||d.items[activeStop].title,sub:'Day '+(activeDay+1)+' · '+d.items[activeStop].t,ts:Date.now()}); },1000); });
+function takePhoto(){ if(activeDay<0||activeStop<0) return; flashEl.classList.remove('go'); void flashEl.offsetWidth; flashEl.classList.add('go'); if(A.sound.on) A.sound.shutter();
+  renderer.render(scene,cam); const src=renderer.domElement.toDataURL('image/jpeg',.7); const d=DAYS[activeDay], p=A.placeOf(d.items[activeStop]); A.addPhoto({src,title:p.title||d.items[activeStop].title,sub:'Day '+(activeDay+1)+' · '+d.items[activeStop].t,ts:Date.now()}); }
+A.on('snap',()=>{ if(camMode!=='follow'||travel) return; gestQueue=[]; setGesture('pose'); gestNext=4; setTimeout(takePhoto,1000); });
+/* ---------- moments: props + choreography ---------- */
+const momentM={gold:mat(0xf2c14e,.35),pink:mat(0xf49ac1,.3),dark:mat(0x2a2f45,.05),white:mat(0xffffff,.2)};
+const lockProp=new THREE.Group(); { const body=new THREE.Mesh(new THREE.BoxGeometry(.5,.44,.16),momentM.pink); body.position.y=-.08; const sh=new THREE.Mesh(new THREE.TorusGeometry(.17,.04,8,18,Math.PI),momentM.gold); sh.position.y=.16; const hp=new THREE.Mesh(new THREE.SphereGeometry(.06,8,6),momentM.white); hp.position.set(.08,-.08,.09); const hp2=new THREE.Mesh(new THREE.SphereGeometry(.06,8,6),momentM.white); hp2.position.set(-.08,-.08,.09); lockProp.add(hp2); lockProp.add(body,sh,hp); lockProp.visible=false; castAll(lockProp); scene.add(lockProp); }
+const coinProp=new THREE.Mesh(new THREE.CylinderGeometry(.09,.09,.02,16),momentM.gold); coinProp.visible=false; scene.add(coinProp);
+const HBN=160, hbPos=new Float32Array(HBN*3), hbCol=new Float32Array(HBN*3), hbAlpha=new Float32Array(HBN), hbSize=new Float32Array(HBN).fill(1.1), hbSeed=new Float32Array(HBN);
+const hbGeo=new THREE.BufferGeometry(); hbGeo.setAttribute('position',new THREE.BufferAttribute(hbPos,3)); hbGeo.setAttribute('aColor',new THREE.BufferAttribute(hbCol,3)); hbGeo.setAttribute('aAlpha',new THREE.BufferAttribute(hbAlpha,1)); hbGeo.setAttribute('aSize',new THREE.BufferAttribute(hbSize,1));
+const hbMat=pMat.clone(); hbMat.blending=THREE.NormalBlending; const hearts3d=new THREE.Points(hbGeo,hbMat); hearts3d.frustumCulled=false; hearts3d.visible=false; scene.add(hearts3d); let hbT=-1, hbScale=.09; const hbCenter=new THREE.Vector3();
+function heartBurst(p,scale=.09){ hbT=0; hbScale=scale; hbCenter.copy(p); for(let i=0;i<HBN;i++){ hbSeed[i]=Math.random(); const c=[[1,.5,.65],[1,.72,.82],[1,.9,.94],[.98,.6,.72]][i%4]; hbCol.set(c,i*3); hbAlpha[i]=0; hbSize[i]=.9+hbSeed[i]*.8; } hbGeo.attributes.aColor.needsUpdate=true; hearts3d.visible=true; if(A.sound.on) A.sound.heart(); }
+function updateHearts(dt,t){ if(hbT<0){ hearts3d.visible=false; return; } hbT+=dt; const f=hbT/3.2; if(f>=1){ hbT=-1; hearts3d.visible=false; return; } const grow=1-Math.pow(1-Math.min(1,hbT/.9),3), rise=hbT*1.2, right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
+  for(let i=0;i<HBN;i++){ const h=HEART(i,HBN); const wob=Math.sin(t*3+hbSeed[i]*20)*.06; hbPos[i*3]=hbCenter.x+right.x*(h[0]*hbScale*grow+wob); hbPos[i*3+1]=hbCenter.y+2.6+rise+h[1]*hbScale*grow; hbPos[i*3+2]=hbCenter.z+right.z*(h[0]*hbScale*grow+wob)+Math.cos(t*2+hbSeed[i]*9)*.05; hbAlpha[i]=Math.min(1,hbT*2.5)*(1-Math.max(0,(f-.55)/.45))*(.75+.25*Math.sin(t*5+hbSeed[i]*30)); }
+  hbGeo.attributes.position.needsUpdate=true; hbGeo.attributes.aAlpha.needsUpdate=true; }
+let propFly=null, momentFall=0, momentCam=0;
+function flyProp(obj,from,to,dur,spin,onLand){ obj.visible=true; obj.position.copy(from); propFly={obj,from:from.clone(),to:to.clone(),t:0,dur,spin,onLand}; }
+function updateProp(dt){ if(!propFly) return; const p=propFly; p.t+=dt; const f=Math.min(1,p.t/p.dur), e=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2; p.obj.position.lerpVectors(p.from,p.to,e); p.obj.position.y+=Math.sin(f*Math.PI)*1.1; p.obj.rotation.y+=dt*p.spin; p.obj.rotation.x+=dt*p.spin*.6;
+  if(f>=1){ const land=p.onLand; propFly=null; if(land) land(p.obj); } }
+const fwd=()=>new THREE.Vector3(Math.sin(yaw),0,Math.cos(yaw));
+A.on('moment',m=>{ if(camMode!=='follow'||travel||!arrived) return; gestQueue=[]; const c=couple.position, fw=fwd(); momentCam=1; zoomT=.86; pitchT=.12;
+  switch(m.k){
+    case 'locks': setGesture('hands'); gestNext=2.2; gestQueue=['kiss','hug']; { const from=c.clone().add(fw.clone().multiplyScalar(.5)); from.y+=1.4; const to=c.clone().add(fw.clone().multiplyScalar(2.6)); to.y+=1.15; setTimeout(()=>{ if(!arrived) return; flyProp(lockProp,from,to,1.5,4,o=>{ o.rotation.set(0,yaw,0); sparkleBurst(o.position.clone().setY(o.position.y-2.2),[[1,.55,.7],[1,.85,.9],[1,1,1]],26,3); setTimeout(()=>heartBurst(c,.07),500); }); if(A.sound.on) A.sound.pop(1.1); },900); } break;
+    case 'lanterns': setGesture('lantern'); gestQueue=['admire','kiss']; if(!fxActive||fxActive==='sparkle') startFx('lanterns',c); setTimeout(()=>heartBurst(c,.06),2200); break;
+    case 'lean': setGesture('lean'); gestNext=5; gestQueue=['sway','forehead']; setTimeout(()=>heartBurst(c,.06),1400); break;
+    case 'kiss': setGesture('dip'); gestNext=3.2; gestQueue=['kiss','hug']; setTimeout(()=>{ heartBurst(c,.1); sparkleBurst(c,[[1,.55,.7],[1,.85,.9],[1,1,1]],34,3.6); },1500); if(/fireworks/.test(m.id)||(activeDay>=0&&activeStop>=0&&props[activeDay][activeStop]&&props[activeDay][activeStop].userData.fx==='fireworks')){ tapFx=2.6; } break;
+    case 'leaves': momentFall=1; setGesture('twirl'); gestQueue=['cheer','kiss']; setTimeout(()=>sparkleBurst(c,[[1,.78,.3],[.95,.45,.2],[1,.9,.6]],30,3.4),600); setTimeout(()=>heartBurst(c,.06),2600); break;
+    case 'selfie': setGesture('selfie'); gestNext=4; gestQueue=['kiss']; setTimeout(()=>{ if(arrived) takePhoto(); },1700); setTimeout(()=>heartBurst(c,.06),2600); break;
+    case 'wish': setGesture('hands'); gestNext=2.6; gestQueue=['forehead','kiss']; { const from=c.clone().add(fw.clone().multiplyScalar(.4)); from.y+=1.3; const to=c.clone().add(fw.clone().multiplyScalar(3.2)); to.y+=.08; setTimeout(()=>{ if(!arrived) return; flyProp(coinProp,from,to,1.3,9,o=>{ o.visible=false; ripple.position.set(o.position.x,.09,o.position.z); rippleT=0; sparkleBurst(o.position.clone().setY(o.position.y-2.4),SPARK_GOLD,24,2.6); if(A.sound.on&&A.sound.bell) A.sound.bell(); setTimeout(()=>heartBurst(c,.06),700); }); },1100); } break;
+    case 'dance': setGesture('twirl'); gestQueue=['dip','kiss','cheer']; setTimeout(()=>heartBurst(c,.1),1200); if(!fxActive) tapFx=2.4; break;
+    case 'feed': case 'cups': setGesture('cheer'); gestNext=3.5; gestQueue=['whisper','kiss']; setTimeout(()=>{ sparkleBurst(c,SPARK_GOLD,20,2.6); if(A.sound.on) A.sound.pop(1.3); },900); setTimeout(()=>heartBurst(c,.055),2400); break;
+    case 'sleep': setGesture('tuck'); gestNext=6; gestQueue=['whisper']; setTimeout(()=>sparkleBurst(c,[[1,1,1],[.9,.95,1]],10,1.4),1200); setTimeout(()=>heartBurst(c,.05),3000); break;
+    case 'perfume': setGesture('whisper'); gestNext=3.6; gestQueue=['kiss','forehead']; setTimeout(()=>sparkleBurst(c,[[1,.75,.85],[1,.9,.95],[.95,.8,1]],30,2.2),600); setTimeout(()=>heartBurst(c,.07),2200); break;
+    default: setGesture('kiss'); gestQueue=['hug']; setTimeout(()=>heartBurst(c,.07),1000); }
+  if(A.sound.on) A.sound.heart(); });
+A.on('move',()=>{ propFly=null; lockProp.visible=false; coinProp.visible=false; momentFall=0; if(momentCam){ momentCam=0; zoomT=1; pitchT=0; } });
 /* one-time hint */
 if(!localStorage.getItem('sbtrip-hint-v1')){ const h=()=>{ if((A.arrivals||0)<3) return; A.toast('Drag to look around · tap the couple or the place · pinch to zoom'); localStorage.setItem('sbtrip-hint-v1','1'); A.hooks.arrive=A.hooks.arrive.filter(f=>f!==h); }; A.on('arrive',h); }
 
@@ -2631,7 +2770,7 @@ function frame(){
     handGlow.visible=false; }
   else handGlow.visible=hold>.6&&!spin.active; handGlow.position.set(0,1.42+Math.sin(t*1.4)*.03*(1-walk),.12); handGlow.material.emissiveIntensity=.4+.3*Math.sin(t*2.5);
   if(pin.visible){ pin.position.y=Math.sin(t*2.2)*.25+.2; pin.rotation.y=t*.8; const ps=activeStop>=0&&arrived?1:.001; pin.scale.setScalar(pin.scale.x+(ps-pin.scale.x)*Math.min(1,dt*6)); }
-  updateFx(dt,t);
+  updateFx(dt,t); updateHearts(dt,t); updateProp(dt); if(momentFall>0) momentFall=Math.max(0,momentFall-dt/9);
 
   // trails + markers
   trails.forEach((trl,i)=>{ const m=trailMats[i].uniforms, active=i===activeDay;
