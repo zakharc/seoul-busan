@@ -39,6 +39,10 @@ After the last stop (→ at the airport, the ✨ pill, or ♥ → *Roll the cred
 
 The first time the trail reaches a Busan place (the KTX on day 6) the app cuts to a camellia cliff above Gwangalli: the sea shader slides from azure to gold, the Gwangan bridge cycles its lamp colours, gulls and sailboats drift by, and **Hello, Busan.** builds up word by word. *Step off the train →* carries on to the stop you were heading for. It plays once per session; the 🌊 button on any Busan day card replays it.
 
+### Stages
+
+Every stop gets its own little environment (`STAGE_KIT` in `index.html`): a themed ground (flagstones, grass, sand, rock, boardwalk, market tiles, café brick, city paving — canvas textures, three variants each) and a ring of set dressing chosen by the place type — stone lanterns, onggi jars and pines at palaces and temples; picnic blankets, flower beds, a kite, butterflies by day and fireflies after dark in parks; umbrellas, buoys, a sandcastle and gulls on beaches; railings, a life ring, bunting and bobbing boats on waterfronts; food carts with steam and string lights at markets; café tables with people and a cat at restaurants. Only the current stop's stage (plus the one you are walking from) is built and animated.
+
 ### Moments
 
 Every special place has a little scene (`MOMENTS` in `index.html`, keyed by option id, with fall-backs per landmark type): the figurines act it out in 3D (lock on the fence, coin into the stream, lantern release, leaf storm, selfie, a toast…) and a small caption tells something nice about the place itself. It starts about a second after arrival, repeats quietly every half-minute or so while you stand there, and can be triggered by tapping the couple. Hearts only appear at the handful of places marked `r:1` (Namsan locks, the lotus pond, Gwangalli at night…).
