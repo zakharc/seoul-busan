@@ -2,6 +2,8 @@
 
 *Two leaves. One shared adventure.* A single-file trip companion that opens on the roameo brand splash and hands off to the Seoul ⇄ Busan trail.
 
+**Version 1.13** — Final combined UX review: narrow-phone day capsule, 44px game controls and ribbons that fit, reduced-motion game messages keep their reading time, driver card traps focus, map search focus and ARIA clean-up.
+
 **Version 1.12** — Trip map convenience pass: time check (leave-by, time at each stop, tight-connection warnings), Today view with Next up, KakaoMap links and a 🚕 driver card in Hangul, find, ▶ Play the day, smoother sheet and transitions, layered Esc; fixes Esc not closing the map after a popup.
 
 **Version 1.11** — Chronicles of Novartis v2: five levels with their own scenery and songs, comic splashes, combos, phone-notification gags, its own music/SFX toggle; smoother 120 Hz physics.
