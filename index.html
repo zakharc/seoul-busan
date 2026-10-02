@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f7f0e5">
 <meta property="og:title" content="roameo · Seoul ⇄ Busan"><meta property="og:description" content="Two leaves. One shared adventure. Eleven days, two cities, one trail — for the two of us."><meta property="og:image" content="https://zakharc.github.io/seoul-busan/icons/og.png"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
-<meta name="build" content="20261002-090901">
+<meta name="build" content="20261002-092220">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
@@ -960,6 +960,10 @@ html{background:var(--bg)}
 #chgdlg{--spot-height:100dvh}
 .dlg.spotlight{top:calc(var(--sat) + 10px);bottom:auto;left:10px;right:10px;display:flex;flex-direction:column;max-height:calc(var(--spot-height) - var(--sat) - 20px);padding:0;overflow:hidden;border-radius:22px;border:1px solid var(--line);background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);box-shadow:0 30px 80px -30px rgba(17,22,40,.5);animation:spotin .32s var(--ease)}
 @keyframes spotin{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:none}}
+#chgdlg>.dlg.spotlight{max-height:calc(var(--spot-height) - var(--sat) - 20px)}
+html.comfort-ui #chgdlg .spot-search input:focus-visible{outline:none;box-shadow:none}
+html.comfort-ui #chgdlg .spot-search:focus-within{box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--c) 55%,transparent)}
+@media (max-width:899px){ html.comfort-ui .sheet .scout .sc-h{padding-right:44px} }
 @media (min-width:900px){ .dlg.spotlight{top:12vh;left:50%;right:auto;width:min(640px,calc(100vw - 40px));transform:translateX(-50%);animation:spotin-d .32s var(--ease)} @keyframes spotin-d{from{opacity:0;transform:translate(-50%,-10px) scale(.98)}to{opacity:1;transform:translateX(-50%)}} }
 .spot-search{display:flex;align-items:center;gap:10px;padding:12px 12px 10px 16px;border-bottom:1px solid var(--line)}
 .spot-search>span{font-size:22px;line-height:1;color:var(--muted)}
@@ -1213,6 +1217,8 @@ html.visual-preview body > :not(#stage):not(script):not(style){display:none!impo
 html.visual-preview #stage{position:fixed;inset:0;width:100%;height:100%;opacity:1!important}
 html.visual-preview body{margin:0;overflow:hidden}
 </style>
+<link rel="stylesheet" href="experience.css?v=acf42d4776f4">
+<script defer src="experience.js?v=a0e3ec495f07"></script>
 </head>
 <body>
 <div id="stage"></div>
@@ -2702,7 +2708,7 @@ function renderComposer(){ cancelPlaceSearch(); if(chgDraft.step==="search"){ re
 function readDraft(){ const d=chgDraft, g=id=>{ const el=$(id); return el?el.value:null; }; const v=(k,id)=>{ const x=g(id); if(x!=null) d.place[k]=x.trim(); }; v("title","c-title"); v("ko","c-ko"); v("cool","c-cool"); v("price","c-price"); v("hours","c-hours"); v("need","c-need"); v("url","c-url"); const n=g("c-note"); if(n!=null) d.note=n; const w=g("c-when"); if(w!=null) d.when=w; const a=g("c-after"); if(a!=null) d.toAfter=a; const dd=g("c-day"); if(dd!=null){ if(d.type==="move") d.toDay=+dd; else d.day=+dd; } }
 APP.openComposer=openComposer;
 addEventListener("keydown",e=>{
-  if(!(e.metaKey||e.ctrlKey)||e.key.toLowerCase()!=="k"||!$("brand").hidden||visualPreview) return;
+  if(e.defaultPrevented||!(e.metaKey||e.ctrlKey)||e.key.toLowerCase()!=="k"||!$("brand").hidden||visualPreview) return;
   e.preventDefault(); if(chgEl.open) chgEl.close(); else openComposer({day:Math.max(0,APP.state.day),type:"add"});
 });
 function fitSpotlight(){ chgEl.style.setProperty("--spot-height",(window.visualViewport?window.visualViewport.height:innerHeight)+"px"); }

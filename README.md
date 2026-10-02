@@ -2,6 +2,8 @@
 
 *Two leaves. One shared adventure.* A single-file trip companion that opens on the roameo brand splash and hands off to the Seoul ⇄ Busan trail.
 
+**Version 1.7** — Apple-inspired comfort layer (`experience.css` / `experience.js`): trip overview with all days, top-bar search, glass surfaces, system typography, visible focus, 44px touch targets, **Back to the scene** on the phone sheet; integrated with Spotlight search and Scout report.
+
 **Version 1.6** — Spotlight-style change search (⌘K / ⋯ → Search places): one field with live suggestions, commands (`move`, `remove`, `swap`, `note`), ↑↓/↵ and a short review step. New **Scout report** on every stop: generated at-a-glance summary, live surroundings from OpenStreetMap, one-tap rating links (Google, Tripadvisor, Naver, Kakao, Michelin, blogs) and **Swap ideas** with reasons (nearby, cheaper, rain plan, open later, similar dish/vibe, our pick) that turn into a suggestion in one tap.
 
 **Version 1.5** — 40 place-specific scene designs, sheet-aware framing, cache-versioned visuals, fast intro transition fixes and an expanded Before/After gallery. Search and shared itinerary changes are preserved.
@@ -38,6 +40,9 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 
 ## On the phone
 
+- **Trip overview:** the day capsule at the top opens all eleven days, with dates, cities and stop counts. Choose a day to open its timeline directly. Search, shared picks and bookings are also one tap away in the overview; sound remains in More.
+- **Quick research:** the search icon in the top bar opens the Spotlight place search. On a keyboard, use **Cmd/Ctrl+K**.
+- **Comfortable controls:** quieter glass surfaces, system UI typography, visible keyboard focus, 44px primary touch targets and an explicit **Back to the scene** button on the phone's place sheet. Hidden trail panels are excluded from keyboard navigation; arrow keys inside a dialog no longer move the trail behind it. Reduced-motion preferences remove UI delays and looping decoration; scene motion remains managed by the 3D layer.
 - Phone flow is staged: pick a character → the 3D scene fills the screen with a **Start the day** pill → the couple walks → an arrival pill pulls up the info sheet. Swipe the sheet down (big handle) or tap the scene to put it away; tap the pill or the title in the bottom bar to bring it back. `?debug=1` shows an on-screen diagnostics overlay.
 - Android (Samsung Internet / Chrome): open the link → menu → **Add to Home screen** — the page ships a web manifest and icons, so it installs as a standalone app with its own icon. iPhone: Share → **Add to Home Screen**.
 - `tools/` has no test runner; QA is done by walking the app in a phone-emulated browser (360×780 Galaxy profile) and checking for overflow, small touch targets and console errors.
@@ -46,6 +51,7 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 
 - Content lives in `data/meta.json`, `data/days-a.json`, `data/days-b.json`. After changing stops/options run `python3 tools/commutes.py` (OSRM routing, cached) and then deploy.
 - UI/3D code is in `index.html`. `tools/build.py` injects the data and stamps the build; `deploy.sh` runs it for you.
+- The additive interface layer lives in `experience.css` and `experience.js`, loaded by two tags at the end of the document head. It uses the existing app/navigation handlers, leaves 3D geometry and camera framing untouched, and does not run in `?visual-preview=1`. `tools/build.py` versions both tags (`?v=` content hash), like `place-scenes.js`, so phones never keep a stale copy.
 - Street scenery (ginkgo trees, hanok lamps, lantern wires, gates, Hangul signs, benches, flowers) is generated per day in `buildStreet()`; the Hangul sign words live in the `hangulTex` atlas next to it. Counts scale down automatically on phones (`lowEnd`).
 - Local preview: `python3 -m http.server 8765` → http://127.0.0.1:8765/index.html · add `?debug=1` for the on-screen diagnostics overlay.
 
