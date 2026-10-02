@@ -33,7 +33,7 @@ dialog#nvx-game{background:#cfe9f7;color:#111628;overflow:hidden;touch-action:no
 dialog#nvx-game[open]{animation:nvx-open .45s var(--ease,cubic-bezier(.2,.8,.2,1))}
 dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
 @keyframes nvx-open{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:none}}
-#nvx-game canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#nvx-game>canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 #nvx-game .nvx-hud{position:absolute;left:0;right:0;top:0;padding:calc(env(safe-area-inset-top,0px) + 10px) 12px 0;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;pointer-events:none;font-family:var(--body,system-ui)}
 #nvx-game .nvx-pill{pointer-events:auto;display:flex;align-items:center;gap:6px;height:38px;padding:0 12px;border-radius:999px;background:rgba(255,255,255,.78);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);box-shadow:0 4px 16px rgba(17,22,40,.12);font:700 14px var(--display,system-ui);white-space:nowrap}
 #nvx-game .nvx-lives{letter-spacing:1px;font-size:15px}
@@ -55,10 +55,19 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
 #nvx-game .nvx-quip.show{animation:nvx-quip 2.6s var(--ease,ease) forwards}
 #nvx-game .nvx-quip.good{background:linear-gradient(135deg,#e8557a,#d59a17)}
 @keyframes nvx-quip{0%{opacity:0;transform:translate(-50%,-8px) scale(.94)}10%,78%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-6px)}}
-#nvx-game .nvx-card{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(460px,calc(100vw - 28px));max-height:calc(100dvh - 120px);overflow:auto;padding:22px 22px 18px;border-radius:26px;background:rgba(255,255,255,.9);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);box-shadow:0 24px 70px rgba(17,22,40,.28);font-family:var(--body,system-ui);text-align:center;touch-action:auto}
+#nvx-game .nvx-card{position:absolute;left:50%;top:50%;translate:-50% -50%;transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .35s cubic-bezier(.2,.8,.2,1);width:min(460px,calc(100vw - 28px));max-height:calc(100dvh - 120px);overflow:auto;padding:22px 22px 18px;border-radius:26px;background:rgba(255,255,255,.9);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);box-shadow:0 24px 70px rgba(17,22,40,.28);font-family:var(--body,system-ui);text-align:center;touch-action:auto}
 #nvx-game .nvx-card[hidden]{display:none}
-#nvx-game .nvx-card.in{animation:nvx-card .55s cubic-bezier(.34,1.56,.64,1)}
-@keyframes nvx-card{from{opacity:0;transform:translate(-50%,-44%) scale(.94)}to{opacity:1;transform:translate(-50%,-50%)}}
+#nvx-game .nvx-card.in{animation:nvx-card .62s cubic-bezier(.22,.9,.32,1) both}
+#nvx-game .nvx-card.out{animation:nvx-card-out .24s cubic-bezier(.5,0,.75,0) forwards;pointer-events:none}
+@keyframes nvx-card{0%{opacity:0;scale:.62;rotate:-4deg}55%{opacity:1;scale:1.045;rotate:1deg}78%{scale:.985;rotate:-.4deg}100%{opacity:1;scale:1;rotate:0deg}}
+@keyframes nvx-card-out{to{opacity:0;scale:.86;rotate:2.5deg}}
+#nvx-game .nvx-card.in>:not(.nvx-stamp){animation:nvx-rise .55s cubic-bezier(.2,.9,.3,1.25) both;animation-delay:calc(var(--i,0) * 55ms + 130ms)}
+#nvx-game .nvx-card.in>h2{animation:nvx-rise .55s cubic-bezier(.2,.9,.3,1.25) both,nvx-shine 5s linear infinite;animation-delay:calc(var(--i,0) * 55ms + 130ms),0s}
+@keyframes nvx-rise{from{opacity:0;translate:0 16px;scale:.95}}
+#nvx-game .nvx-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(circle at var(--gx,50%) var(--gy,0%),rgba(255,255,255,.7),transparent 46%);opacity:0;transition:opacity .35s;mix-blend-mode:soft-light}
+#nvx-game .nvx-card.tilt::after{opacity:1}
+#nvx-game .nvx-scrim{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(15,19,32,.12),rgba(15,19,32,.42));opacity:0;pointer-events:none;transition:opacity .35s ease}
+#nvx-game .nvx-scrim.on{opacity:1;pointer-events:auto}
 #nvx-game .nvx-eyebrow{margin:0 0 6px;font:800 11px var(--body,system-ui);letter-spacing:.14em;text-transform:uppercase;color:#e8557a}
 #nvx-game h2{margin:0;font:800 clamp(24px,6vw,32px)/1.05 var(--display,system-ui);letter-spacing:-.02em;background:linear-gradient(100deg,#111628 20%,#e8557a 50%,#111628 80%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:nvx-shine 5s linear infinite}
 @keyframes nvx-shine{from{background-position:100% 0}to{background-position:-150% 0}}
@@ -74,8 +83,16 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
 #nvx-game .nvx-stats span{padding:8px 12px;border-radius:14px;background:#f3f4f8;font:600 12px var(--body,system-ui);color:#6b7392}
 #nvx-game .nvx-stats b{display:block;font:800 18px var(--display,system-ui);color:#111628}
 #nvx-game .nvx-actions{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
-.nvx-btn{appearance:none;border:0;cursor:pointer;height:46px;padding:0 20px;border-radius:999px;font:700 15px var(--display,system-ui);display:inline-flex;align-items:center;gap:8px;transition:transform .15s}
-.nvx-btn:active{transform:scale(.96)}
+.nvx-btn{position:relative;overflow:hidden;appearance:none;border:0;cursor:pointer;height:46px;padding:0 20px;border-radius:999px;font:700 15px var(--display,system-ui);display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .18s cubic-bezier(.34,1.56,.64,1),translate .2s ease,box-shadow .2s}
+.nvx-btn:active{transform:scale(.93)}
+@media (hover:hover){ .nvx-btn:hover{translate:0 -2px} .nvx-btn.go:hover::before{left:130%;transition:left .7s ease} }
+.nvx-btn.go::before{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);pointer-events:none}
+#nvx-game .nvx-card .nvx-btn.go{animation:nvx-glow 2.4s ease-in-out 1s infinite}
+@keyframes nvx-glow{50%{box-shadow:0 8px 30px rgba(232,85,122,.6),0 0 0 6px rgba(232,85,122,.12)}}
+.nvx-ripple{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:rgba(255,255,255,.55);pointer-events:none;animation:nvx-ripple .55s ease-out forwards}
+.nvx-btn.ghost .nvx-ripple{background:rgba(17,22,40,.14)}
+@keyframes nvx-ripple{to{scale:22;opacity:0}}
+.nvx-btn.small{height:38px;padding:0 14px;font-size:13.5px}
 .nvx-btn.go{color:#fff;background:linear-gradient(135deg,#e8557a,#f2a25c);box-shadow:0 8px 22px rgba(232,85,122,.35)}
 .nvx-btn.ghost{color:var(--ink,#111628);background:var(--soft,#f0f2f8)}
 #nvx-game .nvx-btn.ghost{color:#111628;background:#eef0f6}
@@ -145,6 +162,86 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
   #nvx-game .nvx-quip.show{animation:nvx-quipfade 2.6s linear forwards;animation-duration:2.6s!important}
   #nvx-game .nvx-level .rib::before{animation:none}
 }
+
+#nvx-game .nvx-hero{display:flex;align-items:center;justify-content:center;gap:4px;margin:-4px 0 4px}
+#nvx-game .nvx-hero canvas{width:96px;height:120px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+#nvx-game .nvx-bubble{position:relative;margin:0;max-width:190px;padding:9px 13px;border-radius:16px 16px 16px 4px;background:#fff;box-shadow:0 6px 18px rgba(17,22,40,.12);font:700 13px/1.3 var(--body,system-ui);color:#2a3048;text-align:left}
+#nvx-game .nvx-bubble.pop{animation:nvx-pop .45s cubic-bezier(.34,1.8,.64,1)}
+#nvx-game .nvx-wiggle,#nvx-game .nvx-card .nvx-wiggle.nvx-wiggle{animation:nvx-wiggle .6s ease-in-out}
+@keyframes nvx-wiggle{20%{rotate:-6deg}40%{rotate:5deg}60%{rotate:-3deg}80%{rotate:2deg}}
+#nvx-game .nvx-ev-head{display:flex;align-items:center;gap:12px;text-align:left}
+#nvx-game .nvx-ava{flex:0 0 auto;width:58px;height:58px;border-radius:20px;display:grid;place-items:center;font-size:30px;background:linear-gradient(135deg,#fff,#eef0f6);box-shadow:0 8px 20px rgba(17,22,40,.14),inset 0 0 0 1px rgba(17,22,40,.06);animation:nvx-ring 1.4s ease-in-out infinite}
+#nvx-game .nvx-ava.happy{animation:nvx-hop .5s cubic-bezier(.34,1.8,.64,1) 2}
+@keyframes nvx-ring{0%,60%,100%{rotate:0deg}65%{rotate:-12deg}70%{rotate:10deg}75%{rotate:-8deg}80%{rotate:6deg}85%{rotate:0deg}}
+@keyframes nvx-hop{50%{translate:0 -10px;scale:1.08}}
+#nvx-game .nvx-ev-head .nvx-eyebrow{margin:0 0 2px}
+#nvx-game .nvx-ev-name{display:block;font:800 19px/1.15 var(--display,system-ui);color:#111628}
+#nvx-game .nvx-speech{position:relative;margin:14px 0 0;padding:12px 14px;min-height:44px;border-radius:4px 18px 18px 18px;background:#f3f4f8;text-align:left;font:600 14.5px/1.4 var(--body,system-ui);color:#2a3048}
+#nvx-game .nvx-speech.reply{background:linear-gradient(135deg,#fff0f4,#fff6e6);box-shadow:inset 0 0 0 1px rgba(232,85,122,.18)}
+#nvx-game .nvx-typed::after{content:"▍";margin-left:1px;color:#e8557a;animation:nvx-caret .8s steps(1) infinite}
+#nvx-game .nvx-typed.done::after{content:none}
+@keyframes nvx-caret{50%{opacity:0}}
+#nvx-game .nvx-opts{display:grid;gap:8px;margin-top:14px}
+#nvx-game .nvx-opt{position:relative;overflow:hidden;display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:10px;min-height:50px;padding:6px 12px;border:0;border-radius:16px;background:#fff;box-shadow:0 3px 10px rgba(17,22,40,.08),inset 0 0 0 1.5px rgba(17,22,40,.07);text-align:left;cursor:pointer;font:700 14.5px/1.2 var(--display,system-ui);color:#111628;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s,opacity .25s,scale .25s,translate .2s}
+#nvx-game .nvx-opt>i{font-style:normal;font-size:22px;display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:#f3f4f8;transition:rotate .3s,scale .3s}
+#nvx-game .nvx-opt small{display:block;margin-top:2px;font:700 11.5px var(--body,system-ui);color:#e8557a}
+#nvx-game .nvx-opt kbd{opacity:.7}
+@media (hover:hover){ #nvx-game .nvx-opt:hover{translate:4px 0;box-shadow:0 6px 16px rgba(17,22,40,.12),inset 0 0 0 2px rgba(232,85,122,.45)} #nvx-game .nvx-opt:hover>i{rotate:-10deg;scale:1.15} }
+#nvx-game .nvx-opt:active{transform:scale(.97)}
+#nvx-game .nvx-opt:focus-visible{outline:3px solid rgba(232,85,122,.5);outline-offset:2px}
+#nvx-game .nvx-opts.chosen .nvx-opt{pointer-events:none}
+#nvx-game .nvx-opts.chosen .nvx-opt:not(.pick){opacity:0;scale:.85}
+#nvx-game .nvx-opts.chosen .nvx-opt.gone{display:none}
+#nvx-game .nvx-card[data-kind=title] .nvx-actions{position:sticky;bottom:-18px;z-index:2;margin:12px -22px -18px;padding:12px 0 16px;background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.96) 40%);border-radius:0 0 26px 26px}
+@media (max-width:600px){ #nvx-game .nvx-card[data-kind=title] .nvx-actions{bottom:-14px;margin:10px -16px -14px;padding:10px 0 14px} }
+#nvx-game .nvx-scrim.on~.nvx-note{visibility:hidden}
+@media (min-width:900px) and (min-aspect-ratio:5/4){ #nvx-game .nvx-card[data-kind=event]{left:auto;right:max(24px,7vw);translate:0 -50%} }
+#nvx-game .nvx-opts.chosen .nvx-opt.pick{box-shadow:0 8px 24px rgba(232,85,122,.3),inset 0 0 0 2px #e8557a;animation:nvx-pop .5s cubic-bezier(.34,1.8,.64,1)}
+#nvx-game .nvx-tapnext{margin:10px 0 0;font:700 12px var(--body,system-ui);color:#6b7392;opacity:0;transition:opacity .3s}
+#nvx-game .nvx-tapnext.on{opacity:1}
+#nvx-game .nvx-play{display:flex;gap:12px;align-items:center;margin:14px 0 0;padding:12px;border-radius:18px;background:#f3f4f8;text-align:left}
+#nvx-game .nvx-play>div{flex:1;min-width:0}
+#nvx-game .nvx-play b{display:block;font:800 13px var(--display,system-ui);color:#111628}
+#nvx-game .nvx-play small{display:block;font:600 11.5px var(--body,system-ui);color:#6b7392;margin-top:2px}
+#nvx-game .nvx-meter{height:7px;margin-top:6px;border-radius:9px;background:rgba(17,22,40,.08);overflow:hidden}
+#nvx-game .nvx-meter i{display:block;height:100%;width:var(--m,0%);border-radius:9px;background:linear-gradient(90deg,#8a5a3c,#d59a17);transition:width .4s cubic-bezier(.34,1.56,.64,1)}
+#nvx-game .nvx-cup{position:relative;flex:0 0 auto;width:64px;height:64px;border:0;border-radius:18px;background:#fff;box-shadow:0 4px 14px rgba(17,22,40,.1);cursor:pointer;padding:0}
+#nvx-game .nvx-cup .mug{position:absolute;left:13px;top:20px;width:30px;height:30px;border-radius:4px 4px 10px 10px;background:#fff;box-shadow:inset 0 0 0 2.5px #2a3048;overflow:hidden}
+#nvx-game .nvx-cup .mug::after{content:"";position:absolute;inset:auto 0 0;height:var(--lvl,80%);background:linear-gradient(#a0673e,#6e4426);transition:height .4s ease}
+#nvx-game .nvx-cup .handle{position:absolute;left:41px;top:25px;width:11px;height:14px;border:2.5px solid #2a3048;border-left:0;border-radius:0 8px 8px 0}
+#nvx-game .nvx-cup .steam{position:absolute;top:4px;width:4px;height:14px;border-radius:4px;background:rgba(160,166,186,.55);animation:nvx-steam 1.8s ease-in-out infinite}
+#nvx-game .nvx-cup .steam:nth-of-type(2){left:22px;animation-delay:.3s}
+#nvx-game .nvx-cup .steam:nth-of-type(3){left:30px;animation-delay:.9s}
+#nvx-game .nvx-cup .steam:nth-of-type(4){left:38px;animation-delay:.6s}
+@keyframes nvx-steam{0%{opacity:0;translate:0 6px;scale:1 .6}40%{opacity:1}100%{opacity:0;translate:3px -8px;scale:1 1.2}}
+#nvx-game .nvx-cup.sip{animation:nvx-sip .5s ease-in-out}
+@keyframes nvx-sip{40%{rotate:-18deg;translate:-4px -4px}}
+#nvx-game .nvx-excuse{margin:10px 0 0;padding:12px;border-radius:18px;background:#f3f4f8;text-align:left}
+#nvx-game .nvx-excuse p{margin:8px 2px 0;min-height:38px;font:600 13.5px/1.4 var(--body,system-ui);color:#2a3048}
+#nvx-game .nvx-rca{margin:14px 0 0;padding:12px;border-radius:18px;background:linear-gradient(135deg,#1d2133,#33375a);color:#fff;text-align:center}
+#nvx-game .nvx-rca h3{margin:0 0 8px;font:800 11px var(--body,system-ui);letter-spacing:.14em;text-transform:uppercase;color:#ffd166}
+#nvx-game .nvx-reels{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+#nvx-game .nvx-reel{position:relative;height:34px;overflow:hidden;border-radius:10px;background:#fff;box-shadow:inset 0 3px 6px rgba(17,22,40,.25)}
+#nvx-game .nvx-reel::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(17,22,40,.18),transparent 30%,transparent 70%,rgba(17,22,40,.18));pointer-events:none}
+#nvx-game .nvx-strip{display:block;font-style:normal;transition:transform 1s cubic-bezier(.15,.85,.25,1.08)}
+#nvx-game .nvx-strip span{display:flex;align-items:center;justify-content:center;height:34px;padding:0 4px;font:800 12px/1.05 var(--display,system-ui);color:#111628;white-space:nowrap;overflow:hidden}
+#nvx-game .nvx-rca p{margin:10px 0 8px;min-height:20px;font:700 13px/1.35 var(--body,system-ui);color:#fff}
+#nvx-game .nvx-rca .nvx-btn.ghost{background:rgba(255,255,255,.14);color:#fff}
+#nvx-game .nvx-sign{position:relative;margin:14px 0 0;border-radius:16px;background:repeating-linear-gradient(#fffef8 0 27px,#e9edf5 27px 28px);box-shadow:inset 0 0 0 1.5px rgba(17,22,40,.1);overflow:hidden}
+#nvx-game .nvx-sign canvas{display:block;width:100%;height:88px;touch-action:none;cursor:crosshair}
+#nvx-game .nvx-sign .hint{position:absolute;left:12px;right:96px;bottom:9px;font:700 12px var(--body,system-ui);color:#8a91ad;pointer-events:none;text-align:left;transition:color .3s}
+#nvx-game .nvx-sign .x{position:absolute;left:10px;top:32px;font:900 18px var(--display,system-ui);color:#c7cbe0;pointer-events:none}
+#nvx-game .nvx-sign.done .hint{color:#1f9a5a}
+#nvx-game .nvx-sign .nvx-btn{position:absolute;right:8px;bottom:8px;height:32px;padding:0 12px;font-size:12px}
+#nvx-game .nvx-stamp.wait{opacity:0;animation:none;pointer-events:none}
+#nvx-game .nvx-stamp.slam{animation:nvx-stamp .5s cubic-bezier(.2,1.6,.4,1) forwards;cursor:pointer}
+#nvx-game .nvx-stats span.best{background:linear-gradient(135deg,#fff3c4,#ffe0ea);color:#b5651d;animation:nvx-wiggle .8s ease-in-out 1.3s 2}
+.nvx-dc{position:absolute;left:0;top:0;z-index:5;pointer-events:none;font-style:normal;line-height:1;animation:nvx-dc var(--d,1s) cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes nvx-dc{0%{translate:0 0;scale:.4;opacity:1}35%{translate:calc(var(--dx) * .6) var(--dy);scale:1;opacity:1}100%{translate:var(--dx) calc(var(--dy) + 140px);rotate:var(--r);opacity:0}}
+.nvx-invite.bye .nvx-inv-art{animation:nvx-sad .8s ease-in-out forwards}
+@keyframes nvx-sad{30%{rotate:-8deg}60%{rotate:6deg;scale:.94}100%{rotate:0deg;scale:.9;filter:grayscale(.6)}}
+@media (hover:hover){ .nvx-invite:hover .nvx-inv-art{animation:nvx-wiggle .6s ease-in-out} }
+@media (max-width:600px){ #nvx-game .nvx-hero{margin:-8px 0 0} #nvx-game .nvx-hero canvas{width:80px;height:100px} #nvx-game .nvx-strip span{font-size:11px} #nvx-game .nvx-opt{font-size:14px;min-height:48px} }
 
 .nvx-invite{position:fixed;z-index:80;left:12px;right:12px;bottom:calc(var(--bar-h,68px) + var(--sab,0px) + 12px);display:grid;grid-template-columns:92px 1fr;gap:12px 14px;align-items:center;padding:14px;border-radius:26px;background:color-mix(in srgb,var(--surface,#fff) 90%,transparent);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid var(--line,rgba(17,22,40,.08));box-shadow:0 22px 60px rgba(17,22,40,.25);color:var(--ink,#111628);font-family:var(--body,system-ui);overflow:hidden;opacity:0;transform:translateY(calc(100% + 40px)) scale(.94)}
 .nvx-invite.in{animation:nvx-inv-in .8s cubic-bezier(.34,1.56,.64,1) forwards}
@@ -664,8 +761,8 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
 
   /* ---------- the game ---------- */
   const TOTAL = 34000, KM = 165, GRAV = 2300, JUMP = 780, DJUMP = 690, VH = 380, GY = 300;
-  const FX_LIFE = { massage: 6, yog: 6.5, wine: 8 };
-  const FX_ICON = { massage: ["💆‍♀️", "#8a7be0"], yog: ["🥛", "#4f8fe6"], wine: ["🍷", "#e8557a"] };
+  const FX_LIFE = { massage: 6, yog: 6.5, wine: 8, shield: 6 };
+  const FX_ICON = { massage: ["💆‍♀️", "#8a7be0"], yog: ["🥛", "#4f8fe6"], wine: ["🍷", "#e8557a"], shield: ["🛡️", "#2fb3a0"] };
   const HIT_WORD = { esc: ["ESCALATED!", "P1!!", "RE: RE: RE:"], paper: ["FORM 27B?!", "WRONG STAMP!", "NOTARY!"], friends: ["SURPRISE!!", "KEVIN?!", "SLEEPOVER!"], truck: ["HOOONK!", "SIGN IT!", "BEEP BEEP!"] };
   const SMASH_WORD = ["POW!", "KABOOM!", "BONK!", "YEET!", "SMASH!", "DELETED!"];
   const BONUS_FX = {
@@ -685,6 +782,32 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     { p: .835, ic: "📞", app: "Mama", title: "Missed calls (3)", text: "Did you bring the Vollmacht? The ORIGINAL?" },
     { p: .925, ic: "💗", app: "{me}", title: "I can see you on the map 👀", text: "Wine is chilled. Run, {her}, run!" }
   ];
+  /* interactive pop-ups at each level change: three choices, each with its own effect */
+  const EVENTS = {
+    1: { who: "📋", name: "The Auditor", line: "Good morning! Could I see the logbook… from 2019? In colour, please?", opts: [
+      { ic: "🖨️", t: "Print it in colour", hint: "+250 points", fx: "points", v: 250, reply: "Toner empty. Of course. Still — +250 for effort." },
+      { ic: "🥼", t: "Hide in the cleanroom", hint: "🛡️ shield · 6 s", fx: "shield", reply: "Gowned up. Nothing can touch you for 6 seconds." },
+      { ic: "🍰", t: "Offer cheesecake", hint: "+1 ❤️", fx: "life", reply: "The auditor is now your best friend. +1 ❤️" }] },
+    2: { who: "🚚", name: "Hans · truck driver", line: "Still waiting for that signature 🙂 I brought sandwiches.", opts: [
+      { ic: "✍️", t: "Sign it right now", hint: "+300 points", fx: "points", v: 300, reply: "Batch released! Hans honks happily. +300" },
+      { ic: "🥪", t: "Share his sandwich", hint: "💆‍♀️ slow motion", fx: "massage", reply: "Lunch break with Hans. Everything slows down…" },
+      { ic: "🙊", t: "“QA? Never heard of her.”", hint: "🛡️ shield · 6 s", fx: "shield", reply: "Incognito mode on. Shield for 6 seconds." }] },
+    3: { who: "🎉", name: "WhatsApp · WEEKEND!!!", line: "Can we come Friday? And bring Kevin? And the dog? 🐶", opts: [
+      { ic: "🍷", t: "Yes! Open the wine box", hint: "🍷 points ×2", fx: "wine", reply: "PROST! Problems shrink, points double." },
+      { ic: "🤔", t: "Who is Kevin?", hint: "+200 points", fx: "points", v: 200, reply: "Nobody knows. Kevin is coming anyway. +200" },
+      { ic: "🔕", t: "Phone on silent", hint: "🛡️ shield · 6 s", fx: "shield", reply: "Do not disturb: ON. Shield for 6 seconds." }] },
+    4: { who: "📞", name: "Mama", line: "Did you bring the Vollmacht? The ORIGINAL? With the stamp?", opts: [
+      { ic: "📜", t: "Yes, the ORIGINAL", hint: "+350 points", fx: "points", v: 350, reply: "Mama is proud. The notary is speechless. +350" },
+      { ic: "😬", t: "…define “original”", hint: "🥛 panic strength", fx: "yog", reply: "Panic strength unlocked! Smash everything." },
+      { ic: "💗", t: "Ask {me} to bring it", hint: "+1 ❤️", fx: "life", reply: "{me}: “Already in my bag, together with the wine.” +1 ❤️" }] }
+  };
+  const HERO_LINES = ["Ready when you are! 🏃‍♀️", "Is it Friday yet?", "Coffee first ☕", "Who escalated THIS?", "{me}, I'm coming!", "Hehe, that tickles 😄", "Cheesecake? Where?!", "QA approved ✓", "Boing!"];
+  const EXCUSE = [["Sorry, I'm", "Can't talk, I'm", "Out of office —", "BRB, I'm", "Per SOP-4711 I'm"],
+    ["re-validating the coffee machine", "auditing a cheesecake", "signing off a very patient truck", "running to München", "in a meeting with Kevin", "deleting RE: RE: RE:", "notarising a Vollmacht", "laminating the logbook"],
+    ["🙏", "(urgent)", "— back Monday", "😇", "— it's GMP-critical", "— with love, QA"]];
+  const RCA = [["Kevin", "Auditor", "Hans", "Mama", "Printer", "Fri 16:55", "Rogue CC", "Intern"],
+    ["deleted", "escalated", "laminated", "re-replied to", "forgot", "stamped", "lost", "CC'd"],
+    ["logbook", "Vollmacht", "cheesecake", "batch #4711", "wine box", "CC list", "truck", "SOP-12"]];
   const esc = s => String(s).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
   const ICON = {
     x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
@@ -819,16 +942,28 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     over: () => play(t => [[62, .32], [61, .32], [60, .32], [59, 1.3]].reduce((at, [m, d], i) => { note(midi(m - 12), at, d, { type: "sawtooth", vol: .1, lp: 900, vib: i === 3 ? 7 : 0, vibRate: 5, attack: .03 }); return at + d * (i === 3 ? 1 : .95); }, t)),
     win: () => play(t => { hiss(t, 1.6, { hp: 2500, vol: .1 }); [[60, 0], [64, .12], [67, .24], [72, .36], [67, .6], [72, .72]].forEach(([m, d]) => { note(midi(m), t + d, .5, { type: "sawtooth", vol: .045, lp: 2600 }); note(midi(m + 12), t + d, .3, { type: "square", vol: .02, lp: 3000 }); }); }),
     pop: () => play(t => { hiss(t, .35, { hp: 500, vol: .14 }); for (let i = 0; i < 5; i++) hiss(t + .1 + Math.random() * .3, .04, { hp: 3000, vol: .05 }); }),
-    tap: () => play(t => note(1200, t, .04, { type: "sine", vol: .03 }))
+    tap: () => play(t => note(1200, t, .04, { type: "sine", vol: .03 })),
+    tick: n => play(t => { note(n > 1 ? 660 : 880, t, .14, { type: "square", vol: .05, lp: 3000 }); hiss(t, .05, { hp: 4000, vol: .04 }); }),
+    go: () => play(t => { [72, 79, 84].forEach((m, i) => note(midi(m), t + i * .04, .4, { type: "sawtooth", vol: .04, lp: 3200 })); hiss(t, .45, { hp: 2500, vol: .07 }); }),
+    whoosh: () => play(t => hiss(t, .32, { bp: 900, q: .7, vol: .09 })),
+    bubble: () => play(t => note(480 + Math.random() * 120, t, .1, { type: "sine", f2: 1300, glide: .08, vol: .07 })),
+    type: () => play(t => hiss(t, .025, { hp: 3500, vol: .025 })),
+    stamp: () => play(t => { note(120, t, .28, { type: "sine", f2: 45, vol: .32 }); hiss(t, .14, { lp: 900, vol: .2 }); }),
+    slurp: () => play(t => { hiss(t, .38, { bp: 650, q: 3, vol: .14 }); note(320, t, .32, { type: "sine", f2: 170, vol: .04 }); }),
+    blocked: () => play(t => { note(midi(88), t, .18, { type: "triangle", vol: .06 }); note(midi(95), t + .05, .28, { type: "sine", vol: .05 }); hiss(t, .15, { hp: 3000, vol: .05 }); }),
+    choose: () => play(t => [79, 84, 88, 91].forEach((m, i) => note(midi(m), t + i * .05, .28, { type: "triangle", vol: .05 }))),
+    reel: () => play(t => note(1500 + Math.random() * 300, t, .03, { type: "square", vol: .02, lp: 5000 })),
+    sad: () => play(t => { note(midi(67), t, .25, { type: "triangle", vol: .05, f2: midi(63), glide: .25 }); note(midi(62), t + .22, .45, { type: "triangle", vol: .05, f2: midi(58), glide: .45, vib: 6 }); })
   };
   let G = null, cv, ctx, W = 0, H = 0, dpr = 1, VW = 720, S = 1, TOP = 0, PX = 300, VK = 1, raf = 0, last = 0;
   const bag = [];
   function reset() {
     G = { state: "title", t: 0, dist: 0, lives: 3, score: 0, y: 0, vy: 0, jumps: 0, buffer: 0, inv: 0, shake: 0, v: 0, v0: 0,
-      fx: { massage: 0, yog: 0, wine: 0 }, slow: 1, giant: 1, shrink: 1, ph: 0, obs: [], bon: [], parts: [], pops: [], spl: [], lines: [], rockets: [], amb: [],
+      fx: { massage: 0, yog: 0, wine: 0, shield: 0 }, slow: 1, giant: 1, shrink: 1, ph: 0, obs: [], bon: [], parts: [], pops: [], spl: [], lines: [], rockets: [], amb: [],
       nextObs: 560, nextBonus: 1500, lastType: "", seen: {}, endT: 0, hug: 0, cleared: 0, smashed: 0, picked: 0, closeCalls: 0,
       combo: 0, bestCombo: 0, level: 0, levelT: 0, noteIdx: 0, coinN: 0, coinT: -9, freeze: 0, flash: 0, flashCol: "255,255,255",
       sq: 1, sqv: 0, lean: 0, hair: 2, hlift: 0, camY: 0, zoom: 1, punch: 0, fwT: 0, her: names().her, me: names().me,
+      count: 0, countStep: .6, countWords: [], countN: -1, ramp: 0, pendingBanner: -1, blocked: 0, sips: 0, coffeeDone: false,
       best: read(KEY.best, 0), newBest: false, cardShown: false };
     bag.length = 0;
   }
@@ -898,6 +1033,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     if (G.state === "title") { start(); return; }
     if (G.state === "pause") { resume(); return; }
     if (G.state === "run") G.buffer = .14;
+    else if (G.state === "count" && G.count < .25) G.buffer = .14;
   }
   function tryJump() {
     if (G.buffer <= 0) return;
@@ -935,6 +1071,12 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     splash(pick(SMASH_WORD), o.x + o.w / 2, GY - o.h - 30, { size: 22, col: "#7cc4ff", life: .8 });
     addScore(50, "+50", o.x + o.w / 2, GY - o.h - 10, "#4f8fe6");
   }
+  function block(o) {
+    o.smashed = true; G.blocked++; SFX.blocked(); G.punch = .03; vibrate(20);
+    burst(o.x + o.w / 2, GY - o.h / 2, 22, ["#5ee0c8", "#fff", "#b8fff1"], "spark", 1.1);
+    splash(pick(["NOPE!", "BLOCKED!", "NOT TODAY!", "DENIED!"]), o.x + o.w / 2, GY - o.h - 30, { size: 18, col: "#5ee0c8", life: .8 });
+    addScore(25, "+25", o.x + o.w / 2, GY - o.h - 10, "#2fb3a0");
+  }
   function collect(b) {
     b.taken = true;
     if (b.type === "heart") {
@@ -948,16 +1090,68 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     else { G.fx[b.type] = FX_LIFE[b.type]; addScore(100, "+100", b.x, GY - b.h - 20, "#d59a17"); updateFx(true); }
     quip(BONUS[b.type].quip, true);
   }
-  function enterLevel(li) {
-    G.level = li; G.levelT = 0; musicLevel(li); levelBanner(li);
+  function showLevel(li) {
+    levelBanner(li);
     if (li > 0) { SFX.level(); flash("255,255,255", .45); G.punch = .04; confetti(PX, GY - 140, 30); }
   }
-  function start() {
-    const best = G.best; reset(); G.best = best; G.state = "run"; hideCard(); dlg.focus({ preventScroll: true });
-    musicStart(0); enterLevel(0); updateLives(0); updateFx(true); updateCombo();
+  function enterLevel(li) {
+    G.level = li; G.levelT = 0; musicLevel(li);
+    if (EVENTS[li]) openEvent(li); else showLevel(li);
   }
-  function pause() { if (G.state !== "run") return; G.state = "pause"; musicDuck(true); showCard("pause"); }
-  function resume() { if (G.state !== "pause") return; G.state = "run"; musicDuck(false); hideCard(); dlg.focus({ preventScroll: true }); last = performance.now(); }
+  /* countdown: the world holds still while the numbers pop, then GO eases her back up to speed */
+  function countdown(words, stepT, ramp) {
+    G.state = "count"; G.countWords = words; G.countStep = stepT; G.count = words.length * stepT; G.countN = -1; G.ramp = ramp; G.buffer = 0;
+  }
+  function countTick(dt) {
+    G.count -= dt;
+    const n = Math.ceil(G.count / G.countStep);
+    if (n !== G.countN && n > 0) { G.countN = n; const w = G.countWords[G.countWords.length - n]; splash(w, PX + 70, GY - 185, { size: w.length > 2 ? 26 : 40, col: "#ffd166", life: G.countStep * .96, vy: 0, rot: rand(-.08, .08), spikes: 9 }); SFX.tick(n); }
+    if (G.count > 0) return;
+    G.state = "run"; G.countN = -1; musicDuck(false);
+    splash("GO!", PX + 70, GY - 185, { size: 44, col: "#8be38b", rays: true, life: .85, vy: -14, rot: -.06 }); SFX.go();
+    if (G.pendingBanner >= 0) { showLevel(G.pendingBanner); G.pendingBanner = -1; }
+  }
+  function start() {
+    const best = G.best; reset(); G.best = best; hideCard(); dlg.focus({ preventScroll: true });
+    musicStart(0); G.level = 0; G.pendingBanner = 0; updateLives(0); updateFx(true); updateCombo();
+    countdown(["3", "2", "1"], .6, 0);
+  }
+  function pause() { if (G.state !== "run" && G.state !== "count") return; G.state = "pause"; musicDuck(true); showCard("pause"); }
+  function resume() { if (G.state !== "pause") return; hideCard(); dlg.focus({ preventScroll: true }); last = performance.now(); countdown(["READY?"], .8, .45); }
+
+  /* ---------- level events ---------- */
+  let evLi = 0, evDone = false;
+  function openEvent(li) {
+    G.state = "event"; evLi = li; evDone = false; G.pendingBanner = li; musicDuck(true); vibrate(25);
+    G.obs = G.obs.filter(o => o.x > PX + 330 || o.x + o.w < PX - 30);
+    G.nextObs = Math.max(G.nextObs, G.dist + 380);
+    showCard("event", li);
+  }
+  function chooseEvent(i) {
+    if (G.state !== "event" || evDone) return;
+    evDone = true;
+    const ev = EVENTS[evLi], o = ev.opts[i], fill = t => t.replace(/\{me\}/g, G.me).replace(/\{her\}/g, G.her);
+    const opts = hud.card.querySelector(".nvx-opts"), btn = o && hud.card.querySelector(`.nvx-opt[data-i="${i}"]`);
+    if (opts) opts.classList.add("chosen");
+    if (btn) { btn.classList.add("pick"); domBurst(btn, 22); }
+    if (opts) later(() => opts.querySelectorAll(".nvx-opt:not(.pick)").forEach(b => b.classList.add("gone")), reduced() ? 0 : 260);
+    if (o) {
+      SFX.choose();
+      if (o.fx === "points") addScore(o.v, null);
+      else if (o.fx === "life") { if (G.lives < 5) { G.lives++; updateLives(1); } else addScore(200, null); }
+      else { G.fx[o.fx] = FX_LIFE[o.fx]; if (SFX[o.fx]) SFX[o.fx](); updateFx(true); }
+    } else SFX.sad();
+    const ava = hud.card.querySelector(".nvx-ava"); if (ava) { ava.classList.remove("happy"); void ava.offsetWidth; ava.classList.add("happy"); }
+    const sp = hud.card.querySelector(".nvx-speech"); if (sp) sp.classList.add("reply");
+    typeInto(hud.card.querySelector(".nvx-speech .nvx-typed"), o ? fill(o.reply) : "Left on read 👀 …they will call again.", () => {
+      const nx = hud.card.querySelector(".nvx-tapnext"); if (nx) nx.classList.add("on");
+      later(endEvent, reduced() ? 900 : 1300);
+    });
+  }
+  function endEvent() {
+    if (G.state !== "event") return;
+    hideCard(); dlg.focus({ preventScroll: true }); countdown(["READY?"], .8, .5);
+  }
   function saveBest() { const s = Math.round(G.score); if (s > G.best) { G.best = s; G.newBest = true; write(KEY.best, s); refreshMenu(); } }
   function gameOver() { G.state = "over"; G.endT = 0; G.v0 = G.v; saveBest(); musicStop(.3); setTimeout(() => SFX.over(), 250); }
   function finish() {
@@ -976,7 +1170,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     G.shrink = lerp(G.shrink, G.fx.wine > 0 ? .58 : 1, e4);
     G.inv = Math.max(0, G.inv - h); G.buffer = Math.max(0, G.buffer - h);
     let v = 0;
-    if (G.state === "run") { v = (300 + 170 * p) * VK * G.slow; const rem = TOTAL - G.dist; if (rem < 560) v = Math.min(v, 28 + rem * .85); }
+    if (G.state === "run") { G.ramp = Math.min(1, G.ramp + h * 1.6); v = (300 + 170 * p) * VK * G.slow * (.25 + .75 * G.ramp * G.ramp * (3 - 2 * G.ramp)); const rem = TOTAL - G.dist; if (rem < 560) v = Math.min(v, 28 + rem * .85); }
     else if (G.state === "over") v = G.v0 * Math.max(0, 1 - G.endT * 2.4);
     G.v = v; const dx = v * h; G.dist = Math.min(TOTAL, G.dist + dx);
     G.ph += h * (v > 0 ? 9 + v / 300 * 5 : 0);
@@ -999,7 +1193,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
         if (o.hit || o.smashed) continue;
         const cx = o.x + o.w / 2, hw = o.w * o.k / 2 - 7, top = o.h * o.k - 5;
         if (pr > cx - hw && pl < cx + hw) {
-          if (pb < top) { if (G.fx.yog > 0) smash(o); else if (G.inv <= 0) hurt(o); if (G.state !== "run") break; continue; }
+          if (pb < top) { if (G.fx.yog > 0) smash(o); else if (G.fx.shield > 0) block(o); else if (G.inv <= 0) hurt(o); if (G.state !== "run") break; continue; }
           o.gap = Math.min(o.gap, pb - top);
         }
         if (!o.cleared && cx + hw < pl) clearObstacle(o, cx, hw);
@@ -1057,10 +1251,11 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
   }
 
   function update(dt) {
-    G.t += dt; visuals(dt);
-    if (G.state === "title" || G.state === "pause") return;
+    G.t += dt; visuals(dt); cardTick(dt);
+    if (G.state === "count") { countTick(dt); if (G.state === "count") return; }
+    if (G.state === "title" || G.state === "pause" || G.state === "event") return;
     if (G.freeze > 0) { G.freeze -= dt; return; }
-    let acc = dt; while (acc > 1e-6) { const h = Math.min(acc, 1 / 120); step(h); acc -= h; }
+    let acc = dt; while (acc > 1e-6 && G.state !== "event") { const h = Math.min(acc, 1 / 120); step(h); acc -= h; }
     updateHud();
   }
 
@@ -1116,10 +1311,20 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     if (G.inv > 0 && G.state === "run" && Math.floor(t * 14) % 2) c.globalAlpha = .4;
     let mode = "idle";
     if (G.state === "run" || G.state === "pause") mode = G.y > 0 ? "air" : G.inv > 1.25 ? "hurt" : "run";
+    else if (G.state === "count" || G.state === "event") mode = G.y > 0 ? "air" : G.state === "event" ? "wave" : "idle";
     else if (G.state === "over") mode = "fall";
     else if (G.state === "finish") mode = G.hug < .95 ? "run" : "hug";
     else if (G.state === "title") mode = t % 5 < 1.4 ? "wave" : "idle";
     drawHer(c, G.ph, mode, t, { flow: G.hair, lift: G.hlift }); c.restore();
+    if (G.fx.shield > 0) {
+      const sx0 = PX + ox, sy0 = GY - G.y - 58 * gs, R = 66 * gs, fade = G.fx.shield < 1.5 ? (Math.floor(t * 10) % 2 ? .35 : 1) : 1;
+      c.save(); c.globalAlpha = fade;
+      const g = c.createRadialGradient(sx0, sy0, R * .55, sx0, sy0, R); g.addColorStop(0, "rgba(94,224,200,0)"); g.addColorStop(.85, "rgba(94,224,200,.22)"); g.addColorStop(1, "rgba(184,255,241,.75)");
+      c.fillStyle = g; c.beginPath(); c.arc(sx0, sy0, R * (1 + Math.sin(t * 5) * .02), 0, Math.PI * 2); c.fill();
+      c.strokeStyle = "rgba(255,255,255,.85)"; c.lineWidth = 2.4; c.lineCap = "round"; c.beginPath(); c.arc(sx0, sy0, R * .86, t * 2, t * 2 + .9); c.stroke();
+      c.beginPath(); c.arc(sx0, sy0, R * .86, t * 2 + Math.PI, t * 2 + Math.PI + .4); c.stroke();
+      c.restore();
+    }
     // ambience, particles, pops, splashes
     c.save(); c.globalCompositeOperation = "source-over";
     G.amb.forEach(q => {
@@ -1146,6 +1351,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     if (calm > .01) { c.fillStyle = `rgba(160,130,230,${.16 * calm})`; c.fillRect(0, 0, W, H); }
     if (wineK > .01) { const g = c.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .3, W / 2, H / 2, Math.max(W, H) * .75); g.addColorStop(0, "rgba(200,40,90,0)"); g.addColorStop(1, `rgba(200,40,90,${.3 * wineK})`); c.fillStyle = g; c.fillRect(0, 0, W, H); }
     const vg = c.createRadialGradient(W / 2, H * .55, Math.min(W, H) * .45, W / 2, H * .55, Math.max(W, H) * .8); vg.addColorStop(0, "rgba(10,12,30,0)"); vg.addColorStop(1, `rgba(10,12,30,${.16 + .14 * pal.n})`); c.fillStyle = vg; c.fillRect(0, 0, W, H);
+    if (G.state === "over") { c.fillStyle = `rgba(30,24,52,${Math.min(.28, G.endT * .35)})`; c.fillRect(0, 0, W, H); }
     if (G.flash > .01) { c.fillStyle = `rgba(${G.flashCol},${G.flash})`; c.fillRect(0, 0, W, H); }
     if (G.state === "run" && G.t < 9 && touchFirst()) { const yy = (TOP + (GY + 70) * S + H) / 2; c.globalAlpha = smooth(9, 6, G.t) * .8; const hc = pal.n > .5 ? "#f4f1ff" : "#1f4d2a"; text(c, "Tap anywhere to jump", W / 2, yy, 15, hc, 800); text(c, "tap again in the air for a double jump", W / 2, yy + 22, 12, hc, 600); c.globalAlpha = 1; }
   }
@@ -1161,6 +1367,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
   const dlg = document.createElement("dialog");
   dlg.id = "nvx-game"; dlg.tabIndex = -1; dlg.setAttribute("aria-label", "Chronicles of Novartis");
   dlg.innerHTML = `<canvas aria-hidden="true"></canvas>
+<div class="nvx-scrim" aria-hidden="true"></div>
 <div class="nvx-hud">
   <div class="nvx-pill nvx-lives" role="img" aria-label="Lives"></div>
   <div class="nvx-route" aria-hidden="true"><span>Innsbruck</span><div class="nvx-track"><i class="nvx-fill"></i>${[20, 40, 60, 80].map(x => `<u style="left:${x}%"></u>`).join("")}<b class="nvx-me"></b></div><span>München</span><em class="nvx-lvlname"></em></div>
@@ -1172,10 +1379,10 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
 <div class="nvx-quip" role="status" aria-live="polite"></div>
 <div class="nvx-card" hidden></div>`;
   document.body.appendChild(dlg);
-  cv = dlg.querySelector("canvas"); ctx = cv.getContext("2d");
+  cv = dlg.querySelector(":scope > canvas"); ctx = cv.getContext("2d");
   const $g = sel => dlg.querySelector(sel);
   const hud = { lives: $g(".nvx-lives"), score: $g(".nvx-score"), fill: $g(".nvx-fill"), me: $g(".nvx-me"), chips: $g(".nvx-chips"), combo: $g(".nvx-combo"), lvl: $g(".nvx-lvlname"),
-    quip: $g(".nvx-quip"), card: $g(".nvx-card"), level: $g(".nvx-level"), note: $g(".nvx-note"), snd: $g(".nvx-snd") };
+    quip: $g(".nvx-quip"), card: $g(".nvx-card"), scrim: $g(".nvx-scrim"), level: $g(".nvx-level"), note: $g(".nvx-note"), snd: $g(".nvx-snd") };
   const restart = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
 
   function paintSound() { hud.snd.innerHTML = SND.on ? ICON.snd : ICON.mute; hud.snd.setAttribute("aria-pressed", String(SND.on)); hud.snd.title = SND.on ? "Sound on" : "Sound off"; }
@@ -1223,13 +1430,54 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     hud.note.innerHTML = `<i>${n.ic}</i><div><div class="h"><span>${fill(n.app)}</span><span>now</span></div><b>${fill(n.title)}</b><p>${fill(n.text)}</p></div>`;
     restart(hud.note, "show"); SFX.ding(); setTimeout(nextNote, 4000);
   }
-  const stat = (label, value) => `<span><b>${value}</b>${label}</span>`;
+  /* ---------- pop-up cards: spring in/out, staggered content, little toys inside ---------- */
+  const stat = (label, n, pre = "", cls = "") => `<span class="${cls}"><b data-n="${n}" data-pre="${esc(pre)}">${esc(pre)}${n}</b>${label}</span>`;
   const levelStrip = () => `<div class="nvx-levels">${LEVELS.map((L, i) => `<span style="--a:${L.sky[0]};--b:${L.sky[2]}"><b>${i + 1}</b>${esc(L.name.replace("Kufstein ", "").replace(" in Innsbruck", ""))}</span>`).join("")}</div>`;
-  function showCard(kind) {
+  const fillNames = t => t.replace(/\{me\}/g, G.me).replace(/\{her\}/g, G.her);
+  let timers = [], hideTok = 0, cardKind = "", cardT0 = 0;
+  const later = (fn, ms) => { const id = setTimeout(fn, ms); timers.push(id); return id; };
+  const clearLater = () => { timers.forEach(clearTimeout); timers = []; };
+  const fine = () => matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  function typeInto(el, txt, done) {
+    if (!el) return;
+    if (el._tw) clearInterval(el._tw);
+    el.classList.remove("done");
+    if (reduced()) { el.textContent = txt; el.classList.add("done"); if (done) later(done, 0); return; }
+    const chars = [...txt]; let i = 0; el.textContent = "";
+    el._tw = setInterval(() => {
+      if (!el.isConnected) { clearInterval(el._tw); return; }
+      el.textContent += chars[i++]; if (i % 2) SFX.type();
+      if (i >= chars.length) { clearInterval(el._tw); el._tw = 0; el.classList.add("done"); if (done) done(); }
+    }, 24);
+  }
+  /* confetti made of DOM sparks, launched from an element */
+  function domBurst(el, n, glyphs) {
+    if (reduced() || !el) return;
+    const r = el.getBoundingClientRect(), d = dlg.getBoundingClientRect(), x = r.left - d.left + r.width / 2, y = r.top - d.top + r.height / 2;
+    for (let i = 0; i < n; i++) {
+      const sp = document.createElement("i"); sp.className = "nvx-dc";
+      const a = rand(-Math.PI * .95, -Math.PI * .05), v = rand(70, 190);
+      sp.style.cssText = `left:${x}px;top:${y}px;--dx:${Math.cos(a) * v * 1.4}px;--dy:${Math.sin(a) * v}px;--r:${rand(-540, 540)}deg;--d:${rand(.8, 1.3)}s;`;
+      if (glyphs) { sp.textContent = pick(glyphs); sp.style.fontSize = rand(14, 22) + "px"; }
+      else { sp.style.width = rand(6, 10) + "px"; sp.style.height = rand(4, 6) + "px"; sp.style.background = pick(["#e8557a", "#ffd166", "#7cc4ff", "#8be38b", "#c9b4f0", "#ff9f43"]); sp.style.borderRadius = "2px"; }
+      dlg.appendChild(sp); setTimeout(() => sp.remove(), 1500);
+    }
+  }
+  function ripple(btn, e) {
+    if (reduced()) return;
+    const r = btn.getBoundingClientRect(), k = btn.offsetWidth / (r.width || 1), sp = document.createElement("span");
+    sp.className = "nvx-ripple"; sp.style.left = (e.clientX - r.left) * k + "px"; sp.style.top = (e.clientY - r.top) * k + "px";
+    btn.appendChild(sp); setTimeout(() => sp.remove(), 600);
+  }
+
+  function showCard(kind, arg) {
     const her = esc(G.her), me = esc(G.me), km = Math.round(progress() * KM), score = Math.round(G.score);
+    clearLater(); hideTok++; cardKind = kind; cardT0 = performance.now();
     let h = "";
     if (kind === "title") {
       h = `<p class="nvx-eyebrow">A satirical runner in five levels</p><h2>Chronicles of Novartis</h2>
+<div class="nvx-hero"><canvas width="${96 * dpr}" height="${120 * dpr}" aria-label="Tap ${her} to say hi" role="button" tabindex="0"></canvas><p class="nvx-bubble">Psst… tap me! 👋</p></div>
 <p class="nvx-sub">${her} has to get from <b>Innsbruck</b> to <b>München</b> — ${me} is waiting there. Jump over the QA life, grab the good stuff, keep the combo alive.</p>
 ${levelStrip()}
 <div class="nvx-legend"><div><h3>Jump over</h3><ul>
@@ -1246,52 +1494,214 @@ ${levelStrip()}
 <div class="nvx-actions"><button type="button" class="nvx-btn go" data-a="start">Start running ▸</button></div>
 ${G.best ? `<p class="nvx-keys">Best so far: ★ ${G.best}</p>` : ""}`;
     } else if (kind === "pause") {
+      const lvl = Math.max(0, 100 - G.sips * 20);
       h = `<p class="nvx-eyebrow">Coffee break ☕</p><h2>Paused</h2><p class="nvx-sub">${pick(["The escalations will wait. Probably.", "Hans the truck driver is fine. He has sandwiches.", "Out of office: 5 minutes. Maybe 6."])}</p>
+<div class="nvx-play"><button type="button" class="nvx-cup" data-a="sip" aria-label="Sip the coffee"><i class="steam"></i><i class="steam"></i><i class="steam"></i><span class="mug" style="--lvl:${lvl * .8}%"></span><span class="handle"></span></button>
+<div><b>Caffeine level</b><div class="nvx-meter"><i style="--m:${Math.min(100, G.sips * 20)}%"></i></div><small class="nvx-cupnote">${G.coffeeDone ? "Fully caffeinated ⚡" : "Tap the cup to sip"}</small></div></div>
+<div class="nvx-excuse"><button type="button" class="nvx-btn ghost small" data-a="excuse">🎲 Excuse for the boss</button><p><span class="nvx-typed done">Need a reason to stay on this break?</span></p></div>
 <div class="nvx-actions"><button type="button" class="nvx-btn ghost" data-a="close">Back to the trip</button><button type="button" class="nvx-btn go" data-a="resume">Resume ▸</button></div>`;
     } else if (kind === "over") {
-      h = `<i class="nvx-stamp no">REJECTED</i><p class="nvx-eyebrow">Out of office · ${esc(LEVELS[G.level].name)}</p><h2>${pick(["Escalated. Again.", "Ticket closed: won't fix", "Batch on hold", "Too many CCs", "Deviation #4711"])}</h2>
+      h = `<i class="nvx-stamp no">REJECTED</i><p class="nvx-eyebrow">Out of office · ${esc(LEVELS[G.level].tag)}</p><h2>${pick(["Escalated. Again.", "Ticket closed: won't fix", "Batch on hold", "Too many CCs", "Deviation #4711"])}</h2>
 <p class="nvx-sub">${her} made it ${km} km of ${KM} — ${me} is still waiting in München. Have a slice of cheesecake and try again.</p>
-<div class="nvx-stats">${stat("score", "★ " + score)}${stat("km run", km)}${stat("best combo", "🔥 " + G.bestCombo)}${stat(G.newBest ? "new best!" : "best", "★ " + G.best)}</div>
+<div class="nvx-stats">${stat("score", score, "★ ")}${stat("km run", km)}${stat("best combo", G.bestCombo, "🔥 ")}${stat(G.newBest ? "new best!" : "best", G.best, "★ ", G.newBest ? "best" : "")}</div>
+<div class="nvx-rca"><h3>Root-cause analysis</h3><div class="nvx-reels">${[0, 1, 2].map(i => `<span class="nvx-reel"><i class="nvx-strip"><span>???</span></i></span>`).join("")}</div><p><span class="nvx-typed done">Spinning up the CAPA machine…</span></p><button type="button" class="nvx-btn ghost small" data-a="rca">🎰 Spin again</button></div>
 <div class="nvx-actions"><button type="button" class="nvx-btn ghost" data-a="close">Back to the trip</button><button type="button" class="nvx-btn go" data-a="start">Run again ▸</button></div>`;
     } else if (kind === "win") {
-      h = `<i class="nvx-stamp ok">RELEASED ✓</i><p class="nvx-eyebrow">Willkommen in München</p><h2>Made it to ${me} 💗</h2>
-<p class="nvx-sub">Batch “Weekend” approved by QA. ${G.cleared} problems jumped, ${G.smashed} smashed, ${G.closeCalls} close call${G.closeCalls === 1 ? "" : "s"}, ${G.picked} treats grabbed.</p>
-<div class="nvx-stats">${stat("score", "★ " + score)}${stat("lives left", "❤️ " + G.lives)}${stat("best combo", "🔥 " + G.bestCombo)}${stat(G.newBest ? "new best!" : "best", "★ " + G.best)}</div>
+      h = `<i class="nvx-stamp ok wait" data-a="stamp">RELEASED ✓</i><p class="nvx-eyebrow">Willkommen in München</p><h2>Made it to ${me} 💗</h2>
+<p class="nvx-sub">${G.cleared} problems jumped, ${G.smashed + G.blocked} smashed or blocked, ${G.closeCalls} close call${G.closeCalls === 1 ? "" : "s"}, ${G.picked} treats grabbed.</p>
+<div class="nvx-sign"><span class="x">✕</span><canvas aria-label="Signature pad"></canvas><span class="hint">✍️ Sign here to release batch “Weekend”</span><button type="button" class="nvx-btn ghost" data-a="autosign">Sign for me</button></div>
+<div class="nvx-stats">${stat("score", score, "★ ")}${stat("lives left", G.lives, "❤️ ")}${stat("best combo", G.bestCombo, "🔥 ")}${stat(G.newBest ? "new best!" : "best", G.best, "★ ", G.newBest ? "best" : "")}</div>
 <div class="nvx-actions"><button type="button" class="nvx-btn ghost" data-a="close">Back to the trip</button><button type="button" class="nvx-btn go" data-a="start">Run again ▸</button></div>`;
+    } else if (kind === "event") {
+      const ev = EVENTS[arg], L = LEVELS[arg];
+      h = `<div class="nvx-ev-head"><span class="nvx-ava" aria-hidden="true">${ev.who}</span><div><p class="nvx-eyebrow">${esc(L.tag)} · incoming</p><b class="nvx-ev-name">${esc(ev.name)}</b></div></div>
+<p class="nvx-speech"><span class="nvx-typed"></span></p>
+<div class="nvx-opts">${ev.opts.map((o, i) => `<button type="button" class="nvx-opt" data-a="opt" data-i="${i}"><i>${o.ic}</i><span>${esc(fillNames(o.t))}<small>${esc(o.hint)}</small></span>${fine() ? `<kbd>${i + 1}</kbd>` : ""}</button>`).join("")}</div>
+<p class="nvx-tapnext">${touchFirst() ? "Tap to continue" : "Click or press Enter to continue"}</p>`;
     }
-    G.cardShown = true; hud.card.innerHTML = h; hud.card.hidden = false; restart(hud.card, "in");
-    const btn = hud.card.querySelector(".nvx-btn.go"); if (btn && kind !== "title") setTimeout(() => btn.focus({ preventScroll: true }), 350);
+    const c = hud.card;
+    c.innerHTML = h; c.hidden = false; c.dataset.kind = kind; c.classList.remove("out", "armed", "tilt"); c.style.removeProperty("--rx"); c.style.removeProperty("--ry");
+    [...c.children].forEach((el, i) => el.style.setProperty("--i", i));
+    restart(c, "in"); hud.scrim.classList.add("on"); G.cardShown = true;
+    if (kind !== "title") SFX.whoosh();
+    // cards that interrupt play ignore taps for a moment so a jump-tap can't press a button by accident
+    if (kind === "title" || kind === "pause") c.classList.add("armed"); else later(() => c.classList.add("armed"), reduced() ? 120 : 420);
+    const btn = c.querySelector(".nvx-btn.go"); if (btn && kind !== "title") later(() => btn.focus({ preventScroll: true }), 380);
+    if (kind === "title") heroInit();
+    if (kind === "event") later(() => typeInto(c.querySelector(".nvx-speech .nvx-typed"), fillNames(EVENTS[arg].line)), reduced() ? 0 : 320);
+    if (kind === "over") later(spinRca, reduced() ? 0 : 750);
+    if (kind === "win") signInit();
   }
-  function hideCard() { hud.card.hidden = true; G.cardShown = false; }
+  function hideCard() {
+    G.cardShown = false; clearLater(); hud.scrim.classList.remove("on"); cardKind = "";
+    const c = hud.card; if (c.hidden) return;
+    const tok = ++hideTok; c.classList.remove("in", "armed", "tilt"); c.classList.add("out");
+    setTimeout(() => { if (tok !== hideTok) return; c.hidden = true; c.classList.remove("out"); c.innerHTML = ""; }, reduced() ? 0 : 250);
+  }
+
+  /* title: tap her to say hi */
+  const hero = { y: 0, vy: 0, taps: 0, tapT: -9, cv: null, c: null };
+  function heroInit() { hero.cv = hud.card.querySelector(".nvx-hero canvas"); hero.c = hero.cv && hero.cv.getContext("2d"); hero.y = 0; hero.vy = 0; hero.taps = 0; }
+  function heroTap() {
+    if (!hero.cv) return;
+    hero.taps++; hero.tapT = G.t;
+    if (hero.y <= 0) { hero.vy = 300; SFX.jump(); } else { hero.vy = 260; SFX.dbl(); }
+    const b = hud.card.querySelector(".nvx-bubble");
+    if (b) { b.textContent = hero.taps >= 7 ? "OKAY OKAY, let's run! 🏃‍♀️💨" : fillNames(HERO_LINES[(hero.taps - 1) % HERO_LINES.length]); restart(b, "pop"); }
+    if (hero.taps >= 7) { const go = hud.card.querySelector(".nvx-btn.go"); if (go) restart(go, "nvx-wiggle"); }
+    domBurst(hero.cv, 6, ["💗", "✨", "⭐"]);
+  }
+  function heroDraw(dt) {
+    if (!hero.c || !hero.cv.isConnected) { hero.c = null; return; }
+    hero.vy -= 1300 * dt; hero.y = Math.max(0, hero.y + hero.vy * dt); if (hero.y <= 0) hero.vy = 0;
+    const c = hero.c, k = dpr; c.setTransform(k, 0, 0, k, 0, 0); c.clearRect(0, 0, 96, 120);
+    c.fillStyle = "rgba(17,22,40,.12)"; c.beginPath(); c.ellipse(48, 115, 15 * (1 - Math.min(.5, hero.y / 60)), 3.4, 0, 0, Math.PI * 2); c.fill();
+    c.translate(48, 114 - hero.y); c.scale(.78, .78);
+    const mode = hero.y > 0 ? "air" : G.t - hero.tapT < 1.4 ? "wave" : (G.t % 6) < 1.2 ? "wave" : "idle";
+    drawHer(c, G.t * 8, mode, G.t, { flow: hero.y > 0 ? 9 : 2, lift: hero.y > 0 ? -8 : 0 });
+  }
+
+  /* pause: coffee + excuse generator */
+  function sip() {
+    const cup = hud.card.querySelector(".nvx-cup"); if (!cup) return;
+    if (G.sips >= 5) { const n = hud.card.querySelector(".nvx-cupnote"); if (n) { n.textContent = "Empty. Hans is making a refill ☕"; restart(n, "nvx-wiggle"); } SFX.sad(); return; }
+    G.sips++; SFX.slurp(); restart(cup, "sip");
+    cup.querySelector(".mug").style.setProperty("--lvl", Math.max(0, 100 - G.sips * 20) * .8 + "%");
+    hud.card.querySelector(".nvx-meter i").style.setProperty("--m", G.sips * 20 + "%");
+    const n = hud.card.querySelector(".nvx-cupnote");
+    if (G.sips >= 5 && !G.coffeeDone) { G.coffeeDone = true; addScore(100, null); updateHud(); if (n) n.textContent = "Fully caffeinated ⚡ +100"; domBurst(cup, 16, ["⚡", "☕", "✨"]); SFX.choose(); }
+    else if (n) n.textContent = ["Mmm…", "Better.", "Getting there…", "Eyes open! 👀", "Fully caffeinated ⚡"][G.sips - 1];
+  }
+  function excuse() { const el = hud.card.querySelector(".nvx-excuse .nvx-typed"); typeInto(el, EXCUSE.map(pick).join(" ")); SFX.bubble(); }
+
+  /* game over: root-cause slot machine */
+  function spinRca() {
+    const reels = [...hud.card.querySelectorAll(".nvx-reel .nvx-strip")]; if (!reels.length) return;
+    const res = RCA.map(pick), H = 34;
+    reels.forEach((st, i) => {
+      const items = []; for (let k = 0; k < 14 + i * 4; k++) items.push(pick(RCA[i])); items.push(res[i]);
+      st.innerHTML = items.map(w => `<span>${esc(w)}</span>`).join("");
+      st.style.transition = "none"; st.style.transform = "translateY(0)"; void st.offsetWidth;
+      st.style.transition = `transform ${.9 + i * .35}s cubic-bezier(.15,.85,.25,1.08)`; st.style.transform = `translateY(${-(items.length - 1) * H}px)`;
+    });
+    const out = hud.card.querySelector(".nvx-rca .nvx-typed"); if (out) { out.textContent = "Analysing…"; out.classList.remove("done"); }
+    if (!reduced()) for (let k = 0; k < 18; k++) later(SFX.reel, k * k * 5.2);
+    later(() => { SFX.stamp(); typeInto(out, `Root cause: ${res[0]} ${res[1]} the ${res[2]}. CAPA opened 📋`); }, reduced() ? 0 : 1650);
+  }
+
+  /* win: sign the release, then the stamp slams */
+  const sign = { cv: null, c: null, len: 0, last: null, done: false };
+  function signInit() {
+    const cv2 = hud.card.querySelector(".nvx-sign canvas"); sign.cv = cv2; sign.done = false; sign.len = 0; sign.last = null;
+    if (!cv2) return;
+    const w = cv2.offsetWidth || 300, hh = cv2.offsetHeight || 88; cv2.width = w * dpr; cv2.height = hh * dpr;
+    sign.c = cv2.getContext("2d"); sign.c.setTransform(dpr, 0, 0, dpr, 0, 0); sign.c.lineCap = "round"; sign.c.lineJoin = "round"; sign.c.strokeStyle = "#1d2a6b";
+    const pos = e => { const r = cv2.getBoundingClientRect(); return [(e.clientX - r.left) * cv2.offsetWidth / r.width, (e.clientY - r.top) * cv2.offsetHeight / r.height, performance.now()]; };
+    cv2.addEventListener("pointerdown", e => { e.preventDefault(); sign.last = pos(e); try { cv2.setPointerCapture(e.pointerId); } catch (err) { /* capture is optional */ } });
+    cv2.addEventListener("pointermove", e => {
+      if (!sign.last) return; const p = pos(e), [x0, y0, t0] = sign.last, d = Math.hypot(p[0] - x0, p[1] - y0); if (d < 1) return;
+      const sp = d / Math.max(1, p[2] - t0); sign.c.lineWidth = clamp(3.4 - sp * 1.2, 1.3, 3.4);
+      sign.c.beginPath(); sign.c.moveTo(x0, y0); sign.c.lineTo(p[0], p[1]); sign.c.stroke(); sign.len += d; sign.last = p;
+    });
+    const up = () => { sign.last = null; if (sign.len > 110) release(); };
+    cv2.addEventListener("pointerup", up); cv2.addEventListener("pointercancel", up);
+  }
+  function autoSign() {
+    if (sign.done || !sign.c) return;
+    const c = sign.c, w = sign.cv.offsetWidth, name = G.her, t0 = performance.now(), dur = reduced() ? 1 : 1100;
+    c.font = 'italic 600 34px "Snell Roundhand","Segoe Script","Brush Script MT",cursive'; c.textBaseline = "middle"; c.fillStyle = "#1d2a6b";
+    const tw = Math.min(w - 40, c.measureText(name).width);
+    const stepDraw = () => {
+      if (!sign.cv || !sign.cv.isConnected) return;
+      const k = clamp((performance.now() - t0) / dur, 0, 1);
+      c.save(); c.beginPath(); c.rect(28, 0, tw * k + 4, 88); c.clip(); c.clearRect(28, 0, w, 88); c.fillText(name, 30, 46, w - 40); c.restore();
+      if (k < 1) { if (Math.random() < .5) SFX.type(); requestAnimationFrame(stepDraw); }
+      else { c.lineWidth = 2; c.beginPath(); c.moveTo(30, 66); c.quadraticCurveTo(30 + tw / 2, 76, 34 + tw, 62); c.stroke(); release(); }
+    };
+    stepDraw();
+  }
+  function release() {
+    if (sign.done) return; sign.done = true;
+    const st = hud.card.querySelector(".nvx-stamp"), box = hud.card.querySelector(".nvx-sign"), hint = box && box.querySelector(".hint"), auto = box && box.querySelector("[data-a=autosign]");
+    if (box) box.classList.add("done");
+    if (hint) hint.textContent = `Signed by ${G.her} · ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} ✓`;
+    if (auto) auto.remove();
+    if (st) { st.classList.remove("wait"); restart(st, "slam"); }
+    later(() => { SFX.stamp(); vibrate(40); domBurst(st, 26); domBurst(st, 8, ["💗", "✨"]); }, reduced() ? 0 : 160);
+    later(SFX.choose, 380);
+  }
+
+  function cardTick(dt) {
+    if (!G.cardShown) return;
+    if (cardKind === "title") heroDraw(dt);
+    if (cardKind === "over" || cardKind === "win") {
+      const k = reduced() ? 1 : clamp((performance.now() - cardT0 - 380) / 900, 0, 1), e = 1 - Math.pow(1 - k, 3);
+      hud.card.querySelectorAll("[data-n]").forEach(b => { if (b.dataset.fin) return; const n = +b.dataset.n; b.textContent = b.dataset.pre + Math.round(n * e); if (k >= 1) b.dataset.fin = 1; });
+    }
+  }
+
+  /* desktop: cards tilt toward the pointer with a soft glare */
+  hud.card.addEventListener("pointermove", e => {
+    if (!fine() || reduced() || cardKind === "win" || !hud.card.classList.contains("in")) return;
+    const r = hud.card.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    hud.card.style.setProperty("--ry", ((x - .5) * 7).toFixed(2) + "deg"); hud.card.style.setProperty("--rx", (-(y - .5) * 5).toFixed(2) + "deg");
+    hud.card.style.setProperty("--gx", (x * 100).toFixed(1) + "%"); hud.card.style.setProperty("--gy", (y * 100).toFixed(1) + "%"); hud.card.classList.add("tilt");
+  });
+  hud.card.addEventListener("pointerleave", () => { hud.card.style.setProperty("--rx", "0deg"); hud.card.style.setProperty("--ry", "0deg"); hud.card.classList.remove("tilt"); });
+  hud.card.addEventListener("pointerdown", e => {
+    const b = e.target.closest(".nvx-btn, .nvx-opt"); if (b) ripple(b, e);
+    if (e.target.closest(".nvx-hero canvas")) { e.preventDefault(); heroTap(); }
+    if (cardKind === "event" && evDone && !e.target.closest("button")) endEvent();
+  });
+  hud.card.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.closest && e.target.closest(".nvx-hero canvas")) { e.preventDefault(); heroTap(); } });
+  hud.scrim.addEventListener("pointerdown", e => { e.preventDefault(); if (G && (G.state === "title" || G.state === "pause")) press(); else if (G && G.state === "event" && evDone) endEvent(); });
 
   dlg.addEventListener("click", e => {
-    const a = e.target.closest("[data-a]")?.dataset.a; if (!a) return;
-    if (a !== "sound") SFX.tap();
-    if (a === "start") start(); else if (a === "resume") resume(); else if (a === "pause") { if (G.state === "run") pause(); else if (G.state === "pause") resume(); }
+    const el = e.target.closest("[data-a]"), a = el && el.dataset.a; if (!a) return;
+    if (el.closest(".nvx-card") && !hud.card.classList.contains("armed")) return;
+    if (a !== "sound" && a !== "opt" && a !== "sip") SFX.tap();
+    if (a === "start") start(); else if (a === "resume") resume(); else if (a === "pause") { if (G.state === "run" || G.state === "count") pause(); else if (G.state === "pause") resume(); }
     else if (a === "sound") { setSound(!SND.on); paintSound(); dlg.focus({ preventScroll: true }); }
     else if (a === "close") dlg.close();
+    else if (a === "opt") chooseEvent(+el.dataset.i);
+    else if (a === "sip") sip();
+    else if (a === "excuse") excuse();
+    else if (a === "rca") spinRca();
+    else if (a === "autosign") autoSign();
+    else if (a === "stamp" && sign.done) { restart(el, "slam"); SFX.stamp(); domBurst(el, 10); }
   });
   cv.addEventListener("pointerdown", e => { e.preventDefault(); press(); });
   addEventListener("keydown", e => {
     if (!dlg.open) return;
     e.stopPropagation();
     const jumpKey = e.code === "Space" || e.key === " " || e.code === "ArrowUp" || e.code === "KeyW";
+    if (G.state === "event") {
+      const d = /^(?:Digit|Numpad)([1-3])$/.exec(e.code);
+      if (d && hud.card.classList.contains("armed")) { e.preventDefault(); chooseEvent(+d[1] - 1); }
+      else if (e.key === "Enter" && evDone) { e.preventDefault(); endEvent(); }
+      else if (jumpKey) e.preventDefault();
+      return;
+    }
     if (jumpKey && e.target.closest && e.target.closest("button") && G.state !== "run") return;
     if (jumpKey) { e.preventDefault(); if (!e.repeat) press(); return; }
-    if (e.code === "KeyP") { e.preventDefault(); if (G.state === "run") pause(); else if (G.state === "pause") resume(); }
+    if (e.code === "KeyP") { e.preventDefault(); if (G.state === "run" || G.state === "count") pause(); else if (G.state === "pause") resume(); }
     if (e.code === "KeyM") { e.preventDefault(); setSound(!SND.on); paintSound(); }
   }, true);
   addEventListener("keyup", e => { if (dlg.open && (e.code === "Space" || e.key === " ") && !(e.target.closest && e.target.closest("button"))) e.preventDefault(); }, true);
-  dlg.addEventListener("cancel", e => { if (G && G.state === "run") { e.preventDefault(); pause(); } });
+  dlg.addEventListener("cancel", e => {
+    if (!G) return;
+    if (G.state === "run" || G.state === "count") { e.preventDefault(); pause(); }
+    else if (G.state === "event") { e.preventDefault(); if (evDone) endEvent(); else chooseEvent(-1); }
+  });
   dlg.addEventListener("close", () => {
-    cancelAnimationFrame(raf); raf = 0; musicStop(.2); noteQueue.length = 0; noteBusy = false;
+    cancelAnimationFrame(raf); raf = 0; musicStop(.2); noteQueue.length = 0; noteBusy = false; clearLater(); hud.scrim.classList.remove("on");
     if (window.APP) window.APP.renderPaused = false;
-    if (G && (G.state === "run" || G.state === "pause")) saveBest();
+    if (G && (G.state === "run" || G.state === "pause" || G.state === "count" || G.state === "event")) saveBest();
   });
   addEventListener("resize", () => { if (dlg.open) layout(); });
   document.addEventListener("visibilitychange", () => {
     if (!dlg.open || !G) return;
-    if (document.hidden) { if (G.state === "run") pause(); if (SND.ctx) SND.ctx.suspend(); } else if (SND.ctx && SND.on) SND.ctx.resume();
+    if (document.hidden) { if (G.state === "run" || G.state === "count") pause(); if (SND.ctx) SND.ctx.suspend(); } else if (SND.ctx && SND.on) SND.ctx.resume();
   });
 
   function openGame() {
@@ -1333,7 +1743,19 @@ ${G.best ? `<p class="nvx-keys">Best so far: ★ ${G.best}</p>` : ""}`;
 <div class="nvx-inv-copy"><p class="nvx-eyebrow">Chronicles of Novartis</p><h3 id="nvx-inv-h">${pick(INV_TITLES)}</h3><p class="t">${esc(n.her)}, ${esc(pick(INV_LINES).replace("{me}", n.me))}</p></div>
 <div class="nvx-inv-actions"><button type="button" class="nvx-btn ghost" data-a="later">Maybe later</button><button type="button" class="nvx-btn go" data-a="play">Let's play ▸</button></div>
 <button type="button" class="nvx-inv-x" data-a="later" aria-label="Close">${ICON.x}</button><i class="nvx-inv-time"></i>`;
-    inv.addEventListener("click", e => { const a = e.target.closest("[data-a]")?.dataset.a; if (a === "play") openGame(); else if (a === "later") closeInvite(true); });
+    inv.addEventListener("pointerdown", e => { const b = e.target.closest(".nvx-btn"); if (b) ripple(b, e); });
+    inv.addEventListener("click", e => {
+      const a = e.target.closest("[data-a]")?.dataset.a;
+      if (a === "play") openGame();
+      else if (a === "later") {
+        const el = inv; if (!el || el.classList.contains("bye")) return;
+        if (reduced()) { closeInvite(true); return; }
+        el.classList.add("bye");
+        el.querySelector("h3").textContent = pick(["Okay… 🥲", "Fine. The truck will wait. 🚚", "Next time then! 💗"]);
+        el.querySelector(".t").textContent = pick(["Hans the truck driver is a bit sad now.", "The escalations say hi. 👋", "Cheesecake will be here when you're back."]);
+        setTimeout(() => { if (inv === el) closeInvite(true); }, 1100);
+      }
+    });
     inv.addEventListener("keydown", e => { if (e.key === "Escape") closeInvite(true); });
     document.body.appendChild(inv);
     requestAnimationFrame(() => inv && inv.classList.add("in"));

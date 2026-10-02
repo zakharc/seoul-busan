@@ -2,6 +2,8 @@
 
 *Two leaves. One shared adventure.* A single-file trip companion that opens on the roameo brand splash and hands off to the Seoul ⇄ Busan trail.
 
+**Version 1.15** — Chronicles of Novartis v3: springy pop-up cards, 3-2-1 countdown, level events with choices (🛡️ shield, ❤️, slow-mo), pause/game-over/win toys (coffee, excuse generator, RCA slot machine, signature + RELEASED stamp).
+
 **Version 1.14** — Test as her: a safe test copy (`?trip=sandbox&as=her`, ⋯ → Test as Киця) seeded read-only from the real trip, with its own device storage, switch person, reset and leave.
 
 **Version 1.13** — Final combined UX review: narrow-phone day capsule, 44px game controls and ribbons that fit, reduced-motion game messages keep their reading time, driver card traps focus, map search focus and ARIA clean-up.
@@ -64,6 +66,15 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 - Android (Samsung Internet / Chrome): open the link → menu → **Add to Home screen** — the page ships a web manifest and icons, so it installs as a standalone app with its own icon. iPhone: Share → **Add to Home Screen**.
 - **Trip map:** the map icon in the top bar (also **See it on the map** in the trip overview, **Map** on each day card and ⋯ → **Trip map**) shows the plan on a street map. The day list sits in a bottom sheet that follows your finger: drag or flick its handle, or tap it. Swipe the day title left or right, or use ‹ ›, to change the day. Tap a stop to fly to it with its actions in the list, or tap a pin for a card. Long-press anywhere on the map to suggest that spot. 🔍 finds any stop, option, idea or hotel.
 - **Chronicles of Novartis** (`novartis-game.js`, self-contained): a two-minute satirical 2D runner in five levels. Her figurine (a 2D port of the 3D one, same palette) runs from Innsbruck to München, where Mykola waits.
+- **Game pop-ups and interactions:** cards spring in and out over a dimmed scrim, their content appears in a staggered sequence, and on desktop they tilt toward the pointer with a soft glare. Buttons ripple, and the main button shimmers.
+  - **Start and resume:** a 3-2-1 / READY? countdown, then GO, after which she eases back up to speed.
+  - **Title card:** tap her to make her jump and talk.
+  - **Level events:** at levels 2–5 a typewriter pop-up appears (the Auditor, Hans the truck driver, WhatsApp about Kevin, Mama about the Vollmacht) with three choices: points, a 🛡️ shield, +1 ❤️, slow motion, wine or yoghurt. Use keys 1–3 or tap; Esc means "left on read".
+  - **Pause card:** a coffee cup you can sip (+100 when fully caffeinated) and an excuse-for-the-boss generator.
+  - **Game over:** a root-cause-analysis slot machine.
+  - **Win:** sign the release on a signature pad, or tap "Sign for me", and the RELEASED stamp slams down while the stats count up.
+  - **Invite:** "Maybe later" gets a playful sad goodbye.
+  - **Reduced motion:** cards fade, and text appears without the typewriter effect.
 - Game sound, pause and close controls have 44px touch targets; the compact HUD keeps five hearts and a four-digit score visible even at 320px. Level ribbons fit narrow phones; reduced-motion mode fades timed messages without shortening their reading time.
 - Regression checks use Node's built-in test runner; browser QA also walks the app in a phone-emulated browser (360×780 Galaxy profile) and checks framing, overflow, touch targets and console errors.
 
