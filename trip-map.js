@@ -197,9 +197,211 @@
   // Walking legs open Kakao's walking route; other legs open from/to so Kakao offers transit, car or taxi.
   const kakaoRoute = (a, b, mode) => mode === "walk" ? `https://map.kakao.com/link/by/walk/${kPt(a)}/${kPt(b)}` : `https://map.kakao.com/link/from/${kPt(a)}/to/${kPt(b)}`;
 
+  /* ---------- discover around a stop: parse several open sources, merge, score "worth visiting" ---------- */
+  const fold = v => String(v || "").normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+  const HANGUL = /[\uac00-\ud7a3]/;
+  const clamp01 = v => Math.max(0, Math.min(1, v));
+  const DISC_KINDS = {
+    heritage: ["🏯", "Heritage"], museum: ["🏛️", "Museum"], gallery: ["🎨", "Gallery"], view: ["🌇", "Viewpoint"],
+    sight: ["✨", "Sight"], nature: ["🌿", "Park"], area: ["🏘️", "Neighbourhood"], market: ["🛍️", "Market"],
+    culture: ["🎭", "Stage"], food: ["🍜", "Food"], cafe: ["☕", "Café"], night: ["🍻", "Night out"]
+  };
+  const DISC_FILTERS = {
+    all: null,
+    sights: new Set(["heritage", "museum", "gallery", "sight", "area", "culture", "market"]),
+    food: new Set(["food", "cafe", "market"]),
+    outdoors: new Set(["view", "nature"]),
+    night: new Set(["night"])
+  };
+  const LOCAL_FOOD = /korean|noodle|soup|bbq|barbecue|dumpling|seafood|fish|tteok|bibimbap|kimchi|bunsik|gukbap|naengmyeon|kalguksu|samgyetang|hanjeongsik|tea|bakery/i;
+  const SIGHTLIKE = new Set(["heritage", "museum", "gallery", "view", "sight", "nature", "area", "market", "culture"]);
+  function osmKind(t) {
+    if (t.tourism === "museum") return "museum";
+    if (t.tourism === "gallery" || t.amenity === "arts_centre") return "gallery";
+    if (t.tourism === "viewpoint") return "view";
+    if (t.historic || t.heritage || t.amenity === "place_of_worship") return "heritage";
+    if (t.tourism) return "sight";
+    if (t.leisure === "park" || t.leisure === "garden") return "nature";
+    if (t.amenity === "marketplace") return "market";
+    if (t.amenity === "theatre" || t.amenity === "cinema") return "culture";
+    if (t.amenity === "cafe") return "cafe";
+    if (t.amenity === "bar" || t.amenity === "pub") return "night";
+    if (t.amenity === "restaurant") return "food";
+    // Other amenities only count when they are something to visit (not a university, post office or bank).
+    return t.wikidata && /^(fountain|library|clock|public_bookcase)$/.test(t.amenity || "") ? "sight" : null;
+  }
+  const PLACE_DESC = /palace|temple|shrine|gate|fortress|wall|tomb|park|garden|forest|museum|gallery|market|village|neighbo|street|alley|square|plaza|stream|river|lake|mountain|hill|peak|island|beach|bridge|tower|observatory|lighthouse|cathedral|church|hall|theat|library|monument|statue|memorial|landmark|building in|district|area in|attraction|viewpoint|skywalk/i;
+  const NOT_PLACE = /dynasty|murder|assassinat|rule\b|war\b|battle|incident|massacre|protest|movement|era\b|period|election|treaty|company|corporation|court|ministry|government|agency|school|university|hospital|station|line\b|embassy|^\d{3,4}\s*[–-]\s*\d{2,4}/i;
+  const KO_PLACE = /(궁|문|사|공원|시장|박물관|미술관|마을|거리|길|산|탑|다리|교|해수욕장|전망대|성|천|광장|정원|숲|섬|대|각|루|정)$/;
+  function wikiKind(desc, title) {
+    const s = `${desc || ""} ${title || ""}`;
+    if (/palace|temple|shrine|gate|fortress|tomb|royal|wall|pavilion|throne|\bhall in \w+gung|gung\b/i.test(s) || /(궁|문|사|성|루|정|각|단|묘)$/.test(title || "")) return "heritage";
+    if (/museum/i.test(s) || /박물관$/.test(title || "")) return "museum";
+    if (/gallery|art cent/i.test(s) || /미술관$/.test(title || "")) return "gallery";
+    if (/tower|observatory|skywalk|viewpoint|lookout/i.test(s) || /전망대$/.test(title || "")) return "view";
+    if (/park|garden|forest|mountain|hill|island|beach|lake|stream|river/i.test(s) || /(공원|산|숲|섬|천|해수욕장)$/.test(title || "")) return "nature";
+    if (/market/i.test(s) || /시장$/.test(title || "")) return "market";
+    if (/village|neighbo|street|alley|district|area/i.test(s) || /(마을|거리|길)$/.test(title || "")) return "area";
+    if (/theat|concert hall|performance|opera/i.test(s)) return "culture";
+    return "sight";
+  }
+  const llOf = e => e.center ? {lat: e.center.lat, lng: e.center.lon} : {lat: e.lat, lng: e.lon};
+  function fromOverpass(json) {
+    const out = [];
+    for (const e of (json && json.elements) || []) {
+      const t = e.tags || {}, p = llOf(e), kind = osmKind(t);
+      if (!kind || !t.name || !validLL(p)) continue;
+      const enName = t["name:en"] && !/[;)]/.test(t["name:en"]) ? t["name:en"] : "";
+      out.push({id: `o${e.type[0]}${e.id}`, osm: `${e.type}/${e.id}`, title: enName || t.name, ko: t["name:ko"] || (HANGUL.test(t.name) ? t.name : ""),
+        lat: p.lat, lng: p.lng, kind, wd: /^Q\d+$/.test(t.wikidata || "") ? t.wikidata : "", en: !!enName,
+        hours: t.opening_hours || "", web: t.website || t["contact:website"] || "", cuisine: t.cuisine || "", brand: !!t.brand,
+        heritage: !!t.heritage, historic: !!t.historic, src: ["osm"]});
+    }
+    return out;
+  }
+  function fromWiki(json, lang) {
+    const out = [];
+    for (const pg of (json && json.query && json.query.pages) || []) {
+      const c = pg.coordinates && pg.coordinates[0];
+      if (!c || !validLL({lat: c.lat, lng: c.lon})) continue;
+      const views = Object.values(pg.pageviews || {}).reduce((a, v) => a + (v || 0), 0);
+      const wd = pg.pageprops && pg.pageprops.wikibase_item || "";
+      const placeLike = lang === "en" ? PLACE_DESC.test(pg.description || "") && !NOT_PLACE.test(pg.description || "") && !/station$/i.test(pg.title)
+        : KO_PLACE.test(pg.title) && !/역$/.test(pg.title);
+      out.push({id: wd ? `w${wd}` : `p${lang}${pg.pageid}`, title: pg.title, ko: lang === "ko" ? pg.title : "", lat: c.lat, lng: c.lon,
+        kind: wikiKind(pg.description, pg.title), wd, desc: pg.description || "", img: pg.thumbnail ? pg.thumbnail.source : "",
+        wiki: {[lang]: pg.title}, views: {[lang]: views}, placeLike, en: lang === "en", src: [lang === "en" ? "wpen" : "wpko"]});
+    }
+    return out;
+  }
+  function wdSignals(json) {
+    const out = {};
+    for (const [q, e] of Object.entries((json && json.entities) || {})) {
+      if (!e || e.missing !== undefined) continue;
+      const claims = e.claims || {};
+      const label = e.labels || {};
+      out[q] = {sitelinks: Object.keys(e.sitelinks || {}).length, heritage: !!(claims.P1435 && claims.P1435.length),
+        en: (e.sitelinks && e.sitelinks.enwiki && e.sitelinks.enwiki.title) || (label.en && label.en.value) || "", ko: (label.ko && label.ko.value) || ""};
+    }
+    return out;
+  }
+  // Heritage status (Wikidata P1435) arrives separately from a light SPARQL query.
+  function applyHeritage(wd, ids) {
+    const out = Object.assign({}, wd);
+    for (const q of ids || []) out[q] = Object.assign({sitelinks: 0, en: "", ko: ""}, out[q], {heritage: true});
+    return out;
+  }
+  // Group the same place across sources: same Wikidata item, or same name within 150 m, or a Wikipedia page within 60 m of an OSM place of a similar name.
+  function mergeCandidates(lists, wd = {}) {
+    const all = [].concat(...lists);
+    const groups = [];
+    const byWd = new Map();
+    const sameName = (a, b) => { const x = fold(a), y = fold(b); return x && y && (x === y || (x.length > 4 && y.length > 4 && (x.includes(y) || y.includes(x)))); };
+    for (const c of all) {
+      let g = c.wd && byWd.get(c.wd);
+      if (!g) g = groups.find(o => distKm(o, c) < 0.15 && (sameName(o.title, c.title) || (c.ko && sameName(o.ko, c.ko)) || sameName(o.ko, c.title) || sameName(o.title, c.ko)));
+      if (!g) { g = Object.assign({}, c, {src: [...c.src], wiki: Object.assign({}, c.wiki), views: Object.assign({}, c.views)}); groups.push(g); if (c.wd) byWd.set(c.wd, g); continue; }
+      for (const s of c.src) if (!g.src.includes(s)) g.src.push(s);
+      if (c.osm && !g.osm) Object.assign(g, {id: g.wd ? g.id : c.id, osm: c.osm, lat: c.lat, lng: c.lng, kind: c.kind, hours: c.hours, web: c.web, cuisine: c.cuisine, brand: c.brand, heritage: g.heritage || c.heritage, historic: c.historic});
+      if (c.en && !g.en) { g.title = c.title; g.en = true; }
+      if (!g.wd && c.wd) { g.wd = c.wd; g.id = `w${c.wd}`; byWd.set(c.wd, g); }
+      if (c.src.includes("wpen") && !g.en && !g.osm) g.title = c.title;
+      g.ko = g.ko || c.ko;
+      g.img = g.img || c.img;
+      g.desc = g.desc || c.desc;
+      g.placeLike = g.placeLike || c.placeLike;
+      Object.assign(g.wiki, c.wiki || {});
+      for (const [l, v] of Object.entries(c.views || {})) g.views[l] = Math.max(g.views[l] || 0, v);
+    }
+    // Wikipedia-only pages that don't look like a place (a dynasty, an event, a station) are dropped.
+    return groups.filter(g => g.osm || g.placeLike || g.src.includes("ours")).map(g => {
+      const s = g.wd && wd[g.wd];
+      if (s) {
+        g.sitelinks = s.sitelinks;
+        g.heritage = g.heritage || s.heritage;
+        if (!g.en && s.en && !HANGUL.test(s.en)) { g.ko = g.ko || g.title; g.title = s.en; g.en = true; }
+        g.ko = g.ko || s.ko;
+        if (!g.src.includes("wd")) g.src.push("wd");
+      }
+      if (!g.wd && !g.osm && g.id[0] !== "p" && g.id[0] !== "x") g.id = savedKey(g);
+      return g;
+    });
+  }
+  function curatedNear(center, km, pool) {
+    return pool.filter(p => validLL(p) && distKm(center, p) <= km).map(p => ({id: p.id || savedKey(p), title: p.title, ko: p.ko || "", lat: +p.lat, lng: +p.lng,
+      kind: p.kind || wikiKind(`${p.type || ""} ${p.about || p.cool || ""}`, p.title), wd: "", ours: p.ours, desc: p.cool || p.about || "", src: ["ours"], placeLike: true, wiki: {}, views: {}}));
+  }
+  const walkMinutes = km => Math.max(1, Math.round(km * 1.3 / 4.6 * 60));
+  const fmtK = n => n >= 1000 ? (n / 1000).toFixed(n >= 10000 ? 0 : 1).replace(/\.0$/, "") + "k" : String(n);
+  const TIERS = [[70, "Must see", "gold"], [55, "Worth the detour", "teal"], [40, "Nice if nearby", "slate"], [0, "If passing by", "grey"]];
+  const tierOf = score => TIERS.find(t => score >= t[0]);
+  // 0–100 from open signals only: how known (Wikipedia views, languages), protected heritage, our own research, listing detail, and the walk.
+  function worthScore(c, center) {
+    const views = (c.views && ((c.views.en || 0) + (c.views.ko || 0) * 0.6)) || 0;
+    const f1 = clamp01(Math.log10(views + 1) / 4.3), f2 = clamp01(Math.log10((c.sitelinks || 0) + 1) / Math.log10(61));
+    const fame = Math.round(35 * (c.sitelinks ? 0.65 * f1 + 0.35 * f2 : f1));
+    const heritage = c.heritage ? 12 : c.historic ? 6 : 0;
+    const research = c.ours ? (c.ours.kind === "idea" ? 20 : 16) : 0;
+    // Food has no open fame signal, so it is judged on how local and how well documented it is (ratings stay one tap away).
+    const sightlike = SIGHTLIKE.has(c.kind), local = LOCAL_FOOD.test(c.cuisine || "");
+    const detail = sightlike
+      ? Math.max(0, Math.min(13, 5 + (c.en ? 2 : 0) + (c.hours ? 2 : 0) + (c.web ? 2 : 0) + (c.img ? 2 : 0) - (c.brand ? 6 : 0)))
+      : Math.max(0, Math.min(25, (local ? 7 : c.cuisine ? 3 : 0) + (c.en ? 5 : 0) + (c.hours ? 5 : 0) + (c.web ? 4 : 0) + (c.img ? 2 : 0) + (c.wd ? 4 : 0) - (c.brand ? 8 : 0)));
+    const km = center ? distKm(center, c) : 0, walk = walkMinutes(km);
+    const near = Math.round(20 * clamp01(1 - (walk - 4) / 26));
+    const score = Math.max(0, Math.min(100, fame + heritage + research + detail + near));
+    const why = [];
+    if (c.ours) why.push(["💎", c.ours.kind === "idea" ? "Our Explore pick" : `Our ${c.ours.label || "alternative"}`, research]);
+    if (c.heritage) why.push(["🏯", "Protected heritage", heritage]); else if (c.historic) why.push(["🏯", "Historic site", heritage]);
+    if (views >= 50) why.push(["📈", `${fmtK(Math.round(views))} Wikipedia views/month`, fame]);
+    if ((c.sitelinks || 0) >= 5) why.push(["🌐", `On ${c.sitelinks} language wikis`, Math.round(fame / 2)]);
+    if (c.brand) why.push(["⛓️", "A chain", sightlike ? -6 : -8]);
+    if (!sightlike && local) why.push(["🥢", "Local Korean food", 7]);
+    if (!sightlike && c.en) why.push(["🔤", "English name listed", 5]);
+    if (c.hours) why.push(["🕒", "Opening hours listed", sightlike ? 2 : 5]);
+    why.push(["🚶", walk <= 1 ? "Right here" : `${walk} min walk`, near]);
+    why.sort((a, b) => b[2] - a[2]);
+    return {score, tier: tierOf(score), walk, km: Math.round(km * 100) / 100, parts: {fame, heritage, research, detail, near}, why,
+      sources: new Set(c.src.map(s => s === "wpko" ? "wpen" : s)).size};
+  }
+  // Every key a place can be known by; saves match on any of them.
+  function placeKeys(p) {
+    const out = [];
+    if (p.wd) out.push(`w${p.wd}`);
+    if (p.osm) out.push(`o${p.osm[0]}${p.osm.split("/")[1]}`);
+    if (!out.length || p.title) out.push(hashKey(p));
+    return [...new Set(out)];
+  }
+  function hashKey(p) {
+    let h = 0;
+    const s = `${fold(p.title || p.name)}|${(+p.lat).toFixed(4)}|${(+p.lng).toFixed(4)}`;
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    return `g${h.toString(36)}`;
+  }
+  // Stable keys for saved places (valid Firestore field names).
+  function savedKey(p) {
+    if (p.wd) return `w${p.wd}`;
+    if (p.osm) return `o${p.osm[0]}${p.osm.split("/")[1]}`;
+    return hashKey(p);
+  }
+  function discover(sources, center, radiusKm, opts = {}) {
+    const lists = [sources.osm || [], sources.en || [], sources.ko || [], sources.ours || []];
+    const planned = opts.planned || [];
+    return mergeCandidates(lists, sources.wd || {})
+      .filter(c => distKm(center, c) <= radiusKm && !planned.some(p => distKm(p, c) < 0.08 || (fold(p.title) && fold(p.title) === fold(c.title))))
+      .map(c => Object.assign(c, {worth: worthScore(c, center)}))
+      .sort((a, b) => b.worth.score - a.worth.score || a.worth.km - b.worth.km);
+  }
+  const savedEntry = (c, ctx = {}) => ({t: String(c.title).slice(0, 80), ko: String(c.ko || "").slice(0, 60), lat: +(+c.lat).toFixed(6), lng: +(+c.lng).toFixed(6),
+    cat: c.kind, score: c.worth ? c.worth.score : 0, why: c.worth ? c.worth.why.filter(w => w[2] > 0).slice(0, 3).map(w => `${w[0]} ${w[1]}`) : [],
+    src: [...new Set(c.src || [])].slice(0, 5), wp: c.wiki && (c.wiki.en ? `en:${c.wiki.en}` : c.wiki.ko ? `ko:${c.wiki.ko}` : "") || "",
+    city: ctx.city || "", near: String(ctx.near || "").slice(0, 80), day: ctx.day != null ? ctx.day : null, at: ctx.at || Date.now()});
+
   const MODEL = {DAY_COLORS, dayColor, validLL, distKm, fareText, legBetween, buildDay, alternativesOf,
     plannedIdeaIds, nearestStop, nearbyIdeas, openProposals, proposalDays, placeUrl, legUrl, dayRouteUrl,
-    toMin, fmtMin, needMin, schedule, seoulNow, tripDayIndex, nextUp, kakaoTo, kakaoRoute};
+    toMin, fmtMin, needMin, schedule, seoulNow, tripDayIndex, nextUp, kakaoTo, kakaoRoute,
+    fold, DISC_KINDS, DISC_FILTERS, osmKind, fromOverpass, fromWiki, wdSignals, applyHeritage, mergeCandidates, curatedNear, walkMinutes,
+    worthScore, tierOf, savedKey, placeKeys, discover, savedEntry};
   if (typeof module === "object" && module.exports) { module.exports = MODEL; return; }
   if (typeof window === "undefined" || !window.APP) return;
   if (new URLSearchParams(location.search).has("visual-preview")) return;
@@ -427,10 +629,101 @@ p.tm-now{cursor:default}
   .tm-dhead{touch-action:pan-y}
   .tm-grab{height:34px}
 }
+/* discover around: shadow marks with scores, radar, saved hearts */
+@property --p{syntax:"<number>";inherits:true;initial-value:0}
+.tmap{--t-gold:#d59a17;--t-teal:#0e9aa7;--t-slate:#6b7392;--t-grey:#a3a9bb;--her:#e8557a;--me:#4f5fe6}
+.tm-sh{--tc:var(--t-grey);--p:0;position:relative;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:conic-gradient(var(--tc) calc(var(--p) * 1%),rgba(255,255,255,.55) 0);box-shadow:0 6px 16px -6px rgba(17,22,40,.55),0 0 0 6px color-mix(in srgb,var(--tc) 16%,transparent);
+  opacity:.9;transition:--p .9s cubic-bezier(.2,.8,.2,1),transform .25s cubic-bezier(.2,1.4,.4,1),opacity .25s,box-shadow .25s;animation:tm-pop .5s cubic-bezier(.2,1.5,.4,1) both;animation-delay:calc(var(--i,0) * 38ms);cursor:pointer}
+.tm-sh::before{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--surface,#fff)}
+.tm-sh b{position:relative;font:800 13px/1 -apple-system,system-ui,sans-serif;color:var(--ink,#111628);font-variant-numeric:tabular-nums}
+.tm-sh i{position:absolute;right:-5px;bottom:-5px;width:18px;height:18px;border-radius:50%;background:var(--surface,#fff);display:flex;align-items:center;justify-content:center;font-size:11px;font-style:normal;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.tm-sh.t-gold{--tc:var(--t-gold)}.tm-sh.t-teal{--tc:var(--t-teal)}.tm-sh.t-slate{--tc:var(--t-slate)}
+.tm-sh.is-hover,.tm-sh.is-sel{transform:scale(1.22);opacity:1;z-index:5}
+.tm-sh.is-sel{box-shadow:0 8px 22px -6px rgba(17,22,40,.6),0 0 0 7px color-mix(in srgb,var(--tc) 35%,transparent)}
+.tm-sh.out{animation:tm-shout .22s ease forwards}
+.tm-sh.bump{animation:tm-bump .5s cubic-bezier(.2,1.5,.4,1)}
+.tm-sh .tm-hearts{position:absolute;left:-6px;top:-7px;display:flex;font-size:13px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.3));animation:tm-pop .45s cubic-bezier(.2,1.6,.4,1) both}
+.tm-sh.saved{opacity:1}
+.tm-sh.saved.only{transform:scale(.88);opacity:.82}
+.tm-sh.burst::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:3px solid var(--her);animation:tm-burst .7s ease-out forwards;pointer-events:none}
+.tm-dim .tm-sh:not(.is-sel):not(.is-hover){opacity:.42}
+@keyframes tm-pop{from{transform:scale(.2) translateY(10px);opacity:0}}
+@keyframes tm-shout{to{transform:scale(.3);opacity:0}}
+@keyframes tm-bump{40%{transform:scale(1.3)}}
+@keyframes tm-burst{from{transform:scale(.7);opacity:1}to{transform:scale(1.9);opacity:0}}
+.tm-radar{position:relative;pointer-events:none}
+.tm-radar>span{position:absolute;left:50%;top:50%;width:var(--d);height:var(--d);margin:calc(var(--d) / -2) 0 0 calc(var(--d) / -2);border-radius:50%}
+.tm-radar .sweep{background:conic-gradient(from 0deg,color-mix(in srgb,var(--dc) 38%,transparent),transparent 28%);animation:tm-spin 1.6s linear infinite;opacity:.9;transition:opacity .6s}
+.tm-radar .ring{border:2px solid var(--dc);opacity:0;animation:tm-ring 2s ease-out infinite}
+.tm-radar .ring.r2{animation-delay:.65s}.tm-radar .ring.r3{animation-delay:1.3s}
+.tm-radar.done .sweep,.tm-radar.done .ring{animation:none;opacity:0}
+@keyframes tm-spin{to{transform:rotate(360deg)}}
+@keyframes tm-ring{from{transform:scale(.08);opacity:.85}to{transform:scale(1);opacity:0}}
+.tm-radius{animation:tm-dash 30s linear infinite}
+@keyframes tm-dash{to{stroke-dashoffset:-400}}
+/* panel */
+.tm-disc{margin:6px 0 14px;padding:14px;border-radius:18px;border:1px solid color-mix(in srgb,var(--dc,var(--seoul)) 35%,var(--line));background:color-mix(in srgb,var(--dc,var(--seoul)) 6%,var(--surface));animation:tm-fade .3s ease}
+.tm-disc-h{display:flex;align-items:center;gap:8px}
+.tm-disc-h h4{flex:1;margin:0;font:700 15px/1.3 var(--display)}
+.tm-disc-h .tm-ib{width:36px;height:36px;flex:0 0 36px;border-radius:11px}
+.tm-src{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 2px}
+.tm-src span{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 9px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:11px;font-weight:600;color:var(--muted);transition:color .3s,border-color .3s,background .3s}
+.tm-src span.ok{color:var(--ink);border-color:color-mix(in srgb,var(--t-teal) 55%,var(--line))}
+.tm-src span.err{color:#b7791f}
+.tm-src span.load::before{content:"";width:9px;height:9px;border-radius:50%;border:2px solid var(--muted);border-right-color:transparent;animation:tm-spin .8s linear infinite}
+.tm-src span.ok::before{content:"✓";color:var(--t-teal);font-weight:800}
+.tm-seg{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.tm-seg button{height:34px;padding:0 11px;border-radius:11px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 12px/1 var(--body);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.tm-seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.tm-follow{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12px;color:var(--muted);cursor:pointer}
+.tm-follow input{width:16px;height:16px;accent-color:var(--seoul)}
+.tm-dsum{margin:10px 0 4px;font-size:12px;color:var(--muted)}
+.tm-dlist{list-style:none;margin:6px 0 0;padding:0}
+.tm-drow{display:flex;align-items:center;gap:4px;border-radius:14px;animation:tm-rowin .4s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0) * 30ms)}
+@keyframes tm-rowin{from{opacity:0;transform:translateY(8px)}}
+.tm-drow>.tm-row{flex:1;min-width:0;padding:8px 6px}
+.tm-drow.is-sel{background:var(--surface);box-shadow:inset 0 0 0 1px var(--tc,var(--line))}
+.tm-drow.is-hover>.tm-row{background:var(--soft)}
+.tm-ring{--tc:var(--t-grey);--p:0;position:relative;flex:0 0 40px;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:conic-gradient(var(--tc) calc(var(--p) * 1%),var(--line) 0);transition:--p .9s cubic-bezier(.2,.8,.2,1)}
+.tm-ring::before{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--surface)}
+.tm-ring b{position:relative;font:800 13px/1 var(--body);font-variant-numeric:tabular-nums}
+.t-gold{--tc:var(--t-gold)}.t-teal{--tc:var(--t-teal)}.t-slate{--tc:var(--t-slate)}
+.tm-tier{font-weight:700;color:var(--tc)}
+.tm-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}
+.tm-chips span{font-size:11px;padding:1px 7px;border-radius:999px;background:var(--soft);border:1px solid var(--line);color:var(--ink);white-space:nowrap}
+.tm-heart{flex:0 0 44px;width:44px;height:44px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;font-size:20px;line-height:1;background:none;border:0;cursor:pointer;color:var(--muted);transition:transform .2s cubic-bezier(.2,1.6,.4,1)}
+.tm-heart[aria-pressed="true"]{color:var(--her)}
+.tm-heart:active{transform:scale(.85)}
+.tm-heart.pop{animation:tm-heart .55s cubic-bezier(.2,1.6,.4,1)}
+@keyframes tm-heart{30%{transform:scale(1.45)}60%{transform:scale(.9)}}
+.tm-drow .tm-acts{display:none}
+.tm-drow.is-sel{flex-wrap:wrap}
+.tm-drow.is-sel .tm-acts{display:flex;flex-basis:100%;padding:0 8px 10px 52px;margin-top:0}
+.tm-who{font-size:11px;font-weight:700}
+.tm-who.her{color:var(--her)}.tm-who.me{color:var(--me)}
+.tm-dempty{padding:14px 6px;color:var(--muted);font-size:13px}
+.tm-skel{height:52px;border-radius:14px;margin:6px 0;background:linear-gradient(90deg,var(--soft) 25%,color-mix(in srgb,var(--soft) 40%,var(--surface)) 50%,var(--soft) 75%);background-size:300% 100%;animation:tm-shimmer 1.2s linear infinite}
+@keyframes tm-shimmer{from{background-position:100% 0}to{background-position:-200% 0}}
+/* popup breakdown */
+.tm-bd{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;margin:8px 0 6px;font-size:12px}
+.tm-bd span{color:var(--muted)}
+.tm-bd i{height:6px;border-radius:6px;background:var(--line);overflow:hidden;position:relative}
+.tm-bd i::after{content:"";position:absolute;inset:0;width:calc(var(--w) * 1%);background:var(--tc,var(--t-teal));border-radius:6px;transform-origin:left;animation:tm-grow .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--j) * 70ms)}
+@keyframes tm-grow{from{transform:scaleX(0)}}
+.tm-bd b{font-variant-numeric:tabular-nums;font-size:12px}
+.tm-ph{display:flex;align-items:center;gap:12px}
+.tm-ph .tm-ring{flex:0 0 52px;width:52px;height:52px}
+.tm-ph .tm-ring b{font-size:16px}
+.tm-srcs{font-size:11px;color:var(--muted);margin:6px 0 0}
+.tm-srcs a{color:inherit}
 @media (prefers-reduced-motion:reduce){
   .tm-panel,.tm-pin{transition:none}
   #tripmap .tmap,#tripmap::backdrop,.tm-pbody,.tm-driver,.tm-caption{animation:none!important}
   .tm-pulse{animation:none}
+  .tm-sh,.tm-sh.out,.tm-sh.bump,.tm-drow,.tm-heart.pop,.tm-sh .tm-hearts,.tm-bd i::after,.tm-disc,.tm-radius,.tm-skel{animation:none!important}
+  .tm-radar{display:none}
+  .tm-sh,.tm-ring{transition:none}
 }
 `;
 
@@ -475,8 +768,9 @@ p.tm-now{cursor:default}
   };
   const PREFS_KEY = "sbtrip-map-v1";
   const loadPrefs = () => {
-    try { return Object.assign({route: true, alts: true, ideas: true, props: true, others: true, sat: false}, JSON.parse(localStorage.getItem(PREFS_KEY) || "{}")); }
-    catch (e) { return {route: true, alts: true, ideas: true, props: true, others: true, sat: false}; }
+    const base = {route: true, alts: true, ideas: true, props: true, others: true, sat: false, found: true, saved: true};
+    try { return Object.assign(base, JSON.parse(localStorage.getItem(PREFS_KEY) || "{}")); }
+    catch (e) { return base; }
   };
   const state = {day: -1, sel: null, layers: loadPrefs(), size: "peek", returnAfterComposer: false, drag: null};
   const savePrefs = () => { try { localStorage.setItem(PREFS_KEY, JSON.stringify(state.layers)); } catch (e) {} };
@@ -549,6 +843,8 @@ p.tm-now{cursor:default}
         <label><input type="checkbox" data-layer="alts"> Other options (A/B)</label>
         <label><input type="checkbox" data-layer="ideas"> Explore ideas 찜</label>
         <label><input type="checkbox" data-layer="props"> Open suggestions 💡</label>
+        <label><input type="checkbox" data-layer="found"> Discover results (scores)</label>
+        <label><input type="checkbox" data-layer="saved"> Saved places ♥</label>
         <label><input type="checkbox" data-layer="others"> Other days, faded</label>
         <label><input type="checkbox" data-layer="sat"> Satellite view</label>
       </div>
@@ -651,6 +947,7 @@ p.tm-now{cursor:default}
     const fixedKind = s.kind === "stay" || s.kind === "transit";
     const leg = dm.legs.find(l => l.to === s.k);
     const a = [`<button type="button" class="tm-btn pri" data-act="go" data-day="${s.day}" data-k="${s.k}">${IC.play} Open in trip</button>`];
+    if (s.pinned && !s.removed) a.push(`<button type="button" class="tm-btn" data-act="disc-start" data-day="${s.day}" data-k="${s.k}">✨ Discover around</button>`);
     if (s.place.ko) a.push(`<button type="button" class="tm-btn" data-act="driver" data-day="${s.day}" data-k="${s.k}">🚕 Show the driver</button>`);
     if (s.pinned) a.push(`<a class="tm-btn" href="${esc(canRoute(leg) ? MODEL.kakaoRoute(leg.fromPlace, s.place, leg.mode) : MODEL.kakaoTo(s.place))}" target="_blank" rel="noopener">KakaoMap ↗</a>`);
     a.push(`<a class="tm-btn" href="${esc(MODEL.placeUrl(s.place))}" target="_blank" rel="noopener">Google Maps ↗</a>`);
@@ -729,16 +1026,19 @@ p.tm-now{cursor:default}
         <div class="tm-dacts">
           <button type="button" class="tm-btn pri" data-act="play" data-day="${dm.index}" aria-pressed="${!!tour}">${tour ? "■ Stop the tour" : "▶ Play the day"}</button>
           ${routeUrl ? `<a class="tm-btn" href="${esc(routeUrl)}" target="_blank" rel="noopener">${IC.route} Day in Google Maps ↗</a>` : ""}
+          <button type="button" class="tm-btn" data-act="disc-day" data-day="${dm.index}" aria-pressed="${disc.on && disc.anchor && disc.anchor.day === dm.index}">✨ Discover nearby</button>
           <button type="button" class="tm-btn" data-act="add" data-day="${dm.index}">${IC.plus} Add a place</button>
           <button type="button" class="tm-btn" data-act="go" data-day="${dm.index}" data-k="-1">${IC.play} Open day</button>
         </div>
       </header>
+      ${discSectionHtml(dm)}
       ${st.longLegs ? `<p class="tm-warn">⚠ ${st.longLegs} long hop${st.longLegs > 1 ? "s" : ""} today (over 30 min). A nearer swap or a different order may give you more time at the stops.</p>` : ""}
       ${tight ? `<p class="tm-warn">⏱ ${tight} tight connection${tight > 1 ? "s" : ""}: there isn't enough time at ${tight > 1 ? "those stops" : "that stop"} to get to the next one on time. Moving a time or swapping a stop fixes it.</p>` : ""}
       <ol class="tm-list" id="tm-list">${rows.join("")}</ol>
       ${ideasHtml}
+      ${savedSectionHtml(dm.city, dm.index)}
       ${proposalsHtml(props)}
-      <p class="tm-help">${PHONE ? "Tap a pin or a stop for its actions. Long-press anywhere on the map to suggest that spot." : "Click a pin or a stop for its actions. Drag a stop (⠿) onto another stop or a day chip to suggest a move. Right-click the map to suggest any spot. Keys: [ and ] change the day, A shows all days, / searches, P plays the day, F fits the map."} Suggestions go to the other phone first, and nothing changes until you both agree.</p>`;
+      <p class="tm-help">${PHONE ? "Tap a pin or a stop for its actions. Long-press anywhere on the map to suggest that spot." : "Click a pin or a stop for its actions. Drag a stop (⠿) onto another stop or a day chip to suggest a move. Right-click the map to suggest any spot. Keys: [ and ] change the day, A shows all days, / searches, D discovers around the stop, P plays the day, F fits the map."} Suggestions go to the other phone first, and nothing changes until you both agree.</p>`;
   }
 
   function allPanel() {
@@ -759,6 +1059,7 @@ p.tm-now{cursor:default}
         </div>
       </header>
       <ol class="tm-list">${rows}</ol>
+      ${savedSectionHtml(null, -1)}
       ${proposalsHtml(proposals)}
       <p class="tm-help">Pick a day to see its route, the walk or taxi between stops, other options and ideas nearby. The KML file opens in Google My Maps: Create → Import.</p>`;
   }
@@ -770,6 +1071,7 @@ p.tm-now{cursor:default}
     byId("tm-sub").textContent = dm ? `Day ${dm.index + 1} · ${dateShort(dm.date)} · ${dm.city}` : "Trip map · Seoul ⇄ Busan";
     byId("tm-title").textContent = dm ? dm.title : "All days";
     pbody.querySelector(".tm-stop.is-sel")?.scrollIntoView({block: "nearest", behavior: RM() ? "auto" : "smooth"});
+    animateRings(pbody);
   }
 
   /* ---------- map ---------- */
@@ -820,7 +1122,13 @@ p.tm-now{cursor:default}
     if (PHONE) map.attributionControl.setPosition("topleft");
     setTiles();
     group = Lf.layerGroup().addTo(map);
+    map.createPane("tmRadar").style.zIndex = 420;
+    map.createPane("tmShadow").style.zIndex = 590;
+    savedGroup = Lf.layerGroup().addTo(map);
+    discGroup = Lf.layerGroup().addTo(map);
     map.on("contextmenu", e => pinPopup(e.latlng));
+    map.on("popupopen", e => { const el = e.popup.getElement(); if (el) animateRings(el); });
+    map.on("zoomend", () => { if (disc.on) paintDiscMarks(); });
     map.on("click", closeLayers);
     return map;
   }
@@ -940,6 +1248,7 @@ p.tm-now{cursor:default}
     }
 
     if (meLayer) meLayer.addTo(map);
+    paintSaved();
     if (fit) fitTo(bounds, fit === "fly");
   }
 
@@ -974,6 +1283,10 @@ p.tm-now{cursor:default}
   }
 
   function select(day, k, opts = {}) {
+    if (disc.on && disc.follow && !tour && disc.anchor && (disc.anchor.day !== day || disc.anchor.k !== k)) {
+      clearTimeout(followTimer);
+      followTimer = setTimeout(() => { const a = anchorFor(day, k); if (a && disc.on && dlg.open) startDiscover(a, {quiet: true}); }, 380);
+    }
     if (state.day === -1 && opts.fromMap) { highlight(day, k); return; }
     state.sel = {day, k};
     if (state.day !== day) { state.day = day; render(true); } else renderPanel();
@@ -1085,6 +1398,7 @@ p.tm-now{cursor:default}
 
   function switchDay(day, dir = 0, k = null) {
     map?.closePopup();
+    if (disc.on && disc.anchor && disc.anchor.day !== day) stopDiscover();
     const from = state.day;
     state.day = day;
     state.sel = null;
@@ -1108,6 +1422,66 @@ p.tm-now{cursor:default}
       }
       case "play": tour ? stopTour() : playTour(day); break;
       case "driver": showDriver(day, k); break;
+      case "disc-start": startDiscover(anchorFor(day, k)); break;
+      case "disc-day":
+        if (disc.on && disc.anchor && disc.anchor.day === day) stopDiscover();
+        else startDiscover(defaultAnchor(day));
+        break;
+      case "disc-close": stopDiscover(); break;
+      case "disc-focus": focusFound(d.id); break;
+      case "disc-radius": disc.radius = +d.km; disc.more = false; resizeRadius(); paintDiscMarks(); paintDiscList(); paintSaved();
+        pbody.querySelectorAll('[data-act="disc-radius"]').forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.km === disc.radius)));
+        if (disc.center) fitTo([[disc.center.lat - disc.radius / 111, disc.center.lng], [disc.center.lat + disc.radius / 111, disc.center.lng], [disc.center.lat, disc.center.lng - disc.radius / 88], [disc.center.lat, disc.center.lng + disc.radius / 88]], true);
+        break;
+      case "disc-filter": disc.filter = d.f; disc.more = false; disc.sel = null; map?.closePopup(); paintDiscMarks(); paintDiscList(); paintSaved();
+        pbody.querySelectorAll('[data-act="disc-filter"]').forEach(b => b.setAttribute("aria-pressed", String(b.dataset.f === disc.filter)));
+        break;
+      case "disc-more": disc.more = true; paintDiscMarks(); paintDiscList(); break;
+      case "disc-save": {
+        const c = found(d.id);
+        if (!c) break;
+        const on = toggleSave(c);
+        const btn = pbody.querySelector(`.tm-drow[data-id="${cssEsc(d.id)}"] .tm-heart`);
+        if (btn && on && !RM()) { btn.classList.remove("pop"); void btn.offsetWidth; btn.classList.add("pop"); }
+        if (disc.sel === d.id && mapEl.querySelector(".leaflet-popup")) focusFound(d.id, {fromMap: true});
+        break;
+      }
+      case "disc-add": case "disc-swap": {
+        const c = found(d.id), a = disc.anchor;
+        if (!c || !a) break;
+        const note = `${scoreNote(c)} ${c.worth.walk} min walk from ${a.title}.`;
+        if (d.act === "disc-add") suggest({day: a.day, type: "add", toAfter: a.id, place: placeFor(c), note});
+        else suggest({day: a.day, stop: a.k, type: "replace", place: placeFor(c), note});
+        break;
+      }
+      case "disc-driver": {
+        const c = found(d.id);
+        if (c) showDriverFor({title: c.title, ko: c.ko, name: c.title, lat: c.lat, lng: c.lng});
+        break;
+      }
+      case "saved-focus": case "saved-toggle": case "saved-add": case "saved-discover": {
+        const e = savedList().find(x => x.key === d.key);
+        if (!e) break;
+        if (d.act === "saved-toggle") {
+          toggleSavedKey(d.key);
+          map?.closePopup();
+        } else if (d.act === "saved-add") {
+          const dayN = state.day >= 0 ? state.day : app.days.findIndex(x => x.city === e.city);
+          const near = MODEL.nearestStop(model[dayN], e);
+          suggest({day: dayN, type: "add", toAfter: near ? near.stop.id : lastItemId(dayN),
+            place: {title: e.t, ko: e.ko, name: e.t, lat: e.lat, lng: e.lng, cool: e.why.join(" · "), url: MODEL.placeUrl({name: e.t, lat: e.lat, lng: e.lng}), cat: CAT_OF[e.cat] || "sight"},
+            note: `♥ Saved by ${e.who.map(w => names()[w]).join(" & ")} · worth-visiting score ${e.score}.${near ? ` 📍 ${near.km} km from ${near.stop.title}.` : ""}`});
+        } else if (d.act === "saved-discover") {
+          const dayN = state.day >= 0 && model[state.day].city === e.city ? state.day : app.days.findIndex(x => x.city === e.city);
+          map?.closePopup();
+          startDiscover({day: dayN, k: -1, id: lastItemId(dayN), title: e.t, place: {title: e.t, ko: e.ko, lat: e.lat, lng: e.lng}, swappable: false});
+        } else if (map) {
+          flyToPoint([e.lat, e.lng], Math.max(map.getZoom(), 16));
+          const m = savedMarks.get(d.key);
+          setTimeout(() => { if (!dlg.open) return; if (m) m.openPopup(); else Lf.popup(popupOpts()).setLatLng([e.lat, e.lng]).setContent(savedPopup(d.key)).openOn(map); }, PHONE ? 650 : 450);
+        }
+        break;
+      }
       case "driver-close": hideDriver(); break;
       case "copy-ko":
         navigator.clipboard?.writeText(d.text).then(() => toast("Korean name copied"), () => toast("Couldn't copy here, so please show the screen instead"));
@@ -1267,6 +1641,7 @@ p.tm-now{cursor:default}
     savePrefs();
     if (key === "sat") setTiles();
     draw(false);
+    if (key === "found") paintDiscMarks();
   });
   byId("tm-fit").onclick = () => { map?.closePopup(); fitTo(currentBounds()); };
   byId("tm-close").onclick = () => closeMap();
@@ -1311,6 +1686,8 @@ p.tm-now{cursor:default}
     else if (!layersEl.hidden) { closeLayers(); layersBtn.focus(); }
     else if (tour) stopTour();
     else if (map && mapEl.querySelector(".leaflet-popup")) map.closePopup();
+    else if (disc.on && disc.sel) focusFound(disc.sel);
+    else if (disc.on) stopDiscover();
     else closeMap();
   });
 
@@ -1418,7 +1795,11 @@ p.tm-now{cursor:default}
   const driverBackground = [...dlg.querySelectorAll(".tm-head, .tm-days, .tm-body")];
   function showDriver(day, k) {
     const s = model[day] && model[day].stops[k];
-    if (!s || !s.place.ko) return;
+    if (s) showDriverFor(Object.assign({title: s.title, pinned: s.pinned}, s.place));
+  }
+  function showDriverFor(place) {
+    const s = {title: place.title, pinned: MODEL.validLL(place), place};
+    if (!s.place.ko) return;
     driverReturn = document.activeElement;
     const en = [s.title, s.place.name && s.place.name !== s.title && !/[\uac00-\ud7a3]/.test(s.place.name) ? s.place.name : ""].filter(Boolean).join(" · ");
     driverEl.innerHTML = `<p class="k-say" lang="ko">이곳으로 가 주세요</p>
@@ -1451,7 +1832,6 @@ p.tm-now{cursor:default}
 
   /* ---------- quick search: stops, other options, ideas, hotels ---------- */
   const tmapEl = dlg.querySelector(".tmap"), qEl = byId("tm-q"), resEl = byId("tm-results");
-  const fold = v => String(v || "").normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
   let results = [], ri = -1;
   function searchIndex() {
     const out = [];
@@ -1549,6 +1929,7 @@ p.tm-now{cursor:default}
     else if (key === "[" || key === "]") { e.preventDefault(); act({act: "step", dir: key === "]" ? 1 : -1}); }
     else if (key === "a" || key === "A" || key === "0") { e.preventDefault(); if (state.day !== -1) act({act: "day", day: -1}); }
     else if ((key === "p" || key === "P") && state.day >= 0) { e.preventDefault(); act({act: "play", day: state.day}); }
+    else if ((key === "d" || key === "D") && state.day >= 0) { e.preventDefault(); act({act: "disc-day", day: state.day}); }
     else if (key === "f" || key === "F") { e.preventDefault(); map?.closePopup(); fitTo(currentBounds(), true); }
   });
 
@@ -1574,6 +1955,602 @@ p.tm-now{cursor:default}
     warm = () => { if (!slow() && !Lf) loadLeaflet().catch(() => {}); };
   }
 
+  /* ---------- discover around the active stop: several open sources, a worth-visiting score, shadow marks ---------- */
+  const DISC_FETCH_KM = 1.6, DISC_TTL = 7 * 864e5, DISC_CACHE = "sbtrip-disc-v1", SAVED_KEY = "sbtrip-saved-v1";
+  const RADII = [[5, 0.4], [10, 0.8], [20, 1.6]];
+  const OVERPASS = ["https://overpass-api.de/api/interpreter", "https://lz4.overpass-api.de/api/interpreter", "https://z.overpass-api.de/api/interpreter", "https://overpass.private.coffee/api/interpreter"];
+  const SRC_NAMES = [["osm", "OpenStreetMap"], ["en", "Wikipedia"], ["ko", "위키백과"], ["wd", "Wikidata"], ["her", "Heritage"], ["ours", "Our research"]];
+  const FILTERS = [["all", "All"], ["sights", "Sights"], ["food", "Food & cafés"], ["outdoors", "Views & parks"], ["night", "Night"], ["saved", "♥ Saved"]];
+  const CAT_OF = {heritage: "sight", museum: "culture", gallery: "culture", view: "view", sight: "sight", nature: "nature", area: "sight", market: "shop", culture: "culture", food: "food", cafe: "cafe", night: "night"};
+  const disc = {on: false, token: 0, ctrl: null, filter: "all", radius: 0.8, follow: true, more: false, sel: null, list: [], src: {}, status: {}, center: null, anchor: null, city: "", shown: new Map(), ids: new Map()};
+  let discGroup = null, savedGroup = null, radar = null, radarCircle = null, discMarks = new Map(), savedMarks = new Map(), followTimer = 0;
+  const names = () => { try { return Object.assign({me: "Mykola", her: "Киця"}, JSON.parse(localStorage.getItem("sbtrip-names-v1") || "{}")); } catch (e) { return {me: "Mykola", her: "Киця"}; } };
+  const tierCls = w => "t-" + w.tier[2];
+  // `CSS` is the stylesheet text in this file, so use the browser's escaper explicitly.
+  const cssEsc = v => window.CSS && window.CSS.escape ? window.CSS.escape(v) : String(v).replace(/["\\]/g, "\\$&");
+  const kindIcon = k => (MODEL.DISC_KINDS[k] || ["📍"])[0];
+  const kindName = k => (MODEL.DISC_KINDS[k] || ["", "Place"])[1];
+
+  // --- source fetchers (keyless, CORS-friendly, each with its own timeout)
+  async function getJSON(url, init, ms, signal) {
+    const ctrl = new AbortController(), t = setTimeout(() => ctrl.abort(), ms);
+    const stop = () => ctrl.abort();
+    signal && signal.addEventListener("abort", stop);
+    try {
+      const r = await fetch(url, Object.assign({}, init, {signal: ctrl.signal}));
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return JSON.parse(await r.text());
+    } finally { clearTimeout(t); signal && signal.removeEventListener("abort", stop); }
+  }
+  const overpassQ = c => {
+    const A = `(around:${Math.round(DISC_FETCH_KM * 1000)},${c.lat.toFixed(6)},${c.lng.toFixed(6)})`;
+    const sights = t => `${t}${A}[name][tourism~"^(attraction|museum|gallery|viewpoint|artwork|theme_park|zoo|aquarium)$"];${t}${A}[name][historic];${t}${A}[name][leisure~"^(park|garden)$"];${t}${A}[name][amenity~"^(marketplace|theatre|arts_centre)$"];${t}${A}[name][amenity][wikidata];`;
+    // Overpass fills a capped output nodes-first, so areas (palaces, parks, big museums) and points get separate caps.
+    return `[out:json][timeout:25];(${sights("wr")});out tags center 250;(${sights("node")});out tags center 150;nwr${A}[amenity~"^(restaurant|cafe|bar|pub)$"]["name:en"];out tags center 90;`;
+  };
+  async function fetchOsm(c, signal) {
+    let last;
+    // Overpass allows a couple of queries per visitor at a time; if every server is busy, wait a moment and ask the main one again.
+    for (const ep of [...OVERPASS, "retry"]) {
+      try {
+        if (ep === "retry") await new Promise((ok, no) => { const t = setTimeout(ok, 3000); signal.addEventListener("abort", () => { clearTimeout(t); no(new Error("aborted")); }); });
+        return MODEL.fromOverpass(await getJSON(ep === "retry" ? OVERPASS[0] : ep, {method: "POST", body: "data=" + enc(overpassQ(c)), headers: {"Content-Type": "application/x-www-form-urlencoded"}}, 20000, signal));
+      } catch (e) { last = e; if (signal.aborted) throw e; }
+    }
+    throw last;
+  }
+  const fetchWiki = (c, lang, signal) => getJSON(`https://${lang}.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&generator=geosearch&ggscoord=${c.lat.toFixed(6)}%7C${c.lng.toFixed(6)}&ggsradius=${DISC_FETCH_KM * 1000}&ggslimit=50&prop=pageviews%7Cpageprops%7Cdescription%7Ccoordinates%7Cpageimages&pvipdays=30&ppprop=wikibase_item&piprop=thumbnail&pithumbsize=160&colimit=50`, {}, 12000, signal).then(j => { if (j.error) throw new Error(j.error.code || "wiki"); return MODEL.fromWiki(j, lang); });
+  async function fetchWd(ids, signal) {
+    const out = {};
+    for (let i = 0; i < ids.length; i += 50) Object.assign(out, MODEL.wdSignals(await getJSON(`https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&origin=*&ids=${ids.slice(i, i + 50).join("%7C")}&props=sitelinks%7Clabels&languages=en%7Cko`, {}, 12000, signal)));
+    return out;
+  }
+  async function fetchHeritage(ids, signal) {
+    const q = `SELECT DISTINCT ?item WHERE { VALUES ?item { ${ids.map(i => "wd:" + i).join(" ")} } ?item wdt:P1435 [] }`;
+    const j = await getJSON("https://query.wikidata.org/sparql?format=json&query=" + enc(q), {headers: {Accept: "application/sparql-results+json"}}, 15000, signal);
+    return ((j.results && j.results.bindings) || []).map(b => b.item.value.split("/").pop());
+  }
+  // --- cache per ~100 m cell, so going back to a stop is instant
+  const cellKey = c => `${c.lat.toFixed(3)},${c.lng.toFixed(3)}`;
+  const readCache = () => { try { return JSON.parse(localStorage.getItem(DISC_CACHE) || "{}") || {}; } catch (e) { return {}; } };
+  function writeCache(c, src) {
+    try {
+      const all = readCache();
+      all[cellKey(c)] = {at: Date.now(), osm: src.osm, en: src.en, ko: src.ko, wd: src.wd || {}, her: src.her || []};
+      const keys = Object.keys(all).sort((a, b) => all[b].at - all[a].at);
+      for (const k of keys.slice(16)) delete all[k];
+      localStorage.setItem(DISC_CACHE, JSON.stringify(all));
+    } catch (e) { /* storage full: the scan still works, it just isn't remembered */ }
+  }
+  // --- our own research nearby: Explore ideas and unchosen options
+  function oursPool(city) {
+    const out = [];
+    for (const x of EXPLORE) if (x.city === city) out.push(Object.assign({}, x, {ours: {kind: "idea"}}));
+    app.days.forEach((d, di) => {
+      if (d.city !== city) return;
+      d.items.forEach(it => (it.options || []).forEach(o => {
+        const p = app.resolve ? app.resolve(o) : o;
+        if (p && !model[di].stops.some(s => s.item === it && s.place.title === p.title)) out.push(Object.assign({}, p, {ours: {kind: "alt", label: `Day ${di + 1} option`}}));
+      }));
+    });
+    return out;
+  }
+  const plannedPlaces = () => model.flatMap(dm => dm.stops.filter(s => !s.removed && s.pinned).map(s => s.place)).concat(Object.values(app.hotels).filter(MODEL.validLL));
+
+  // --- saved places (synced as saved.<key>.<her|me> in the trip doc)
+  const cleanEntry = e => e && typeof e === "object" && MODEL.validLL(e) ? {t: String(e.t || "Saved place").slice(0, 80), ko: String(e.ko || "").slice(0, 60), lat: +e.lat, lng: +e.lng,
+    cat: MODEL.DISC_KINDS[e.cat] ? e.cat : "sight", score: Math.max(0, Math.min(100, Math.round(+e.score) || 0)), why: Array.isArray(e.why) ? e.why.slice(0, 3).map(w => String(w).slice(0, 60)) : [],
+    src: Array.isArray(e.src) ? e.src.slice(0, 5).map(String) : [], wp: String(e.wp || "").slice(0, 120), city: String(e.city || ""), near: String(e.near || "").slice(0, 80),
+    day: Number.isInteger(e.day) ? e.day : null, at: +e.at || 0} : null;
+  function cleanSaved(raw) {
+    const out = {};
+    for (const [k, v] of Object.entries(raw || {})) {
+      if (!/^[a-zA-Z0-9_-]{2,40}$/.test(k) || !v || typeof v !== "object") continue;
+      for (const who of ["her", "me"]) { const e = cleanEntry(v[who]); if (e) (out[k] = out[k] || {})[who] = e; }
+    }
+    return out;
+  }
+  let saved = (() => { try { return cleanSaved(JSON.parse(localStorage.getItem(SAVED_KEY) || "{}")); } catch (e) { return {}; } })();
+  let savedSynced = false;
+  const persistSaved = () => { try { localStorage.setItem(SAVED_KEY, JSON.stringify(saved)); } catch (e) {} };
+  // Unsaves made before sync is connected (syncSet can't send yet) are remembered and sent with the first snapshot.
+  const PENDING_DEL = "sbtrip-saved-del-v1";
+  const pendingDel = () => { try { return JSON.parse(localStorage.getItem(PENDING_DEL) || "[]") || []; } catch (e) { return []; } };
+  const setPendingDel = list => { try { list.length ? localStorage.setItem(PENDING_DEL, JSON.stringify(list.slice(-200))) : localStorage.removeItem(PENDING_DEL); } catch (e) {} };
+  const unsaveSync = (k, role) => {
+    app.syncSet?.(["saved", k, role], null);
+    if (!savedSynced) setPendingDel([...new Set([...pendingDel(), `${k}|${role}`])]);
+  };
+  const saveSync = (k, role, entry) => {
+    app.syncSet?.(["saved", k, role], entry);
+    if (!savedSynced) setPendingDel(pendingDel().filter(x => x !== `${k}|${role}`));
+  };
+  const savedOne = k => saved[k] && (saved[k].me || saved[k].her);
+  // A place's saved key: whichever of its identities is already saved, else the preferred one.
+  const keyOf = c => MODEL.placeKeys(c).find(k => saved[k]) || MODEL.savedKey(c);
+  const savedWho = k => saved[k] ? ["her", "me"].filter(w => saved[k][w]) : [];
+  const heartsHtml = k => savedWho(k).map(w => `<span class="tm-who ${w}" title="${esc(names()[w])}">♥</span>`).join("");
+  function savedList(city) {
+    return Object.entries(saved).map(([k, v]) => Object.assign({key: k, who: Object.keys(v)}, v.me || v.her))
+      .filter(e => !city || !e.city || e.city === city).sort((a, b) => b.score - a.score || b.at - a.at);
+  }
+  app.on?.("remote", data => {
+    try {
+      const role = myRole(), prev = saved, first = !savedSynced;
+      let next = cleanSaved(data && data.saved);
+      if (!first && JSON.stringify(next) === JSON.stringify(prev)) return;
+      if (first) {
+        savedSynced = true;
+        // Saves made while offline or before sync was set up are sent once, like the app does for suggestions.
+        for (const [k, v] of Object.entries(prev)) if (role && v[role] && !(next[k] && next[k][role]) && app.syncSet) {
+          app.syncSet(["saved", k, role], v[role]);
+          (next[k] = next[k] || {})[role] = v[role];
+        }
+        for (const pk of pendingDel()) {
+          const [k, who] = pk.split("|");
+          if (who !== role || !app.syncSet) continue;
+          app.syncSet(["saved", k, who], null);
+          if (next[k]) { delete next[k][who]; if (!Object.keys(next[k]).length) delete next[k]; }
+        }
+        setPendingDel([]);
+      }
+      saved = next;
+      persistSaved();
+      const other = role === "her" ? "me" : role === "me" ? "her" : null;
+      const arrived = other ? Object.keys(saved).filter(k => saved[k][other] && !(prev[k] && prev[k][other])) : [];
+      if (dlg.open) {
+        paintSaved();
+        if (disc.on) { paintDiscMarks(); paintDiscList(); }
+        // Refresh the saved list too, unless someone is in the middle of using the panel.
+        else if (!pbody.contains(document.activeElement)) renderPanel();
+        if (arrived.length && !first) {
+          const e = saved[arrived[0]][other];
+          toast(`💗 ${names()[other]} saved ${e.t}${arrived.length > 1 ? ` and ${arrived.length - 1} more` : ""} · ${e.score}`);
+          arrived.forEach(k => burstMark(k));
+        }
+      }
+    } catch (e) { console.warn("trip map: saved sync", e); }
+  });
+  function toggleSavedKey(k) {
+    const role = myRole(), v = saved[k];
+    if (!role) { toast("First choose who you are (⋯ → More), then save"); return; }
+    if (!v) return;
+    if (v[role]) {
+      delete v[role];
+      if (!Object.keys(v).length) delete saved[k];
+      unsaveSync(k, role);
+    } else {
+      v[role] = Object.assign({}, v.me || v.her, {at: Date.now()});
+      saveSync(k, role, v[role]);
+    }
+    persistSaved();
+    paintSaved();
+    if (disc.on) { paintDiscMarks(); paintDiscList(); }
+    if (dlg.open) renderPanel();
+    if (v[role]) burstMark(k);
+    toast(v[role] ? "♥ Saved for you too" : "Removed from your saved");
+  }
+  function toggleSave(c) {
+    const role = myRole();
+    if (!role) { toast("First choose who you are (⋯ → More), then save"); return null; }
+    const k = keyOf(c);
+    const mine = saved[k] && saved[k][role];
+    if (mine) {
+      delete saved[k][role];
+      if (!Object.keys(saved[k]).length) delete saved[k];
+      unsaveSync(k, role);
+    } else {
+      const entry = cleanEntry(MODEL.savedEntry(c, {city: disc.city || (model[state.day] || {}).city || "", near: disc.anchor ? disc.anchor.title : "", day: disc.anchor ? disc.anchor.day : state.day >= 0 ? state.day : null}));
+      (saved[k] = saved[k] || {})[role] = entry;
+      saveSync(k, role, entry);
+    }
+    persistSaved();
+    paintSaved();
+    if (disc.on) { paintDiscMarks(); paintDiscList(); }
+    if (!mine) burstMark(k);
+    toast(mine ? "Removed from saved" : `♥ Saved${app.syncStatus && app.syncStatus() === "live" ? ", and on both phones" : ""}`);
+    return !mine;
+  }
+
+  // --- score ring count-up
+  function countUp(el, to) {
+    const from = +el.dataset.v || 0;
+    el.dataset.v = to;
+    if (RM() || from === to) { el.textContent = to; return; }
+    const t0 = performance.now(), d = 700;
+    const step = t => { const p = Math.min(1, (t - t0) / d); el.textContent = Math.round(from + (to - from) * (1 - (1 - p) ** 3)); if (p < 1 && el.isConnected) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  // Rings start from the score shown last time, so new evidence visibly lifts (or lowers) a place.
+  const ringHtml = (w, id) => {
+    const from = id && disc.shown.has(id) ? disc.shown.get(id) : RM() ? w.score : 0;
+    return `<span class="tm-ring ${tierCls(w)}" style="--p:${from}" aria-hidden="true"${id ? ` data-id="${esc(id)}"` : ""} data-to="${w.score}"><b data-v="${from}">${from}</b></span>`;
+  };
+  function animateRings(root) {
+    root.querySelectorAll(".tm-ring[data-to]").forEach(r => {
+      const to = +r.dataset.to;
+      if (r.dataset.id) disc.shown.set(r.dataset.id, to);
+      countUp(r.querySelector("b"), to);
+      if (RM()) r.style.setProperty("--p", to);
+      else requestAnimationFrame(() => requestAnimationFrame(() => r.style.setProperty("--p", to)));
+    });
+  }
+
+  // --- radar while scanning
+  function startRadar(c, color) {
+    stopRadar(true);
+    if (!map) return;
+    const km = disc.radius;
+    radarCircle = Lf.circle([c.lat, c.lng], {radius: km * 1000, color, weight: 1.5, opacity: .7, fillColor: color, fillOpacity: .05, dashArray: "6 8", className: "tm-radius", interactive: false}).addTo(map);
+    if (RM()) return;
+    const px = () => Math.round(2 * km * 1000 / (40075016.686 * Math.cos(c.lat * Math.PI / 180) / 2 ** (map.getZoom() + 8)));
+    const html = d => `<div class="tm-radar" style="--dc:${color};--d:${d}px"><span class="sweep"></span><span class="ring"></span><span class="ring r2"></span><span class="ring r3"></span></div>`;
+    radar = Lf.marker([c.lat, c.lng], {icon: Lf.divIcon({className: "", html: html(px()), iconSize: [0, 0]}), pane: "tmRadar", interactive: false, keyboard: false}).addTo(map);
+    radar._zoom = () => radar.setIcon(Lf.divIcon({className: "", html: html(px()).replace('class="tm-radar"', `class="tm-radar${disc.loading ? "" : " done"}"`), iconSize: [0, 0]}));
+    map.on("zoomend", radar._zoom);
+  }
+  function radarDone() { radar && radar.getElement()?.querySelector(".tm-radar")?.classList.add("done"); }
+  function stopRadar(all) {
+    if (radar) { map && map.off("zoomend", radar._zoom); radar.remove(); radar = null; }
+    if (all && radarCircle) { radarCircle.remove(); radarCircle = null; }
+  }
+  function resizeRadius() { if (radarCircle) radarCircle.setRadius(disc.radius * 1000); if (radar) radar._zoom(); }
+
+  // --- results → what's shown
+  function visibleFound() {
+    if (disc.filter === "saved") return [];
+    const set = MODEL.DISC_FILTERS[disc.filter];
+    return disc.list.filter(c => c.worth.km <= disc.radius && (!set || set.has(c.kind)));
+  }
+  function recompute() {
+    const src = disc.src;
+    const wd = MODEL.applyHeritage(src.wd || {}, src.her || []);
+    disc.list = MODEL.discover({osm: src.osm, en: src.en, ko: src.ko, wd, ours: src.ours}, disc.center, DISC_FETCH_KM, {planned: plannedPlaces()});
+    for (const c of disc.list) {
+      const keys = MODEL.placeKeys(c);
+      const id = keys.map(k => disc.ids.get(k)).find(Boolean) || keys[0];
+      keys.forEach(k => disc.ids.set(k, id));
+      c.id = id;
+    }
+  }
+  const found = id => disc.list.find(c => c.id === id);
+
+  // --- shadow marks on the map
+  const shHtml = (c, i, extra = "") => {
+    const k = keyOf(c), hearts = heartsHtml(k);
+    return `<div class="tm-sh ${tierCls(c.worth)}${hearts ? " saved" : ""}${disc.sel === c.id ? " is-sel" : ""}${extra}" style="--p:${c.worth.score};--i:${i}" data-id="${esc(c.id)}"><b>${c.worth.score}</b><i>${kindIcon(c.kind)}</i>${hearts ? `<span class="tm-hearts">${hearts}</span>` : ""}</div>`;
+  };
+  // Lower-scored places that would sit on top of a better one are left off at this zoom (they stay in the list).
+  function declutter(list) {
+    const z = map.getZoom(), placed = [], out = [];
+    const sel = list.find(c => c.id === disc.sel);
+    for (const c of sel ? [sel, ...list.filter(x => x !== sel)] : list) {
+      const pt = map.project([c.lat, c.lng], z);
+      if (placed.some(q => Math.abs(q.x - pt.x) < 30 && Math.abs(q.y - pt.y) < 30)) continue;
+      placed.push(pt);
+      out.push(c);
+    }
+    return out;
+  }
+  function paintDiscMarks() {
+    if (!map || !discGroup) return;
+    const show = disc.on && state.layers.found ? declutter(visibleFound()).slice(0, disc.more ? 80 : 30) : [];
+    const keep = new Set(show.map(c => c.id));
+    for (const [id, m] of discMarks) {
+      if (keep.has(id)) continue;
+      const el = m.getElement()?.querySelector(".tm-sh");
+      discMarks.delete(id);
+      if (el && !RM()) { el.classList.add("out"); setTimeout(() => discGroup.removeLayer(m), 230); } else discGroup.removeLayer(m);
+    }
+    show.forEach((c, i) => {
+      const m = discMarks.get(c.id);
+      if (m) {
+        const el = m.getElement()?.querySelector(".tm-sh");
+        if (!el) return;
+        const was = +el.style.getPropertyValue("--p");
+        el.className = `tm-sh ${tierCls(c.worth)}${savedWho(keyOf(c)).length ? " saved" : ""}${disc.sel === c.id ? " is-sel" : ""}`;
+        el.style.setProperty("--p", c.worth.score);
+        el.style.animation = "none";
+        const hearts = heartsHtml(keyOf(c)), h = el.querySelector(".tm-hearts");
+        if (hearts && !h) el.insertAdjacentHTML("beforeend", `<span class="tm-hearts">${hearts}</span>`); else if (h) { if (hearts) h.innerHTML = hearts; else h.remove(); }
+        if (was !== c.worth.score) { countUp(el.querySelector("b"), c.worth.score); if (!RM()) { el.classList.add("bump"); setTimeout(() => el.classList.remove("bump"), 520); } }
+        m.setZIndexOffset(300 + c.worth.score);
+        return;
+      }
+      const mk = Lf.marker([c.lat, c.lng], {icon: Lf.divIcon({className: "", html: shHtml(c, i), iconSize: [38, 38], iconAnchor: [19, 19], popupAnchor: [0, -18]}),
+        pane: "tmShadow", zIndexOffset: 300 + c.worth.score, keyboard: true, title: `${c.title}: ${c.worth.score} · ${c.worth.tier[1]}`, riseOnHover: true});
+      mk.on("click", () => focusFound(c.id, {fromMap: true}));
+      mk.on("mouseover", () => discRow(c.id)?.classList.add("is-hover"));
+      mk.on("mouseout", () => discRow(c.id)?.classList.remove("is-hover"));
+      mk.addTo(discGroup);
+      discMarks.set(c.id, mk);
+      const b = mk.getElement()?.querySelector("b");
+      if (b) { b.dataset.v = 0; countUp(b, c.worth.score); }
+    });
+    mapEl.classList.toggle("tm-dim", !!disc.sel);
+  }
+  // Saved marks are updated in place (not rebuilt), so an open card survives sync heartbeats and zooming.
+  function paintSaved() {
+    if (!map || !savedGroup) return;
+    const city = state.day >= 0 ? model[state.day].city : null;
+    const covered = new Set(disc.on && state.layers.found ? visibleFound().map(c => keyOf(c)) : []);
+    const want = new Map(state.layers.saved ? savedList(city).filter(e => !covered.has(e.key)).map(e => [e.key, e]) : []);
+    for (const [k, m] of savedMarks) if (!want.has(k)) { savedGroup.removeLayer(m); savedMarks.delete(k); }
+    for (const [k, e] of want) {
+      const tier = MODEL.tierOf(e.score), sig = `${e.score}|${e.cat}|${e.who.join("+")}`;
+      const html = `<div class="tm-sh t-${tier[2]} saved only" style="--p:${e.score};--i:0"><b>${e.score}</b><i>${kindIcon(e.cat)}</i><span class="tm-hearts">${heartsHtml(k)}</span></div>`;
+      const icon = Lf.divIcon({className: "", html, iconSize: [38, 38], iconAnchor: [19, 19], popupAnchor: [0, -18]});
+      const m = savedMarks.get(k);
+      if (m) {
+        if (m._sig !== sig) { m.setIcon(icon); m._sig = sig; if (m.isPopupOpen()) m.getPopup().setContent(savedPopup(k)); }
+        continue;
+      }
+      const mk = Lf.marker([e.lat, e.lng], {icon, pane: "tmShadow", zIndexOffset: 200 + e.score, title: `Saved: ${e.t} · ${e.score}`});
+      mk._sig = sig;
+      mk.bindPopup(() => savedPopup(k), popupOpts());
+      mk.addTo(savedGroup);
+      savedMarks.set(k, mk);
+    }
+  }
+  function burstMark(k) {
+    if (RM()) return;
+    const c = disc.list.find(x => keyOf(x) === k);
+    const m = (c && discMarks.get(c.id)) || savedMarks.get(k);
+    const el = m && m.getElement()?.querySelector(".tm-sh");
+    if (!el) return;
+    el.classList.remove("burst");
+    void el.offsetWidth;
+    el.classList.add("burst");
+    setTimeout(() => el.classList.remove("burst"), 750);
+  }
+
+  // --- panel section
+  const discRow = id => pbody.querySelector(`.tm-drow[data-id="${cssEsc(id)}"]`);
+  function foundActions(c) {
+    const k = keyOf(c), mine = !!(saved[k] && saved[k][myRole()]);
+    const a = disc.anchor;
+    const out = [`<button type="button" class="tm-btn pri" data-act="disc-save" data-id="${esc(c.id)}" aria-pressed="${mine}">${mine ? "♥ Saved" : "♡ Save"}</button>`];
+    if (a) out.push(`<button type="button" class="tm-btn" data-act="disc-add" data-id="${esc(c.id)}">${IC.plus} Add after ${esc(a.title.length > 22 ? a.title.slice(0, 21) + "…" : a.title)}</button>`);
+    if (a && a.swappable) out.push(`<button type="button" class="tm-btn" data-act="disc-swap" data-id="${esc(c.id)}">🔁 Swap it in</button>`);
+    if (c.ko) out.push(`<button type="button" class="tm-btn" data-act="disc-driver" data-id="${esc(c.id)}">🚕 Show the driver</button>`);
+    out.push(`<a class="tm-btn" href="${esc(a && a.place ? MODEL.kakaoRoute(a.place, c, c.worth.walk <= 25 ? "walk" : "taxi") : MODEL.kakaoTo(c))}" target="_blank" rel="noopener">KakaoMap ↗</a>`);
+    out.push(`<a class="tm-btn" href="${esc(MODEL.placeUrl({name: c.title, lat: c.lat, lng: c.lng}))}" target="_blank" rel="noopener">Google Maps ↗</a>`);
+    return out.join("");
+  }
+  function discRowHtml(c, i) {
+    const w = c.worth, k = keyOf(c), mine = !!(saved[k] && saved[k][myRole()]);
+    const chips = w.why.filter(x => x[2] > 0 && x[0] !== "🚶").slice(0, 2).map(x => `<span>${x[0]} ${esc(x[1])}</span>`).join("");
+    return `<li class="tm-drow ${tierCls(w)}${disc.sel === c.id ? " is-sel" : ""}" data-id="${esc(c.id)}" style="--i:${Math.min(i, 12)}">
+      <button type="button" class="tm-row" data-act="disc-focus" data-id="${esc(c.id)}" aria-expanded="${disc.sel === c.id}">
+        ${ringHtml(w, c.id)}
+        <span class="tm-copy"><small>${kindIcon(c.kind)} ${esc(kindName(c.kind))} · ${w.walk <= 1 ? "right here" : `${w.walk} min walk`} · <span class="tm-tier">${esc(w.tier[1])}</span> ${heartsHtml(k)}</small><b>${esc(c.title)}</b>${chips ? `<span class="tm-chips">${chips}</span>` : ""}</span>
+      </button>
+      <button type="button" class="tm-heart" data-act="disc-save" data-id="${esc(c.id)}" aria-pressed="${mine}" aria-label="${mine ? "Unsave" : "Save"} ${esc(c.title)}">${mine ? "♥" : "♡"}</button>
+      <div class="tm-acts">${foundActions(c)}</div>
+    </li>`;
+  }
+  function savedRowHtml(e, i) {
+    const tier = MODEL.tierOf(e.score), w = {score: e.score, tier};
+    const nm = names();
+    const near = state.day >= 0 ? MODEL.nearestStop(model[state.day], e) : null;
+    return `<li class="tm-drow t-${tier[2]}" data-saved="${esc(e.key)}" style="--i:${Math.min(i, 12)}">
+      <button type="button" class="tm-row" data-act="saved-focus" data-key="${esc(e.key)}">
+        ${ringHtml(w, "s:" + e.key)}
+        <span class="tm-copy"><small>${kindIcon(e.cat)} ${esc(kindName(e.cat))} · ${e.who.map(x => `<span class="tm-who ${x}">♥ ${esc(nm[x])}</span>`).join(" ")}</small><b>${esc(e.t)}</b>
+        <em>${near ? `${near.km} km from ${esc(near.stop.title)}` : e.near ? `found near ${esc(e.near)}` : ""}</em>${e.why.length ? `<span class="tm-chips">${e.why.slice(0, 2).map(x => `<span>${esc(x)}</span>`).join("")}</span>` : ""}</span>
+      </button>
+      ${state.day >= 0 ? `<button type="button" class="tm-btn" data-act="saved-add" data-key="${esc(e.key)}" aria-label="Suggest ${esc(e.t)} for Day ${state.day + 1}">${IC.plus} Add</button>` : ""}
+    </li>`;
+  }
+  function discListHtml() {
+    if (disc.filter === "saved") {
+      const list = savedList(disc.city);
+      return list.length ? list.map(savedRowHtml).join("") : `<li class="tm-dempty">Nothing saved in ${esc(disc.city)} yet. Tap ♡ on any place.</li>`;
+    }
+    const vis = visibleFound();
+    if (!vis.length && disc.loading) return '<li class="tm-skel"></li><li class="tm-skel"></li><li class="tm-skel"></li>';
+    if (!vis.length) return `<li class="tm-dempty">${Object.values(disc.status).some(s => s === "err") && !disc.list.length ? "The sources didn't answer. Check the connection and try again." : "Nothing here for this filter. Try a longer walk or another filter."}</li>`;
+    const n = disc.more ? 40 : 12;
+    return vis.slice(0, n).map(discRowHtml).join("") + (vis.length > n ? `<li><button type="button" class="tm-btn" data-act="disc-more" style="margin:8px 0 0 48px">Show all ${vis.length}</button></li>` : "");
+  }
+  function srcHtml() {
+    return SRC_NAMES.map(([k, label]) => {
+      const st = disc.status[k] || "wait", n = k === "her" ? (disc.src.her || []).length : k === "wd" ? Object.keys(disc.src.wd || {}).length : (disc.src[k] || []).length;
+      return `<span class="${st}" title="${esc(label)}: ${st === "ok" ? n + " found" : st === "err" ? "didn't answer" : st === "load" ? "searching…" : "waiting"}">${esc(label)}${st === "ok" ? ` ${n}` : ""}</span>`;
+    }).join("");
+  }
+  function discSummary() {
+    const vis = visibleFound(), top = vis.filter(c => c.worth.score >= 55).length;
+    if (disc.loading && !disc.list.length) return "Scanning the neighbourhood…";
+    return `${vis.length} place${vis.length === 1 ? "" : "s"} within ${RADII.find(r => r[1] === disc.radius)[0]} min walk${top ? ` · ${top} worth the detour` : ""}${disc.loading ? " · still checking sources…" : ""}`;
+  }
+  function discSectionHtml(dm) {
+    if (!disc.on || !disc.anchor || disc.anchor.day !== dm.index) return "";
+    return `<section class="tm-disc" id="tm-disc" style="--dc:${dm.color}" aria-label="Places around ${esc(disc.anchor.title)}">
+      <div class="tm-disc-h"><h4>✨ Around ${esc(disc.anchor.title)}</h4><button type="button" class="tm-ib" data-act="disc-close" aria-label="Close discover">${IC.close}</button></div>
+      <div class="tm-src" id="tm-src" aria-hidden="true">${srcHtml()}</div>
+      <div class="tm-seg" role="group" aria-label="How far to walk">${RADII.map(([m, km]) => `<button type="button" data-act="disc-radius" data-km="${km}" aria-pressed="${disc.radius === km}">🚶 ${m} min</button>`).join("")}</div>
+      <div class="tm-seg" role="group" aria-label="What to show">${FILTERS.map(([f, l]) => `<button type="button" data-act="disc-filter" data-f="${f}" aria-pressed="${disc.filter === f}">${esc(l)}</button>`).join("")}</div>
+      <label class="tm-follow"><input type="checkbox" id="tm-follow"${disc.follow ? " checked" : ""}> Follow the stop I pick</label>
+      <p class="tm-dsum" id="tm-dsum" role="status" aria-live="polite">${esc(discSummary())}</p>
+      <ol class="tm-dlist" id="tm-dlist">${discListHtml()}</ol>
+      <p class="tm-help">Scores (0–100) combine open data: OpenStreetMap listings, how much Wikipedia readers look at a place, how many language wikis cover it, protected-heritage status in Wikidata, our own Explore research, and the walk from here. Food has no open ratings, so it is judged on local cuisine and listing detail; check reviews with the links.</p>
+    </section>`;
+  }
+  function paintDiscList() {
+    const list = byId("tm-dlist");
+    if (!list) return;
+    const focusId = document.activeElement && pbody.contains(document.activeElement) && document.activeElement.closest(".tm-drow")?.dataset.id;
+    const act = document.activeElement && document.activeElement.dataset.act;
+    list.innerHTML = discListHtml();
+    byId("tm-src").innerHTML = srcHtml();
+    byId("tm-dsum").textContent = discSummary();
+    // Only rows that are new slide in; the rest just update their numbers.
+    list.querySelectorAll(".tm-drow[data-id]").forEach(r => { if (disc.shown.has(r.dataset.id)) r.style.animation = "none"; });
+    animateRings(list);
+    if (focusId) list.querySelector(`.tm-drow[data-id="${cssEsc(focusId)}"] [data-act="${act}"]`)?.focus({preventScroll: true});
+  }
+  function savedSectionHtml(city, day) {
+    const list = savedList(city);
+    if (!list.length || (disc.on && disc.filter === "saved")) return "";
+    return `<section class="tm-sec"><h4>♥ Saved places${city ? ` in ${esc(city)}` : ""} (${list.length})</h4><p class="sub">Found with Discover and saved by either of you. They sync between both phones and stay on the map as shadow marks.</p>
+      <ol class="tm-dlist">${list.slice(0, 12).map(savedRowHtml).join("")}</ol></section>`;
+  }
+
+  // --- popups
+  function foundPopup(c) {
+    const w = c.worth, P = w.parts;
+    const rows = [["Known", P.fame, 35], ["Heritage", P.heritage, 12], ["Our research", P.research, 20], [SIGHT_KINDS.has(c.kind) ? "Listing" : "Local & listed", P.detail, SIGHT_KINDS.has(c.kind) ? 13 : 25], ["Walk", P.near, 20]];
+    const links = [];
+    if (c.osm) links.push(`<a href="https://www.openstreetmap.org/${esc(c.osm)}" target="_blank" rel="noopener">OpenStreetMap</a>`);
+    for (const [l, t] of Object.entries(c.wiki || {})) links.push(`<a href="https://${l}.wikipedia.org/wiki/${enc(String(t).replace(/ /g, "_"))}" target="_blank" rel="noopener">${l === "en" ? "Wikipedia" : "위키백과"}</a>`);
+    if (c.wd) links.push(`<a href="https://www.wikidata.org/wiki/${esc(c.wd)}" target="_blank" rel="noopener">Wikidata</a>`);
+    if (c.src.includes("ours")) links.push("our Explore research");
+    return `<div class="${tierCls(w)}"><p class="tm-eyebrow">${kindIcon(c.kind)} ${esc(kindName(c.kind))} · ${w.walk <= 1 ? "right here" : `${w.walk} min walk`}${disc.anchor ? ` from ${esc(disc.anchor.title)}` : ""}</p>
+      <div class="tm-ph">${ringHtml(w)}<div><h5>${esc(c.title)}</h5><p style="margin:0"><span class="tm-tier">${esc(w.tier[1])}</span>${c.ko && c.ko !== c.title ? ` · <span lang="ko">${esc(c.ko)}</span>` : ""} ${heartsHtml(keyOf(c))}</p></div></div>
+      ${c.desc ? `<p style="color:var(--muted)">${esc(String(c.desc).slice(0, 140))}</p>` : ""}
+      <div class="tm-bd">${rows.map(([l, v, mx], j) => `<span>${l}</span><i style="--w:${Math.round(100 * Math.max(0, v) / mx)};--j:${j}"></i><b>${v}</b>`).join("")}</div>
+      <div class="tm-chips">${w.why.filter(x => x[2] !== 0).slice(0, 4).map(x => `<span>${x[0]} ${esc(x[1])}</span>`).join("")}</div>
+      <p class="tm-srcs">From ${w.sources} source${w.sources > 1 ? "s" : ""}: ${links.join(" · ")}</p>
+      <div class="tm-acts">${foundActions(c)}</div></div>`;
+  }
+  const SIGHT_KINDS = new Set(["heritage", "museum", "gallery", "view", "sight", "nature", "area", "market", "culture"]);
+  function savedPopup(k) {
+    const e = savedList().find(x => x.key === k);
+    if (!e) return "";
+    const tier = MODEL.tierOf(e.score), nm = names(), mine = !!(saved[k] && saved[k][myRole()]);
+    const wp = /^(en|ko):(.+)$/.exec(e.wp || "");
+    return `<div class="t-${tier[2]}"><p class="tm-eyebrow">♥ Saved · ${kindIcon(e.cat)} ${esc(kindName(e.cat))}${e.near ? ` · found near ${esc(e.near)}` : ""}</p>
+      <div class="tm-ph">${ringHtml({score: e.score, tier})}<div><h5>${esc(e.t)}</h5><p style="margin:0"><span class="tm-tier">${esc(tier[1])}</span> · ${e.who.map(x => `<span class="tm-who ${x}">♥ ${esc(nm[x])}</span>`).join(" ")}</p></div></div>
+      ${e.why.length ? `<div class="tm-chips">${e.why.map(x => `<span>${esc(x)}</span>`).join("")}</div>` : ""}
+      ${wp ? `<p class="tm-srcs"><a href="https://${wp[1]}.wikipedia.org/wiki/${enc(wp[2].replace(/ /g, "_"))}" target="_blank" rel="noopener">${wp[1] === "en" ? "Wikipedia" : "위키백과"}</a></p>` : ""}
+      <div class="tm-acts">
+        <button type="button" class="tm-btn pri" data-act="saved-toggle" data-key="${esc(k)}" aria-pressed="${mine}">${mine ? "♥ Saved" : "♡ Save too"}</button>
+        ${state.day >= 0 ? `<button type="button" class="tm-btn" data-act="saved-add" data-key="${esc(k)}">${IC.plus} Add to Day ${state.day + 1}</button>` : ""}
+        <button type="button" class="tm-btn" data-act="saved-discover" data-key="${esc(k)}">✨ Discover around</button>
+        <a class="tm-btn" href="${esc(MODEL.kakaoTo({ko: e.ko, name: e.t, lat: e.lat, lng: e.lng}))}" target="_blank" rel="noopener">KakaoMap ↗</a>
+        <a class="tm-btn" href="${esc(MODEL.placeUrl({name: e.t, lat: e.lat, lng: e.lng}))}" target="_blank" rel="noopener">Google Maps ↗</a>
+      </div></div>`;
+  }
+
+  // --- run a scan
+  function anchorFor(day, k) {
+    const dm = model[day], s = dm && dm.stops[k];
+    if (!s || s.removed || !s.pinned) return null;
+    return {day, k, id: s.id, title: s.title, place: s.place, swappable: s.kind !== "stay" && s.kind !== "transit"};
+  }
+  function defaultAnchor(day) {
+    const dm = model[day];
+    if (!dm) return null;
+    if (state.sel && state.sel.day === day) { const a = anchorFor(day, state.sel.k); if (a) return a; }
+    if (MODEL.tripDayIndex(app.days, now()) === day) {
+      const up = MODEL.nextUp(MODEL.schedule(dm), MODEL.seoulNow(now()).min);
+      if (up) { const a = anchorFor(day, up.k); if (a) return a; }
+    }
+    const first = dm.stops.find(s => !s.removed && s.pinned && s.kind !== "stay" && s.kind !== "transit") || dm.stops.find(s => !s.removed && s.pinned);
+    return first ? anchorFor(day, first.k) : null;
+  }
+  async function startDiscover(anchor, opts = {}) {
+    if (!anchor) { toast("Pick a stop on the map first"); return; }
+    if (tour) stopTour();
+    disc.ctrl && disc.ctrl.abort();
+    const token = ++disc.token, ctrl = disc.ctrl = new AbortController();
+    const center = {lat: +anchor.place.lat, lng: +anchor.place.lng}, dm = model[anchor.day];
+    Object.assign(disc, {on: true, anchor, center, city: dm.city, sel: null, more: false, list: [], loading: true, shown: new Map(), ids: new Map(),
+      src: {ours: MODEL.curatedNear(center, DISC_FETCH_KM, oursPool(dm.city))}, status: {osm: "load", en: "load", ko: "load", wd: "wait", her: "wait", ours: "ok"}});
+    if (disc.filter === "saved") disc.filter = "all";
+    state.layers.found = true;
+    syncLayerInputs();
+    for (const m of discMarks.values()) discGroup && discGroup.removeLayer(m);
+    discMarks = new Map();
+    if (state.day !== anchor.day) switchDay(anchor.day, anchor.day > state.day ? 1 : -1);
+    renderPanel();
+    if (!opts.quiet) byId("tm-disc")?.scrollIntoView({block: "start", behavior: RM() ? "auto" : "smooth"});
+    if (PHONE && state.size === "min") setSize("peek");
+    if (map) {
+      map.closePopup();
+      startRadar(center, dm.color);
+      fitTo([[center.lat - disc.radius / 111, center.lng], [center.lat + disc.radius / 111, center.lng], [center.lat, center.lng - disc.radius / 88], [center.lat, center.lng + disc.radius / 88]], true);
+    }
+    const live = () => token === disc.token && disc.on;
+    const update = () => { if (!live()) return; recompute(); paintDiscMarks(); paintDiscList(); paintSaved(); };
+    update();
+    const cached = readCache()[cellKey(center)];
+    if (cached && Date.now() - cached.at < DISC_TTL) {
+      Object.assign(disc.src, {osm: cached.osm || [], en: cached.en || [], ko: cached.ko || [], wd: cached.wd || {}, her: cached.her || []});
+      disc.status = {osm: "ok", en: "ok", ko: "ok", wd: "ok", her: "ok", ours: "ok"};
+      disc.loading = false;
+      // A short sweep even from cache, so the change of place reads clearly.
+      setTimeout(() => { if (!live()) return; update(); radarDone(); }, RM() ? 0 : 650);
+      return;
+    }
+    const one = (key, p) => p.then(v => { if (!live()) return; disc.src[key] = v; disc.status[key] = "ok"; update(); })
+      .catch(() => { if (!live()) return; disc.status[key] = "err"; update(); });
+    await Promise.all([one("osm", fetchOsm(center, ctrl.signal)), one("en", fetchWiki(center, "en", ctrl.signal)), one("ko", fetchWiki(center, "ko", ctrl.signal))]);
+    if (!live()) return;
+    const ids = [...new Set([...(disc.src.osm || []), ...(disc.src.en || []), ...(disc.src.ko || [])].map(c => c.wd).filter(Boolean))].slice(0, 150);
+    disc.status.wd = ids.length ? "load" : "ok";
+    disc.status.her = ids.length ? "load" : "ok";
+    update();
+    if (ids.length) await Promise.all([one("wd", fetchWd(ids, ctrl.signal)), one("her", fetchHeritage(ids, ctrl.signal))]);
+    if (!live()) return;
+    disc.loading = false;
+    update();
+    radarDone();
+    // Only a complete answer is remembered, so a source that failed is asked again next time.
+    if (["osm", "en", "ko", "wd", "her"].every(k => disc.status[k] === "ok")) writeCache(center, disc.src);
+  }
+  function stopDiscover() {
+    if (!disc.on) return;
+    disc.ctrl && disc.ctrl.abort();
+    disc.on = false;
+    disc.token++;
+    disc.sel = null;
+    clearTimeout(followTimer);
+    stopRadar(true);
+    for (const m of discMarks.values()) discGroup && discGroup.removeLayer(m);
+    discMarks = new Map();
+    mapEl.classList.remove("tm-dim");
+    map && map.closePopup();
+    if (dlg.open) { renderPanel(); paintSaved(); }
+  }
+  function focusFound(id, opts = {}) {
+    const c = found(id);
+    if (!c) {
+      disc.sel = null;
+      mapEl.classList.remove("tm-dim");
+      discMarks.forEach(m => m.getElement()?.querySelector(".tm-sh")?.classList.remove("is-sel"));
+      return;
+    }
+    const again = disc.sel === id && !opts.fromMap;
+    disc.sel = again ? null : id;
+    discMarks.forEach((m, mid) => m.getElement()?.querySelector(".tm-sh")?.classList.toggle("is-sel", mid === disc.sel));
+    mapEl.classList.toggle("tm-dim", !!disc.sel);
+    pbody.querySelectorAll(".tm-drow[data-id]").forEach(r => {
+      const on = r.dataset.id === disc.sel;
+      r.classList.toggle("is-sel", on);
+      r.querySelector(".tm-row")?.setAttribute("aria-expanded", String(on));
+    });
+    if (again) { map && map.closePopup(); return; }
+    discRow(id)?.scrollIntoView({block: "nearest", behavior: RM() ? "auto" : "smooth"});
+    if (!map) return;
+    if (!opts.fromMap) flyToPoint([c.lat, c.lng], Math.max(map.getZoom(), 16));
+    if (!PHONE || opts.fromMap) {
+      const open = () => { if (!dlg.open || disc.sel !== id) return; Lf.popup(popupOpts()).setLatLng([c.lat, c.lng]).setContent(foundPopup(c)).openOn(map); };
+      if (opts.fromMap) open();
+      else { let done = false; const once = () => { if (done) return; done = true; open(); }; map.once("moveend", once); setTimeout(once, 900); }
+    }
+  }
+  const placeFor = c => ({title: c.title, ko: c.ko, name: c.title, lat: c.lat, lng: c.lng, cool: c.desc || c.worth.why.filter(w => w[2] > 0).map(w => w[1]).join(" · "),
+    url: MODEL.placeUrl({name: c.title, lat: c.lat, lng: c.lng}), wiki: c.wiki && (c.wiki.en || c.wiki.ko) || "", img: c.img || "", cat: CAT_OF[c.kind] || "sight"});
+  const scoreNote = c => `✨ Worth-visiting score ${c.worth.score} (${c.worth.tier[1]}): ${c.worth.why.filter(w => w[2] > 0).slice(0, 3).map(w => w[1]).join(", ")}.`;
+
+  pbody.addEventListener("change", e => {
+    if (e.target.id !== "tm-follow") return;
+    disc.follow = e.target.checked;
+    if (!disc.follow) clearTimeout(followTimer);
+  });
+
   /* ---------- open / close ---------- */
   function render(fit) { renderChips(); renderPanel(); draw(fit); }
 
@@ -1598,6 +2575,7 @@ p.tm-now{cursor:default}
         state.sel = atStop;
         state.view = null;
         setSize("peek");
+        stopDiscover();
       }
       opener = opts.opener || document.activeElement;
     } else if (state.day >= model.length) state.day = -1;
@@ -1614,7 +2592,12 @@ p.tm-now{cursor:default}
     setTiles();
     // Layout is synchronous after showModal(), so draw now rather than waiting on a frame (paused in background tabs).
     map.invalidateSize();
-    if (restore && state.view) { map.setView(state.view.c, state.view.z, {animate: false}); draw(false); highlight(state.sel?.day, state.sel?.k); }
+    if (restore && state.view) {
+      map.setView(state.view.c, state.view.z, {animate: false});
+      draw(false);
+      highlight(state.sel?.day, state.sel?.k);
+      if (disc.on) { if (!radarCircle && disc.center) { startRadar(disc.center, model[disc.anchor.day].color); if (!disc.loading) radarDone(); } paintDiscMarks(); }
+    }
     else {
       draw(true);
       if (state.sel) select(state.sel.day, state.sel.k, {pan: true, popup: !PHONE});

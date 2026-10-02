@@ -10,7 +10,7 @@ window.__tripTest={trip:t,as:a,sandbox:/^sandbox(-|$)/.test(t),clear:function(){
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f7f0e5">
 <meta property="og:title" content="roameo · Seoul ⇄ Busan"><meta property="og:description" content="Two leaves. One shared adventure. Eleven days, two cities, one trail — for the two of us."><meta property="og:image" content="https://zakharc.github.io/seoul-busan/icons/og.png"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
-<meta name="build" content="20261002-155604">
+<meta name="build" content="20261002-163800">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
@@ -1228,7 +1228,7 @@ html.visual-preview body{margin:0;overflow:hidden}
 <link rel="stylesheet" href="experience.css?v=0b6bacc0309e">
 <script defer src="experience.js?v=205f09bb8d67"></script>
 <script defer src="novartis-game.js?v=70e3b7112ebe"></script>
-<script defer src="trip-map.js?v=583c35be7ea7"></script>
+<script defer src="trip-map.js?v=24000ddf5e58"></script>
 </head>
 <body>
 <div id="stage"></div>
@@ -2098,7 +2098,7 @@ function liveHtml(){ const o=role?other(role):"her", on=isOnline(o), x=presence[
   return `<div class="livehead"><i class="${on?"on":""}"></i>${on?`<b>${esc(names[o])} is online</b> — looking at ${esc(x.title||"the trail")}${x.day>=0?` (Day ${x.day+1})`:""}`:(x.at?`${esc(names[o])} was last here ${fmt(x.at)}`:`${esc(names[o])} hasn't opened the trail yet`)}</div>`+(acts.length?`<ul class="feed">${acts.slice(0,8).map(a=>`<li data-i="${a.i}" data-k="${a.k}"><i class="${a.s==="heart"?"love":"skip"} ${a.w}">${a.s==="heart"?"♥":"⤼"}</i><span><b>${esc(names[a.w])}</b> ${a.s==="heart"?"picked":"skipped"} ${esc(a.title)}</span><small>${fmt(a.ts)}</small></li>`).join("")}</ul>`:`<p class="sub" style="margin:8px 0 0">No hearts yet — they'll appear here live.</p>`); }
 /* key-sorted stringify: Firestore hands back map keys in varying order between snapshots */
 const sj=o=>JSON.stringify(o,(k,v)=>v&&typeof v==="object"&&!Array.isArray(v)?Object.keys(v).sort().reduce((acc,kk)=>(acc[kk]=v[kk],acc),{}):v);
-function applyRemote(data,local){ const firstSnap=fb.first;
+function applyRemote(data,local){ APP.emit("remote",data,local); const firstSnap=fb.first;
   if(fb.first){ fb.first=false; const rr=data.review||{}, dd=data.done||{}, add={}; let n=0;
     Object.keys(review).forEach(id=>Object.keys(review[id]).forEach(w=>{ if(!(rr[id]&&rr[id][w])){ (add.review=add.review||{})[id]=Object.assign(add.review[id]||{},{[w]:review[id][w]}); n++; } }));
     Object.keys(done).forEach(id=>{ if(!dd[id]){ (add.done=add.done||{})[id]=done[id]; n++; } });
@@ -2150,7 +2150,7 @@ $("syncdlg").addEventListener("click",e=>{ if(e.target===$("syncdlg")) $("syncdl
 APP.on("move",()=>sheet.classList.remove("full"));
 if(PHONE&&!visualPreview) new MutationObserver(()=>renderBar()).observe(sheet,{attributes:true,attributeFilter:["class"]});
 
-APP.buildKml=buildKml; APP.paperHtml=paperHtml; APP.syncStatus=()=>fb.status; importPicks();
+APP.buildKml=buildKml; APP.paperHtml=paperHtml; APP.syncStatus=()=>fb.status; APP.syncSet=(path,value)=>syncSet(path,value); importPicks();
 renderRoles(); updateSum(); setSync(fb.cfg&&!visualPreview?"wait":"off"); if(fb.cfg&&!visualPreview) syncStart();
 
 /* ---------- place quiz ---------- */

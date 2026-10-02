@@ -2,6 +2,8 @@
 
 *Two leaves. One shared adventure.* A single-file trip companion that opens on the roameo brand splash and hands off to the Seoul ⇄ Busan trail.
 
+**Version 1.16** — Trip map Discover: scored places around any stop from OpenStreetMap, Wikipedia and Wikidata (estimated "worth visiting" 0–100 with reasons), shadow marks on the map, and ♡ saves that sync between both phones (`saved` in the trip doc).
+
 **Version 1.15** — Chronicles of Novartis v3: springy pop-up cards, 3-2-1 countdown, level events with choices (🛡️ shield, ❤️, slow-mo), pause/game-over/win toys (coffee, excuse generator, RCA slot machine, signature + RELEASED stamp).
 
 **Version 1.14** — Test as her: a safe test copy (`?trip=sandbox&as=her`, ⋯ → Test as Киця) seeded read-only from the real trip, with its own device storage, switch person, reset and leave.
@@ -64,7 +66,7 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 - On narrow phones the day capsule keeps the day number visible alongside Search, Map, Picks and More; its accessible label still includes the city. Map search returns focus to the map after choosing a result, and **Show the driver** keeps keyboard focus inside its card until Done or Escape.
 - Phone flow is staged: pick a character → the 3D scene fills the screen with a **Start the day** pill → the couple walks → an arrival pill pulls up the info sheet. Swipe the sheet down (big handle) or tap the scene to put it away; tap the pill or the title in the bottom bar to bring it back. `?debug=1` shows an on-screen diagnostics overlay.
 - Android (Samsung Internet / Chrome): open the link → menu → **Add to Home screen** — the page ships a web manifest and icons, so it installs as a standalone app with its own icon. iPhone: Share → **Add to Home Screen**.
-- **Trip map:** the map icon in the top bar (also **See it on the map** in the trip overview, **Map** on each day card and ⋯ → **Trip map**) shows the plan on a street map. The day list sits in a bottom sheet that follows your finger: drag or flick its handle, or tap it. Swipe the day title left or right, or use ‹ ›, to change the day. Tap a stop to fly to it with its actions in the list, or tap a pin for a card. Long-press anywhere on the map to suggest that spot. 🔍 finds any stop, option, idea or hotel.
+- **Trip map:** the map icon in the top bar (also **See it on the map** in the trip overview, **Map** on each day card and ⋯ → **Trip map**) shows the plan on a street map. The day list sits in a bottom sheet that follows your finger: drag or flick its handle, or tap it. Swipe the day title left or right, or use ‹ ›, to change the day. Tap a stop to fly to it with its actions in the list, or tap a pin for a card. Long-press anywhere on the map to suggest that spot. 🔍 finds any stop, option, idea or hotel. **✨ Discover** scores what's around the stop you're looking at; ♡ saves a place for both of you.
 - **Chronicles of Novartis** (`novartis-game.js`, self-contained): a two-minute satirical 2D runner in five levels. Her figurine (a 2D port of the 3D one, same palette) runs from Innsbruck to München, where Mykola waits.
 - **Game pop-ups and interactions:** cards spring in and out over a dimmed scrim, their content appears in a staggered sequence, and on desktop they tilt toward the pointer with a soft glare. Buttons ripple, and the main button shimmers.
   - **Start and resume:** a 3-2-1 / READY? countdown, then GO, after which she eases back up to speed.
@@ -98,6 +100,8 @@ Open `/visual-review/` for the 40-place comparison gallery, or `/index.html?moti
 ## Live sync
 
 In the app: ⋯ → **Sync between phones** → follow the 4 steps (free Firebase project, Firestore, rules, paste `firebaseConfig`). Then **Copy her link** and send it.
+
+Places saved on the trip map live in the trip document under `saved.<place>.<her|me>` (title, Korean name, position, kind, score, top reasons, where it was found). They are written only when someone taps ♡. `index.html` hands the map `APP.syncSet` and an `APP` `"remote"` event for this; nothing else in the plan is touched. In a test copy (`?trip=sandbox…`), saves go to the copy like everything else.
 
 ### Test as her (safe copy)
 
@@ -143,7 +147,17 @@ A Google-Maps-style view of the itinerary for checking a day at a glance and rew
 - **Rework:** every stop has **Open in trip**, **KakaoMap**, **Google Maps**, **🔁 Swap**, **🕒 Move**, **✖ Remove** and **📝 Note**. **💎 Ideas near this day** lists up to five Explore places within 4 km, and **＋ Add** suggests one right after the stop it is closest to. Tapping a faded stop from another day offers **Move to Day N**. On a computer, drag a stop (⠿) onto another stop or onto a day chip. Right-click or long-press the map to name that spot (OpenStreetMap reverse lookup) and suggest it. All of these open the usual suggestion review with day, slot, place and a short "📍 x km from …" note filled in. Nothing changes until you both agree, and the map comes back after you send or cancel.
 - **Take it along:** **Day in Google Maps** opens the whole day as a multi-stop route. **Google My Maps (KML)** on the All-days view exports the chosen plan, like the summary does.
 - **Smooth by default:** the map opens and closes with a short animation, flies between days and stops, slides the list when the day changes, and highlights the pin under the row you point at (and the reverse). Reopening it on the same day within 15 minutes keeps your place. The map libraries are fetched quietly in idle time after the splash (not on Save-Data or 2G) and loaded the moment you point at or touch a map button, so it usually opens instantly. With *reduce motion* switched on, the animations become instant cuts.
-- **Keys** (computer, while the map is open): **[** and **]** change the day, **A** shows all days, **/** searches, **P** plays the day, **F** fits the map, the arrow keys pan. **Esc** closes whatever is on top: the open card, the driver screen, search, layers, the tour, and then the map.
+- **✨ Discover around a stop:** **Discover around** on any stop (or **✨ Discover nearby** on the day, or **D**) scans up to a 20-minute walk around it. Five open sources are asked at once, and results appear while they arrive, with a radar sweep:
+  - **OpenStreetMap** (sights, heritage, parks, markets, stages, and restaurants, cafés and bars that list an English name);
+  - **Wikipedia** in English and Korean (geosearch with last month's page views; non-places such as dynasties, events or stations are left out);
+  - **Wikidata** (how many language wikis cover a place, its English name, and protected-heritage status);
+  - **our own research** (Explore ideas and unchosen options).
+
+  The same place from different sources is merged. Each one gets a **worth-visiting score** from 0 to 100, made of: how well known it is (up to 35, from Wikipedia views and languages), protected heritage (12), our own research (20), listing detail (13; for food 25, judged on local cuisine, English name, hours, website, and minus points for chains, because open data has no restaurant ratings), and the walk from the stop (20). Tiers: Must see 70+, Worth the detour 55+, Nice if nearby 40+.
+
+  Results show as **shadow marks**: a ring filled to the score, the kind as an icon, and hearts for saves. They pop in by rank, count up and lift live as Wikidata and heritage answers arrive. Overlapping lower scores are hidden at the current zoom and appear when you zoom in. Filter by Sights, Food & cafés, Views & parks, Night or ♥ Saved, and choose a 5, 10 or 20-minute walk. **Follow the stop I pick** re-centres the scan when you choose another stop. A place's card shows the score breakdown, its sources (with links) and **♡ Save**, **Add after** the stop, **Swap it in**, **Show the driver**, KakaoMap and Google Maps. Add and Swap open the usual suggestion with the score and reasons in the note. Answers are kept for a week per spot, so going back is instant. With no connection, only our own research is scored.
+- **♥ Saved places:** a saved place stays on the map as a shadow mark with its score and the heart of whoever saved it (pink for her, blue for him). It syncs to the other phone live, with a "💗 … saved …" note, and is listed under **♥ Saved places** for the city, with **Add** to the day, **Save too**, and **Discover around** it.
+- **Keys** (computer, while the map is open): **[** and **]** change the day, **A** shows all days, **/** searches, **D** discovers around the stop, **P** plays the day, **F** fits the map, the arrow keys pan. **Esc** closes whatever is on top: the open card, the driver screen, search, layers, the tour, the selected discovery result, Discover itself, and then the map.
 
 Map model tests: `node --test tools/test-trip-map.cjs`.
 
