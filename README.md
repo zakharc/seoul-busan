@@ -2,6 +2,8 @@
 
 *Two leaves. One shared adventure.* A single-file trip companion that opens on the roameo brand splash and hands off to the Seoul ⇄ Busan trail.
 
+**Version 1.11** — Chronicles of Novartis v2: five levels with their own scenery and songs, comic splashes, combos, phone-notification gags, its own music/SFX toggle; smoother 120 Hz physics.
+
 **Version 1.10** — Integrated cinematic miniature worlds: 40 distinct atmospheres, soft-edged architecture, sculpted terrain, continuous scene transitions and frame-rate-independent camera/pose motion. Preserves Spotlight/Scout, the comfort interface, trip map and mini-game.
 
 **Version 1.9.1** — Trip map returns instantly after a suggestion closes (no gap where another pop-up could slip in).
@@ -54,7 +56,7 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 - Phone flow is staged: pick a character → the 3D scene fills the screen with a **Start the day** pill → the couple walks → an arrival pill pulls up the info sheet. Swipe the sheet down (big handle) or tap the scene to put it away; tap the pill or the title in the bottom bar to bring it back. `?debug=1` shows an on-screen diagnostics overlay.
 - Android (Samsung Internet / Chrome): open the link → menu → **Add to Home screen** — the page ships a web manifest and icons, so it installs as a standalone app with its own icon. iPhone: Share → **Add to Home Screen**.
 - **Trip map:** the map icon in the top bar (also **See it on the map** in the trip overview, **Map** on each day card and ⋯ → **Trip map**) shows the plan on a street map. The day list sits in a bottom sheet: drag its handle up or down, or tap it. Tap a pin or a stop to see its actions. Long-press anywhere on the map to suggest that spot.
-- **Chronicles of Novartis** (`novartis-game.js`, self-contained): a two-minute satirical 2D runner. Her figurine (a 2D port of the 3D one, same palette) runs from Innsbruck to München, where Mykola waits. Jump over escalations, the truck waiting for QA sign-off (double jump), weekend guests and the parents' legal paperwork. Bonuses: cheesecake (+1 ❤️), massage (slow motion), giant yoghurt (giant and unstoppable, smashes obstacles), wine box (problems shrink, points ×2). Space / ↑ to jump on desktop, tap on phones; press again in the air for a double jump; P or Esc pauses. Open it from ⋯ → **Chronicles of Novartis**, or with `?game`. An animated invite appears after about 2.5 minutes of active use, at most twice per session and 30 minutes apart, and not within 2 hours of playing. Invites don't appear in Mykola's role (`?as=me`); use `?game-invite` to show one on demand. The best score is stored locally (`sbtrip-novartis-best-v1`).
+- **Chronicles of Novartis** (`novartis-game.js`, self-contained): a two-minute satirical 2D runner in five levels. Her figurine (a 2D port of the 3D one, same palette) runs from Innsbruck to München, where Mykola waits.
 - Regression checks use Node's built-in test runner; browser QA also walks the app in a phone-emulated browser (360×780 Galaxy profile) and checks framing, overflow, touch targets and console errors.
 
 ## Editing
