@@ -2,6 +2,8 @@
 
 *Two leaves. One shared adventure.* A single-file trip companion that opens on the roameo brand splash and hands off to the Seoul ⇄ Busan trail.
 
+**Version 1.5** — 40 place-specific scene designs, sheet-aware framing, cache-versioned visuals, fast intro transition fixes and an expanded Before/After gallery. Search and shared itinerary changes are preserved.
+
 **Version 1.4** — Changes to the plan: propose add / replace / move / drop / note from any stop, day or Explore card; search places, Wikipedia photo lookup; agree together; agreed changes become part of the trail on both phones.
 
 **Version 1.3** — polish round from her first test: no ground flicker (depth offsets on stacked ground layers, tighter near plane), landmarks no longer pop up/down on arrival, nothing stands between camera and couple (street trees/poles and stage props keep out of the camera corridor, neighbouring landmarks in the corridor are hidden, Namsan pines removed, lanterns rise behind the landmark), tall buildings sit off-axis.
@@ -71,7 +73,7 @@ The first time the trail reaches a Busan place (the KTX on day 6) the app cuts t
 
 ### Place scenes
 
-Twenty stops have hand-built, place-specific Three.js scenes (`place-scenes.js`, listed in `VISUAL-SCENES.md`): Gyeongbokgung's courtyard, N Seoul Tower, Myeongdong, Bukchon, Seoul Forest, Seongsu, Gwangalli at night, the Sky Capsule, Haedong Yonggungsa, Gamcheon, Cheonggyecheon, Banpo, Common Ground, Seokchon Lake, Seoul Sky, Jagalchi, Huinnyeoul, Naksan, DDP and the Secret Garden. When the couple arrives at one of them the generic world fades out and the scene takes over, with its own sky and light; the Before/After gallery is at `/visual-review/`, and `?visual-before=1` shows the generic models in the normal trip.
+Forty scene designs serve 41 selectable visits with place-specific Three.js environments (`place-scenes.js`, described and tested in `VISUAL-SCENES.md`). They now include the cable cars, Gwanghwamun, Jogyesa, Gyeonghuigung, Seonyudo, Café Onion, coastal paths, lighthouses, Spa Land, book and food markets, and the glasshouse alongside the original twenty. When the couple arrives, the generic world fades out and the authored scene takes over with its own sky and light. The phone framing keeps the figurines above the half-height information sheet. The Before/After gallery is at `/visual-review/`; `?visual-before=1` retains generic models in the normal trip. Scene imports are content-versioned during the build.
 
 ### Stages
 

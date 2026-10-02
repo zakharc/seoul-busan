@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Build step: inject data/*.json into index.html (single self-contained page) and write the KML."""
-import json, os, re, html
+"""Inject trip data, version the scene module and review URL, and write the KML."""
+import json, os, re, html, hashlib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, "..")
@@ -24,7 +24,20 @@ assert new != src or blob in src, "trip-data block not found in index.html"
 import datetime as _dt
 stamp = _dt.datetime.now(_dt.timezone.utc).strftime("%Y%m%d-%H%M%S")
 new = re.sub(r'<meta name="build" content="[^"]*">', f'<meta name="build" content="{stamp}">', new, count=1)
+scene_path = os.path.join(ROOT, "place-scenes.js")
+scene_version = hashlib.sha256(open(scene_path, "rb").read()).hexdigest()[:12]
+new, imports = re.subn(
+    r"(import \{createPlaceScenes\} from '\./place-scenes\.js)(?:\?v=[^']*)?(';)",
+    lambda m: m.group(1) + "?v=" + scene_version + m.group(2), new, count=1)
+assert imports == 1, "place-scenes import not found in index.html"
 open(idx_path, "w", encoding="utf-8").write(new)
+review_path = os.path.join(ROOT, "visual-review", "index.html")
+review = open(review_path, encoding="utf-8").read()
+review, frames = re.subn(
+    r'(\.\./index\.html\?visual-preview=1)(?:&v=[^"]*)?',
+    lambda m: m.group(1) + "&v=" + stamp, review, count=1)
+assert frames == 1, "visual review iframe not found"
+open(review_path, "w", encoding="utf-8").write(review)
 open(os.path.join(ROOT, ".build-stamp"), "w").write(stamp)
 print("index.html:", len(new), "bytes · build", stamp)
 

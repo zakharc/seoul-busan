@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f7f0e5">
 <meta property="og:title" content="roameo · Seoul ⇄ Busan"><meta property="og:description" content="Two leaves. One shared adventure. Eleven days, two cities, one trail — for the two of us."><meta property="og:image" content="https://zakharc.github.io/seoul-busan/icons/og.png"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
-<meta name="build" content="20261002-062943">
+<meta name="build" content="20261002-073231">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
@@ -1568,7 +1568,7 @@ let momentSeen={}; try{ momentSeen=JSON.parse(sessionStorage.getItem("sbtrip-mom
 let momentTimer=null, momentEl=null, momentHideT=null;
 function momentHearts(e,n){ let box=$("moment-hearts"); if(!box){ box=document.createElement("div"); box.id="moment-hearts"; box.className="moment-hearts"; document.body.appendChild(box); }
   for(let i=0;i<n;i++){ const sp=document.createElement("span"); sp.textContent=i%3===0?e:["💗","💕","🩷"][i%3]; sp.style.left=(30+Math.random()*40)+"%"; sp.style.setProperty("--dx",(Math.random()*160-80)+"px"); sp.style.setProperty("--rot",(Math.random()*50-25)+"deg"); sp.style.animationDelay=(i*.12)+"s"; box.appendChild(sp); setTimeout(()=>sp.remove(),3200); } }
-function showMomentCard(m){ if(!momentEl){ momentEl=document.createElement("div"); momentEl.id="moment"; momentEl.className="moment"; momentEl.innerHTML='<span class="me"></span><span class="tx"><b></b><small></small></span><button class="mx" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>'; document.body.appendChild(momentEl); momentEl.querySelector(".mx").onclick=()=>momentEl.classList.remove("show"); }
+function showMomentCard(m){ if(sheet.classList.contains("show")) return; if(!momentEl){ momentEl=document.createElement("div"); momentEl.id="moment"; momentEl.className="moment"; momentEl.innerHTML='<span class="me"></span><span class="tx"><b></b><small></small></span><button class="mx" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>'; document.body.appendChild(momentEl); momentEl.querySelector(".mx").onclick=()=>momentEl.classList.remove("show"); }
   const prs=$("presence"); momentEl.classList.toggle("lower",!!(prs&&prs.classList.contains("show"))); momentEl.querySelector(".me").textContent=m.e; momentEl.querySelector("b").textContent=m.b; momentEl.querySelector("small").textContent=m.t; momentEl.classList.remove("show"); void momentEl.offsetWidth; momentEl.classList.add("show"); clearTimeout(momentHideT); momentHideT=setTimeout(()=>momentEl.classList.remove("show"),7500); }
 let momentRepeat=null;
 function playMoment(i,k,manual,quiet){ const s=APP.state; if(s.mode!=="stop"||s.day!==i||s.stop!==k) return; const it=DAYS[i].items[k], opts=optionsOf(it), m=momentFor(it,opts?opts[selIdx(it)]:null); if(!m) return;
@@ -1588,8 +1588,8 @@ function startInterlude(pending){ const s=APP.state; if(s.mode==="interlude") re
   $("i-stats").innerHTML=`<b>${bd} days</b> by the sea · <b>${bp} places</b> · one bay, one bridge, two of us.`;
   interEl.hidden=false; interEl.classList.remove("show","warm"); interEl.querySelectorAll(".f-line,.i-big span").forEach(el=>{ el.style.animation="none"; void el.offsetWidth; el.style.animation=""; });
   $("i-go").onclick=()=>{ buzz(8); const pg=interPending; interPending=null; interSeen=true; try{ sessionStorage.setItem("sbtrip-inter","1"); }catch(e){} endInterlude(); if(pg) go(pg.day,pg.stop,pg.kind||"jump"); else go(5,-1); };
-  interTimers.forEach(clearTimeout); interTimers=[setTimeout(()=>interEl.classList.add("warm"),11000), setTimeout(()=>buzz([10,30,10]),4400)];
-  emitMove(true,{kind:"interlude",day:pending?pending.day:5,stop:-1,prev}); setTimeout(()=>interEl.classList.add("show"),400); buzz(6); }
+  interTimers.forEach(clearTimeout); interTimers=[setTimeout(()=>interEl.classList.add("warm"),11000), setTimeout(()=>buzz([10,30,10]),4400),setTimeout(()=>{ if(s.mode==="interlude") interEl.classList.add("show"); },400)];
+  emitMove(true,{kind:"interlude",day:pending?pending.day:5,stop:-1,prev}); buzz(6); }
 function endInterlude(){ interTimers.forEach(clearTimeout); interEl.classList.remove("show"); setTimeout(()=>{ if(!interEl.classList.contains("show")) interEl.hidden=true; },900); }
 APP.interlude=()=>startInterlude({day:5,stop:-1});
 /* ---------- finale ---------- */
@@ -1602,12 +1602,12 @@ function startFinale(){ const s=APP.state; if(s.mode==="finale") return; const p
   finaleEl.hidden=false; finaleEl.classList.remove("show","night"); finaleEl.querySelectorAll(".f-line,.f-big span").forEach(el=>{ el.style.animation="none"; void el.offsetWidth; el.style.animation=""; });
   $("f-plan").onclick=()=>{ buzz(6); openSum(); }; $("f-restart").onclick=()=>{ buzz(6); endFinale(); startEl.hidden=false; s.mode="start"; APP.emit("move",{kind:"start",day:-1,stop:-1,prev:APP.state}); };
   finaleTimers.forEach(clearTimeout); finaleTimers=[setTimeout(()=>finaleEl.classList.add("night"),12500), setTimeout(()=>buzz([10,40,10,40,30]),10200)];
-  emitMove(true,{kind:"finale",day:-1,stop:-1,prev}); setTimeout(()=>finaleEl.classList.add("show"),400); buzz(8); }
+  emitMove(true,{kind:"finale",day:-1,stop:-1,prev}); finaleTimers.push(setTimeout(()=>{ if(s.mode==="finale") finaleEl.classList.add("show"); },400)); buzz(8); }
 function endFinale(){ finaleTimers.forEach(clearTimeout); finaleEl.classList.remove("show"); setTimeout(()=>{ if(!finaleEl.classList.contains("show")) finaleEl.hidden=true; },900); }
 APP.finale=startFinale;
 /* ---------- staged phone flow: full-screen scene with one floating action; the info sheet is pulled up on demand ---------- */
 const PHONE=matchMedia("(max-width:899px)").matches, peekEl=$("peek");
-function openSheet(){ if(APP.state.mode!=="stop") return; sheet.classList.remove("still"); sheet.classList.add("show"); buzz(4); }
+function openSheet(){ if(APP.state.mode!=="stop") return; sheet.classList.remove("still"); sheet.classList.add("show"); if(momentEl) momentEl.classList.remove("show"); buzz(4); }
 function putDown(){ sheet.classList.remove("show","full"); buzz(4); }
 function renderPeek(){ if(!PHONE||!peekEl) return; const s=APP.state; let html="";
   if(s.mode==="day"&&!daycard.classList.contains("show")){ const d=DAYS[s.day]; html=`<button class="alt" id="peek-plan"><span class="ic">🗺️</span><span class="tx"><b>Day ${s.day+1} plan</b></span></button><button class="go" id="peek-go"><span class="tx"><b>Start the day</b><small>${esc(d.title)}</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>`; }
@@ -1625,7 +1625,7 @@ function go(day,stop,kind){
   const s=APP.state, prev={mode:s.mode,day:s.day,stop:s.stop}; const seq=++moveSeq;
   startEl.hidden=true; clearTimeout(arriveTimer); closePick();
   if(stop>=0){ const tgtB=isBusanPlace(placeOf(DAYS[day].items[stop])); if(tgtB&&!busanEntered&&!interSeen&&prev.mode!=="interlude"){ startInterlude({day,stop,kind}); return; } busanEntered=tgtB; }
-  const leavingScene=prev.mode==="stop"&&APP.isSceneStop&&APP.isSceneStop(prev.day,prev.stop); const fromHill=prev.mode==="start"||prev.mode==="pick"||prev.mode==="finale"||prev.mode==="interlude"||leavingScene; APP.lastKind=kind||null; if(prev.mode==="finale") endFinale(); if(prev.mode==="interlude") endInterlude();
+  const leavingScene=prev.mode==="stop"&&APP.isSceneStop&&APP.isSceneStop(prev.day,prev.stop); const fromHill=!visualPreview&&(prev.mode==="start"||prev.mode==="pick"||prev.mode==="finale"||prev.mode==="interlude"||leavingScene); APP.lastKind=kind||null; if(prev.mode==="finale") endFinale(); if(prev.mode==="interlude") endInterlude();
   if(stop<0){ if(prev.mode==="finale"&&typeof renderPeek==="function"){ /* fall through */ } s.mode="day"; s.day=day; s.stop=-1; setEvening(false); renderDay(day); sheet.classList.remove("show"); travelEl.classList.remove("show");
     requestAnimationFrame(()=>{ if(!PHONE) daycard.classList.add("show"); renderPeek(); }); renderBar(); setHash(); emitMove(fromHill,{kind:"intro",day,stop:-1,prev}); return; }
   const it=DAYS[day].items[stop], p=placeOf(it);
@@ -1638,10 +1638,10 @@ function go(day,stop,kind){
   renderBar(); setHash();
   const dur=APP.travelDuration?APP.travelDuration(day,prev,stop,k):1400; renderPeek();
   emitMove(fromHill,{kind:k,day,stop,prev,dur,vehicle:cm.vehicle});
-  const intoScene=APP.isSceneStop&&APP.isSceneStop(day,stop); arriveTimer=setTimeout(()=>{ if(seq!==moveSeq) return; if(intoScene){ const st=$("stage"); st.classList.add("fade"); setTimeout(()=>{ if(seq!==moveSeq) return; APP.arrive(); setTimeout(()=>st.classList.remove("fade"),160); },340); } else APP.arrive(); },dur+300+(fromHill?360:0)-(intoScene?300:0));
+  const intoScene=!visualPreview&&APP.isSceneStop&&APP.isSceneStop(day,stop); arriveTimer=setTimeout(()=>{ if(seq!==moveSeq) return; if(intoScene){ const st=$("stage"); st.classList.add("fade"); setTimeout(()=>{ if(seq!==moveSeq) return; APP.arrive(); setTimeout(()=>st.classList.remove("fade"),160); },340); } else APP.arrive(); },dur+300+(fromHill?360:0)-(intoScene?300:0));
 }
 /* leaving the welcome hill: fade the scene out, let the 3D camera cut to the city, fade back in */
-function emitMove(fade,m){ if(!fade){ APP.emit("move",m); return; } const st=$("stage"); st.classList.add("fade"); setTimeout(()=>{ APP.emit("move",m); setTimeout(()=>st.classList.remove("fade"),140); },340); }
+function emitMove(fade,m){ const st=$("stage"); if(!fade){ st.classList.remove("fade"); APP.emit("move",m); return; } const seq=moveSeq; st.classList.add("fade"); setTimeout(()=>{ if(seq!==moveSeq) return; APP.emit("move",m); setTimeout(()=>{ if(seq===moveSeq) st.classList.remove("fade"); },140); },340); }
 APP.arrive=function(){ const s=APP.state; if(s.mode!=="travel") return; clearTimeout(arriveTimer); s.mode="stop"; const autoOpen=!PHONE||APP.quick; APP.quick=false; APP.arrivals=(APP.arrivals||0)+1; travelEl.classList.remove("show"); progEl.style.width="0"; renderBar(); if(autoOpen){ sheet.classList.add("show"); firstHints(); } renderPeek(); APP.emit("arrive",s); };
 APP.progress=p=>{ progEl.style.width=(p*100).toFixed(1)+"%"; };
 APP.go=go;
@@ -2457,7 +2457,7 @@ A.sound={step,pop,shutter,bell,boom,select,heart,fanfare,rain:rainSound,get on()
 </script>
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-import {createPlaceScenes} from './place-scenes.js';
+import {createPlaceScenes} from './place-scenes.js?v=595f19ba412b';
 try{
 const A=window.APP, DAYS=A.days, stage=document.getElementById('stage');
 const VISUAL_REVIEW=new URLSearchParams(location.search).has('visual-preview');
@@ -2954,7 +2954,7 @@ function rebuildProps(day){ props[day].forEach(disposeGroup); props[day]=buildPr
 function showProps(day,stop){ const a0=day>=0&&stop>=0?camAngle(day,stop):0; props.forEach((list,i)=>list.forEach((g,k)=>{ let vis=i===day; if(vis&&g.userData.visual&&stop>=0&&k!==stop) vis=false; /* authored scenes are whole environments — only the one we stand in */ if(VISUAL_REVIEW&&stop>=0) vis=vis&&k===stop; if(vis&&stop>=0&&k!==stop){ const cur=list[stop]; if(g.position.distanceTo(cur.position)<34||g.userData.stopPos.distanceTo(cur.userData.stopPos)<26) vis=false;
       /* another stop's landmark standing in the corridor behind the camera would hide the couple: hide it while we're here */
       if(vis){ const sp=cur.userData.stopPos, dx=g.position.x-sp.x, dz=g.position.z-sp.z, r=Math.hypot(dx,dz); if(r<90){ const ang=Math.atan2(dx,dz), d=Math.atan2(Math.sin(ang-a0-Math.PI),Math.cos(ang-a0-Math.PI)); const rad=Math.max(12,(g.userData.rad||12)); const half=Math.atan2(rad,r); if(Math.abs(d)<.8+half) vis=false; } } } g.visible=vis; })); }
-function animateProps(dt,t){ const list=activeDay>=0?props[activeDay]:[]; list.forEach(g=>{ const u=g.userData; const boost=u.pokeT!=null&&(u.lt||0)-u.pokeT<9?3.2:1; u.lt=(u.lt||0)+dt*boost; if(u.anim) u.anim.forEach(fn=>fn(dt*boost,u.lt));
+function animateProps(dt,t){ const list=activeDay>=0?props[activeDay]:[]; list.forEach(g=>{ if(!g.visible) return; const u=g.userData; const boost=u.pokeT!=null&&(u.lt||0)-u.pokeT<9?3.2:1; u.lt=(u.lt||0)+dt*boost; if(u.anim) u.anim.forEach(fn=>fn(dt*boost,u.lt));
   if(u.bounceT!=null){ u.bounceT+=dt; const b=u.bounceT, sy=1+Math.sin(b*14)*Math.exp(-b*4)*.07; g.scale.set(1-(sy-1)*.5,sy,1-(sy-1)*.5); if(b>1.6){ g.scale.set(1,1,1); delete u.bounceT; } }
   u.hov=(u.hov||0)+(((hoverG===g)?1:0)-(u.hov||0))*Math.min(1,dt*6); if(u.occlHold==null) g.position.y=u.hov*.35;
   if(u.cabin){ const f=.5+.45*Math.sin(t*.35); u.cabin.position.copy(u.cabA).lerp(u.cabB,f); }
@@ -3212,6 +3212,21 @@ let occlLift=0, occlFrame=0; const ray=new THREE.Raycaster(); ray.camera=cam;
 function spring(pos,vel,target,omega,dt){ const z=2*omega; tmp.copy(target).sub(pos).multiplyScalar(omega*omega*dt); vel.add(tmp); vel.multiplyScalar(Math.max(0,1-z*dt)); pos.addScaledVector(vel,dt); }
 /* anything standing between the camera and the couple sinks down smoothly, then rises back */
 function activeVisual(){ return visualAfter&&camMode==='follow'&&arrived&&!travel&&!quizOn&&activeDay>=0&&activeStop>=0&&props[activeDay][activeStop]?.userData.visual; }
+A.sceneView=()=>{
+  const visual=activeVisual(), g=visual&&props[activeDay][activeStop];
+  const heads=[fA,fB].map(f=>{
+    const head=f.userData.headP.getWorldPosition(new THREE.Vector3()), projected=head.clone().project(cam);
+    const dir=head.clone().sub(cam.position), distance=dir.length();
+    const ray=new THREE.Raycaster(cam.position,dir.normalize(),.1,Math.max(.1,distance-.35)); ray.camera=cam;
+    const blockers=g?ray.intersectObject(g,true).filter(hit=>{
+      let obj=hit.object; while(obj){ if(!obj.visible) return false; obj=obj.parent; }
+      const m=Array.isArray(hit.object.material)?hit.object.material[hit.face?.materialIndex||0]:hit.object.material;
+      return m&&(!m.transparent||m.opacity>.75);
+    }).slice(0,2).map(hit=>({geometry:hit.object.geometry.type,local:g.worldToLocal(hit.point.clone()).toArray().map(n=>+n.toFixed(2))})):[];
+    return {x:(projected.x+1)/2,y:(1-projected.y)/2,blockers};
+  });
+  return {id:visual?.id||null,heads,calls:renderer.info.render.calls,triangles:renderer.info.render.triangles};
+};
 function occlusion(dt){ if(activeVisual()){occlLift=0;return;} occlFrame++; const blocked=new Set();
   if(camMode==='follow'&&occlFrame%2===0){ const from=couple.position.clone(); from.y+=2.2; const dir=camPos.clone().sub(from); const dist=dir.length(); dir.normalize(); ray.set(from,dir); ray.near=1; ray.far=Math.max(2,dist-3);
     if(camPos.distanceTo(want)<6) cityMeshes.forEach(m=>{ ray.intersectObject(m,false).forEach(h=>{ if(h.instanceId!=null) blocked.add(m.id+':'+h.instanceId); }); });
@@ -3846,7 +3861,18 @@ function frame(){
       if(Math.abs(P[j]-cx)>90) P[j]=cx-(P[j]-cx)*.9; if(Math.abs(P[j+2]-cz)>90) P[j+2]=cz-(P[j+2]-cz)*.9; }
     leafGeo.attributes.position.needsUpdate=true; leaves.material.opacity=camMode==='follow'?leafBase:.3; }
   updateEnv(dt,t);
-  if(mobile&&!VISUAL_REVIEW){ /* phone: slide the view so the couple sits above whatever card is on screen (sheet, finale/interlude caption) */ const want=innerHeight*(camMode==='follow'?(panelUp()?.26:.04):camMode==='finale'?.24:camMode==='interlude'?.18:.04); if(Math.abs(want-vOff)>.5){ vOff+=(want-vOff)*Math.min(1,dt*3.5); cam.setViewOffset(innerWidth,innerHeight,0,vOff,innerWidth,innerHeight); cam.updateProjectionMatrix(); } }
+  if(mobile&&!VISUAL_REVIEW){
+    let offset=innerHeight*(camMode==='follow'?(panelUp()?.26:.04):camMode==='finale'?.24:camMode==='interlude'?.18:.04);
+    const panel=document.getElementById('sheet');
+    if(activeVisual()&&panel.classList.contains('show')&&!panel.classList.contains('full')){
+      const foot=couple.position.clone().project(cam);
+      const headY=Math.min(...[fA,fB].map(f=>(1-f.userData.headP.getWorldPosition(new THREE.Vector3()).project(cam).y)*innerHeight/2));
+      const needed=(1-foot.y)*innerHeight/2+vOff-(panel.getBoundingClientRect().top-18);
+      const top=document.querySelector('.top').getBoundingClientRect().bottom+12;
+      offset=Math.max(0,Math.min(Math.max(offset,needed),headY+vOff-top));
+    }
+    if(Math.abs(offset-vOff)>.5){ vOff+=(offset-vOff)*Math.min(1,dt*3.5); cam.setViewOffset(innerWidth,innerHeight,0,vOff,innerWidth,innerHeight); cam.updateProjectionMatrix(); }
+  }
   const detailed=!!activeVisual();
   ground.visible=!detailed;cityMeshes.forEach(m=>m.visible=!detailed);SV.forEach(m=>m.visible=!detailed);
   if(detailed){[...peds,...cars,...cyclists,...pigeons,...svBirds,...clouds].forEach(m=>m.visible=false);leaves.visible=false;}
@@ -3854,7 +3880,7 @@ function frame(){
   /* the per-stop stage (textured ground, set dressing, backdrop) belongs to the generic world — the authored place scenes bring their own */
   stages.forEach(list=>list.forEach(g=>{ if(g&&g.visible&&detailed) g.visible=false; }));
   showProps(activeDay,activeStop);
-  props.forEach((list,i)=>list.forEach((g,k)=>{if(detailed)g.visible=i===activeDay&&k===activeStop;else if(g.userData.visual&&!VISUAL_REVIEW&&!arrived)g.visible=false;}));
+  props.forEach((list,i)=>list.forEach((g,k)=>{if(detailed)g.visible=i===activeDay&&k===activeStop;else if(g.userData.visual)g.visible=false;}));
   trailMeshes.forEach(m=>m.visible=!VISUAL_REVIEW&&!detailed);markers.flat().forEach(m=>m.visible=!VISUAL_REVIEW&&!detailed);
   if(VISUAL_REVIEW||detailed)pin.visible=false;
   if(VISUAL_REVIEW&&detailed)rain.visible=false;
