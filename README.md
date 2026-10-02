@@ -2,6 +2,8 @@
 
 *Two leaves. One shared adventure.* A single-file trip companion that opens on the roameo brand splash and hands off to the Seoul ⇄ Busan trail.
 
+**Version 1.10** — Integrated cinematic miniature worlds: 40 distinct atmospheres, soft-edged architecture, sculpted terrain, continuous scene transitions and frame-rate-independent camera/pose motion. Preserves Spotlight/Scout, the comfort interface, trip map and mini-game.
+
 **Version 1.9.1** — Trip map returns instantly after a suggestion closes (no gap where another pop-up could slip in).
 
 **Version 1.9** — Trip map (`trip-map.js`): a keyless street/satellite map of the plan with day routes, options, Explore ideas and open suggestions; swap, move, add or remove a stop straight from the map (through the usual agree-together flow).
@@ -53,7 +55,7 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 - Android (Samsung Internet / Chrome): open the link → menu → **Add to Home screen** — the page ships a web manifest and icons, so it installs as a standalone app with its own icon. iPhone: Share → **Add to Home Screen**.
 - **Trip map:** the map icon in the top bar (also **See it on the map** in the trip overview, **Map** on each day card and ⋯ → **Trip map**) shows the plan on a street map. The day list sits in a bottom sheet: drag its handle up or down, or tap it. Tap a pin or a stop to see its actions. Long-press anywhere on the map to suggest that spot.
 - **Chronicles of Novartis** (`novartis-game.js`, self-contained): a two-minute satirical 2D runner. Her figurine (a 2D port of the 3D one, same palette) runs from Innsbruck to München, where Mykola waits. Jump over escalations, the truck waiting for QA sign-off (double jump), weekend guests and the parents' legal paperwork. Bonuses: cheesecake (+1 ❤️), massage (slow motion), giant yoghurt (giant and unstoppable, smashes obstacles), wine box (problems shrink, points ×2). Space / ↑ to jump on desktop, tap on phones; press again in the air for a double jump; P or Esc pauses. Open it from ⋯ → **Chronicles of Novartis**, or with `?game`. An animated invite appears after about 2.5 minutes of active use, at most twice per session and 30 minutes apart, and not within 2 hours of playing. Invites don't appear in Mykola's role (`?as=me`); use `?game-invite` to show one on demand. The best score is stored locally (`sbtrip-novartis-best-v1`).
-- `tools/` has no test runner; QA is done by walking the app in a phone-emulated browser (360×780 Galaxy profile) and checking for overflow, small touch targets and console errors.
+- Regression checks use Node's built-in test runner; browser QA also walks the app in a phone-emulated browser (360×780 Galaxy profile) and checks framing, overflow, touch targets and console errors.
 
 ## Editing
 
@@ -63,6 +65,14 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 - The trip map lives in `trip-map.js`, loaded by one `defer` tag after `experience.js` and versioned the same way. It injects its own styles. It loads Leaflet, MapLibre GL and the Leaflet–MapLibre bridge from unpkg (pinned versions with SRI) only the first time the map opens. It reads `APP.days`, `APP.placeOf`, the trip-data commutes and Explore ideas, and the `sbtrip-props-v1` cache; it never writes them. Every change goes through `APP.openComposer`. It does not run in `?visual-preview=1`.
 - Street scenery (ginkgo trees, hanok lamps, lantern wires, gates, Hangul signs, benches, flowers) is generated per day in `buildStreet()`; the Hangul sign words live in the `hangulTex` atlas next to it. Counts scale down automatically on phones (`lowEnd`).
 - Local preview: `python3 -m http.server 8765` → http://127.0.0.1:8765/index.html · add `?debug=1` for the on-screen diagnostics overlay.
+
+## Cinematic visual revision
+
+The revision developed on `visual/cinematic-scenes` is integrated into `main`: **cinematic miniature worlds** with softened architectural edges, bevelled terrain, textured surfaces, slower coastal water, distinct sky/light/haze palettes and a named atmosphere for each visit. The itinerary and couple stay intact, alongside the comfort interface, Spotlight/Scout, map and mini-game.
+
+Travel now connects scenes with continuous world reveals, lighting handoffs and frame-rate-independent camera/pose springs instead of blank-canvas fades at every stop. Phone sheet framing, interactive camera controls and reduced-motion support are preserved.
+
+Open `/visual-review/` for the 40-place comparison gallery, or `/index.html?motion-preview=1` for the real trail and controls without live sync. See [VISUAL-SCENES.md](./VISUAL-SCENES.md) for visual direction, motion behavior and validation commands. Integration and local validation do not deploy the site; publishing remains a separate step.
 
 ## Live sync
 

@@ -36,6 +36,12 @@ for asset, attr in (("experience.css", "href"), ("experience.js", "src"), ("nova
         r'(' + attr + r'="' + re.escape(asset) + r')(?:\?v=[^"]*)?(")',
         lambda m: m.group(1) + "?v=" + version + m.group(2), new, count=1)
     assert tags == 1, asset + " tag not found in index.html"
+motion_path = os.path.join(ROOT, "scene-motion.js")
+motion_version = hashlib.sha256(open(motion_path, "rb").read()).hexdigest()[:12]
+new, motion_imports = re.subn(
+    r"(from '\./scene-motion\.js)(?:\?v=[^']*)?(';)",
+    lambda m: m.group(1) + "?v=" + motion_version + m.group(2), new, count=1)
+assert motion_imports == 1, "scene-motion import not found in index.html"
 open(idx_path, "w", encoding="utf-8").write(new)
 review_path = os.path.join(ROOT, "visual-review", "index.html")
 review = open(review_path, encoding="utf-8").read()
