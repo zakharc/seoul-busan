@@ -86,7 +86,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
   #nvx-game .nvx-card{padding:18px 16px 14px}
   #nvx-game .nvx-hud{grid-template-columns:minmax(0,1fr) repeat(3,44px);row-gap:6px}
   #nvx-game .nvx-right{display:contents}
-  #nvx-game .nvx-lives{grid-column:1;grid-row:1;justify-self:start}
+  #nvx-game .nvx-lives{grid-column:1;grid-row:1;justify-self:start;gap:4px;letter-spacing:0;padding-inline:10px}
   #nvx-game .nvx-right .nvx-ib{grid-row:1}
   #nvx-game .nvx-snd{grid-column:2}
   #nvx-game .nvx-right [data-a="pause"]{grid-column:3}

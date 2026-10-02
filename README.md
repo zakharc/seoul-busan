@@ -60,7 +60,7 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 - Android (Samsung Internet / Chrome): open the link → menu → **Add to Home screen** — the page ships a web manifest and icons, so it installs as a standalone app with its own icon. iPhone: Share → **Add to Home Screen**.
 - **Trip map:** the map icon in the top bar (also **See it on the map** in the trip overview, **Map** on each day card and ⋯ → **Trip map**) shows the plan on a street map. The day list sits in a bottom sheet that follows your finger: drag or flick its handle, or tap it. Swipe the day title left or right, or use ‹ ›, to change the day. Tap a stop to fly to it with its actions in the list, or tap a pin for a card. Long-press anywhere on the map to suggest that spot. 🔍 finds any stop, option, idea or hotel.
 - **Chronicles of Novartis** (`novartis-game.js`, self-contained): a two-minute satirical 2D runner in five levels. Her figurine (a 2D port of the 3D one, same palette) runs from Innsbruck to München, where Mykola waits.
-- Game sound, pause and close controls have 44px touch targets. Level ribbons fit narrow phones; reduced-motion mode fades timed messages without shortening their reading time.
+- Game sound, pause and close controls have 44px touch targets; the compact HUD keeps five hearts and a four-digit score visible even at 320px. Level ribbons fit narrow phones; reduced-motion mode fades timed messages without shortening their reading time.
 - Regression checks use Node's built-in test runner; browser QA also walks the app in a phone-emulated browser (360×780 Galaxy profile) and checks framing, overflow, touch targets and console errors.
 
 ## Editing
