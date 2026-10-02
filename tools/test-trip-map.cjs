@@ -134,3 +134,54 @@ test('the coordinate guard accepts Korea only', () => {
   assert.ok(M.validLL({ lat: '35.1', lng: '129.04' }));
   for (const p of [null, {}, { lat: '', lng: '' }, { lat: 48.1, lng: 11.6 }, { lat: NaN, lng: 127 }]) assert.ok(!M.validLL(p));
 });
+
+test('durations parse to their lower bound and deadlines are ignored', () => {
+  assert.deepEqual(['1.5–2 h', '45 min–1 h', '≈35 min', '1 h', '35–40 min uphill', '2 h 20 + 35 min'].map(M.needMin), [90, 45, 35, 60, 35, 120]);
+  for (const s of ['1 h before boarding', 'Book ≈1 month ahead', 'Leave the hotel 10:30', 'Tour 90 min + palace 1 h', '', null]) assert.equal(M.needMin(s), null);
+  assert.equal(M.toMin('09:30'), 570);
+  assert.equal(M.toMin('—'), null);
+  assert.equal(M.fmtMin(570), '09:30');
+  assert.equal(M.fmtMin(-10), '23:50');
+});
+
+test('the day schedule gives leave-by times and the time at each stop', () => {
+  const dm = model[1];
+  const sched = M.schedule(dm);
+  assert.equal(sched.length, dm.stops.length);
+  for (const row of sched) {
+    const leg = dm.legs.find(l => l.to === row.k);
+    if (leg && leg.min && row.t != null) assert.equal(row.leaveBy, row.t - leg.min - 5);
+  }
+  assert.equal(sched[sched.length - 1].stayMin, null);
+  assert.ok(model.every(d => M.schedule(d).every(r => !r.tight)), 'the current plan has no tight connections');
+});
+
+test('a squeezed stop is flagged as tight', () => {
+  const days = structuredClone(DAYS);
+  days[1].items[1].t = '09:45';
+  const dm = M.buildDay(days, HOTELS, COMM, placeOf, 1);
+  const first = M.schedule(dm)[0];
+  assert.ok(first.stayMin < 15);
+  assert.equal(first.tight, true);
+  assert.equal(M.schedule(dm)[0].need, 90);
+});
+
+test('today and next-up use Korea time', () => {
+  assert.deepEqual(M.seoulNow(new Date('2026-10-29T03:20:00Z')), { date: '2026-10-29', min: 12 * 60 + 20 });
+  assert.equal(M.tripDayIndex(DAYS, new Date('2026-10-29T03:20:00Z')), 1);
+  assert.equal(M.tripDayIndex(DAYS, new Date('2026-10-27T14:59:00Z')), -1);
+  assert.equal(M.tripDayIndex(DAYS, new Date('2026-10-27T15:00:00Z')), 0);
+  const sched = M.schedule(model[1]);
+  const up = M.nextUp(sched, 12 * 60 + 5);
+  assert.equal(model[1].stops[up.k].t, '12:30');
+  assert.equal(up.leaveIn, up.leaveBy - (12 * 60 + 5));
+  assert.equal(M.nextUp(sched, 23 * 60), null);
+});
+
+test('KakaoMap links carry the Korean name and coordinates', () => {
+  const a = { ko: '경복궁', lat: 37.579617, lng: 126.977041 }, b = { name: 'Insa-dong, Seoul', lat: 37.5743, lng: 126.9849 };
+  assert.equal(M.kakaoTo(a), 'https://map.kakao.com/link/to/' + encodeURIComponent('경복궁') + ',37.579617,126.977041');
+  const A = encodeURIComponent('경복궁') + ',37.579617,126.977041', B = encodeURIComponent('Insa-dong  Seoul') + ',37.574300,126.984900';
+  assert.equal(M.kakaoRoute(a, b, 'taxi'), 'https://map.kakao.com/link/from/' + A + '/to/' + B);
+  assert.equal(M.kakaoRoute(a, b, 'walk'), 'https://map.kakao.com/link/by/walk/' + A + '/' + B);
+});

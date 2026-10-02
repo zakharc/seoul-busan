@@ -153,8 +153,53 @@
     return "https://www.google.com/maps/dir/" + uniq.map(coord).join("/");
   }
 
+  /* ---------- time check (leave-by, time at each stop, tight connections) ---------- */
+  const toMin = t => { const m = /^(\d{1,2}):(\d\d)$/.exec(String(t || "").trim()); return m ? +m[1] * 60 + +m[2] : null; };
+  const fmtMin = m => { const v = ((Math.round(m) % 1440) + 1440) % 1440; return String(Math.floor(v / 60)).padStart(2, "0") + ":" + String(v % 60).padStart(2, "0"); };
+  // Lower bound of a free-text duration ("1.5–2 h", "45 min–1 h", "≈35 min"); null for deadlines like "1 h before boarding".
+  function needMin(need) {
+    const s = String(need || "");
+    if (/before|ahead|book|leave/i.test(s)) return null;
+    const m = /^\s*≈?\s*(\d+(?:\.\d+)?)\s*(?:[–-]\s*\d+(?:\.\d+)?\s*)?(h|min)\b/.exec(s);
+    return m ? Math.round(+m[1] * (m[2] === "h" ? 60 : 1)) : null;
+  }
+  const TIMED_KINDS = new Set(["sight", "food", "activity", "show", ""]);
+  function schedule(dayModel, buffer = 5) {
+    const live = dayModel.stops.filter(s => !s.removed);
+    return live.map((s, i) => {
+      const legIn = dayModel.legs.find(l => l.to === s.k), next = live[i + 1];
+      const legOut = next ? dayModel.legs.find(l => l.to === next.k) : null;
+      const t = toMin(s.t), tn = next ? toMin(next.t) : null;
+      const leaveBy = t != null && legIn && legIn.min ? t - legIn.min - buffer : null;
+      const stayMin = t != null && tn != null ? tn - (legOut && legOut.min ? legOut.min + buffer : 0) - t : null;
+      const need = needMin(s.place.need);
+      const tight = stayMin != null && TIMED_KINDS.has(s.kind) && (stayMin < 0 || (need ? stayMin < need - 10 : stayMin < 15));
+      return {k: s.k, t, leaveBy, stayMin, need, tight};
+    });
+  }
+  // The trip runs on Korea time wherever the phone is.
+  function seoulNow(now = new Date()) {
+    const parts = Object.fromEntries(new Intl.DateTimeFormat("en-GB", {timeZone: "Asia/Seoul", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23"})
+      .formatToParts(now).map(p => [p.type, p.value]));
+    return {date: `${parts.year}-${parts.month}-${parts.day}`, min: +parts.hour * 60 + +parts.minute};
+  }
+  const tripDayIndex = (days, now) => days.findIndex(d => d.date === seoulNow(now).date);
+  function nextUp(sched, nowMin) {
+    const next = sched.find(s => s.t != null && s.t > nowMin);
+    if (!next) return null;
+    return {k: next.k, at: next.t, leaveBy: next.leaveBy, leaveIn: next.leaveBy != null ? next.leaveBy - nowMin : next.t - nowMin};
+  }
+
+  /* ---------- Korean navigation (Google Maps has no walking/driving directions in Korea) ---------- */
+  const kName = p => String(p.ko || p.name || p.title || "").replace(/[,/]/g, " ").trim();
+  const kPt = p => `${enc(kName(p))},${(+p.lat).toFixed(6)},${(+p.lng).toFixed(6)}`;
+  const kakaoTo = p => `https://map.kakao.com/link/to/${kPt(p)}`;
+  // Walking legs open Kakao's walking route; other legs open from/to so Kakao offers transit, car or taxi.
+  const kakaoRoute = (a, b, mode) => mode === "walk" ? `https://map.kakao.com/link/by/walk/${kPt(a)}/${kPt(b)}` : `https://map.kakao.com/link/from/${kPt(a)}/to/${kPt(b)}`;
+
   const MODEL = {DAY_COLORS, dayColor, validLL, distKm, fareText, legBetween, buildDay, alternativesOf,
-    plannedIdeaIds, nearestStop, nearbyIdeas, openProposals, proposalDays, placeUrl, legUrl, dayRouteUrl};
+    plannedIdeaIds, nearestStop, nearbyIdeas, openProposals, proposalDays, placeUrl, legUrl, dayRouteUrl,
+    toMin, fmtMin, needMin, schedule, seoulNow, tripDayIndex, nextUp, kakaoTo, kakaoRoute};
   if (typeof module === "object" && module.exports) { module.exports = MODEL; return; }
   if (typeof window === "undefined" || !window.APP) return;
   if (new URLSearchParams(location.search).has("visual-preview")) return;
@@ -162,8 +207,9 @@
   /* ---------- styles ---------- */
   const CSS = `
 #tripmap{background:transparent}
+#tripmap .tmap:focus,#tripmap .tmap:focus-visible{outline:none}
 #tripmap::backdrop{background:rgba(17,22,40,.45);backdrop-filter:blur(4px)}
-.tmap{position:absolute;inset:0;display:grid;grid-template-rows:auto auto minmax(0,1fr);background:var(--bg);color:var(--ink);overflow:hidden;font-family:var(--body)}
+.tmap{position:absolute;inset:0;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);background:var(--bg);color:var(--ink);overflow:hidden;font-family:var(--body)}
 .tm-head{display:flex;align-items:center;gap:12px;padding:calc(var(--sat) + 12px) 16px 6px}
 .tm-head .tm-ttl{flex:1;min-width:0}
 .tm-head p{margin:0;color:var(--muted);font-size:12px;letter-spacing:.02em}
@@ -292,7 +338,100 @@
   .tm-ctl{top:10px;right:10px}
   .tm-layers{right:62px;top:10px}
 }
-@media (prefers-reduced-motion:reduce){.tm-panel,.tm-pin{transition:none}}
+/* motion */
+#tripmap[open] .tmap{animation:tm-in .32s cubic-bezier(.2,.8,.2,1)}
+#tripmap[open]::backdrop{animation:tm-fade .32s ease}
+#tripmap.tm-closing .tmap{animation:tm-out .2s ease forwards}
+#tripmap.tm-closing::backdrop{animation:tm-fade-out .2s ease forwards}
+@keyframes tm-in{from{opacity:0;transform:translateY(18px) scale(.985)}}
+@keyframes tm-out{to{opacity:0;transform:translateY(14px) scale(.985)}}
+@keyframes tm-fade{from{opacity:0}}
+@keyframes tm-fade-out{to{opacity:0}}
+.tm-pbody.tm-swap{animation:tm-fade .24s ease}
+.tm-pbody.tm-swap-l{animation:tm-slide-l .3s cubic-bezier(.2,.8,.2,1)}
+.tm-pbody.tm-swap-r{animation:tm-slide-r .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes tm-slide-l{from{opacity:0;transform:translateX(-28px)}}
+@keyframes tm-slide-r{from{opacity:0;transform:translateX(28px)}}
+.tm-pin{transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s}
+.tm-pin.is-hover{transform:rotate(-45deg) scale(1.18)}
+.tm-stop.is-hover>.tm-row{background:var(--soft)}
+.tm-panel.dragging{transition:none}
+/* day header */
+.tm-dnav{display:flex;align-items:center;gap:8px;margin:-4px 0 2px}
+.tm-dnav .tm-eyebrow{flex:1;min-width:0}
+.tm-step{width:36px;height:36px;flex:0 0 36px;border-radius:12px;font:500 22px/1 var(--body)}
+.tm-step:disabled{opacity:.3;cursor:default}
+.tm-today{color:var(--rose)}
+.tm-now{display:flex;align-items:center;gap:12px;width:100%;margin:12px 0 2px;padding:12px 14px;border-radius:16px;border:1px solid var(--dc);background:var(--soft);background:color-mix(in srgb,var(--dc) 10%,var(--surface));color:var(--ink);text-align:left;cursor:pointer;font:inherit}
+p.tm-now{cursor:default}
+.tm-now>span:last-child{display:flex;flex-direction:column;min-width:0}
+.tm-now small{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--dc)}
+.tm-now b{font-size:15px;line-height:1.3}
+.tm-now em{font-style:normal;font-size:13px;color:var(--muted)}
+.tm-pulse{width:12px;height:12px;border-radius:50%;background:var(--dc);flex:0 0 12px;animation:tm-pulse 1.8s ease-out infinite}
+@keyframes tm-pulse{0%{box-shadow:0 0 0 0 var(--dc)}70%,100%{box-shadow:0 0 0 10px transparent}}
+.tm-badge.now{background:var(--dc,var(--rose));color:#fff;border-color:transparent}
+.tm-stop.is-next .tm-n{box-shadow:0 0 0 3px var(--surface),0 0 0 5px var(--dc)}
+.tm-copy em.tm-tight{color:#b7791f;font-weight:600}
+:root[data-theme="dark"] .tm-copy em.tm-tight{color:#f0c060}
+.tm-legtxt{flex:1;min-width:0}
+.tm-leave{font-weight:600;color:var(--ink);white-space:nowrap}
+.tm-pbody.touring .tm-stop.is-sel .tm-acts{display:none}
+.tm-leglinks{display:inline-flex;gap:2px;flex:0 0 auto}
+.tm-leg .tm-leglinks a{margin-left:0;padding:6px;border-radius:8px;text-decoration:none}
+.tm-leg .tm-leglinks a:hover{background:var(--soft);color:var(--ink)}
+/* search */
+.tm-search{position:relative;flex:0 1 320px;display:flex;align-items:center}
+.tm-search input{width:100%;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:0 12px 0 38px;font:500 14px/1 var(--body);outline:none;-webkit-appearance:none;appearance:none}
+.tm-search input:focus{border-color:var(--seoul);box-shadow:0 0 0 3px rgba(79,95,230,.2)}
+.tm-sicon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);display:flex;pointer-events:none}
+.tm-sicon svg{width:17px;height:17px}
+.tm-results{position:absolute;top:50px;left:0;right:0;z-index:1200;list-style:none;margin:0;padding:6px;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 20px 50px -20px rgba(17,22,40,.5);max-height:min(60vh,420px);overflow:auto;overscroll-behavior:contain;touch-action:pan-y}
+.tm-results[hidden]{display:none}
+.tm-results li{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;cursor:pointer;min-height:44px}
+.tm-results li[aria-selected="true"],.tm-results li:hover{background:var(--soft)}
+.tm-results li>i{width:10px;height:10px;border-radius:50%;background:var(--dc);flex:0 0 10px}
+.tm-results li>span{display:flex;flex-direction:column;min-width:0}
+.tm-results li b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tm-results li small{font-size:12px;color:var(--muted)}
+.tm-results li.empty{color:var(--muted);cursor:default}
+.tm-sbtn{display:none}
+/* tour */
+.tm-caption{position:absolute;left:50%;top:14px;transform:translateX(-50%);z-index:850;width:max-content;max-width:min(92%,460px);padding:10px 16px;border-radius:16px;background:var(--surface);color:var(--ink);box-shadow:0 14px 40px -16px rgba(17,22,40,.5);border:1px solid var(--line);font-size:13px;text-align:center;pointer-events:none;animation:tm-fade .25s ease}
+.tm-caption[hidden]{display:none}
+.tm-caption small{display:block;color:var(--muted)}
+.tm-caption b{display:block;font-size:15px}
+.tm-tourdot{width:18px;height:18px;border-radius:50%;background:#fff;border:4px solid var(--dc);box-shadow:0 0 0 6px rgba(255,255,255,.55),0 4px 10px rgba(0,0,0,.35)}
+/* show the driver */
+.tm-driver{position:absolute;inset:0;z-index:2000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:calc(var(--sat) + 24px) 24px calc(var(--sab) + 24px);background:#fffdf7;color:#111;text-align:center;animation:tm-fade .2s ease;border-radius:inherit}
+.tm-driver[hidden]{display:none}
+.tm-driver .k-say{margin:0;font-size:clamp(18px,5vw,24px);color:#444}
+.tm-driver .k-ko{margin:0;font:800 clamp(40px,11vw,84px)/1.12 "Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;word-break:keep-all;letter-spacing:-.01em}
+.tm-driver .k-en{margin:0;font-size:16px;color:#555}
+.tm-driver .k-hint{margin:6px 0 0;font-size:13px;color:#777}
+.tm-driver .tm-acts{justify-content:center}
+.tm-driver .tm-btn{background:#f1efe8;color:#111;border-color:#e2dfd4}
+.tm-driver .tm-btn.pri{background:#111;color:#fff;border-color:#111}
+.tm-toast{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:2100;max-width:min(92%,420px);padding:10px 16px;border-radius:14px;background:var(--ink);color:var(--surface);font-size:13px;font-weight:600;box-shadow:0 14px 40px -16px rgba(0,0,0,.5);animation:tm-fade .2s ease;pointer-events:none}
+.tm-toast[hidden]{display:none}
+@media (min-width:900px){
+  .tm-caption,.tm-toast{left:calc(400px + (100% - 400px) / 2)}
+}
+@media (max-width:899px){
+  .tm-sbtn{display:inline-flex}
+  .tm-search{display:none;position:absolute;left:12px;right:12px;top:calc(var(--sat) + 10px);z-index:1300;flex:none}
+  .tmap.searching .tm-search{display:flex}
+  .tmap.searching .tm-ttl,.tmap.searching .tm-sbtn,.tmap.searching #tm-close{visibility:hidden}
+  .tm-caption{top:48px;left:12px;right:64px;transform:none;width:auto;max-width:none}
+  .tm-toast{bottom:auto;top:calc(var(--sat) + 118px)}
+  .tm-dhead{touch-action:pan-y}
+  .tm-grab{height:34px}
+}
+@media (prefers-reduced-motion:reduce){
+  .tm-panel,.tm-pin{transition:none}
+  #tripmap .tmap,#tripmap::backdrop,.tm-pbody,.tm-driver,.tm-caption{animation:none!important}
+  .tm-pulse{animation:none}
+}
 `;
 
   /* ---------- setup ---------- */
@@ -311,7 +450,9 @@
     plus: svg('<path d="M12 5v14M5 12h14"/>'),
     play: svg('<path d="m8 5 11 7-11 7V5Z"/>'),
     ext: svg('<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>'),
-    dl: svg('<path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/>')
+    dl: svg('<path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/>'),
+    search: svg('<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>'),
+    copy: svg('<rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/>')
   };
   const KIND = {sight: "Sight", food: "Food", activity: "Activity", show: "Evening", stay: "Hotel", transit: "Transfer"};
   const MODE_ICON = {walk: "🚶", taxi: "🚕", train: "🚄", same: "📍"};
@@ -339,7 +480,20 @@
   };
   const state = {day: -1, sel: null, layers: loadPrefs(), size: "peek", returnAfterComposer: false, drag: null};
   const savePrefs = () => { try { localStorage.setItem(PREFS_KEY, JSON.stringify(state.layers)); } catch (e) {} };
-  const toast = msg => (app.toast ? app.toast(msg) : console.info(msg));
+  // While the modal map is open the app's own toast sits underneath it, so the map shows its own.
+  let toastTimer = 0;
+  const toast = msg => {
+    const el = document.getElementById("tm-toast");
+    if (!el || !document.getElementById("tripmap")?.open) { app.toast ? app.toast(msg) : console.info(msg); return; }
+    el.textContent = msg;
+    el.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { el.hidden = true; }, 3200);
+  };
+  const RM = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // QA hook: set window.__tripMapNow to an ISO time to preview the "Today / next up" card before the trip.
+  const now = () => new Date(window.__tripMapNow || Date.now());
+  let tour = null;
   const tripData = (() => { try { return JSON.parse(byId("trip-data").textContent); } catch (e) { return {}; } })();
   const COMM = tripData.commutes || {};
   const EXPLORE = tripData.explore || [];
@@ -371,9 +525,15 @@
   const dlg = document.createElement("dialog");
   dlg.id = "tripmap";
   dlg.setAttribute("aria-labelledby", "tm-title");
-  dlg.innerHTML = `<div class="tmap">
+  dlg.innerHTML = `<div class="tmap" tabindex="-1">
     <header class="tm-head">
       <div class="tm-ttl"><p id="tm-sub">Trip map</p><h2 id="tm-title">All days</h2></div>
+      <div class="tm-search" id="tm-search" role="search">
+        <span class="tm-sicon" aria-hidden="true">${IC.search}</span>
+        <input id="tm-q" type="search" placeholder="Find a stop, idea or hotel" autocomplete="off" spellcheck="false" aria-label="Find on the map" aria-controls="tm-results" aria-expanded="false" role="combobox" aria-autocomplete="list">
+        <ul class="tm-results" id="tm-results" role="listbox" hidden></ul>
+      </div>
+      <button type="button" class="tm-ib tm-sbtn" id="tm-sbtn" aria-label="Find on the map" aria-controls="tm-search">${IC.search}</button>
       <button type="button" class="tm-ib" id="tm-close" aria-label="Close the map">${IC.close}</button>
     </header>
     <nav class="tm-days" id="tm-days" aria-label="Show day on the map"></nav>
@@ -392,11 +552,14 @@
         <label><input type="checkbox" data-layer="others"> Other days, faded</label>
         <label><input type="checkbox" data-layer="sat"> Satellite view</label>
       </div>
+      <div class="tm-caption" id="tm-caption" aria-live="polite" hidden></div>
       <aside class="tm-panel" id="tm-panel" data-size="peek" aria-label="Day plan">
         <button type="button" class="tm-grab" id="tm-grab" aria-label="Resize the list"><i></i></button>
         <div class="tm-pbody" id="tm-pbody"></div>
       </aside>
     </div>
+    <div class="tm-toast" id="tm-toast" role="status" hidden></div>
+    <div class="tm-driver" id="tm-driver" hidden role="dialog" aria-modal="true" aria-labelledby="tm-drv-ko"></div>
   </div>`;
   document.body.append(dlg);
   const mapEl = byId("tm-map"), panel = byId("tm-panel"), pbody = byId("tm-pbody"), daysEl = byId("tm-days");
@@ -443,9 +606,10 @@
 
   /* ---------- panel ---------- */
   function renderChips() {
+    const todayIdx = MODEL.tripDayIndex(app.days, now());
     const chips = [`<button type="button" class="tm-chip" data-act="day" data-day="-1" aria-pressed="${state.day === -1}" style="--dc:var(--ink)"><b>All days</b><small>${app.days.length} days</small></button>`];
     model.forEach(dm => chips.push(`<button type="button" class="tm-chip" data-act="day" data-day="${dm.index}" aria-pressed="${state.day === dm.index}" style="--dc:${dm.color}">` +
-      `<b><i></i>Day ${dm.index + 1}</b><small>${esc(dateShort(dm.date))} · ${esc(dm.city)}</small></button>`));
+      `<b><i></i>Day ${dm.index + 1}</b><small>${dm.index === todayIdx ? "Today" : esc(dateShort(dm.date))} · ${esc(dm.city)}</small></button>`));
     daysEl.innerHTML = chips.join("");
     daysEl.querySelector('[aria-pressed="true"]')?.scrollIntoView({block: "nearest", inline: "center"});
   }
@@ -467,7 +631,8 @@
     ${list.map(p => `<div class="tm-irow"><div class="tm-row" style="cursor:default"><span class="tm-ico" style="background:rgba(213,154,23,.16)">💡</span><span class="tm-copy"><b style="font-weight:500;font-size:14px">${propLine(p)}</b>${p.note ? `<em>“${esc(String(p.note).slice(0, 90))}”</em>` : ""}</span></div></div>`).join("")}
     <div class="tm-acts"><button type="button" class="tm-btn" data-act="review">Review suggestions</button></div></section>`;
 
-  function legHtml(leg, dm) {
+  const canRoute = leg => leg && leg.fromPlace && leg.toPlace && MODEL.validLL(leg.fromPlace) && MODEL.validLL(leg.toPlace) && !leg.fixed && leg.mode !== "train" && leg.mode !== "same";
+  function legHtml(leg, dm, row) {
     if (!leg || leg.mode === "same") return "";
     let text;
     if (leg.mode === "train") text = `Train${leg.km ? ` · ${Math.round(leg.km)} km` : ""}`;
@@ -477,17 +642,18 @@
     else text = `Taxi ≈${leg.min} min${leg.fare ? ` · ${MODEL.fareText(leg.fare)}` : ""}`;
     if (leg.est && leg.min != null) text += " (est.)";
     if (leg.long) text += " · long hop";
-    const link = leg.fromPlace && leg.toPlace && !leg.fixed && leg.mode !== "train"
-      ? `<a href="${esc(MODEL.legUrl(leg.fromPlace, leg.toPlace, leg.mode))}" target="_blank" rel="noopener">Route ↗</a>` : "";
-    return `<li class="tm-leg ${leg.mode}${leg.long ? " is-long" : ""}" style="--dc:${dm.color}"><span aria-hidden="true">${MODE_ICON[leg.mode] || "•"}</span><span>${text}</span>${link}</li>`;
+    const leave = row && row.leaveBy != null ? `<b class="tm-leave">leave by ${MODEL.fmtMin(row.leaveBy)}</b>` : "";
+    const links = canRoute(leg) ? `<span class="tm-leglinks"><a href="${esc(MODEL.kakaoRoute(leg.fromPlace, leg.toPlace, leg.mode))}" target="_blank" rel="noopener" aria-label="Route in KakaoMap">Kakao ↗</a><a href="${esc(MODEL.legUrl(leg.fromPlace, leg.toPlace, leg.mode))}" target="_blank" rel="noopener" aria-label="Route in Google Maps">Google ↗</a></span>` : "";
+    return `<li class="tm-leg ${leg.mode}${leg.long ? " is-long" : ""}" style="--dc:${dm.color}"><span aria-hidden="true">${MODE_ICON[leg.mode] || "•"}</span><span class="tm-legtxt">${text}${leave ? " · " + leave : ""}</span>${links}</li>`;
   }
 
   function stopActions(s, dm) {
     const fixedKind = s.kind === "stay" || s.kind === "transit";
     const leg = dm.legs.find(l => l.to === s.k);
     const a = [`<button type="button" class="tm-btn pri" data-act="go" data-day="${s.day}" data-k="${s.k}">${IC.play} Open in trip</button>`];
+    if (s.place.ko) a.push(`<button type="button" class="tm-btn" data-act="driver" data-day="${s.day}" data-k="${s.k}">🚕 Show the driver</button>`);
+    if (s.pinned) a.push(`<a class="tm-btn" href="${esc(canRoute(leg) ? MODEL.kakaoRoute(leg.fromPlace, s.place, leg.mode) : MODEL.kakaoTo(s.place))}" target="_blank" rel="noopener">KakaoMap ↗</a>`);
     a.push(`<a class="tm-btn" href="${esc(MODEL.placeUrl(s.place))}" target="_blank" rel="noopener">Google Maps ↗</a>`);
-    if (leg && leg.fromPlace && !leg.fixed && leg.mode !== "same" && leg.mode !== "train") a.push(`<a class="tm-btn" href="${esc(MODEL.legUrl(leg.fromPlace, s.place, leg.mode))}" target="_blank" rel="noopener">Directions ↗</a>`);
     if (s.removed) return a.join("");
     if (!fixedKind) a.push(`<button type="button" class="tm-btn" data-act="chg" data-type="replace" data-day="${s.day}" data-k="${s.k}">🔁 Swap</button>`);
     if (!fixedKind) a.push(`<button type="button" class="tm-btn" data-act="chg" data-type="move" data-day="${s.day}" data-k="${s.k}">🕒 Move</button>`);
@@ -496,7 +662,7 @@
     return a.join("");
   }
 
-  function stopRow(s, dm) {
+  function stopRow(s, dm, row, isNext) {
     const sel = state.sel && state.sel.day === s.day && state.sel.k === s.k;
     const pend = proposals.filter(p => p.loc && p.loc[0] === s.day && p.loc[1] === s.k).length;
     const badges = [
@@ -505,14 +671,18 @@
       s.changed ? '<span class="tm-badge">Swapped</span>' : "",
       s.removed ? '<span class="tm-badge">Dropped</span>' : "",
       pend ? `<span class="tm-badge prop">💡 ${pend}</span>` : "",
-      !s.pinned && !s.removed ? '<span class="tm-badge">Not on the map</span>' : ""
+      !s.pinned && !s.removed ? '<span class="tm-badge">Not on the map</span>' : "",
+      isNext ? '<span class="tm-badge now">Next</span>' : ""
     ].join("");
+    const timing = !row || row.stayMin == null || s.removed ? "" : row.tight
+      ? `<em class="tm-tight">⚠ ${row.stayMin < 0 ? "No time here: the next stop starts before you can get there" : `Only ${mins(row.stayMin)} here${row.need ? `, it needs about ${mins(row.need)}` : ""}`}</em>`
+      : `<em>⏱ ≈${mins(row.stayMin)} here before you leave</em>`;
     const opts = s.hasOptions ? `<em>${s.item.options.length} options · ${esc(s.item.title)}</em>` : "";
     const draggable = !PHONE && !s.removed && s.kind !== "stay" && s.kind !== "transit";
-    return `<li class="tm-stop${sel ? " is-sel" : ""}${s.removed ? " is-removed" : ""}" data-day="${s.day}" data-k="${s.k}" style="--dc:${dm.color}"${draggable ? ' draggable="true"' : ""}>
+    return `<li class="tm-stop${sel ? " is-sel" : ""}${s.removed ? " is-removed" : ""}${isNext ? " is-next" : ""}${row && row.tight ? " is-tight" : ""}" data-day="${s.day}" data-k="${s.k}" style="--dc:${dm.color}"${draggable ? ' draggable="true"' : ""}>
       <button type="button" class="tm-row" data-act="focus" data-day="${s.day}" data-k="${s.k}" aria-expanded="${!!sel}">
         <span class="tm-n${s.kind === "stay" ? " hotel" : ""}">${s.removed ? "–" : s.kind === "stay" ? "🛏" : s.n}</span>
-        <span class="tm-copy"><small>${esc(s.t)}${s.t ? " · " : ""}${esc(KIND[s.kind] || "Stop")} ${badges}</small><b>${esc(s.title)}</b>${opts}</span>
+        <span class="tm-copy"><small>${esc(s.t)}${s.t ? " · " : ""}${esc(KIND[s.kind] || "Stop")} ${badges}</small><b>${esc(s.title)}</b>${opts}${timing}</span>
         ${draggable ? '<span class="tm-drag" aria-hidden="true" title="Drag onto a day or another stop">⠿</span>' : ""}
       </button>
       <div class="tm-acts">${stopActions(s, dm)}</div>
@@ -526,40 +696,57 @@
     if (st.rideMin) statBits.push(`🚕 ${mins(st.rideMin)}`);
     if (st.km) statBits.push(`${st.km} km between stops`);
     const routeUrl = MODEL.dayRouteUrl(dm);
+    const sched = MODEL.schedule(dm), byK = new Map(sched.map(r => [r.k, r]));
+    const today = MODEL.tripDayIndex(app.days, now()) === dm.index;
+    const up = today ? MODEL.nextUp(sched, MODEL.seoulNow(now()).min) : null;
+    const tight = sched.filter(r => r.tight).length;
     const rows = [];
     if (dm.start) rows.push(`<li class="tm-stop tm-from" data-day="${dm.index}" data-k="start" style="--dc:${dm.color}"><div class="tm-row" style="cursor:default"><span class="tm-n hotel">🛏</span><span class="tm-copy"><small>Morning</small><b>From ${esc(dm.start.title)}</b></span></div></li>`);
     for (const s of dm.stops) {
       const leg = dm.legs.find(l => l.to === s.k);
-      if (leg) rows.push(legHtml(leg, dm));
-      rows.push(stopRow(s, dm));
+      if (leg) rows.push(legHtml(leg, dm, byK.get(s.k)));
+      rows.push(stopRow(s, dm, byK.get(s.k), up && up.k === s.k));
     }
     const ideas = MODEL.nearbyIdeas(EXPLORE, dm, planned, {maxKm: 4, limit: 5});
     const ideasHtml = !ideas.length ? "" : `<section class="tm-sec"><h4>💎 Ideas near this day</h4><p class="sub">From Explore and not in the plan yet. Each one fits after the stop it's closest to.</p>
       ${ideas.map(r => `<div class="tm-irow"><button type="button" class="tm-row" data-act="idea" data-id="${esc(r.idea.id)}"><span class="tm-ico">${esc(r.idea.icon || "✨")}</span><span class="tm-copy"><b>${esc(r.idea.title)}</b><small>${r.km} km from ${esc(r.stop ? r.stop.title : "the route")} · ${esc(EFFORT[r.idea.effort] || "")}</small></span></button>
         <button type="button" class="tm-btn" data-act="add-idea" data-id="${esc(r.idea.id)}" data-day="${dm.index}" aria-label="Suggest ${esc(r.idea.title)} for Day ${dm.index + 1}">${IC.plus} Add</button></div>`).join("")}</section>`;
     const props = proposals.filter(p => MODEL.proposalDays(p).has(dm.index));
+    const upStop = up && dm.stops[up.k];
+    const timed = sched.some(r => r.t != null);
+    const nowCard = !today || !timed ? "" : upStop
+      ? `<button type="button" class="tm-now" data-act="focus" data-day="${dm.index}" data-k="${up.k}"><span class="tm-pulse" aria-hidden="true"></span><span><small>Today · next up</small><b>${esc(upStop.t)} ${esc(upStop.title)}</b><em>${up.leaveIn <= 0 ? "Time to go" : up.leaveBy != null ? `Leave by ${MODEL.fmtMin(up.leaveBy)} · in ${mins(up.leaveIn)}` : `In ${mins(up.leaveIn)}`}</em></span></button>`
+      : `<p class="tm-now"><span><small>Today</small><b>That was the last stop today. Sleep well 🌙</b></span></p>`;
     return `<header class="tm-dhead" style="--dc:${dm.color}">
-        <p class="tm-eyebrow"><i></i>Day ${dm.index + 1} · ${esc(dateShort(dm.date))} · ${esc(dm.city)}</p>
+        <div class="tm-dnav">
+          <button type="button" class="tm-ib tm-step" data-act="step" data-dir="-1" aria-label="Previous day"${dm.index === 0 ? " disabled" : ""}>‹</button>
+          <p class="tm-eyebrow"><i></i>Day ${dm.index + 1} · ${esc(dateShort(dm.date))} · ${esc(dm.city)}${today ? ' · <b class="tm-today">Today</b>' : ""}</p>
+          <button type="button" class="tm-ib tm-step" data-act="step" data-dir="1" aria-label="Next day"${dm.index === model.length - 1 ? " disabled" : ""}>›</button>
+        </div>
         <h3>${esc(dm.title)}</h3>
         <p class="tm-stats">${statBits.join(" · ")}</p>
+        ${nowCard}
         <div class="tm-dacts">
+          <button type="button" class="tm-btn pri" data-act="play" data-day="${dm.index}" aria-pressed="${!!tour}">${tour ? "■ Stop the tour" : "▶ Play the day"}</button>
           ${routeUrl ? `<a class="tm-btn" href="${esc(routeUrl)}" target="_blank" rel="noopener">${IC.route} Day in Google Maps ↗</a>` : ""}
           <button type="button" class="tm-btn" data-act="add" data-day="${dm.index}">${IC.plus} Add a place</button>
           <button type="button" class="tm-btn" data-act="go" data-day="${dm.index}" data-k="-1">${IC.play} Open day</button>
         </div>
       </header>
       ${st.longLegs ? `<p class="tm-warn">⚠ ${st.longLegs} long hop${st.longLegs > 1 ? "s" : ""} today (over 30 min). A nearer swap or a different order may give you more time at the stops.</p>` : ""}
+      ${tight ? `<p class="tm-warn">⏱ ${tight} tight connection${tight > 1 ? "s" : ""}: there isn't enough time at ${tight > 1 ? "those stops" : "that stop"} to get to the next one on time. Moving a time or swapping a stop fixes it.</p>` : ""}
       <ol class="tm-list" id="tm-list">${rows.join("")}</ol>
       ${ideasHtml}
       ${proposalsHtml(props)}
-      <p class="tm-help">${PHONE ? "Tap a pin or a stop for its actions. Long-press anywhere on the map to suggest that spot." : "Click a pin or a stop for its actions. Drag a stop (⠿) onto another stop or a day chip to suggest a move. Right-click the map to suggest any spot."} Suggestions go to the other phone first, and nothing changes until you both agree.</p>`;
+      <p class="tm-help">${PHONE ? "Tap a pin or a stop for its actions. Long-press anywhere on the map to suggest that spot." : "Click a pin or a stop for its actions. Drag a stop (⠿) onto another stop or a day chip to suggest a move. Right-click the map to suggest any spot. Keys: [ and ] change the day, A shows all days, / searches, P plays the day, F fits the map."} Suggestions go to the other phone first, and nothing changes until you both agree.</p>`;
   }
 
   function allPanel() {
+    const todayIdx = MODEL.tripDayIndex(app.days, now());
     const t = model.reduce((a, dm) => ({stops: a.stops + dm.stats.stops, walk: a.walk + dm.stats.walkMin, ride: a.ride + dm.stats.rideMin}), {stops: 0, walk: 0, ride: 0});
     const rows = model.map(dm => `<li><button type="button" class="tm-row tm-dayrow" data-act="day" data-day="${dm.index}" style="--dc:${dm.color}">
         <span class="tm-n">${dm.index + 1}</span>
-        <span class="tm-copy"><small>${esc(dateShort(dm.date))} · ${esc(dm.city)}${dm.stats.longLegs ? ` <span class="tm-badge prop">⚠ ${dm.stats.longLegs} long hop${dm.stats.longLegs > 1 ? "s" : ""}</span>` : ""}${proposals.some(p => MODEL.proposalDays(p).has(dm.index)) ? ' <span class="tm-badge prop">💡</span>' : ""}</small>
+        <span class="tm-copy"><small>${esc(dateShort(dm.date))} · ${esc(dm.city)}${dm.index === todayIdx ? ' <span class="tm-badge now">Today</span>' : ""}${dm.stats.longLegs ? ` <span class="tm-badge prop">⚠ ${dm.stats.longLegs} long hop${dm.stats.longLegs > 1 ? "s" : ""}</span>` : ""}${proposals.some(p => MODEL.proposalDays(p).has(dm.index)) ? ' <span class="tm-badge prop">💡</span>' : ""}</small>
         <b>${esc(dm.title)}</b><em>${dm.stats.stops} stops${dm.stats.walkMin ? ` · 🚶 ${mins(dm.stats.walkMin)}` : ""}${dm.stats.rideMin ? ` · 🚕 ${mins(dm.stats.rideMin)}` : ""}</em></span></button></li>`).join("");
     return `<header class="tm-dhead" style="--dc:var(--ink)">
         <p class="tm-eyebrow">Seoul ⇄ Busan · ${esc(dateShort(model[0].date))} – ${esc(dateShort(model[model.length - 1].date))}</p>
@@ -576,12 +763,13 @@
       <p class="tm-help">Pick a day to see its route, the walk or taxi between stops, other options and ideas nearby. The KML file opens in Google My Maps: Create → Import.</p>`;
   }
 
-  function renderPanel() {
+  function renderPanel(anim) {
     pbody.innerHTML = state.day < 0 ? allPanel() : dayPanel(model[state.day]);
+    if (anim && !RM()) { pbody.classList.remove("tm-swap", "tm-swap-l", "tm-swap-r"); void pbody.offsetWidth; pbody.classList.add(anim === -1 ? "tm-swap-l" : anim === 1 ? "tm-swap-r" : "tm-swap"); }
     const dm = model[state.day];
     byId("tm-sub").textContent = dm ? `Day ${dm.index + 1} · ${dateShort(dm.date)} · ${dm.city}` : "Trip map · Seoul ⇄ Busan";
     byId("tm-title").textContent = dm ? dm.title : "All days";
-    pbody.querySelector(".tm-stop.is-sel")?.scrollIntoView({block: "nearest"});
+    pbody.querySelector(".tm-stop.is-sel")?.scrollIntoView({block: "nearest", behavior: RM() ? "auto" : "smooth"});
   }
 
   /* ---------- map ---------- */
@@ -611,8 +799,12 @@
     layer.addTo(map);
   }
 
-  async function ensureMap() {
-    if (map || mapFailed) return map;
+  let ensuring = null;
+  function ensureMap() {
+    if (map || mapFailed) return Promise.resolve(map);
+    return ensuring || (ensuring = createMap().finally(() => { ensuring = null; }));
+  }
+  async function createMap() {
     mapEl.innerHTML = '<div class="tm-mapmsg">Loading the map…</div>';
     try { await loadLeaflet(); }
     catch (e) {
@@ -676,7 +868,7 @@
         for (const s of dm.stops) {
           if (s.removed || !s.pinned) continue;
           const c = Lf.circleMarker(ll(s.place), {radius: 6, color: "#fff", weight: 1.5, fillColor: dm.color, fillOpacity: .55}).addTo(group);
-          c.bindTooltip(`Day ${dm.index + 1} · ${s.title}`, {direction: "top"});
+          c.bindTooltip(`Day ${dm.index + 1} · ${esc(s.title)}`, {direction: "top"});
           const canMove = s.kind !== "stay" && s.kind !== "transit" && dm.city === model[state.day].city;
           c.bindPopup(`<p class="tm-eyebrow" style="--dc:${dm.color}"><i></i>Day ${dm.index + 1} · ${esc(s.t)}</p><h5>${esc(s.title)}</h5>
             <div class="tm-acts"><button type="button" class="tm-btn" data-act="day" data-day="${dm.index}" data-k="${s.k}">Show Day ${dm.index + 1}</button>
@@ -696,6 +888,7 @@
         const s = a.stop;
         if (s.pinned) Lf.polyline([ll(s.place), ll(a.opt)], {color: dm.color, weight: 1.5, opacity: .6, dashArray: "3 5"}).addTo(group);
         const m = Lf.marker(ll(a.opt), {icon: divIcon(`<div class="tm-alt" style="--dc:${dm.color}">${a.letter}</div>`, [22, 22]), zIndexOffset: 100, keyboard: true, title: `Option ${a.letter}: ${a.opt.title}`}).addTo(group);
+        markers.set(`alt:${dm.index}:${s.k}:${a.index}`, m);
         m.bindPopup(`<p class="tm-eyebrow" style="--dc:${dm.color}"><i></i>Option ${a.letter} for stop ${s.n} · ${esc(s.item.title)}</p><h5>${esc(a.opt.title)}</h5>
           ${a.opt.about ? `<p>${esc(String(a.opt.about).slice(0, 150))}…</p>` : ""}
           <p style="color:var(--muted)">${s.pinned ? `${MODEL.distKm(s.place, a.opt).toFixed(1)} km from the current pick, ${esc(s.title)}.` : ""} Pick it with your ♥ on the stop.</p>
@@ -706,6 +899,8 @@
         const m = Lf.marker(ll(s.place), {icon: pinIcon(s, all), zIndexOffset: 500 + (s.n || 0), keyboard: true, title: `${s.n ? s.n + ". " : ""}${s.title}`, riseOnHover: true}).addTo(group);
         m.bindPopup(stopPopup(s, dm), popupOpts());
         m.on("click", () => select(s.day, s.k, {pan: false, popup: false, fromMap: true}));
+        m.on("mouseover", () => rowOf(s.day, s.k)?.classList.add("is-hover"));
+        m.on("mouseout", () => rowOf(s.day, s.k)?.classList.remove("is-hover"));
         markers.set(`${s.day}:${s.k}`, m);
         bounds.push(ll(s.place));
       }
@@ -745,15 +940,16 @@
     }
 
     if (meLayer) meLayer.addTo(map);
-    if (fit) fitTo(bounds);
+    if (fit) fitTo(bounds, fit === "fly");
   }
 
-  function fitTo(bounds) {
+  function fitTo(bounds, fly) {
     if (!map) return;
     const pad = {paddingTopLeft: [40, 40], paddingBottomRight: [40, panelInset() + 30], maxZoom: 15};
-    if (bounds && bounds.length > 1) map.fitBounds(bounds, pad);
-    else if (bounds && bounds.length === 1) map.setView(bounds[0], 15);
-    else map.fitBounds(CITY_VIEW[(model[state.day] || {}).city || "Seoul"], pad);
+    const b = bounds && bounds.length > 1 ? bounds : bounds && bounds.length === 1 ? null : CITY_VIEW[(model[state.day] || {}).city || "Seoul"];
+    const smooth = fly && !RM();
+    if (b) smooth ? map.flyToBounds(b, Object.assign({duration: .8, easeLinearity: .2}, pad)) : map.fitBounds(b, Object.assign({animate: false}, pad));
+    else smooth ? map.flyTo(bounds[0], 15, {duration: .8}) : map.setView(bounds[0], 15, {animate: false});
   }
   const currentBounds = () => {
     const days = state.day < 0 ? model : [model[state.day]];
@@ -769,7 +965,8 @@
     const z = Math.max(map.getZoom(), zoom || 15);
     const offset = PHONE ? panelInset() / 2 : 0;
     const pt = map.project(latlng, z).add([0, offset]);
-    map.flyTo(map.unproject(pt, z), z, {duration: matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : .6});
+    if (RM()) map.setView(map.unproject(pt, z), z, {animate: false});
+    else map.flyTo(map.unproject(pt, z), z, {duration: .6});
   }
 
   function highlight(day, k) {
@@ -886,22 +1083,40 @@
     }, PHONE ? 650 : 450);
   }
 
+  function switchDay(day, dir = 0, k = null) {
+    map?.closePopup();
+    const from = state.day;
+    state.day = day;
+    state.sel = null;
+    panel.scrollTop = 0;
+    renderChips();
+    renderPanel(from === day ? 0 : dir || "fade");
+    draw(map && map._loaded ? "fly" : true);
+    if (k != null && day >= 0) select(day, k);
+    if (PHONE && state.size === "min") setSize("peek");
+  }
+
   function act(d) {
     const day = d.day != null ? +d.day : null, k = d.k != null && d.k !== "" ? +d.k : null;
+    if (tour && d.act !== "play" && d.act !== "copy-ko") stopTour();
     switch (d.act) {
-      case "day":
-        map?.closePopup();
-        state.day = day;
-        state.sel = null;
-        panel.scrollTop = 0;
-        render(true);
-        if (k != null && day >= 0) select(day, k);
-        if (PHONE && state.size === "min") setSize("peek");
+      case "day": switchDay(day, day > state.day ? 1 : -1, k); break;
+      case "step": {
+        const to = state.day + +d.dir;
+        if (state.day >= 0 && to >= 0 && to < model.length) switchDay(to, +d.dir);
+        break;
+      }
+      case "play": tour ? stopTour() : playTour(day); break;
+      case "driver": showDriver(day, k); break;
+      case "driver-close": hideDriver(); break;
+      case "copy-ko":
+        navigator.clipboard?.writeText(d.text).then(() => toast("Korean name copied"), () => toast("Couldn't copy here, so please show the screen instead"));
         break;
       case "focus":
         if (state.sel && state.sel.day === day && state.sel.k === k) { state.sel = null; renderPanel(); highlight(-1, -1); map?.closePopup(); break; }
         if (PHONE && state.size === "full") setSize("peek");
-        select(day, k, {pan: true, popup: true});
+        // On phones the actions open in the list, so the pin isn't covered by a popup.
+        select(day, k, {pan: true, popup: !PHONE});
         break;
       case "idea": if (PHONE && state.size === "full") setSize("peek"); focusIdea(d.id); break;
       case "go": goTo(day, k); break;
@@ -998,21 +1213,47 @@
   /* ---------- controls ---------- */
   function setSize(size) {
     state.size = size;
+    panel.style.height = "";
     panel.dataset.size = size;
     byId("tm-grab").setAttribute("aria-label", size === "full" ? "Show more map" : "Show more of the list");
   }
   {
+    // The sheet follows the finger and snaps to the nearest size, thrown in the direction of a fast flick.
     const grab = byId("tm-grab");
-    let y0 = null;
-    grab.addEventListener("pointerdown", e => { y0 = e.clientY; grab.setPointerCapture?.(e.pointerId); });
-    grab.addEventListener("pointerup", e => {
-      if (y0 == null) return;
-      const dy = e.clientY - y0, order = ["min", "peek", "full"], i = order.indexOf(state.size);
-      y0 = null;
-      if (dy < -24) setSize(order[Math.min(2, i + 1)]);
-      else if (dy > 24) setSize(order[Math.max(0, i - 1)]);
-      else setSize(state.size === "full" ? "peek" : "full");
+    let drag = null;
+    const snaps = () => {
+      const H = panel.parentElement.getBoundingClientRect().height;
+      return {min: 118, peek: Math.round(H * .44), full: Math.round(H - 8)};
+    };
+    grab.addEventListener("pointerdown", e => {
+      if (!PHONE) return;
+      grab.setPointerCapture?.(e.pointerId);
+      const h = panel.getBoundingClientRect().height;
+      drag = {y0: e.clientY, h0: h, y: e.clientY, t: performance.now(), v: 0, moved: false};
     });
+    grab.addEventListener("pointermove", e => {
+      if (!drag) return;
+      const dy = e.clientY - drag.y0;
+      if (!drag.moved && Math.abs(dy) < 4) return;
+      if (!drag.moved) { drag.moved = true; panel.classList.add("dragging"); }
+      const t = performance.now(), sn = snaps();
+      drag.v = (e.clientY - drag.y) / Math.max(1, t - drag.t);
+      drag.y = e.clientY;
+      drag.t = t;
+      panel.style.height = Math.max(sn.min - 30, Math.min(sn.full, drag.h0 - dy)) + "px";
+    });
+    const end = () => {
+      if (!drag) return;
+      const d = drag;
+      drag = null;
+      if (!d.moved) { setSize(state.size === "full" ? "peek" : "full"); return; }
+      const sn = snaps(), h = panel.getBoundingClientRect().height, aim = h - d.v * 220;
+      const size = Object.keys(sn).reduce((best, key) => Math.abs(sn[key] - aim) < Math.abs(sn[best] - aim) ? key : best, "peek");
+      panel.classList.remove("dragging");
+      requestAnimationFrame(() => { panel.style.height = ""; setSize(size); });
+    };
+    grab.addEventListener("pointerup", end);
+    grab.addEventListener("pointercancel", end);
     grab.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSize(state.size === "full" ? "peek" : "full"); } });
   }
 
@@ -1051,32 +1292,309 @@
   // experience.js stops arrow keys at the document while a dialog is open, so the map pans itself from the window capture phase.
   window.addEventListener("keydown", e => {
     if (!dlg.open || !map || !mapEl.contains(document.activeElement) || e.altKey || e.metaKey || e.ctrlKey) return;
+    if (e.key === "Escape") {
+      // Leaflet swallows Esc (preventDefault) even when its last popup is already closed, which blocks the dialog's cancel.
+      // Let it through only to close an open popup; otherwise Esc reaches the dialog.
+      if (!mapEl.querySelector(".leaflet-popup")) e.stopPropagation();
+      return;
+    }
     const d = {ArrowLeft: [-100, 0], ArrowRight: [100, 0], ArrowUp: [0, -100], ArrowDown: [0, 100]}[e.key];
     if (!d) return;
     e.preventDefault();
     e.stopPropagation();
     map.panBy(d);
   }, true);
-  dlg.addEventListener("cancel", e => { if (!layersEl.hidden) { e.preventDefault(); closeLayers(); layersBtn.focus(); } });
+  dlg.addEventListener("cancel", e => {
+    e.preventDefault();
+    if (!byId("tm-driver").hidden) hideDriver();
+    else if (dlg.querySelector(".tmap").classList.contains("searching") || !resEl.hidden) { exitSearch(); }
+    else if (!layersEl.hidden) { closeLayers(); layersBtn.focus(); }
+    else if (tour) stopTour();
+    else if (map && mapEl.querySelector(".leaflet-popup")) map.closePopup();
+    else closeMap();
+  });
+
+  /* ---------- hover sync (desktop): list row ⇄ pin ---------- */
+  const rowOf = (day, k) => pbody.querySelector(`.tm-stop[data-day="${day}"][data-k="${k}"]`);
+  let hoverKey = null;
+  const hoverPin = key => {
+    if (hoverKey === key) return;
+    markers.get(hoverKey)?.getElement()?.querySelector(".tm-pin")?.classList.remove("is-hover");
+    hoverKey = key;
+    markers.get(key)?.getElement()?.querySelector(".tm-pin")?.classList.add("is-hover");
+  };
+  pbody.addEventListener("pointerover", e => {
+    if (e.pointerType !== "mouse") return;
+    const li = e.target.closest(".tm-stop[data-k]");
+    hoverPin(li && li.dataset.k !== "start" ? `${li.dataset.day}:${li.dataset.k}` : null);
+  });
+  pbody.addEventListener("pointerleave", () => hoverPin(null));
+
+  /* ---------- swipe the day header (phone) ---------- */
+  {
+    let sw = null;
+    pbody.addEventListener("pointerdown", e => {
+      sw = PHONE && state.day >= 0 && e.target.closest(".tm-dhead") && !e.target.closest("button, a, input") ? {x: e.clientX, y: e.clientY, t: performance.now()} : null;
+    });
+    pbody.addEventListener("pointerup", e => {
+      if (!sw) return;
+      const dx = e.clientX - sw.x, dy = e.clientY - sw.y, quick = performance.now() - sw.t < 700;
+      sw = null;
+      if (quick && Math.abs(dx) > 56 && Math.abs(dx) > Math.abs(dy) * 1.6) act({act: "step", dir: dx < 0 ? 1 : -1});
+    });
+    pbody.addEventListener("pointercancel", () => { sw = null; });
+  }
+
+  /* ---------- play the day: a dot travels stop to stop, the camera and the list follow ---------- */
+  const caption = byId("tm-caption");
+  function stopTour() {
+    if (!tour) return;
+    tour.cancelled = true;
+    tour.dot?.remove();
+    tour = null;
+    pbody.classList.remove("touring");
+    caption.hidden = true;
+    if (dlg.open) renderPanel();
+  }
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  function animateDot(t, from, to, dur) {
+    return new Promise(done => {
+      if (!dur) { t.dot.setLatLng(to); done(); return; }
+      const t0 = performance.now();
+      const step = ts => {
+        if (t.cancelled) { done(); return; }
+        const p = Math.min(1, (ts - t0) / dur), e = p < .5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2;
+        t.dot.setLatLng([from[0] + (to[0] - from[0]) * e, from[1] + (to[1] - from[1]) * e]);
+        if (p < 1) requestAnimationFrame(step); else done();
+      };
+      requestAnimationFrame(step);
+    });
+  }
+  async function playTour(day) {
+    if (!map || day == null || !model[day]) return;
+    const dm = model[day];
+    const pts = [];
+    if (dm.start && MODEL.validLL(dm.start)) pts.push({place: dm.start, title: `From ${dm.start.title}`, k: null});
+    for (const s of dm.stops) if (!s.removed && s.pinned) pts.push({place: s.place, title: s.title, k: s.k, t: s.t, leg: dm.legs.find(l => l.to === s.k)});
+    if (pts.length < 2) { toast("There's nothing to play on this day yet"); return; }
+    const t = tour = {cancelled: false, day};
+    pbody.classList.add("touring");
+    map.closePopup();
+    renderPanel();
+    if (PHONE && state.size === "full") setSize("peek");
+    const say = (small, big) => { caption.hidden = false; caption.innerHTML = `<small>${esc(small)}</small><b>${esc(big)}</b>`; };
+    t.dot = Lf.marker(ll(pts[0].place), {icon: divIcon(`<div class="tm-tourdot" style="--dc:${dm.color}"></div>`, [18, 18]), zIndexOffset: 3000, interactive: false, keyboard: false}).addTo(map);
+    say(`Day ${day + 1} · ${dm.title}`, pts[0].title);
+    fitTo([ll(pts[0].place), ll(pts[1].place)], true);
+    await wait(RM() ? 900 : 1100);
+    for (let i = 1; i < pts.length && !t.cancelled; i++) {
+      const a = pts[i - 1], b = pts[i], leg = b.leg;
+      const how = !leg || leg.mode === "same" ? "Next" : leg.mode === "train" ? "🚄 By train" : leg.min == null ? (leg.mode === "walk" ? "🚶 A short walk" : "🚕 By taxi or bus")
+        : leg.mode === "walk" ? `🚶 Walk ${leg.min} min` : `🚕 Taxi ≈${leg.min} min`;
+      say(how, `${b.t ? b.t + " · " : ""}${b.title}`);
+      if (!RM()) {
+        map.flyToBounds([ll(a.place), ll(b.place)], {paddingTopLeft: [70, 90], paddingBottomRight: [70, panelInset() + 70], maxZoom: 16, duration: .7});
+        await wait(760);
+      }
+      if (t.cancelled) break;
+      await animateDot(t, ll(a.place), ll(b.place), RM() ? 0 : Math.max(900, Math.min(2400, (leg && leg.min ? leg.min : 10) * 90)));
+      if (t.cancelled) break;
+      if (b.k != null) { state.sel = {day, k: b.k}; renderPanel(); highlight(day, b.k); }
+      await wait(RM() ? 1500 : 1000);
+    }
+    if (!t.cancelled) {
+      say("That's the day ✨", `${dm.stats.stops} stops${dm.stats.walkMin ? ` · 🚶 ${mins(dm.stats.walkMin)}` : ""}${dm.stats.rideMin ? ` · 🚕 ${mins(dm.stats.rideMin)}` : ""}`);
+      await wait(1800);
+    }
+    if (tour === t) stopTour();
+  }
+  // Any hands-on move of the map ends the tour.
+  mapEl.addEventListener("pointerdown", () => { if (tour) stopTour(); });
+  mapEl.addEventListener("wheel", () => { if (tour) stopTour(); }, {passive: true});
+
+  /* ---------- show the driver: the Korean name, big ---------- */
+  const driverEl = byId("tm-driver");
+  let driverReturn = null;
+  function showDriver(day, k) {
+    const s = model[day] && model[day].stops[k];
+    if (!s || !s.place.ko) return;
+    driverReturn = document.activeElement;
+    const en = [s.title, s.place.name && s.place.name !== s.title && !/[\uac00-\ud7a3]/.test(s.place.name) ? s.place.name : ""].filter(Boolean).join(" · ");
+    driverEl.innerHTML = `<p class="k-say" lang="ko">이곳으로 가 주세요</p>
+      <p class="k-ko" id="tm-drv-ko" lang="ko">${esc(s.place.ko)}</p>
+      <p class="k-en">${esc(en)}</p>
+      <div class="tm-acts">
+        <button type="button" class="tm-btn" data-act="copy-ko" data-text="${esc(s.place.ko)}">${IC.copy} Copy Korean name</button>
+        ${s.pinned ? `<a class="tm-btn" href="${esc(MODEL.kakaoTo(s.place))}" target="_blank" rel="noopener">KakaoMap ↗</a>` : ""}
+        <button type="button" class="tm-btn pri" data-act="driver-close">Done</button>
+      </div>
+      <p class="k-hint">“Please take me here.” Turn the screen toward the driver.</p>`;
+    driverEl.hidden = false;
+    driverEl.querySelector('[data-act="driver-close"]').focus({preventScroll: true});
+  }
+  function hideDriver(silent) {
+    if (driverEl.hidden) return;
+    driverEl.hidden = true;
+    driverEl.innerHTML = "";
+    if (!silent && driverReturn && document.contains(driverReturn)) driverReturn.focus({preventScroll: true});
+  }
+
+  /* ---------- quick search: stops, other options, ideas, hotels ---------- */
+  const tmapEl = dlg.querySelector(".tmap"), qEl = byId("tm-q"), resEl = byId("tm-results");
+  const fold = v => String(v || "").normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+  let results = [], ri = -1;
+  function searchIndex() {
+    const out = [];
+    for (const dm of model) {
+      for (const s of dm.stops) {
+        if (s.removed) continue;
+        out.push({kind: "stop", day: dm.index, k: s.k, title: s.title, sub: `Day ${dm.index + 1} · ${s.t || ""} · ${dm.city}`, color: dm.color,
+          hay: fold([s.title, s.place.ko, s.place.name, s.item.title, s.place.type].join(" "))});
+      }
+      for (const a of MODEL.alternativesOf(dm, app.resolve)) out.push({kind: "alt", day: dm.index, k: a.k, index: a.index, title: a.opt.title,
+        sub: `Option ${a.letter} for Day ${dm.index + 1} · ${a.stop.item.title}`, color: dm.color, hay: fold([a.opt.title, a.opt.ko, a.opt.name, a.opt.type].join(" "))});
+    }
+    for (const idea of EXPLORE) if (MODEL.validLL(idea)) out.push({kind: "idea", id: idea.id, title: idea.title, sub: `Explore idea · ${idea.city}`, color: "var(--rose)",
+      hay: fold([idea.title, idea.ko, idea.name].join(" "))});
+    for (const [id, h] of Object.entries(app.hotels)) if (MODEL.validLL(h)) out.push({kind: "hotel", id, title: h.title, sub: `Hotel · ${h.city} · ${h.nights || ""}`, color: "#2a2f45",
+      hay: fold([h.title, h.ko, h.name].join(" "))});
+    return out;
+  }
+  function runSearch() {
+    const q = fold(qEl.value.trim());
+    if (!q) { resEl.hidden = true; qEl.setAttribute("aria-expanded", "false"); results = []; return; }
+    const words = q.split(/\s+/);
+    results = searchIndex().filter(r => words.every(w => r.hay.includes(w)))
+      .sort((a, b) => (fold(b.title).startsWith(q) - fold(a.title).startsWith(q)) || (a.kind === "stop" ? -1 : 0) - (b.kind === "stop" ? -1 : 0))
+      .slice(0, 12);
+    ri = results.length ? 0 : -1;
+    paintResults();
+  }
+  function paintResults() {
+    resEl.innerHTML = results.length ? results.map((r, i) => `<li role="option" id="tm-r${i}" data-i="${i}" aria-selected="${i === ri}" style="--dc:${r.color}"><i></i><span><b>${esc(r.title)}</b><small>${esc(r.sub)}</small></span></li>`).join("")
+      : '<li class="empty" role="option" aria-disabled="true">Nothing in the plan matches. Try “Search places” in ⋯ for new places.</li>';
+    resEl.hidden = false;
+    qEl.setAttribute("aria-expanded", "true");
+    if (ri >= 0) { qEl.setAttribute("aria-activedescendant", "tm-r" + ri); resEl.querySelector(`#tm-r${ri}`)?.scrollIntoView({block: "nearest"}); }
+    else qEl.removeAttribute("aria-activedescendant");
+  }
+  function exitSearch() {
+    resEl.hidden = true;
+    qEl.setAttribute("aria-expanded", "false");
+    qEl.value = "";
+    results = [];
+    if (tmapEl.classList.contains("searching")) { tmapEl.classList.remove("searching"); if (dlg.open) byId("tm-sbtn").focus({preventScroll: true}); }
+  }
+  function choose(r) {
+    if (!r) return;
+    exitSearch();
+    // Keep focus inside the dialog (on the map) so the shortcuts and arrow keys keep working.
+    if (document.activeElement === qEl || !dlg.contains(document.activeElement)) (PHONE ? tmapEl : mapEl).focus({preventScroll: true});
+    if (r.kind === "stop" || r.kind === "alt") {
+      if (state.day !== r.day) switchDay(r.day, r.day > state.day ? 1 : -1);
+      if (r.kind === "stop") { select(r.day, r.k, {pan: true, popup: !PHONE}); return; }
+      state.sel = {day: r.day, k: r.k};
+      renderPanel();
+      const m = markers.get(`alt:${r.day}:${r.k}:${r.index}`);
+      if (m) { flyToPoint(m.getLatLng(), 15); setTimeout(() => dlg.open && m.openPopup(), 650); }
+      else select(r.day, r.k, {pan: true, popup: false});
+    } else if (r.kind === "idea") {
+      const idea = EXPLORE.find(x => x.id === r.id);
+      if (state.day >= 0 && model[state.day].city !== idea.city) switchDay(app.days.findIndex(d => d.city === idea.city), 1);
+      setTimeout(() => focusIdea(r.id), 250);
+    } else if (r.kind === "hotel" && map) {
+      const h = app.hotels[r.id];
+      flyToPoint(ll(h), 15);
+      setTimeout(() => dlg.open && Lf.popup(popupOpts()).setLatLng(ll(h)).setContent(`<p class="tm-eyebrow">🛏 Hotel · ${esc(h.city)} · ${esc(h.nights || "")}</p><h5>${esc(h.title)}</h5>
+        <div class="tm-acts"><a class="tm-btn" href="${esc(MODEL.kakaoTo(Object.assign({}, h, {ko: h.ko || h.name})))}" target="_blank" rel="noopener">KakaoMap ↗</a><a class="tm-btn" href="${esc(MODEL.placeUrl(h))}" target="_blank" rel="noopener">Google Maps ↗</a></div>`).openOn(map), 650);
+    }
+  }
+  qEl.addEventListener("input", runSearch);
+  qEl.addEventListener("focus", () => { if (qEl.value.trim()) runSearch(); });
+  qEl.addEventListener("keydown", e => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      if (!results.length) return;
+      ri = (ri + (e.key === "ArrowDown" ? 1 : -1) + results.length) % results.length;
+      paintResults();
+    } else if (e.key === "Enter") { e.preventDefault(); choose(results[ri]); }
+  });
+  resEl.addEventListener("pointerdown", e => e.preventDefault());
+  resEl.addEventListener("click", e => { const li = e.target.closest("li[data-i]"); if (li) choose(results[+li.dataset.i]); });
+  byId("tm-search").addEventListener("focusout", e => {
+    if (byId("tm-search").contains(e.relatedTarget)) return;
+    resEl.hidden = true;
+    qEl.setAttribute("aria-expanded", "false");
+    if (!qEl.value.trim() && tmapEl.classList.contains("searching")) tmapEl.classList.remove("searching");
+  });
+  byId("tm-sbtn").onclick = () => { tmapEl.classList.add("searching"); qEl.focus(); };
+
+  /* ---------- keys while the map is open (nothing global) ---------- */
+  dlg.addEventListener("keydown", e => {
+    if (e.metaKey || e.ctrlKey || e.altKey || e.target.closest("input, textarea, select, [contenteditable]") || !driverEl.hidden) return;
+    const key = e.key;
+    if (key === "/") { e.preventDefault(); if (PHONE) tmapEl.classList.add("searching"); qEl.focus(); }
+    else if (key === "[" || key === "]") { e.preventDefault(); act({act: "step", dir: key === "]" ? 1 : -1}); }
+    else if (key === "a" || key === "A" || key === "0") { e.preventDefault(); if (state.day !== -1) act({act: "day", day: -1}); }
+    else if ((key === "p" || key === "P") && state.day >= 0) { e.preventDefault(); act({act: "play", day: state.day}); }
+    else if (key === "f" || key === "F") { e.preventDefault(); map?.closePopup(); fitTo(currentBounds(), true); }
+  });
+
+  /* ---------- warm up: fetch the map libraries in idle time, load them on intent ---------- */
+  let warm = () => {};
+  const warmOn = el => { if (el) ["pointerenter", "touchstart", "focus"].forEach(ev => el.addEventListener(ev, () => warm(), {passive: true, once: true})); };
+  {
+    const slow = () => navigator.connection && (navigator.connection.saveData || /(^|-)2g$/.test(navigator.connection.effectiveType || ""));
+    const prefetch = () => {
+      if (slow() || Lf) return;
+      const urls = [LIBS.leafletJs, LIBS.leafletCss, LIBS.glJs, LIBS.glCss, LIBS.glLeaflet].map(x => x[0]).concat(BASES[isDark() ? "dark" : "light"].style);
+      for (const href of urls) {
+        const link = document.createElement("link");
+        Object.assign(link, {rel: "prefetch", href, crossOrigin: "anonymous"});
+        document.head.append(link);
+      }
+    };
+    const idle = cb => (window.requestIdleCallback ? requestIdleCallback(cb, {timeout: 5000}) : setTimeout(cb, 1500));
+    const later = () => setTimeout(() => idle(prefetch), 6000);
+    const brand = byId("brand");
+    if (!brand || brand.hidden) later();
+    else new MutationObserver((_, obs) => { if (brand.hidden) { obs.disconnect(); later(); } }).observe(brand, {attributes: true, attributeFilter: ["hidden"]});
+    warm = () => { if (!slow() && !Lf) loadLeaflet().catch(() => {}); };
+  }
 
   /* ---------- open / close ---------- */
   function render(fit) { renderChips(); renderPanel(); draw(fit); }
 
   async function openMap(opts = {}) {
-    if (dlg.open) return;
+    if (dlg.open && !dlg.classList.contains("tm-closing")) return;
+    dlg.classList.remove("tm-closing");
+    if (dlg.open) dlg.close();
     rebuild();
-    if (!opts.restore) {
-      const s = app.state;
-      state.day = opts.day != null ? opts.day : (s.day >= 0 && s.day < model.length ? s.day : -1);
-      state.sel = s.mode === "stop" && s.day === state.day && s.stop >= 0 ? {day: s.day, k: s.stop} : null;
-      state.view = null;
-      setSize("peek");
+    let restore = !!opts.restore;
+    if (!restore) {
+      const s = app.state, today = MODEL.tripDayIndex(app.days, now());
+      const day = opts.day != null ? opts.day : (s.day >= 0 && s.day < model.length ? s.day : today >= 0 ? today : -1);
+      const atStop = s.mode === "stop" && s.day === day && s.stop >= 0 ? {day, k: s.stop} : null;
+      const last = state.last;
+      // Reopening soon after on the same day keeps the view and selection where they were.
+      if (last && last.day === day && state.view && Date.now() - last.at < 15 * 60e3 && (!atStop || (last.sel && last.sel.k === atStop.k))) {
+        state.day = day;
+        state.sel = last.sel;
+        restore = true;
+      } else {
+        state.day = day;
+        state.sel = atStop;
+        state.view = null;
+        setSize("peek");
+      }
       opener = opts.opener || document.activeElement;
     } else if (state.day >= model.length) state.day = -1;
     document.querySelectorAll("dialog[open]").forEach(d => d.close());
     closeLayers();
     syncLayerInputs();
     dlg.showModal();
+    // showModal() focuses the first control (the search field); start on the map so keys and shortcuts work.
+    (PHONE ? dlg.querySelector(".tmap") : mapEl).focus({preventScroll: true});
     renderChips();
     renderPanel();
     const m = await ensureMap();
@@ -1084,7 +1602,7 @@
     setTiles();
     // Layout is synchronous after showModal(), so draw now rather than waiting on a frame (paused in background tabs).
     map.invalidateSize();
-    if (opts.restore && state.view) { map.setView(state.view.c, state.view.z, {animate: false}); draw(false); highlight(state.sel?.day, state.sel?.k); }
+    if (restore && state.view) { map.setView(state.view.c, state.view.z, {animate: false}); draw(false); highlight(state.sel?.day, state.sel?.k); }
     else {
       draw(true);
       if (state.sel) select(state.sel.day, state.sel.k, {pan: true, popup: !PHONE});
@@ -1092,10 +1610,20 @@
   }
 
   function closeMap() {
+    if (!dlg.open || dlg.classList.contains("tm-closing")) return;
     if (map) state.view = {c: map.getCenter(), z: map.getZoom()};
-    if (dlg.open) dlg.close();
+    if (RM()) { dlg.close(); return; }
+    dlg.classList.add("tm-closing");
+    setTimeout(() => { if (!dlg.classList.contains("tm-closing")) return; dlg.classList.remove("tm-closing"); if (dlg.open) dlg.close(); }, 190);
   }
   dlg.addEventListener("close", () => {
+    // A close event queued before a quick reopen must not reset the reopened map.
+    if (dlg.open) return;
+    dlg.classList.remove("tm-closing");
+    stopTour();
+    hideDriver(true);
+    exitSearch();
+    state.last = {day: state.day, sel: state.sel, at: Date.now()};
     closeLayers();
     clearDrag();
     map?.closePopup();
@@ -1120,6 +1648,7 @@
     top.setAttribute("aria-controls", "tripmap");
     top.innerHTML = IC.map;
     top.onclick = () => openMap({opener: top});
+    warmOn(top);
     const after = byId("comfort-search");
     if (after) after.after(top); else document.querySelector(".top .tools")?.prepend(top);
 
@@ -1128,6 +1657,7 @@
     menuRow.id = "btn-map-menu";
     menuRow.innerHTML = `<span class="ic">${IC.map}</span><span><b>Trip map</b><small>Every day on a map: route, walk or taxi, ideas nearby</small></span><span class="st">↗</span>`;
     menuRow.onclick = () => { byId("moredlg")?.close(); openMap({opener: byId("btn-more")}); };
+    warmOn(menuRow);
     byId("btn-place-search")?.before(menuRow);
 
     const overview = byId("trip-overview");
@@ -1138,6 +1668,7 @@
       card.className = "comfort-map";
       card.innerHTML = `${IC.map}<span><b>See it on the map</b><small>Routes, walk or taxi times, other options and ideas nearby</small></span>`;
       card.onclick = () => { overview.close(); openMap({opener: document.querySelector(".comfort-trip")}); };
+      warmOn(card);
       actions.after(card);
     }
 
@@ -1151,6 +1682,7 @@
       b.innerHTML = `${IC.map}<span>Map</span>`;
       b.setAttribute("aria-label", "See this day on the map");
       b.onclick = e => { e.stopPropagation(); openMap({day: app.state.day >= 0 ? app.state.day : -1, opener: b}); };
+      warmOn(b);
       row.append(b);
     };
     if (daycard) { new MutationObserver(addDayButton).observe(daycard, {childList: true}); addDayButton(); }
