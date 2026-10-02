@@ -30,7 +30,7 @@ new, imports = re.subn(
     r"(import \{createPlaceScenes\} from '\./place-scenes\.js)(?:\?v=[^']*)?(';)",
     lambda m: m.group(1) + "?v=" + scene_version + m.group(2), new, count=1)
 assert imports == 1, "place-scenes import not found in index.html"
-for asset, attr in (("experience.css", "href"), ("experience.js", "src"), ("novartis-game.js", "src")):
+for asset, attr in (("experience.css", "href"), ("experience.js", "src"), ("novartis-game.js", "src"), ("trip-map.js", "src")):
     version = hashlib.sha256(open(os.path.join(ROOT, asset), "rb").read()).hexdigest()[:12]
     new, tags = re.subn(
         r'(' + attr + r'="' + re.escape(asset) + r')(?:\?v=[^"]*)?(")',

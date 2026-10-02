@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f7f0e5">
 <meta property="og:title" content="roameo · Seoul ⇄ Busan"><meta property="og:description" content="Two leaves. One shared adventure. Eleven days, two cities, one trail — for the two of us."><meta property="og:image" content="https://zakharc.github.io/seoul-busan/icons/og.png"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
-<meta name="build" content="20261002-104603">
+<meta name="build" content="20261002-110442">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
@@ -964,6 +964,7 @@ html{background:var(--bg)}
 html.comfort-ui #chgdlg .spot-search input:focus-visible{outline:none;box-shadow:none}
 html.comfort-ui #chgdlg .spot-search:focus-within{box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--c) 55%,transparent)}
 @media (max-width:899px){ html.comfort-ui .sheet .scout .sc-h{padding-right:44px} }
+@media (max-width:379px){ html.comfort-ui .comfort-trip-copy small{display:none} html.comfort-ui .comfort-trip-copy b{white-space:nowrap} }
 @media (min-width:900px){ .dlg.spotlight{top:12vh;left:50%;right:auto;width:min(640px,calc(100vw - 40px));transform:translateX(-50%);animation:spotin-d .32s var(--ease)} @keyframes spotin-d{from{opacity:0;transform:translate(-50%,-10px) scale(.98)}to{opacity:1;transform:translateX(-50%)}} }
 .spot-search{display:flex;align-items:center;gap:10px;padding:12px 12px 10px 16px;border-bottom:1px solid var(--line)}
 .spot-search>span{font-size:22px;line-height:1;color:var(--muted)}
@@ -1220,6 +1221,7 @@ html.visual-preview body{margin:0;overflow:hidden}
 <link rel="stylesheet" href="experience.css?v=acf42d4776f4">
 <script defer src="experience.js?v=a0e3ec495f07"></script>
 <script defer src="novartis-game.js?v=46b8fca678a8"></script>
+<script defer src="trip-map.js?v=95b3f9a240ee"></script>
 </head>
 <body>
 <div id="stage"></div>
@@ -2668,7 +2670,8 @@ function renderSpotlight(){
 function openComposer(ctx){ if(!role){ toast("First tap your name — Киця or Mykola"); openMore(); return; } document.querySelectorAll("dialog[open]").forEach(d=>d.close()); if(PHONE&&sheet.classList.contains("show")) putDown();
   const day=ctx.day!=null&&ctx.day>=0?ctx.day:Math.max(0,APP.state.day), stop=ctx.stop!=null?ctx.stop:-1, it=stop>=0?DAYS[day].items[stop]:null;
   const type=ctx.type||(it?"replace":"add");
-  cancelPlaceSearch(); chgDraft={type,day,stop,itemId:it?it.id:null,step:(type==="add"||type==="replace")&&!ctx.place?.title?"search":"review",spotTask:"any",spotCity:DAYS[day].city,searchQuery:(ctx.place&&ctx.place.title)||"",place:Object.assign({cat:it&&isFood(it)?"food":"sight"},ctx.place||{}),when:it?(it.t||""):"",toDay:day,toAfter:it?it.id:(DAYS[day].items.length?DAYS[day].items[DAYS[day].items.length-1].id:"start"),note:ctx.note||""};
+  const toDay=type==="move"&&Number.isInteger(ctx.toDay)&&DAYS[ctx.toDay]?ctx.toDay:day, toAfter=ctx.toAfter==null?null:ctx.toAfter==="start"||DAYS[toDay].items.some(x=>x.id===ctx.toAfter)?ctx.toAfter:"start", when=/^([01]\d|2[0-3]):[0-5]\d$/.test(ctx.when||"")?ctx.when:null;
+  cancelPlaceSearch(); chgDraft={type,day,stop,itemId:it?it.id:null,step:(type==="add"||type==="replace")&&!ctx.place?.title?"search":"review",spotTask:"any",spotCity:DAYS[day].city,searchQuery:(ctx.place&&ctx.place.title)||"",place:Object.assign({cat:it&&isFood(it)?"food":"sight"},ctx.place||{}),when:when||(it?(it.t||""):""),toDay,toAfter:toAfter!=null?toAfter:(it?it.id:(DAYS[day].items.length?DAYS[day].items[DAYS[day].items.length-1].id:"start")),note:ctx.note||""};
   renderComposer(); chgEl.showModal(); }
 function renderComposer(){ cancelPlaceSearch(); if(chgDraft.step==="search"){ renderSpotlight(); return; } chgIn.classList.remove("spotlight"); chgEl.setAttribute("aria-label","Review your change"); const d=chgDraft, it=d.itemId?findItem(d.itemId):null, pl=d.place; const types=d.type==="add"||d.type==="replace"?["add","replace"]:[];
   const needsPlace=d.type==="add"||d.type==="replace", needsSlot=d.type==="add"||d.type==="move";

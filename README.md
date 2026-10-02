@@ -2,6 +2,8 @@
 
 *Two leaves. One shared adventure.* A single-file trip companion that opens on the roameo brand splash and hands off to the Seoul ⇄ Busan trail.
 
+**Version 1.9** — Trip map (`trip-map.js`): a keyless street/satellite map of the plan with day routes, options, Explore ideas and open suggestions; swap, move, add or remove a stop straight from the map (through the usual agree-together flow).
+
 **Version 1.8** — Chronicles of Novartis mini-game (`novartis-game.js`): a two-minute runner from ⋯ or an occasional invite; the 3D scene pauses while it's open.
 
 **Version 1.7** — Apple-inspired comfort layer (`experience.css` / `experience.js`): trip overview with all days, top-bar search, glass surfaces, system typography, visible focus, 44px touch targets, **Back to the scene** on the phone sheet; integrated with Spotlight search and Scout report.
@@ -47,6 +49,7 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 - **Comfortable controls:** quieter glass surfaces, system UI typography, visible keyboard focus, 44px primary touch targets and an explicit **Back to the scene** button on the phone's place sheet. Hidden trail panels are excluded from keyboard navigation; arrow keys inside a dialog no longer move the trail behind it. Reduced-motion preferences remove UI delays and looping decoration; scene motion remains managed by the 3D layer.
 - Phone flow is staged: pick a character → the 3D scene fills the screen with a **Start the day** pill → the couple walks → an arrival pill pulls up the info sheet. Swipe the sheet down (big handle) or tap the scene to put it away; tap the pill or the title in the bottom bar to bring it back. `?debug=1` shows an on-screen diagnostics overlay.
 - Android (Samsung Internet / Chrome): open the link → menu → **Add to Home screen** — the page ships a web manifest and icons, so it installs as a standalone app with its own icon. iPhone: Share → **Add to Home Screen**.
+- **Trip map:** the map icon in the top bar (also **See it on the map** in the trip overview, **Map** on each day card and ⋯ → **Trip map**) shows the plan on a street map. The day list sits in a bottom sheet: drag its handle up or down, or tap it. Tap a pin or a stop to see its actions. Long-press anywhere on the map to suggest that spot.
 - **Chronicles of Novartis** (`novartis-game.js`, self-contained): a two-minute satirical 2D runner. Her figurine (a 2D port of the 3D one, same palette) runs from Innsbruck to München, where Mykola waits. Jump over escalations, the truck waiting for QA sign-off (double jump), weekend guests and the parents' legal paperwork. Bonuses: cheesecake (+1 ❤️), massage (slow motion), giant yoghurt (giant and unstoppable, smashes obstacles), wine box (problems shrink, points ×2). Space / ↑ to jump on desktop, tap on phones; press again in the air for a double jump; P or Esc pauses. Open it from ⋯ → **Chronicles of Novartis**, or with `?game`. An animated invite appears after about 2.5 minutes of active use, at most twice per session and 30 minutes apart, and not within 2 hours of playing. Invites don't appear in Mykola's role (`?as=me`); use `?game-invite` to show one on demand. The best score is stored locally (`sbtrip-novartis-best-v1`).
 - `tools/` has no test runner; QA is done by walking the app in a phone-emulated browser (360×780 Galaxy profile) and checking for overflow, small touch targets and console errors.
 
@@ -55,6 +58,7 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 - Content lives in `data/meta.json`, `data/days-a.json`, `data/days-b.json`. After changing stops/options run `python3 tools/commutes.py` (OSRM routing, cached) and then deploy.
 - UI/3D code is in `index.html`. `tools/build.py` injects the data and stamps the build; `deploy.sh` runs it for you.
 - The additive interface layer lives in `experience.css` and `experience.js`, loaded by two tags at the end of the document head. It uses the existing app/navigation handlers, leaves 3D geometry and camera framing untouched, and does not run in `?visual-preview=1`. `tools/build.py` versions both tags (`?v=` content hash), like `place-scenes.js`, so phones never keep a stale copy.
+- The trip map lives in `trip-map.js`, loaded by one `defer` tag after `experience.js` and versioned the same way. It injects its own styles. It loads Leaflet, MapLibre GL and the Leaflet–MapLibre bridge from unpkg (pinned versions with SRI) only the first time the map opens. It reads `APP.days`, `APP.placeOf`, the trip-data commutes and Explore ideas, and the `sbtrip-props-v1` cache; it never writes them. Every change goes through `APP.openComposer`. It does not run in `?visual-preview=1`.
 - Street scenery (ginkgo trees, hanok lamps, lantern wires, gates, Hangul signs, benches, flowers) is generated per day in `buildStreet()`; the Hangul sign words live in the `hangulTex` atlas next to it. Counts scale down automatically on phones (`lowEnd`).
 - Local preview: `python3 -m http.server 8765` → http://127.0.0.1:8765/index.html · add `?debug=1` for the on-screen diagnostics overlay.
 
@@ -83,6 +87,17 @@ Every stop sheet has a **Scout report**:
 Hotels, stations and transfers get only the practical parts (cost, time, around you, links).
 
 Search, Spotlight and Scout regression tests: `node --test tools/test-place-search.cjs`.
+
+### Trip map
+
+A Google-Maps-style view of the itinerary for checking a day at a glance and reworking it together. No API key: the street map is [OpenFreeMap](https://openfreemap.org) (vector OpenStreetMap data, labels in Latin and Hangul, a dark style when the app is dark). The satellite view is Esri World Imagery. Without WebGL, or if the vector style can't load, the map falls back to standard OpenStreetMap tiles. If nothing can load, the day list still works and every stop opens in Google Maps.
+
+- **See the plan:** day chips (or **All days**, with Seoul ⇄ Busan and the KTX) colour each day's route. The numbered pins follow the chosen options and agreed changes. Dotted lines are walks, solid lines are taxi rides. The walk or taxi verdict, minutes, distance and fare come from the same OSRM table as the stop sheet, with estimates (marked *est.*) for places added later. Each day shows its total walking and taxi time, and flags hops over 30 minutes.
+- **Compare:** layers (top right) show the unchosen options (A/B rings joined to the current pick), Explore ideas (◇), open suggestions (💡, dashed lines to the stop they would replace), other days' stops (faded), and a satellite view. **📍** shows your own position once you are in Korea.
+- **Rework:** every stop has **Open in trip**, **Google Maps**, **Directions** from the previous stop, **🔁 Swap**, **🕒 Move**, **✖ Remove** and **📝 Note**. **💎 Ideas near this day** lists up to five Explore places within 4 km, and **＋ Add** suggests one right after the stop it is closest to. Tapping a faded stop from another day offers **Move to Day N**. On a computer, drag a stop (⠿) onto another stop or onto a day chip. Right-click or long-press the map to name that spot (OpenStreetMap reverse lookup) and suggest it. All of these open the usual suggestion review with day, slot, place and a short "📍 x km from …" note filled in. Nothing changes until you both agree, and the map comes back after you send or cancel.
+- **Take it along:** **Day in Google Maps** opens the whole day as a multi-stop route. **Google My Maps (KML)** on the All-days view exports the chosen plan, like the summary does.
+
+Map model tests: `node --test tools/test-trip-map.cjs`.
 
 ### Explore more places (찜)
 
