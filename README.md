@@ -2,6 +2,8 @@
 
 *Two leaves. One shared adventure.* A single-file trip companion that opens on the roameo brand splash and hands off to the Seoul ⇄ Busan trail.
 
+**Version 1.9.1** — Trip map returns instantly after a suggestion closes (no gap where another pop-up could slip in).
+
 **Version 1.9** — Trip map (`trip-map.js`): a keyless street/satellite map of the plan with day routes, options, Explore ideas and open suggestions; swap, move, add or remove a stop straight from the map (through the usual agree-together flow).
 
 **Version 1.8** — Chronicles of Novartis mini-game (`novartis-game.js`): a two-minute runner from ⋯ or an occasional invite; the 3D scene pauses while it's open.

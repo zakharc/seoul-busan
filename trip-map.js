@@ -798,14 +798,13 @@
     app.openComposer(ctx);
     if (!chgEl || !chgEl.open) state.returnAfterComposer = false;
   }
-  chgEl?.addEventListener("close", () => {
-    if (!state.returnAfterComposer) return;
-    setTimeout(() => {
-      if (chgEl.open) return; // the composer re-opened itself; wait for its final close
-      state.returnAfterComposer = false;
-      if (!document.querySelector("dialog[open], .doc.show, .xp.show")) openMap({restore: true});
-    }, 250);
-  });
+  // Reopen from a MutationObserver: it runs as a microtask right after close(), before any timer, so there is never a
+  // moment without an open dialog (the game invite treats that as a quiet moment). A composer that re-opened itself is open again by then.
+  if (chgEl) new MutationObserver(() => {
+    if (!state.returnAfterComposer || chgEl.open) return;
+    state.returnAfterComposer = false;
+    if (!document.querySelector("dialog[open], .doc.show, .xp.show")) openMap({restore: true});
+  }).observe(chgEl, {attributes: true, attributeFilter: ["open"]});
 
   const ideaPlace = idea => ({title: idea.title, ko: idea.ko, name: idea.name || idea.title, lat: idea.lat, lng: idea.lng, cool: idea.cool,
     price: idea.price, need: idea.need, url: MODEL.placeUrl(idea), wiki: idea.wiki, cat: "sight"});
