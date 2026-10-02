@@ -2,6 +2,8 @@
 
 *Two leaves. One shared adventure.* A single-file trip companion that opens on the roameo brand splash and hands off to the Seoul ⇄ Busan trail.
 
+**Version 1.8** — Chronicles of Novartis mini-game (`novartis-game.js`): a two-minute runner from ⋯ or an occasional invite; the 3D scene pauses while it's open.
+
 **Version 1.7** — Apple-inspired comfort layer (`experience.css` / `experience.js`): trip overview with all days, top-bar search, glass surfaces, system typography, visible focus, 44px touch targets, **Back to the scene** on the phone sheet; integrated with Spotlight search and Scout report.
 
 **Version 1.6** — Spotlight-style change search (⌘K / ⋯ → Search places): one field with live suggestions, commands (`move`, `remove`, `swap`, `note`), ↑↓/↵ and a short review step. New **Scout report** on every stop: generated at-a-glance summary, live surroundings from OpenStreetMap, one-tap rating links (Google, Tripadvisor, Naver, Kakao, Michelin, blogs) and **Swap ideas** with reasons (nearby, cheaper, rain plan, open later, similar dish/vibe, our pick) that turn into a suggestion in one tap.
@@ -45,6 +47,7 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 - **Comfortable controls:** quieter glass surfaces, system UI typography, visible keyboard focus, 44px primary touch targets and an explicit **Back to the scene** button on the phone's place sheet. Hidden trail panels are excluded from keyboard navigation; arrow keys inside a dialog no longer move the trail behind it. Reduced-motion preferences remove UI delays and looping decoration; scene motion remains managed by the 3D layer.
 - Phone flow is staged: pick a character → the 3D scene fills the screen with a **Start the day** pill → the couple walks → an arrival pill pulls up the info sheet. Swipe the sheet down (big handle) or tap the scene to put it away; tap the pill or the title in the bottom bar to bring it back. `?debug=1` shows an on-screen diagnostics overlay.
 - Android (Samsung Internet / Chrome): open the link → menu → **Add to Home screen** — the page ships a web manifest and icons, so it installs as a standalone app with its own icon. iPhone: Share → **Add to Home Screen**.
+- **Chronicles of Novartis** (`novartis-game.js`, self-contained): a two-minute satirical 2D runner. Her figurine (a 2D port of the 3D one, same palette) runs from Innsbruck to München, where Mykola waits. Jump over escalations, the truck waiting for QA sign-off (double jump), weekend guests and the parents' legal paperwork. Bonuses: cheesecake (+1 ❤️), massage (slow motion), giant yoghurt (giant and unstoppable, smashes obstacles), wine box (problems shrink, points ×2). Space / ↑ to jump on desktop, tap on phones; press again in the air for a double jump; P or Esc pauses. Open it from ⋯ → **Chronicles of Novartis**, or with `?game`. An animated invite appears after about 2.5 minutes of active use, at most twice per session and 30 minutes apart, and not within 2 hours of playing. Invites don't appear in Mykola's role (`?as=me`); use `?game-invite` to show one on demand. The best score is stored locally (`sbtrip-novartis-best-v1`).
 - `tools/` has no test runner; QA is done by walking the app in a phone-emulated browser (360×780 Galaxy profile) and checking for overflow, small touch targets and console errors.
 
 ## Editing

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f7f0e5">
 <meta property="og:title" content="roameo · Seoul ⇄ Busan"><meta property="og:description" content="Two leaves. One shared adventure. Eleven days, two cities, one trail — for the two of us."><meta property="og:image" content="https://zakharc.github.io/seoul-busan/icons/og.png"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
-<meta name="build" content="20261002-092220">
+<meta name="build" content="20261002-104603">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
@@ -1219,6 +1219,7 @@ html.visual-preview body{margin:0;overflow:hidden}
 </style>
 <link rel="stylesheet" href="experience.css?v=acf42d4776f4">
 <script defer src="experience.js?v=a0e3ec495f07"></script>
+<script defer src="novartis-game.js?v=46b8fca678a8"></script>
 </head>
 <body>
 <div id="stage"></div>
@@ -4104,6 +4105,7 @@ const FREEZE=+(new URLSearchParams(location.search).get('freeze')||0); // dev: p
 const clock=new THREE.Clock();
 function frame(){
   requestAnimationFrame(frame);
+  if(A.renderPaused){ clock.getDelta(); return; } // a full-screen overlay (the mini-game) is covering the scene
   const dt=Math.min(.05,clock.getDelta()), t=clock.elapsedTime, mobile=mobileQ.matches;
   groundMat.uniforms.uTime.value=t; windU.value=t; trailMats.forEach(m=>m.uniforms.uTime.value=t); animateProps(dt,t); updateStage(dt,t);
 
