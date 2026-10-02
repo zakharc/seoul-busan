@@ -10,7 +10,7 @@ window.__tripTest={trip:t,as:a,sandbox:/^sandbox(-|$)/.test(t),clear:function(){
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f7f0e5">
 <meta property="og:title" content="roameo · Seoul ⇄ Busan"><meta property="og:description" content="Two leaves. One shared adventure. Eleven days, two cities, one trail — for the two of us."><meta property="og:image" content="https://zakharc.github.io/seoul-busan/icons/og.png"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
-<meta name="build" content="20261002-163800">
+<meta name="build" content="20261002-204605">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
@@ -1228,7 +1228,7 @@ html.visual-preview body{margin:0;overflow:hidden}
 <link rel="stylesheet" href="experience.css?v=0b6bacc0309e">
 <script defer src="experience.js?v=205f09bb8d67"></script>
 <script defer src="novartis-game.js?v=70e3b7112ebe"></script>
-<script defer src="trip-map.js?v=24000ddf5e58"></script>
+<script defer src="trip-map.js?v=fd93801ef748"></script>
 </head>
 <body>
 <div id="stage"></div>
@@ -4129,6 +4129,12 @@ function updateWeather(dt,t){ wxTargets(); const k=Math.min(1,dt*.9); for(const 
 /* ---------- interactivity: drag to orbit, pinch/wheel to zoom, tap things ---------- */
 let orbitT=0, orbit=0, pitchT=0, pitch=0, zoomT=1, zoom=1, gazeYaw=0, gazeAmt=0, tapFx=0;
 const ptrs=new Map(); let downAt=null, moved=false, pinchD=0, hoverG=null, hoverCursor='', lastHoverT=0;
+/* feel: a flick keeps turning and slows down; tilt and zoom stretch a little past their limits and spring back */
+const PITCH_R=[-.35,.6], ZOOM_R=[.78,1.5], TAU=Math.PI*2; let orbitV=0, flick=[], wheelAt=0, lastTap=null, pitchRaw=0, zoomRaw=1;
+const stretch=(v,[lo,hi],give)=>v<lo?lo-Math.min(give,(lo-v)*.45):v>hi?hi+Math.min(give,(v-hi)*.45):v;
+function resetView(){ const w=Math.round(orbit/TAU)*TAU; orbit-=w; orbitT=0; orbitV=0; pitchT=pitchRaw=0; zoomT=zoomRaw=1; }
+/* has the view been turned, tilted or zoomed away from the usual one? */
+const viewMoved=()=>Math.abs(orbitT-Math.round(orbitT/TAU)*TAU)>.15||Math.abs(pitchT)>.08||Math.abs(zoomT-1)>.06;
 const ndc=new THREE.Vector2(), pick=new THREE.Raycaster(); pick.camera=cam;
 function hitTest(x,y){ ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1); pick.setFromCamera(ndc,cam);
   if(pick.intersectObject(couple,true).length) return {kind:'couple'};
@@ -4152,15 +4158,29 @@ function tapAt(hit){
   else if(hit.kind==='landmark'){ const g=hit.g, u=g.userData; u.bounceT=0; u.pokeT=u.lt||0; if(u.poke) u.poke(); sparkleBurst(hit.point,SPARK_BLUE,14,2); if(A.sound.on) A.sound.pop(1.4); gazeTo(hit.point);
     if(/tower|skyscraper|observatory|xsky|marina|waterfront|bridge|plaza|square|cantilever/.test(u.type||'')){ const save=fxCenter.clone(); fxCenter.copy(g.position); const wasFx=fxActive; fxActive='fireworks'; for(let k=0;k<2;k++) burst(); fxActive=wasFx; fxCenter.copy(save); if(!fxActive) tapFx=2.2; } }
   else if(hit.kind==='ground'){ ripple.position.set(hit.point.x,.09,hit.point.z); rippleT=0; gazeTo(hit.point); if(A.sound.on) A.sound.pop(.7); } }
-stage.addEventListener('pointerdown',e=>{ ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); if(ptrs.size===1){ downAt={x:e.clientX,y:e.clientY,t:performance.now()}; moved=false; } else if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; pinchD=Math.hypot(a.x-b.x,a.y-b.y); } },{passive:true});
+stage.addEventListener('pointerdown',e=>{ ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); orbitV=0; flick=[]; pitchRaw=pitchT; zoomRaw=zoomT; if(ptrs.size===1){ downAt={x:e.clientX,y:e.clientY,t:performance.now()}; moved=false; } else if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; pinchD=Math.hypot(a.x-b.x,a.y-b.y); } },{passive:true});
 stage.addEventListener('pointermove',e=>{ const p=ptrs.get(e.pointerId); if(p){ const dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY;
-    if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; const d=Math.hypot(a.x-b.x,a.y-b.y); if(pinchD>0&&d>0) zoomT=Math.max(.78,Math.min(1.5,zoomT*pinchD/d)); pinchD=d; moved=true; return; }
-    if(downAt&&(moved||Math.hypot(e.clientX-downAt.x,e.clientY-downAt.y)>6)){ moved=true; orbitT-=dx*.006; pitchT=Math.max(-.35,Math.min(.6,pitchT+dy*.004)); } }
+    if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; const d=Math.hypot(a.x-b.x,a.y-b.y); if(pinchD>0&&d>0){ zoomRaw*=pinchD/d; zoomRaw=Math.max(ZOOM_R[0]-.6,Math.min(ZOOM_R[1]+.6,zoomRaw)); zoomT=reduced?Math.max(ZOOM_R[0],Math.min(ZOOM_R[1],zoomRaw)):stretch(zoomRaw,ZOOM_R,.1); } pinchD=d; moved=true; return; }
+    if(downAt&&(moved||Math.hypot(e.clientX-downAt.x,e.clientY-downAt.y)>6)){ moved=true; orbitT-=dx*.006; flick.push([performance.now(),-dx*.006]); if(flick.length>10) flick.shift(); pitchRaw=Math.max(PITCH_R[0]-.6,Math.min(PITCH_R[1]+.6,pitchRaw+dy*.004)); pitchT=reduced?Math.max(PITCH_R[0],Math.min(PITCH_R[1],pitchRaw)):stretch(pitchRaw,PITCH_R,.14); } }
   else if(!mobileQ.matches&&performance.now()-lastHoverT>90){ lastHoverT=performance.now(); const h=camMode==='follow'&&!travel?hitTest(e.clientX,e.clientY):null; hoverG=h&&h.kind==='landmark'?h.g:null; const c=h&&h.kind!=='ground'?'pointer':'grab'; if(c!==hoverCursor){ hoverCursor=c; stage.style.cursor=c; } } },{passive:true});
-function endPtr(e){ ptrs.delete(e.pointerId); if(ptrs.size===0&&downAt){ if(!moved&&performance.now()-downAt.t<500) tapAt(hitTest(e.clientX,e.clientY)); downAt=null; } if(ptrs.size<2) pinchD=0; }
+function endPtr(e){ ptrs.delete(e.pointerId); const now=performance.now();
+  if(ptrs.size===0&&downAt){
+    if(!moved&&now-downAt.t<500){ const hit=hitTest(e.clientX,e.clientY);
+      /* once the view has been moved, a double tap (not on the couple) glides back to the usual one;
+         in the usual view a double tap stays two taps, so landmarks can be poked twice */
+      const two=lastTap&&now-lastTap.t<340&&Math.hypot(e.clientX-lastTap.x,e.clientY-lastTap.y)<40;
+      if(two&&lastTap.reset&&(!hit||hit.kind!=='couple')&&camMode==='follow'){ resetView(); lastTap=null; }
+      else { const canReset=viewMoved()&&(!hit||hit.kind!=='couple'); tapAt(hit); lastTap={t:now,x:e.clientX,y:e.clientY,reset:canReset}; } }
+    else if(moved&&!reduced){ const recent=flick.filter(f=>now-f[0]<90); if(recent.length>1){ const span=Math.max(16,now-recent[0][0])/1000, v=recent.reduce((a,f)=>a+f[1],0)/span; if(Math.abs(v)>.6) orbitV=Math.max(-3.5,Math.min(3.5,v)); } }
+    flick=[]; downAt=null; }
+  if(ptrs.size<2) pinchD=0; }
 stage.addEventListener('pointerup',endPtr,{passive:true}); stage.addEventListener('pointercancel',endPtr,{passive:true});
-stage.addEventListener('wheel',e=>{ zoomT=Math.max(.78,Math.min(1.5,zoomT*(1+e.deltaY*.0012))); },{passive:true});
-A.on('move',()=>{ orbitT=0; pitchT=0; zoomT=1; gazeAmt=0; hoverG=null; });
+/* wheel lines/pages are normalised; a trackpad pinch (ctrl+wheel) zooms the scene, not the page */
+stage.addEventListener('wheel',e=>{ const k=e.deltaMode===1?16:e.deltaMode===2?120:1, now=performance.now(); if(e.ctrlKey) e.preventDefault();
+  if(now-wheelAt>160) zoomRaw=zoomT; /* a new wheel gesture starts from where the view is */
+  zoomRaw=Math.max(ZOOM_R[0]-.6,Math.min(ZOOM_R[1]+.6,zoomRaw*(1+Math.max(-80,Math.min(80,e.deltaY*k))*(e.ctrlKey?.008:.0012))));
+  zoomT=reduced?Math.max(ZOOM_R[0],Math.min(ZOOM_R[1],zoomRaw)):stretch(zoomRaw,ZOOM_R,.08); wheelAt=now; },{passive:false});
+A.on('move',()=>{ const w=Math.round(orbit/TAU)*TAU; orbit-=w; orbitT=0; orbitV=0; pitchT=pitchRaw=0; zoomT=zoomRaw=1; gazeAmt=0; hoverG=null; lastTap=null; });
 /* polaroid camera */
 const flashEl=document.getElementById('flash');
 function takePhoto(){ if(activeDay<0||activeStop<0) return; flashEl.classList.remove('go'); void flashEl.offsetWidth; flashEl.classList.add('go'); if(A.sound.on) A.sound.shutter();
@@ -4281,6 +4301,8 @@ function frame(){
       g.userData.ring.material.opacity+=(ra-g.userData.ring.material.opacity)*Math.min(1,dt*4); g.userData.ring.scale.setScalar(cur?1+Math.sin(t*3)*.12:1); }); });
 
   if(celebT>0){ celebT-=dt; if(celebT<=0&&activeDay>=0&&activeStop>=0&&props[activeDay][activeStop]){ const pg=props[activeDay][activeStop]; startFx(pg.userData.fx,pg.position); } }
+  if(orbitV&&!ptrs.size){ orbitT+=orbitV*dt; orbitV*=Math.exp(-dt*3.6); if(Math.abs(orbitV)<.02) orbitV=0; }
+  if(!ptrs.size){ pitchT+=(Math.max(PITCH_R[0],Math.min(PITCH_R[1],pitchT))-pitchT)*damping(9,dt); if(performance.now()-wheelAt>160) zoomT+=(Math.max(ZOOM_R[0],Math.min(ZOOM_R[1],zoomT))-zoomT)*damping(8,dt); }
   orbit+=(orbitT-orbit)*damping(5,dt);pitch+=(pitchT-pitch)*damping(5,dt);zoom+=(zoomT-zoom)*damping(4,dt);gazeAmt*=Math.exp(-dt*.45);updateSparks(dt);
   if(rippleT<3){ rippleT+=dt; const f=rippleT/1.2; ripple.scale.setScalar(1+f*6); ripple.material.opacity=Math.max(0,.6*(1-f)); }
   if(tapFx>0&&!fxActive){ tapFx-=dt; parts.visible=true; fxActive='fireworks'; fxBurstT=99; updateFx(dt,t); fxActive=null; if(tapFx<=0) parts.visible=false; }
@@ -4358,6 +4380,21 @@ function frame(){
   if(detailed&&!['grove','garden','ridge'].includes(activeVisual()?.kind))fall.visible=false;
   renderer.render(scene,cam);
 }
+/* idle warm-up: while standing at a stop (or looking at a day), build the next stop's stage (it stays hidden) and compile
+   the shaders of that stage and of the day's places, so the next walk and arrival don't stall on first use */
+if(!VISUAL_REVIEW){ const warmed=new WeakSet(); let warmSeq=0;
+  const idleRun=cb=>window.requestIdleCallback?requestIdleCallback(cb,{timeout:2500}):setTimeout(cb,300);
+  const warmGroup=g=>{ if(!g||warmed.has(g)) return Promise.resolve(); warmed.add(g);
+    try{ return renderer.compileAsync?renderer.compileAsync(g,cam,scene).catch(()=>{}):Promise.resolve(renderer.compile(g,cam,scene)); }catch(e){ return Promise.resolve(); } };
+  const warm=()=>{ const my=++warmSeq, day=activeDay, stop=activeStop; if(day<0||!trails[day]) return;
+    const steps=[]; if(DAYS[day].items[stop+1]) steps.push(()=>stageAt(day,stop+1)); (props[day]||[]).forEach(g=>steps.push(()=>g));
+    const still=()=>my===warmSeq&&!travel&&(A.state.mode==='stop'||A.state.mode==='day');
+    /* a full-screen overlay (map, mini-game) pauses rendering: wait it out instead of giving up */
+    const run=()=>{ if(!still()||!steps.length) return; if(A.renderPaused){ setTimeout(run,800); return; } let g=null; try{ g=steps.shift()(); }catch(e){} warmGroup(g).then(()=>idleRun(run)); };
+    idleRun(run); };
+  A.on('arrive',()=>{ warmSeq++; setTimeout(warm,1500); });
+  A.on('move',m=>{ warmSeq++; if(m.kind==='intro') setTimeout(warm,1800); });
+  A.warm3d=warm; }
 if(VISUAL_REVIEW){
   A.on('move',m=>{if(m.stop<0)return;travel=null;appear=1;arrived=true;orbit=orbitT=0;pitch=pitchT=0;zoom=zoomT=1;
     yaw=camAngle(m.day,m.stop)+Math.PI;couple.rotation.y=yaw;setGesture('hands');gestQueue=[];gestNext=7;startFx(null,fxCenter);A.arrive();

@@ -490,7 +490,7 @@
 .tm-total div{background:var(--soft);border-radius:12px;padding:8px 10px;font-size:12px;color:var(--muted)}
 .tm-total b{display:block;color:var(--ink);font-size:16px}
 /* markers */
-.tm-pin{width:30px;height:30px;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);background:var(--dc);border:2px solid #fff;box-shadow:0 4px 10px -2px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;transition:transform .2s}
+.tm-pin{position:relative;width:30px;height:30px;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);background:var(--dc);border:2px solid #fff;box-shadow:0 4px 10px -2px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;transition:transform .2s}
 .tm-pin span{transform:rotate(45deg);color:#fff;font:800 13px/1 -apple-system,system-ui,sans-serif}
 .tm-pin.sm{width:24px;height:24px}.tm-pin.sm span{font-size:11px}
 .tm-pin.hotel{background:#2a2f45}
@@ -629,6 +629,31 @@ p.tm-now{cursor:default}
   .tm-dhead{touch-action:pan-y}
   .tm-grab{height:34px}
 }
+/* smoothness: reveal, unfold, popups, selection */
+.tm-map>.leaflet-pane,.tm-map>.leaflet-control-container{transition:opacity .5s cubic-bezier(.2,.8,.2,1)}
+.tm-map.tm-veil>.leaflet-pane,.tm-map.tm-veil>.leaflet-control-container{opacity:0}
+.tm-map.tm-veil{background:linear-gradient(110deg,var(--soft) 30%,color-mix(in srgb,var(--soft) 30%,var(--surface)) 50%,var(--soft) 70%);background-size:250% 100%;animation:tm-shimmer 1.4s linear infinite}
+.tm-loading{gap:12px}
+.tm-loadmap{width:52px;height:52px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:var(--surface);color:var(--seoul);box-shadow:0 10px 30px -14px rgba(17,22,40,.45);animation:tm-breathe 1.6s ease-in-out infinite}
+.tm-loadmap svg{width:26px;height:26px}
+@keyframes tm-breathe{50%{transform:translateY(-4px) scale(1.05)}}
+.tm-pin.drop{animation:tm-drop .55s cubic-bezier(.2,1.5,.45,1) both;animation-delay:calc(var(--i,0) * 70ms + 120ms)}
+@keyframes tm-drop{from{opacity:0;transform:translateY(-26px) rotate(-45deg) scale(.4)}60%{opacity:1}}
+.tmap path.tm-draw{stroke-dasharray:1.01;stroke-dashoffset:1.01;animation:tm-draw .6s cubic-bezier(.4,0,.2,1) forwards;animation-delay:calc(var(--i,0) * 110ms + 60ms)}
+@keyframes tm-draw{to{stroke-dashoffset:0}}
+.tmap path.tm-fadein{animation:tm-fade .5s ease both;animation-delay:calc(var(--i,0) * 110ms + 60ms)}
+.tmap .leaflet-popup-content-wrapper,.tmap .leaflet-popup-tip-container{transform-origin:50% 100%;animation:tm-popin .26s cubic-bezier(.2,1.25,.4,1) both}
+@keyframes tm-popin{from{opacity:0;transform:translateY(8px) scale(.92)}}
+.tm-pin.is-sel::after{content:"";position:absolute;inset:-7px;border-radius:50% 50% 50% 8px;border:2px solid var(--dc);opacity:0;animation:tm-halo 1.8s ease-out infinite;pointer-events:none}
+@keyframes tm-halo{0%{opacity:.75;transform:scale(.8)}100%{opacity:0;transform:scale(1.55)}}
+.tm-stop.is-sel .tm-acts,.tm-drow.is-sel .tm-acts{animation:tm-expand .32s cubic-bezier(.2,.8,.2,1) both;overflow:hidden}
+@keyframes tm-expand{from{max-height:0;opacity:0;transform:translateY(-4px)}to{max-height:260px;opacity:1}}
+.tm-chip.tm-pop{animation:tm-chippop .4s cubic-bezier(.2,1.6,.4,1)}
+@keyframes tm-chippop{40%{transform:scale(1.07)}}
+.tm-chip{transition:background .25s,border-color .25s,box-shadow .25s,transform .2s}
+.tm-chip:active,.tm-btn:active,.tm-ib:active{transform:scale(.96)}
+.tm-btn,.tm-ib{transition:transform .15s,background .2s,border-color .2s,color .2s}
+.tm-row{transition:background .2s}
 /* discover around: shadow marks with scores, radar, saved hearts */
 @property --p{syntax:"<number>";inherits:true;initial-value:0}
 .tmap{--t-gold:#d59a17;--t-teal:#0e9aa7;--t-slate:#6b7392;--t-grey:#a3a9bb;--her:#e8557a;--me:#4f5fe6}
@@ -723,6 +748,8 @@ p.tm-now{cursor:default}
   .tm-pulse{animation:none}
   .tm-sh,.tm-sh.out,.tm-sh.bump,.tm-drow,.tm-heart.pop,.tm-sh .tm-hearts,.tm-bd i::after,.tm-disc,.tm-radius,.tm-skel{animation:none!important}
   .tm-radar{display:none}
+  .tm-map.tm-veil,.tm-loadmap,.tm-pin.drop,.tmap path.tm-draw,.tmap path.tm-fadein,.tmap .leaflet-popup-content-wrapper,.tmap .leaflet-popup-tip-container,.tm-pin.is-sel::after,.tm-stop.is-sel .tm-acts,.tm-drow.is-sel .tm-acts,.tm-chip.tm-pop{animation:none!important}
+  .tm-map>.leaflet-pane,.tm-map>.leaflet-control-container{transition:none}
   .tm-sh,.tm-ring{transition:none}
 }
 `;
@@ -901,13 +928,16 @@ p.tm-now{cursor:default}
   }
 
   /* ---------- panel ---------- */
+  let lastChipDay = null;
   function renderChips() {
     const todayIdx = MODEL.tripDayIndex(app.days, now());
     const chips = [`<button type="button" class="tm-chip" data-act="day" data-day="-1" aria-pressed="${state.day === -1}" style="--dc:var(--ink)"><b>All days</b><small>${app.days.length} days</small></button>`];
     model.forEach(dm => chips.push(`<button type="button" class="tm-chip" data-act="day" data-day="${dm.index}" aria-pressed="${state.day === dm.index}" style="--dc:${dm.color}">` +
       `<b><i></i>Day ${dm.index + 1}</b><small>${dm.index === todayIdx ? "Today" : esc(dateShort(dm.date))} · ${esc(dm.city)}</small></button>`));
     daysEl.innerHTML = chips.join("");
-    daysEl.querySelector('[aria-pressed="true"]')?.scrollIntoView({block: "nearest", inline: "center"});
+    if (lastChipDay !== state.day && !RM()) daysEl.querySelector('[aria-pressed="true"]')?.classList.add("tm-pop");
+    lastChipDay = state.day;
+    daysEl.querySelector('[aria-pressed="true"]')?.scrollIntoView({block: "nearest", inline: "center", behavior: RM() || lastChipDay === null ? "auto" : "smooth"});
   }
 
   function propLine(p) {
@@ -1107,7 +1137,7 @@ p.tm-now{cursor:default}
     return ensuring || (ensuring = createMap().finally(() => { ensuring = null; }));
   }
   async function createMap() {
-    mapEl.innerHTML = '<div class="tm-mapmsg">Loading the map…</div>';
+    mapEl.innerHTML = `<div class="tm-mapmsg tm-loading" role="status"><span class="tm-loadmap" aria-hidden="true">${IC.map}</span><span>Loading the map…</span></div>`;
     try { await loadLeaflet(); }
     catch (e) {
       mapFailed = true;
@@ -1162,8 +1192,13 @@ p.tm-now{cursor:default}
       <a class="tm-btn" href="${esc(MODEL.placeUrl(idea))}" target="_blank" rel="noopener">Google Maps ↗</a></div>`;
   }
 
+  // Set before a draw that should "unfold" the day (first reveal, day change); ordinary redraws stay still.
+  let unfoldNext = false;
   function draw(fit) {
     if (!map) return;
+    const unfold = unfoldNext && !RM();
+    unfoldNext = false;
+    let legI = 0;
     group.clearLayers();
     markers = new Map();
     const L = state.layers, all = state.day < 0;
@@ -1190,6 +1225,7 @@ p.tm-now{cursor:default}
         if (!leg.fromPlace || !leg.toPlace || !MODEL.validLL(leg.fromPlace) || !MODEL.validLL(leg.toPlace) || leg.mode === "same") continue;
         const style = leg.mode === "walk" ? {dashArray: "2 9", weight: all ? 4 : 5} : leg.mode === "train" ? {dashArray: "12 10", weight: 3} : {weight: all ? 3 : 4};
         const line = Lf.polyline([ll(leg.fromPlace), ll(leg.toPlace)], Object.assign({color: dm.color, opacity: all ? .75 : .9, lineCap: "round"}, style)).addTo(group);
+        if (unfold) unfoldLine(line, legI++, !style.dashArray);
         if (leg.min != null || leg.mode === "train") line.bindTooltip(`${MODE_ICON[leg.mode]} ${leg.mode === "train" ? "KTX" : (leg.mode === "walk" ? "Walk " : "Taxi ≈") + leg.min + " min"}${leg.long ? " · long hop" : ""}`, {sticky: true});
       }
       if (!all && L.alts) for (const a of MODEL.alternativesOf(dm, app.resolve)) {
@@ -1205,6 +1241,7 @@ p.tm-now{cursor:default}
       for (const s of dm.stops) {
         if (s.removed || !s.pinned) continue;
         const m = Lf.marker(ll(s.place), {icon: pinIcon(s, all), zIndexOffset: 500 + (s.n || 0), keyboard: true, title: `${s.n ? s.n + ". " : ""}${s.title}`, riseOnHover: true}).addTo(group);
+        if (unfold) { const pin = m.getElement()?.querySelector(".tm-pin"); if (pin) { pin.style.setProperty("--i", all ? dm.index : s.n || 0); pin.classList.add("drop"); pin.addEventListener("animationend", () => pin.classList.remove("drop"), {once: true}); } }
         m.bindPopup(stopPopup(s, dm), popupOpts());
         m.on("click", () => select(s.day, s.k, {pan: false, popup: false, fromMap: true}));
         m.on("mouseover", () => rowOf(s.day, s.k)?.classList.add("is-hover"));
@@ -1252,6 +1289,17 @@ p.tm-now{cursor:default}
     if (fit) fitTo(bounds, fit === "fly");
   }
 
+  // Solid legs draw themselves along their length; dotted legs (walks, the train) fade in. Either way leg by leg.
+  function unfoldLine(line, i, solid) {
+    const el = line.getElement && line.getElement();
+    if (!el) return;
+    el.style.setProperty("--i", i);
+    if (solid) {
+      el.setAttribute("pathLength", "1");
+      el.classList.add("tm-draw");
+    } else el.classList.add("tm-fadein");
+    el.addEventListener("animationend", () => { el.classList.remove("tm-draw", "tm-fadein"); el.removeAttribute("pathLength"); }, {once: true});
+  }
   function fitTo(bounds, fly) {
     if (!map) return;
     const pad = {paddingTopLeft: [40, 40], paddingBottomRight: [40, panelInset() + 30], maxZoom: 15};
@@ -1405,6 +1453,7 @@ p.tm-now{cursor:default}
     panel.scrollTop = 0;
     renderChips();
     renderPanel(from === day ? 0 : dir || "fade");
+    unfoldNext = from !== day;
     draw(map && map._loaded ? "fly" : true);
     if (k != null && day >= 0) select(day, k);
     if (PHONE && state.size === "min") setSize("peek");
@@ -2551,11 +2600,40 @@ p.tm-now{cursor:default}
     if (!disc.follow) clearTimeout(followTimer);
   });
 
+  /* ---------- the 3D world rests while the map covers it (same switch the mini-game uses) ---------- */
+  let pausedByMap = false;
+  function pause3d() {
+    if (pausedByMap || app.renderPaused || app.state.mode === "travel") return;
+    app.renderPaused = true;
+    pausedByMap = true;
+  }
+  function resume3d() {
+    if (!pausedByMap) return;
+    pausedByMap = false;
+    // If something else opened over us (the mini-game closes the map and pauses 3D itself), leave its pause in place.
+    if (document.querySelector("dialog[open]:not(#tripmap)")) return;
+    app.renderPaused = false;
+  }
+
+  // Resolves when the base map has drawn its first picture (or after a short wait, so the map never stays hidden).
+  function baseReady(ms = 1600) {
+    return new Promise(done => {
+      let t = setTimeout(done, ms);
+      const finish = () => { clearTimeout(t); done(); };
+      const gl = base && base.getMaplibreMap && base.getMaplibreMap();
+      if (gl) { if (gl.loaded && gl.loaded()) finish(); else gl.once("idle", finish); }
+      else if (base && base.once) { if (base._loading === false) finish(); else base.once("load", finish); }
+      else finish();
+    });
+  }
+
   /* ---------- open / close ---------- */
   function render(fit) { renderChips(); renderPanel(); draw(fit); }
 
+  let openGen = 0;
   async function openMap(opts = {}) {
     if (dlg.open && !dlg.classList.contains("tm-closing")) return;
+    const gen = ++openGen, live = () => gen === openGen && dlg.open;
     dlg.classList.remove("tm-closing");
     if (dlg.open) dlg.close();
     rebuild();
@@ -2583,15 +2661,34 @@ p.tm-now{cursor:default}
     closeLayers();
     syncLayerInputs();
     dlg.showModal();
+    pause3d();
     // showModal() focuses the first control (the search field); start on the map so keys and shortcuts work.
     (PHONE ? dlg.querySelector(".tmap") : mapEl).focus({preventScroll: true});
     renderChips();
-    renderPanel();
+    renderPanel(restore ? 0 : "fade");
+    const first = !map;
+    if (first) {
+      // Building the map is the heaviest step, so let the open animation play first, then fade the map in.
+      mapEl.classList.add("tm-veil");
+      if (!RM()) await new Promise(r => setTimeout(r, 300));
+      if (!live()) return;
+    }
     const m = await ensureMap();
-    if (!m || !dlg.open) return;
+    if (!live()) return;
+    if (!m) { mapEl.classList.remove("tm-veil"); return; }
     setTiles();
     // Layout is synchronous after showModal(), so draw now rather than waiting on a frame (paused in background tabs).
     map.invalidateSize();
+    if (first) {
+      if (!restore || !state.view) fitTo(currentBounds());
+      await baseReady();
+      if (!live()) return;
+      unfoldNext = true;
+      mapEl.classList.remove("tm-veil");
+      draw(false);
+      if (state.sel) select(state.sel.day, state.sel.k, {pan: true, popup: !PHONE});
+      return;
+    }
     if (restore && state.view) {
       map.setView(state.view.c, state.view.z, {animate: false});
       draw(false);
@@ -2599,6 +2696,7 @@ p.tm-now{cursor:default}
       if (disc.on) { if (!radarCircle && disc.center) { startRadar(disc.center, model[disc.anchor.day].color); if (!disc.loading) radarDone(); } paintDiscMarks(); }
     }
     else {
+      unfoldNext = true;
       draw(true);
       if (state.sel) select(state.sel.day, state.sel.k, {pan: true, popup: !PHONE});
     }
@@ -2607,6 +2705,8 @@ p.tm-now{cursor:default}
   function closeMap() {
     if (!dlg.open || dlg.classList.contains("tm-closing")) return;
     if (map) state.view = {c: map.getCenter(), z: map.getZoom()};
+    // The 3D world keeps resting during the short fade (it shows its last frame); the close handler wakes it,
+    // so the fade's timer isn't starved by the frame loop restarting.
     if (RM()) { dlg.close(); return; }
     dlg.classList.add("tm-closing");
     setTimeout(() => { if (!dlg.classList.contains("tm-closing")) return; dlg.classList.remove("tm-closing"); if (dlg.open) dlg.close(); }, 190);
@@ -2614,6 +2714,8 @@ p.tm-now{cursor:default}
   dlg.addEventListener("close", () => {
     // A close event queued before a quick reopen must not reset the reopened map.
     if (dlg.open) return;
+    resume3d();
+    mapEl.classList.remove("tm-veil");
     dlg.classList.remove("tm-closing");
     stopTour();
     hideDriver(true);
