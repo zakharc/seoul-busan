@@ -410,7 +410,7 @@ p.tm-now{cursor:default}
 .tm-driver .k-en{margin:0;font-size:16px;color:#555}
 .tm-driver .k-hint{margin:6px 0 0;font-size:13px;color:#777}
 .tm-driver .tm-acts{justify-content:center}
-.tm-driver .tm-btn{background:#f1efe8;color:#111;border-color:#e2dfd4}
+.tm-driver .tm-btn{min-height:44px;background:#f1efe8;color:#111;border-color:#e2dfd4}
 .tm-driver .tm-btn.pri{background:#111;color:#fff;border-color:#111}
 .tm-toast{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:2100;max-width:min(92%,420px);padding:10px 16px;border-radius:14px;background:var(--ink);color:var(--surface);font-size:13px;font-weight:600;box-shadow:0 14px 40px -16px rgba(0,0,0,.5);animation:tm-fade .2s ease;pointer-events:none}
 .tm-toast[hidden]{display:none}
@@ -1415,6 +1415,7 @@ p.tm-now{cursor:default}
   /* ---------- show the driver: the Korean name, big ---------- */
   const driverEl = byId("tm-driver");
   let driverReturn = null;
+  const driverBackground = [...dlg.querySelectorAll(".tm-head, .tm-days, .tm-body")];
   function showDriver(day, k) {
     const s = model[day] && model[day].stops[k];
     if (!s || !s.place.ko) return;
@@ -1430,14 +1431,23 @@ p.tm-now{cursor:default}
       </div>
       <p class="k-hint">“Please take me here.” Turn the screen toward the driver.</p>`;
     driverEl.hidden = false;
+    driverBackground.forEach(el => { el.inert = true; });
     driverEl.querySelector('[data-act="driver-close"]').focus({preventScroll: true});
   }
   function hideDriver(silent) {
     if (driverEl.hidden) return;
     driverEl.hidden = true;
     driverEl.innerHTML = "";
+    driverBackground.forEach(el => { el.inert = false; });
     if (!silent && driverReturn && document.contains(driverReturn)) driverReturn.focus({preventScroll: true});
   }
+  driverEl.addEventListener("keydown", e => {
+    if (e.key !== "Tab") return;
+    const controls = [...driverEl.querySelectorAll("button, a[href]")];
+    const index = controls.indexOf(document.activeElement);
+    e.preventDefault();
+    controls[(index + (e.shiftKey ? -1 : 1) + controls.length) % controls.length].focus();
+  });
 
   /* ---------- quick search: stops, other options, ideas, hotels ---------- */
   const tmapEl = dlg.querySelector(".tmap"), qEl = byId("tm-q"), resEl = byId("tm-results");
@@ -1462,7 +1472,7 @@ p.tm-now{cursor:default}
   }
   function runSearch() {
     const q = fold(qEl.value.trim());
-    if (!q) { resEl.hidden = true; qEl.setAttribute("aria-expanded", "false"); results = []; return; }
+    if (!q) { resEl.hidden = true; qEl.setAttribute("aria-expanded", "false"); qEl.removeAttribute("aria-activedescendant"); results = []; return; }
     const words = q.split(/\s+/);
     results = searchIndex().filter(r => words.every(w => r.hay.includes(w)))
       .sort((a, b) => (fold(b.title).startsWith(q) - fold(a.title).startsWith(q)) || (a.kind === "stop" ? -1 : 0) - (b.kind === "stop" ? -1 : 0))
@@ -1481,6 +1491,7 @@ p.tm-now{cursor:default}
   function exitSearch() {
     resEl.hidden = true;
     qEl.setAttribute("aria-expanded", "false");
+    qEl.removeAttribute("aria-activedescendant");
     qEl.value = "";
     results = [];
     if (tmapEl.classList.contains("searching")) { tmapEl.classList.remove("searching"); if (dlg.open) byId("tm-sbtn").focus({preventScroll: true}); }
@@ -1489,7 +1500,7 @@ p.tm-now{cursor:default}
     if (!r) return;
     exitSearch();
     // Keep focus inside the dialog (on the map) so the shortcuts and arrow keys keep working.
-    if (document.activeElement === qEl || !dlg.contains(document.activeElement)) (PHONE ? tmapEl : mapEl).focus({preventScroll: true});
+    (PHONE ? tmapEl : mapEl).focus({preventScroll: true});
     if (r.kind === "stop" || r.kind === "alt") {
       if (state.day !== r.day) switchDay(r.day, r.day > state.day ? 1 : -1);
       if (r.kind === "stop") { select(r.day, r.k, {pan: true, popup: !PHONE}); return; }
@@ -1525,6 +1536,7 @@ p.tm-now{cursor:default}
     if (byId("tm-search").contains(e.relatedTarget)) return;
     resEl.hidden = true;
     qEl.setAttribute("aria-expanded", "false");
+    qEl.removeAttribute("aria-activedescendant");
     if (!qEl.value.trim() && tmapEl.classList.contains("searching")) tmapEl.classList.remove("searching");
   });
   byId("tm-sbtn").onclick = () => { tmapEl.classList.add("searching"); qEl.focus(); };

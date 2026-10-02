@@ -85,7 +85,7 @@ html.comfort-ui[data-theme="dark"] {
 }
 .comfort-trip svg { width: 16px; height: 16px; flex: 0 0 auto; }
 .comfort-trip-copy { display: grid; min-width: 0; gap: 3px; }
-.comfort-trip-copy b { font-size: 13px; line-height: 1.15; white-space: nowrap; }
+.comfort-trip-copy b { font-size: 13px; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .comfort-trip-copy small {
   color: var(--muted);
   font-size: 11px;
@@ -173,6 +173,12 @@ html.comfort-ui[data-theme="dark"] {
 }
 @media (max-width: 380px) {
   .comfort-overview .dlg { padding-inline: 16px; }
+}
+@media (max-width: 379px) {
+  .comfort-trip { padding-inline: 10px; gap: 6px; }
+  .comfort-trip svg { width: 12px; height: 12px; }
+  .comfort-trip-copy b { font-size: 12px; }
+  .comfort-trip-copy small, .comfort-trip-city { display: none; }
 }
 @media (max-width: 599px) {
   .comfort-days { grid-template-columns: 1fr; }

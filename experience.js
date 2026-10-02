@@ -29,7 +29,7 @@
   tripButton.setAttribute("aria-haspopup", "dialog");
   tripButton.setAttribute("aria-controls", "trip-overview");
   tripButton.setAttribute("aria-expanded", "false");
-  tripButton.innerHTML = '<span class="comfort-trip-copy"><b>Your trip</b><small>All days at a glance</small></span>' +
+  tripButton.innerHTML = '<span class="comfort-trip-copy"><b><span class="comfort-trip-day">Your trip</span><span class="comfort-trip-city"></span></b><small>All days at a glance</small></span>' +
     icon('<path d="m8 10 4 4 4-4"/>');
   top.insertBefore(tripButton, rail);
 
@@ -136,7 +136,8 @@
   const mid = bar.querySelector(".mid");
   const refreshContext = () => {
     const day = app.days[app.state.day];
-    tripButton.querySelector("b").textContent = day ? `Day ${app.state.day + 1} / ${day.city}` : "Your trip";
+    tripButton.querySelector(".comfort-trip-day").textContent = day ? `Day ${app.state.day + 1}` : "Your trip";
+    tripButton.querySelector(".comfort-trip-city").textContent = day ? ` / ${day.city}` : "";
     tripButton.querySelector("small").textContent = day ? `${dateLabel(day.date)} / All days` : "All days at a glance";
     tripButton.setAttribute("aria-label", day ? `Trip overview, Day ${app.state.day + 1}, ${day.city}` : "Open trip overview");
     const tappable = mid.classList.contains("tap");

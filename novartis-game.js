@@ -44,7 +44,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
 #nvx-game .nvx-fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,#e8557a,#d59a17)}
 #nvx-game .nvx-me{position:absolute;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:#2b1f1d;border:2px solid #fff;box-shadow:0 2px 6px rgba(17,22,40,.25);display:grid;place-items:center;font-size:11px}
 #nvx-game .nvx-right{display:flex;gap:8px;align-items:center}
-#nvx-game .nvx-ib{pointer-events:auto;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 4px 16px rgba(17,22,40,.12);color:#111628;border:0;cursor:pointer}
+#nvx-game .nvx-ib{pointer-events:auto;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 4px 16px rgba(17,22,40,.12);color:#111628;border:0;cursor:pointer}
 #nvx-game .nvx-ib svg{width:16px;height:16px}
 #nvx-game .nvx-fx{grid-column:1/-1;display:flex;gap:6px;justify-content:center;min-height:30px}
 #nvx-game .nvx-chip{display:flex;align-items:center;gap:6px;height:28px;padding:0 10px 0 8px;border-radius:999px;background:rgba(255,255,255,.85);font:700 12px var(--body,system-ui);box-shadow:0 3px 10px rgba(17,22,40,.12);animation:nvx-chip .4s cubic-bezier(.34,1.56,.64,1)}
@@ -80,7 +80,20 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
 .nvx-btn.ghost{color:var(--ink,#111628);background:var(--soft,#f0f2f8)}
 #nvx-game .nvx-btn.ghost{color:#111628;background:#eef0f6}
 .nvx-btn:focus-visible,#nvx-game .nvx-ib:focus-visible{outline:3px solid rgba(232,85,122,.5);outline-offset:2px}
-@media (max-width:600px){ #nvx-game .nvx-legend{grid-template-columns:1fr} #nvx-game .nvx-route span{display:none} #nvx-game .nvx-card{padding:18px 16px 14px} #nvx-game .nvx-hud{grid-template-columns:auto 1fr;row-gap:6px} #nvx-game .nvx-right{justify-self:end} #nvx-game .nvx-route{grid-column:1/-1;grid-row:2;width:100%;padding:0 4px} }
+@media (max-width:600px){
+  #nvx-game .nvx-legend{grid-template-columns:1fr}
+  #nvx-game .nvx-route span{display:none}
+  #nvx-game .nvx-card{padding:18px 16px 14px}
+  #nvx-game .nvx-hud{grid-template-columns:minmax(0,1fr) repeat(3,44px);row-gap:6px}
+  #nvx-game .nvx-right{display:contents}
+  #nvx-game .nvx-lives{grid-column:1;grid-row:1;justify-self:start}
+  #nvx-game .nvx-right .nvx-ib{grid-row:1}
+  #nvx-game .nvx-snd{grid-column:2}
+  #nvx-game .nvx-right [data-a="pause"]{grid-column:3}
+  #nvx-game .nvx-right [data-a="close"]{grid-column:4}
+  #nvx-game .nvx-score{grid-column:1;grid-row:2;justify-self:start}
+  #nvx-game .nvx-route{grid-column:2/-1;grid-row:2;width:100%;padding:0 4px}
+}
 @media (max-height:520px){ #nvx-game .nvx-legend,#nvx-game .nvx-levels{display:none} #nvx-game .nvx-quip{bottom:10px} #nvx-game .nvx-note{top:58px} }
 
 #nvx-game .nvx-route{position:relative}
@@ -97,7 +110,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
 #nvx-game .nvx-combo[hidden]{display:none}
 #nvx-game .nvx-combo.pop{animation:nvx-pop .45s cubic-bezier(.34,1.8,.64,1)}
 #nvx-game .nvx-level{position:absolute;left:0;right:0;top:34%;display:grid;place-items:center;pointer-events:none;overflow:hidden;padding:20px 0}
-#nvx-game .nvx-level .rib{position:relative;min-width:min(560px,84vw);padding:12px 34px 14px;border-radius:8px;text-align:center;color:#fff;background:linear-gradient(100deg,#e8557a,var(--a,#4f5fe6) 72%);box-shadow:0 18px 50px rgba(17,22,40,.3);transform:skewX(-10deg) translateX(-130vw);overflow:hidden}
+#nvx-game .nvx-level .rib{position:relative;width:min(560px,84vw);min-width:0;padding:12px 24px 14px;border-radius:8px;text-align:center;color:#fff;background:linear-gradient(100deg,#e8557a,var(--a,#4f5fe6) 72%);box-shadow:0 18px 50px rgba(17,22,40,.3);transform:skewX(-10deg) translateX(-130vw);overflow:hidden;overflow-wrap:anywhere}
 #nvx-game .nvx-level .rib::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(-45deg,rgba(255,255,255,.14) 0 12px,transparent 12px 24px);animation:nvx-stripes 1s linear infinite}
 #nvx-game .nvx-level .rib>*{position:relative;display:block;transform:skewX(10deg);text-shadow:0 2px 0 rgba(17,22,40,.25)}
 #nvx-game .nvx-level small{font:900 11px var(--body,system-ui);letter-spacing:.24em;text-transform:uppercase;opacity:.92}
@@ -123,7 +136,15 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
 @keyframes nvx-stamp{from{opacity:0;transform:scale(2.6) rotate(-6deg)}to{opacity:.9;transform:rotate(14deg)}}
 @media (max-width:600px){ #nvx-game .nvx-note{top:calc(env(safe-area-inset-top,0px) + 136px)} #nvx-game .nvx-card:has(.nvx-stamp) .nvx-eyebrow{padding:0;margin-top:30px} }
 @keyframes nvx-ribfade{0%,100%{opacity:0;transform:skewX(-10deg)}10%,85%{opacity:1;transform:skewX(-10deg)}}
-@media (prefers-reduced-motion: reduce){ #nvx-game .nvx-level.show .rib{animation:nvx-ribfade 3.2s linear forwards} #nvx-game .nvx-level .rib::before{animation:none} }
+@keyframes nvx-notefade{0%,100%{opacity:0;transform:translate(-50%,0)}11%,86%{opacity:1;transform:translate(-50%,0)}}
+@keyframes nvx-quipfade{0%,100%{opacity:0;transform:translate(-50%,0)}10%,78%{opacity:1;transform:translate(-50%,0)}}
+/* These durations are reading time, not decorative motion; retain them over the app's reduced-motion reset. */
+@media (prefers-reduced-motion: reduce){
+  #nvx-game .nvx-level.show .rib{animation:nvx-ribfade 3.2s linear forwards;animation-duration:3.2s!important}
+  #nvx-game .nvx-note.show{animation:nvx-notefade 3.9s linear forwards;animation-duration:3.9s!important}
+  #nvx-game .nvx-quip.show{animation:nvx-quipfade 2.6s linear forwards;animation-duration:2.6s!important}
+  #nvx-game .nvx-level .rib::before{animation:none}
+}
 
 .nvx-invite{position:fixed;z-index:80;left:12px;right:12px;bottom:calc(var(--bar-h,68px) + var(--sab,0px) + 12px);display:grid;grid-template-columns:92px 1fr;gap:12px 14px;align-items:center;padding:14px;border-radius:26px;background:color-mix(in srgb,var(--surface,#fff) 90%,transparent);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid var(--line,rgba(17,22,40,.08));box-shadow:0 22px 60px rgba(17,22,40,.25);color:var(--ink,#111628);font-family:var(--body,system-ui);overflow:hidden;opacity:0;transform:translateY(calc(100% + 40px)) scale(.94)}
 .nvx-invite.in{animation:nvx-inv-in .8s cubic-bezier(.34,1.56,.64,1) forwards}
