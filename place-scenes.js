@@ -1,6 +1,68 @@
-// Place-specific scene prototypes. Built from geometry, not image backdrops.
+// Authored miniature worlds. Architecture stays specific; atmosphere sets the pace.
+const DIRECTIONS = {
+  d1s3a:['Blue-hour promises','night',0x182440,0xe3a398,0xa9c9ff,.82,1.65,.0042,-.55],
+  d1s4c:['Lantern-lit bustle','lantern',0x102035,0x72516a,0xffc184,.85,1.45,.005,.65],
+  d2s1a:['Porcelain and gold','court',0x89adbd,0xf0ddba,0xffd3a0,.72,2.4,.0032,-.8],
+  d2s4b:['Ochre alley afternoon','lane',0x91b5bf,0xf3d4ab,0xffcd8d,.82,2.1,.005,-.65],
+  d4s4a:['A cathedral of ginkgo','grove',0x768e86,0xefcc8e,0xffc56e,.72,2.3,.008,-.9],
+  d4s4b:['Brick and slow coffee','lane',0x96a9ad,0xf0c8a0,0xffc082,.86,2,.0045,.7],
+  d6s7b:['Violet tide, golden bridge','night',0x111e3c,0xa789ad,0xbacaff,.82,1.5,.004,-.6],
+  d7s1a:['Candy-colour coast','coast',0x78bccc,0xf2e6c7,0xffdfa9,.9,2.1,.003,.7],
+  d7s4a:['A prayer above the sea','coast',0x7baeb9,0xefdfb6,0xffd091,.78,2.3,.0035,-.75],
+  d8s1a:['A pocket of painted hills','village',0x8bb8c2,0xf1d3c1,0xffd8b0,.85,2.05,.005,.8],
+  d2s7b:['Silver stream at dusk','river',0x182e4b,0x9289aa,0xb7d5ee,.85,1.6,.005,.6],
+  d3s5b:['Fountain afterglow','night',0x17253e,0xba869d,0xc4cbff,.82,1.5,.0035,-.8],
+  d5s2a:['Cobalt design district','modern',0x85a6bb,0xe7d6c4,0xffdfb8,.9,1.85,.004,.8],
+  d5s3a:['Autumn on mirrored water','garden',0x8ab2b5,0xeacda5,0xffcd8f,.8,2.1,.006,-.7],
+  d5s4a:['Above the violet city','modern',0x343853,0xdfaba1,0xffd1b7,.88,1.6,.003,.5],
+  d8s2a:['Salt, steel and morning','coast',0x7fa9b5,0xe6dfc9,0xffe3bd,.88,1.95,.004,-.65],
+  d8s3a:['White walls, blue infinity','coast',0x69afc3,0xf0dfb9,0xffdca0,.9,2.2,.003,.8],
+  d9s4a:['Terracotta sunset walk','ridge',0x839dab,0xf1b98d,0xffbc77,.76,2.25,.005,-.85],
+  d9s6b:['Liquid silver after dark','modern',0x191d37,0x717b9f,0xc1c6ff,.8,1.5,.004,.65],
+  d10s1a:['The jade garden','garden',0x778f8b,0xe1cba6,0xffd69c,.72,2.05,.008,-.75],
+  d1s2a:['Scarlet above the gold','ridge',0x8fabb5,0xefc292,0xffc486,.78,2.15,.0055,-.7],
+  d2s1b:['The city opens out','court',0x8caeba,0xf2dfbd,0xffd7a1,.82,2.2,.0035,.8],
+  d2s5a:['A spiral of small discoveries','lane',0x9bafad,0xedd2ac,0xffd196,.9,1.9,.005,-.65],
+  d2s5b:['Under the lantern canopy','lantern',0x808e9e,0xe4be9c,0xffd5a4,.8,2,.006,.7],
+  d3s3a:['The quiet royal courtyard','court',0x99b7b9,0xead6b1,0xffd49d,.72,2.25,.004,-.85],
+  d3s4b:['An island reclaimed by green','garden',0x83a5a0,0xdcdab4,0xffdfa9,.8,2.05,.006,.6],
+  d4s2b:['Flour, timber and morning','lane',0x9fbab7,0xf2ddba,0xffdea8,.9,1.95,.004,-.7],
+  d5s2b:['One more slow coffee','lane',0x9daeb2,0xeecda8,0xffce95,.86,2,.0045,.65],
+  d5s3b:['One tree, endless sky','grove',0x90afa6,0xf1d7a3,0xffce87,.78,2.2,.005,-.8],
+  d6s2a:['A blue ribbon to Busan','rail',0x9bb9cc,0xe9e1c9,0xffe5bb,.95,1.9,.0035,.75],
+  d6s5b:['Wind on the basalt edge','coast',0x74a9b5,0xe0dbc0,0xffd7a6,.8,2.15,.004,-.75],
+  d7s2a:['Walking on the horizon','coast',0x7abacc,0xeee5c5,0xffe0ac,.9,2.05,.0028,.75],
+  d7s2b:['Two lights on a quiet harbour','coast',0x8cbdc5,0xf0debb,0xffd9a8,.9,2,.0035,-.8],
+  d7s5b:['Pine shade and sea glass','garden',0x83afa9,0xe7dfb8,0xffd8a3,.78,2.15,.005,.7],
+  d7s7a:['Gold in the midnight marina','night',0x0e1931,0x52678a,0xb3ceef,.78,1.45,.0035,-.7],
+  d7s7c:['A ceiling made of colour','modern',0x191e39,0x786d9b,0xd3ccff,.82,1.55,.004,.8],
+  d8s1b:['Old paper in warm light','lane',0x92acae,0xe8d2ad,0xffd39c,.86,2,.006,-.7],
+  d8s3b:['Bright cabins, open water','coast',0x71b4c5,0xf0dfbd,0xffdaa5,.9,2.1,.003,.7],
+  d8s4a:['An amber sanctuary','interior',0xa9a694,0xe5d4b1,0xffcb8c,.95,1.5,.008,-.65],
+  d9s5a:['Supper under a hundred lights','lantern',0x26334a,0x98684d,0xffc484,.86,1.6,.007,.7],
+  d10s2a:['A glass jewel in autumn','garden',0x96babc,0xf0deb6,0xffdba5,.82,2,.0045,-.75],
+};
+
 export function createPlaceScenes(T, helpers) {
-  const { box, cyl, reg, lowEnd, reduced } = helpers;
+  const { box:flatBox, cyl, reg, lowEnd, reduced } = helpers;
+  function box(w,h,d,m,x=0,y=0,z=0){
+    if(Math.min(w,h,d)<1||Math.max(w,h,d)>110)return flatBox(w,h,d,m,x,y,z);
+    const radius=Math.min(.16,Math.min(w,h,d)*.09),half=[w/2,h/2,d/2];
+    const geometry=new T.BoxGeometry(1,1,1,4,4,4),positions=geometry.attributes.position,normals=geometry.attributes.normal;
+    const vertex=new T.Vector3(),inner=new T.Vector3(),normal=new T.Vector3();
+    for(let i=0;i<positions.count;i++){
+      vertex.fromBufferAttribute(positions,i);
+      for(const [axis,j] of [['x',0],['y',1],['z',2]]){
+        const unit=vertex[axis],magnitude=Math.abs(unit);
+        vertex[axis]=Math.sign(unit)*(magnitude===.5?half[j]:magnitude===.25?half[j]-radius:0);
+        inner[axis]=Math.max(-half[j]+radius,Math.min(half[j]-radius,vertex[axis]));
+      }
+      normal.subVectors(vertex,inner).normalize();vertex.copy(inner).addScaledVector(normal,radius);
+      positions.setXYZ(i,vertex.x,vertex.y,vertex.z);normals.setXYZ(i,normal.x,normal.y,normal.z);
+    }
+    const mesh=new T.Mesh(geometry,m);mesh.position.set(x,y+h/2,z);
+    return mesh;
+  }
   const palette = {};
   const material = (color, emission = .045, roughness = .85) => {
     const key = `${color}:${emission}:${roughness}`;
@@ -32,8 +94,27 @@ export function createPlaceScenes(T, helpers) {
     const tube = new T.Mesh(new T.TubeGeometry(curve,Math.max(8,points.length*4),r,5,false),m);
     g.add(tube); return tube;
   };
+  function groundOutline(w,d){
+    const s=new T.Shape(),r=Math.min(w,d)*.08,x=-w/2,z=-d/2;
+    s.moveTo(x+r,z);s.lineTo(x+w-r,z);s.quadraticCurveTo(x+w,z,x+w,z+r);
+    s.lineTo(x+w,z+d-r);s.quadraticCurveTo(x+w,z+d,x+w-r,z+d);
+    s.lineTo(x+r,z+d);s.quadraticCurveTo(x,z+d,x,z+d-r);
+    s.lineTo(x,z+r);s.quadraticCurveTo(x,z,x+r,z);return s;
+  }
   function floor(g,m,w=180,d=180,x=0,z=0,y=-.06) {
-    const p=new T.Mesh(new T.PlaneGeometry(w,d),m); p.rotation.x=-Math.PI/2; p.position.set(x,y,z); p.receiveShadow=true; g.add(p); return p;
+    const ground=m.clone();delete ground.userData.shared;ground.userData.sharedTexture=true;
+    ground.onBeforeCompile=shader=>{
+      shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vTerrain;')
+        .replace('#include <begin_vertex>','#include <begin_vertex>\nvTerrain=position;');
+      shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vTerrain;')
+        .replace('#include <color_fragment>',`#include <color_fragment>
+          float grain=fract(sin(dot(floor(vTerrain.xy*19.),vec2(12.9898,78.233)))*43758.5453);
+          float patina=sin(vTerrain.x*.16)*cos(vTerrain.y*.12);
+          diffuseColor.rgb*=.95+grain*.065+patina*.035;`);
+    };
+    ground.customProgramCacheKey=()=>'cinematic-terrain';
+    const outline=w>=100&&d>=80?groundOutline(w,d):null;
+    const p=new T.Mesh(outline?new T.ShapeGeometry(outline):new T.PlaneGeometry(w,d),ground);p.rotation.x=-Math.PI/2;p.position.set(x,y,z);p.receiveShadow=true;p.userData.terrain={w,d,outline};g.add(p);return p;
   }
   function tree(g,x,z,size=1,m=C.ochre,y=0) {
     const trunk=cyl(.15*size,.3*size,4*size,C.wood,x,y,z,7); g.add(trunk);
@@ -139,7 +220,18 @@ export function createPlaceScenes(T, helpers) {
   function water(g,w=220,d=160,z=-55,night=false){
     const m=new T.ShaderMaterial({transparent:false,uniforms:{time:{value:0},deep:{value:new T.Color(night?0x092b52:0x107b9a)},light:{value:new T.Color(night?0x287aaf:0x77c8cb)}},
       vertexShader:'varying vec2 vUv; uniform float time; void main(){ vUv=uv; vec3 p=position; p.z+=sin(p.x*.24+time)*.045+cos(p.y*.29+time*.7)*.04; gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.); }',
-      fragmentShader:'varying vec2 vUv; uniform float time; uniform vec3 deep,light; void main(){ float w=sin(vUv.x*190.+sin(vUv.y*90.+time)*2.+time)*sin(vUv.y*160.-time*.6); float s=pow(max(0.,w),8.); vec3 c=mix(deep,light,.18+s*.5); gl_FragColor=vec4(c,1.);\n #include <tonemapping_fragment>\n #include <colorspace_fragment>\n }'});
+      fragmentShader:`varying vec2 vUv; uniform float time; uniform vec3 deep,light;
+        void main(){
+          float swell=sin(vUv.x*95.+vUv.y*32.+time*.45);
+          float ripple=sin(vUv.x*240.+sin(vUv.y*110.+time*.55)*1.8);
+          float glint=pow(max(0.,swell*ripple),18.);
+          float ribbon=pow(max(0.,sin(vUv.x*70.+vUv.y*12.+time*.22)),26.);
+          float distanceTint=smoothstep(0.,1.,vUv.y);
+          vec3 c=mix(deep,light,.13+distanceTint*.22+glint*.34+ribbon*.08);
+          gl_FragColor=vec4(c,1.);
+          #include <tonemapping_fragment>
+          #include <colorspace_fragment>
+        }`});
     const plane=new T.Mesh(new T.PlaneGeometry(w,d,60,40),m);plane.rotation.x=-Math.PI/2;plane.position.set(0,-.2,z);g.add(plane);
     reg(g,(dt,t)=>m.uniforms.time.value=reduced?0:t);
     return plane;
@@ -153,12 +245,98 @@ export function createPlaceScenes(T, helpers) {
     for(let i=0;i<n;i++){const p=sphere(g,material(i%2?0x73877f:0x5d726c),-26+i*52/n,1.1+seed(i,2)*2,z+(seed(i,4)-.5)*12,4+seed(i,3)*2,2.5+seed(i,5)*3,4,geo.rock);p.rotation.y=seed(i)*6;}
   }
   function configure(g,id,camera,target,accent,sky,light){
-    light.night??=([0x142548,0x10223e,0x050d20].includes(sky.zen)?1:0);
-    g.userData.visual={id,camera,target,accent,sky,light};
+    const [name,kind,zen,hor,sun,ambient,key,fog,angle]=DIRECTIONS[id];
+    light.night??=(kind==='night'||zen===0x191d37||zen===0x191e39||id==='d9s5a'?1:0);
+    Object.assign(light,{sun,ambient,key,sky:zen,ground:kind==='night'?0x34324e:0x9c8870});
+    Object.assign(sky,{zen,hor});
+    const sunDirection=[angle,.58,1];
+    g.userData.visual={id,camera,target,accent,sky,light,name,kind,fog,sunDirection};
+    cinematicDetails(g,kind,accent,hor,id);
     g.userData.dispose=()=>{
       const owned=new Set();g.traverse(o=>{if(o.material)for(const m of [].concat(o.material))if(!m.userData.shared)owned.add(m);});
-      owned.forEach(m=>{if(m.map)m.map.dispose();m.dispose();});
+      owned.forEach(m=>{if(m.map&&!m.userData.sharedTexture)m.map.dispose();m.dispose();});
     };
+  }
+  function cinematicDetails(g,kind,accent,horizon,id){
+    const salt=[...id].reduce((a,c)=>a+c.charCodeAt(0),0);
+    const colour=new T.Color(accent),distant=new T.Color(horizon);
+    if(!['interior','lane','lantern'].includes(kind)){
+      const bands=lowEnd?2:3;
+      for(let i=0;i<bands;i++){
+        const haze=new T.ShaderMaterial({transparent:true,depthWrite:false,side:T.DoubleSide,
+          uniforms:{uTint:{value:distant.clone().lerp(new T.Color(kind==='night'?0x8e9abf:0xffffff),.35)},uTime:{value:0},uSeed:{value:seed(salt,i)*9}},
+          vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+          fragmentShader:`varying vec2 vUv;uniform vec3 uTint;uniform float uTime,uSeed;void main(){
+            float x=vUv.x+uTime*.0015;float crest=.48+sin(x*11.+uSeed)*.06+sin(x*23.+uSeed)*.025;
+            float band=exp(-pow((vUv.y-crest)*12.,2.));
+            float edge=smoothstep(0.,.16,vUv.x)*(1.-smoothstep(.82,1.,vUv.x));
+            float wisps=.55+.45*sin(x*17.+uSeed);
+            gl_FragColor=vec4(uTint,band*edge*wisps*.2);
+            #include <tonemapping_fragment>
+            #include <colorspace_fragment>
+          }`});
+        const cloud=new T.Mesh(new T.PlaneGeometry(160+i*24,22),haze);cloud.position.set((i-1)*26,26+i*11,-120-i*18);cloud.userData.noShadow=true;g.add(cloud);
+        if(!reduced)reg(g,(dt,t)=>haze.uniforms.uTime.value=t);
+      }
+    }
+    const isLand=!['coast','night','river','interior','rail'].includes(kind);
+    if(isLand){
+      const terrain=g.children.find(o=>o.userData.terrain?.outline);
+      if(terrain){
+        const base=new T.Mesh(new T.ExtrudeGeometry(terrain.userData.terrain.outline,{depth:1.2,bevelEnabled:true,bevelSize:.65,bevelThickness:.35,bevelSegments:2,steps:1}),material(distant.clone().multiplyScalar(.58).getHex()));
+        base.rotation.x=-Math.PI/2;base.position.copy(terrain.position);base.position.y-=1.6;
+        base.userData.noShadow=true;g.add(base);
+        for(const side of [-1,1]){
+          const ridge=sphere(g,material(distant.clone().lerp(colour,.22).multiplyScalar(.68).getHex()),side*70,2,-75,38,9+seed(salt,side)*9,19,geo.leaf);
+          ridge.userData.noShadow=true;
+        }
+      }
+    }
+    if(['court','ridge','grove','garden','village'].includes(kind)){
+      const shades=[colour.clone().lerp(new T.Color(0xf2d6a1),.3),new T.Color(0x93734a),new T.Color(0xc16b44)];
+      const count=lowEnd?70:140,geom=new T.PlaneGeometry(.16,.32);
+      const mulch=new T.InstancedMesh(geom,new T.MeshStandardMaterial({color:0xffffff,roughness:1,side:T.DoubleSide}),count);
+      const matrix=new T.Matrix4(),q=new T.Quaternion();
+      for(let i=0;i<count;i++){
+        const side=i%2?1:-1,x=side*(17+seed(i,salt)*27),z=-30+seed(i,salt+2)*40;
+        q.setFromEuler(new T.Euler(-Math.PI/2,0,seed(i,5)*6));
+        matrix.compose(new T.Vector3(x,.045,z),q,new T.Vector3(1,1,1));
+        mulch.setMatrixAt(i,matrix);mulch.setColorAt(i,shades[i%3]);
+      }
+      g.add(mulch);
+    }
+    if(['lane','lantern','interior'].includes(kind)){
+      const warm=material(0xffd2a0,.8);
+      for(const side of [-1,1]){
+        const glow=new T.Mesh(new T.PlaneGeometry(3.8,2.6),new T.MeshBasicMaterial({color:0xffd2a0,transparent:true,opacity:.12,depthWrite:false,side:T.DoubleSide}));
+        glow.rotation.x=-Math.PI/2;glow.rotation.z=side*.35;glow.position.set(side*7,.055,1);g.add(glow);
+        if(kind==='lane'){
+          const pot=cyl(.45,.6,.65,C.brick,side*19,0,7,10);g.add(pot);
+          sphere(g,C.pine,side*19,1.05,7,.7,.6,.7,geo.leaf);
+        }
+        sphere(g,warm,side*18,2.2,-6,.12);
+      }
+    }
+    const count=reduced?0:(lowEnd?28:64);
+    if(!count)return;
+    const positions=new Float32Array(count*3),colours=new Float32Array(count*3),sizes=new Float32Array(count);
+    const particles=new T.BufferGeometry();particles.setAttribute('position',new T.BufferAttribute(positions,3));particles.setAttribute('color',new T.BufferAttribute(colours,3));particles.setAttribute('aSize',new T.BufferAttribute(sizes,1));
+    const motes=new T.ShaderMaterial({transparent:true,depthWrite:false,vertexColors:true,uniforms:{uTime:{value:0},uWarm:{value:kind==='night'||kind==='lantern'?1:0}},
+      vertexShader:`attribute float aSize;varying vec3 vColor;uniform float uTime;void main(){
+        vColor=color;vec3 p=position;p.x+=sin(uTime*.24+position.z)*.65;p.y+=sin(uTime*.32+position.x)*.4;
+        vec4 mv=modelViewMatrix*vec4(p,1.);gl_PointSize=clamp(aSize*170./max(1.,-mv.z),1.,5.);gl_Position=projectionMatrix*mv;
+      }`,
+      fragmentShader:`varying vec3 vColor;uniform float uWarm;void main(){
+        float r=length(gl_PointCoord-.5);float a=(1.-smoothstep(.12,.5,r))*.42;
+        if(a<.01)discard;gl_FragColor=vec4(vColor*(1.+uWarm*.5),a);
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }`});
+    for(let i=0;i<count;i++){
+      positions.set([(seed(i,salt)-.5)*84,2+seed(i,salt+1)*16,-12-seed(i,salt+2)*62],i*3);
+      colour.clone().lerp(new T.Color(0xffffff),seed(i,8)*.65).toArray(colours,i*3);sizes[i]=.45+seed(i,3)*.7;
+    }
+    const points=new T.Points(particles,motes);points.userData.noShadow=true;g.add(points);reg(g,(dt,t)=>motes.uniforms.uTime.value=t);
   }
   function palace(g){
     floor(g,C.pale);floor(g,C.stone,45,28,0,3,.005);
@@ -239,7 +417,7 @@ export function createPlaceScenes(T, helpers) {
     for(let row=0;row<12;row++)for(let col=-1;col<6;col++){x.fillStyle=['#a3573f','#b76b4b','#994d36','#ab6145'][(row+col+8)%4];x.fillRect(col*48+(row%2)*24,row*23,45,20);}
     const tx=new T.CanvasTexture(c);tx.colorSpace=T.SRGBColorSpace;tx.wrapS=tx.wrapT=T.RepeatWrapping;tx.repeat.set(2.5,1.4);return new T.MeshStandardMaterial({map:tx,roughness:.93});
   }
-  const brick=brickMaterial();
+  const brick=brickMaterial();brick.userData.shared=true;
   function seongsu(g){
     floor(g,C.concrete);floor(g,material(0x666d69),18,100,0,-25,.005);
     g.add(box(30,9,11,brick,0,0,-18),box(30.5,.4,12,C.black,0,9,-18));
@@ -786,7 +964,7 @@ export function createPlaceScenes(T, helpers) {
   return {
     d1s3a:namsan,d1s4c:market,d2s1a:palace,d2s4b:bukchon,d4s4a:forest,d4s4b:seongsu,d6s7b:gwangalli,d7s1a:capsule,d7s4a:seaTemple,d8s1a:gamcheon,
     d2s7b:cheonggyecheon,d3s5b:banpo,d5s2a:commonGround,d5s3a:seokchon,d5s4a:seoulSky,d8s2a:jagalchi,d8s3a:huinnyeoul,d9s4a:naksan,d9s6b:ddp,d10s1a:secretGarden,
-    d1s2a:namsanCar,d2s1b:gwanghwamun,d2s5a:ssamziegil,d2s5b:jogyesa,d3s3a:gyeonghuigung,d3s4b:seonyudo,d4s2b:onion,d5s2b:g=>{onion(g);g.userData.visual.id='d5s2b';},d5s3b:loneTree,d6s2a:ktx,d6s5b:igidae,
+    d1s2a:namsanCar,d2s1b:gwanghwamun,d2s5a:ssamziegil,d2s5b:jogyesa,d3s3a:gyeonghuigung,d3s4b:seonyudo,d4s2b:onion,d5s2b:g=>{onion(g);g.userData.visual.id='d5s2b';g.userData.visual.name=DIRECTIONS.d5s2b[0];},d5s3b:loneTree,d6s2a:ktx,d6s5b:igidae,
     d7s2a:daritdol,d7s2b:cheongsapo,d7s5b:dongbaek,d7s7a:bay101,d7s7c:cinema,d8s1b:bookAlley,d8s3b:songdo,d8s4a:spaLand,d9s5a:gwangjang,d10s2a:glasshouse
   };
 }

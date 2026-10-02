@@ -38,7 +38,7 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 
 - Phone flow is staged: pick a character → the 3D scene fills the screen with a **Start the day** pill → the couple walks → an arrival pill pulls up the info sheet. Swipe the sheet down (big handle) or tap the scene to put it away; tap the pill or the title in the bottom bar to bring it back. `?debug=1` shows an on-screen diagnostics overlay.
 - Android (Samsung Internet / Chrome): open the link → menu → **Add to Home screen** — the page ships a web manifest and icons, so it installs as a standalone app with its own icon. iPhone: Share → **Add to Home Screen**.
-- `tools/` has no test runner; QA is done by walking the app in a phone-emulated browser (360×780 Galaxy profile) and checking for overflow, small touch targets and console errors.
+- Regression checks use Node's built-in test runner; browser QA also walks the app in a phone-emulated browser (360×780 Galaxy profile) and checks framing, overflow, touch targets and console errors.
 
 ## Editing
 
@@ -46,6 +46,14 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 - UI/3D code is in `index.html`. `tools/build.py` injects the data and stamps the build; `deploy.sh` runs it for you.
 - Street scenery (ginkgo trees, hanok lamps, lantern wires, gates, Hangul signs, benches, flowers) is generated per day in `buildStreet()`; the Hangul sign words live in the `hangulTex` atlas next to it. Counts scale down automatically on phones (`lowEnd`).
 - Local preview: `python3 -m http.server 8765` → http://127.0.0.1:8765/index.html · add `?debug=1` for the on-screen diagnostics overlay.
+
+## Cinematic visual revision
+
+The separate `visual/cinematic-scenes` branch explores **cinematic miniature worlds**: softened architectural edges, bevelled terrain, textured surfaces, slower coastal water, distinct sky/light/haze palettes and a named atmosphere for each visit. The itinerary and couple stay intact.
+
+Travel now connects scenes with continuous world reveals, lighting handoffs and frame-rate-independent camera/pose springs instead of blank-canvas fades at every stop. Phone sheet framing, interactive camera controls and reduced-motion support are preserved.
+
+Open `/visual-review/` for the 40-place comparison gallery, or `/index.html?motion-preview=1` for the real trail and controls without live sync. See [VISUAL-SCENES.md](./VISUAL-SCENES.md) for visual direction, motion behavior and validation commands. This revision is not yet merged or deployed.
 
 ## Live sync
 

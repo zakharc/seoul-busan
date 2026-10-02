@@ -30,6 +30,12 @@ new, imports = re.subn(
     r"(import \{createPlaceScenes\} from '\./place-scenes\.js)(?:\?v=[^']*)?(';)",
     lambda m: m.group(1) + "?v=" + scene_version + m.group(2), new, count=1)
 assert imports == 1, "place-scenes import not found in index.html"
+motion_path = os.path.join(ROOT, "scene-motion.js")
+motion_version = hashlib.sha256(open(motion_path, "rb").read()).hexdigest()[:12]
+new, motion_imports = re.subn(
+    r"(from '\./scene-motion\.js)(?:\?v=[^']*)?(';)",
+    lambda m: m.group(1) + "?v=" + motion_version + m.group(2), new, count=1)
+assert motion_imports == 1, "scene-motion import not found in index.html"
 open(idx_path, "w", encoding="utf-8").write(new)
 review_path = os.path.join(ROOT, "visual-review", "index.html")
 review = open(review_path, encoding="utf-8").read()

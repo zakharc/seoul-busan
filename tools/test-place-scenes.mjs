@@ -45,6 +45,7 @@ assert.equal(new Set(places.map(p => p.id)).size, 40);
 const reports = [];
 for (const [lowEnd, reduced] of [[true, false], [false, false], [true, true]]) {
   const scenes = createPlaceScenes(T, { box, cyl, reg, lowEnd, reduced });
+  const atmospheres = new Set();
   assert.equal(Object.keys(scenes).length, 41, '40 unique scenes plus the repeated Onion visit');
   for (const id of Object.keys(scenes)) {
     assert.ok(entries.has(id), `${id} is missing from the current itinerary`);
@@ -54,6 +55,11 @@ for (const [lowEnd, reduced] of [[true, false], [false, false], [true, true]]) {
     assert.equal(visual.id, id);
     assert.ok(visual.camera.every(Number.isFinite));
     assert.ok(visual.target.every(Number.isFinite));
+    assert.equal(typeof visual.name, 'string');
+    assert.ok(!atmospheres.has(visual.name), `${id}: each visit has its own atmosphere`);
+    atmospheres.add(visual.name);
+    assert.ok(visual.fog >= .0028 && visual.fog <= .008);
+    assert.ok(visual.sunDirection.every(Number.isFinite));
     for (const t of [0, 1, 10, 30]) {
       for (const animate of g.userData.anim || []) animate(1 / 60, t);
     }
@@ -70,6 +76,10 @@ for (const [lowEnd, reduced] of [[true, false], [false, false], [true, true]]) {
     });
     const bounds = new T.Box3().setFromObject(g);
     assert.ok(!bounds.isEmpty());
+    if (lowEnd) assert.ok(meshes <= 900, `${id}: mobile mesh budget exceeded`);
+    const motes = g.children.filter(o => o.isPoints && o.geometry.getAttribute('aSize'));
+    assert.equal(motes.length, reduced ? 0 : 1);
+    if (!reduced) assert.equal(motes[0].geometry.getAttribute('position').count, lowEnd ? 28 : 64);
     if (id === 'd8s1b') {
       let books = 0;
       g.traverse(o => {
