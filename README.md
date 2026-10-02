@@ -2,6 +2,8 @@
 
 *Two leaves. One shared adventure.* A single-file trip companion that opens on the roameo brand splash and hands off to the Seoul ⇄ Busan trail.
 
+**Version 1.4** — Changes to the plan: propose add / replace / move / drop / note from any stop, day or Explore card; search places, Wikipedia photo lookup; agree together; agreed changes become part of the trail on both phones.
+
 **Version 1.3** — polish round from her first test: no ground flicker (depth offsets on stacked ground layers, tighter near plane), landmarks no longer pop up/down on arrival, nothing stands between camera and couple (street trees/poles and stage props keep out of the camera corridor, neighbouring landmarks in the corridor are hidden, Namsan pines removed, lanterns rise behind the landmark), tall buildings sit off-axis.
 
 **Version 1.2** — roameo branding: animated splash (two-leaf logo, Nunito wordmark, motto, Start button) before the welcome hill; roameo app icons, manifest, OG card.
@@ -50,6 +52,10 @@ In the app: ⋯ → **Sync between phones** → follow the 4 steps (free Firebas
 ### Finale
 
 After the last stop (→ at the airport, the ✨ pill, or ♥ → *Roll the credits*) the camera returns to the autumn hill from the welcome screen: golden hour slides into a starry night while the couple plays through their gestures, lanterns rise, a heart blooms, fireworks go up over Seoul, and the words build up to **An amazing trip is coming.**
+
+### Changes to the plan (her research, his research)
+
+Either of you can propose a change from any stop (**💡 Suggest a change** in the sheet), from the **＋** on a day card, from the summary, or from an Explore card (**＋ Plan**): **replace** a stop with another place, **add** a place anywhere in a day (search Korea on OpenStreetMap, paste a link, say why, optionally pull photo/blurb from Wikipedia), **move** a stop to another day/time, **drop** it, or just leave a **note**. The other one gets a badge in ⋯ and a toast, can reply, and taps **💞 Agree** or **Not this one**. Agreed changes are written into both phones' plan (`props` in Firestore, applied at boot): added places become real stops on the 3D trail with their own stage, moment, quiz-less sheet, route links, itinerary entry and My Maps placemark; dropped stops are struck through and skipped by →; replaced stops get the new option pre-selected. A change that lands while the app is open shows a *Reload to see it* pill.
 
 ### Explore more places (찜)
 
