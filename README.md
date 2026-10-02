@@ -2,6 +2,8 @@
 
 *Two leaves. One shared adventure.* A single-file trip companion that opens on the roameo brand splash and hands off to the Seoul ⇄ Busan trail.
 
+**Version 1.14** — Test as her: a safe test copy (`?trip=sandbox&as=her`, ⋯ → Test as Киця) seeded read-only from the real trip, with its own device storage, switch person, reset and leave.
+
 **Version 1.13** — Final combined UX review: narrow-phone day capsule, 44px game controls and ribbons that fit, reduced-motion game messages keep their reading time, driver card traps focus, map search focus and ARIA clean-up.
 
 **Version 1.12** — Trip map convenience pass: time check (leave-by, time at each stop, tight-connection warnings), Today view with Next up, KakaoMap links and a 🚕 driver card in Hangul, find, ▶ Play the day, smoother sheet and transitions, layered Esc; fixes Esc not closing the map after a popup.
@@ -85,6 +87,15 @@ Open `/visual-review/` for the 40-place comparison gallery, or `/index.html?moti
 ## Live sync
 
 In the app: ⋯ → **Sync between phones** → follow the 4 steps (free Firebase project, Firestore, rules, paste `firebaseConfig`). Then **Copy her link** and send it.
+
+### Test as her (safe copy)
+
+To see the app exactly as Киця does without touching her history: ⋯ → **Test as Киця** (shown on your phone, not hers), or open `https://zakharc.github.io/seoul-busan/?trip=sandbox&as=her` directly.
+
+- It opens a **test copy**: a separate Firestore document (`trips/sandbox`) made once from a read-only copy of the real trip. Hearts, picks, quiz answers, suggestions, pokes and "who's online" all go to the copy. The real trip (`trips/seoul-busan-2026`) is only ever read, never written.
+- The copy also gets its **own storage on the device** (keys prefixed `sbx:<trip>:<person>:`), so your real role, picks and caches on this phone stay exactly as they were. Leaving test mode brings back your real app.
+- An amber frame and a **🧪 Test copy · Киця** tag show you're in test mode. Tap the tag (or ⋯ → **Test copy**) to switch to Mykola's view of the same copy, open the other person's view in a new tab (to try suggest → agree from both sides), **reset the copy** from the real trip as it is now, or **leave test mode**.
+- The copy persists between test sessions until you reset it. Any `?trip=…` link (including QA scratch trips) uses its own device storage the same way.
 
 ### Finale
 
