@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f7f0e5">
 <meta property="og:title" content="roameo · Seoul ⇄ Busan"><meta property="og:description" content="Two leaves. One shared adventure. Eleven days, two cities, one trail — for the two of us."><meta property="og:image" content="https://zakharc.github.io/seoul-busan/icons/og.png"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
-<meta name="build" content="20261002-073231">
+<meta name="build" content="20261002-090901">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
@@ -949,18 +949,6 @@ html{background:var(--bg)}
 .cf-l textarea{resize:vertical;line-height:1.4}
 .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.cgrid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 @media (max-width:380px){ .cgrid3{grid-template-columns:1fr 1fr} }
-.cres{display:grid;gap:4px;margin-top:6px}
-.cres button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:9px 12px;border-radius:12px;background:var(--surface);border:1px solid var(--line);text-align:left;font:600 14px var(--body);color:var(--ink)}
-.cres button small{font:500 12px var(--body);color:var(--muted)}
-.cres .muted{margin:4px 0;font-size:13px;color:var(--muted)}
-.csearch{display:flex;gap:8px;margin-top:6px}
-.csearch input{margin-top:0;min-width:0;flex:1;min-height:48px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--soft);color:var(--ink);font:500 16px var(--body)}
-.csearch button{flex:0 0 auto;min-height:48px;padding:0 18px;border-radius:12px;background:var(--c);color:#fff;font:700 14px var(--body)}
-.cres button{min-height:54px}
-.cres .search-result{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
-.cres .search-result button{border:0;background:var(--soft)}
-.cres .search-result a{align-self:center;font-size:12px;color:var(--c)}
-.cres .search-result .source{grid-column:1/-1;color:var(--muted);font-size:11px}
 .csearch-help{margin:8px 0;font-size:12px;color:var(--muted);line-height:1.5}
 .csearch-links{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
 .csearch-links a{padding:7px 10px;background:var(--soft);border-radius:10px;color:var(--c);font-size:12px;text-decoration:none}
@@ -968,6 +956,106 @@ html{background:var(--bg)}
 .cpinned small{display:block;margin-top:4px;color:var(--muted)}
 .cwiki{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:12.5px;color:var(--muted)}
 .chgd .row{margin-top:18px}
+/* spotlight: search first, small action second */
+#chgdlg{--spot-height:100dvh}
+.dlg.spotlight{top:calc(var(--sat) + 10px);bottom:auto;left:10px;right:10px;display:flex;flex-direction:column;max-height:calc(var(--spot-height) - var(--sat) - 20px);padding:0;overflow:hidden;border-radius:22px;border:1px solid var(--line);background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);box-shadow:0 30px 80px -30px rgba(17,22,40,.5);animation:spotin .32s var(--ease)}
+@keyframes spotin{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:none}}
+@media (min-width:900px){ .dlg.spotlight{top:12vh;left:50%;right:auto;width:min(640px,calc(100vw - 40px));transform:translateX(-50%);animation:spotin-d .32s var(--ease)} @keyframes spotin-d{from{opacity:0;transform:translate(-50%,-10px) scale(.98)}to{opacity:1;transform:translateX(-50%)}} }
+.spot-search{display:flex;align-items:center;gap:10px;padding:12px 12px 10px 16px;border-bottom:1px solid var(--line)}
+.spot-search>span{font-size:22px;line-height:1;color:var(--muted)}
+.spot-search input{flex:1;min-width:0;height:44px;padding:0;border:0;outline:none;background:transparent;color:var(--ink);font:600 18px var(--body);letter-spacing:-.01em}
+.spot-search input::placeholder{color:var(--muted);font-weight:500}
+.spot-search button{flex:0 0 36px;width:36px;height:36px;border-radius:50%;background:var(--soft);color:var(--ink);font:500 22px/1 var(--body);display:grid;place-items:center}
+.spot-context{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 16px;font:600 12px var(--body);color:var(--muted)}
+.spot-context>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.spot-city{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.spot-city select{height:30px;padding:0 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:700 12px var(--body)}
+#spot-results{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:2px 8px 8px;position:relative;scrollbar-width:none}
+#spot-results::-webkit-scrollbar{display:none}
+#spot-results[aria-busy="true"]{opacity:.75}
+#spot-results button{display:flex;align-items:center;gap:12px;width:100%;min-height:54px;padding:8px 10px;border-radius:14px;background:transparent;text-align:left;color:var(--ink);transition:background .15s}
+#spot-results button[aria-selected="true"]{background:color-mix(in srgb,var(--c) 13%,var(--surface))}
+#spot-results button:active{background:color-mix(in srgb,var(--c) 20%,var(--surface))}
+.spot-icon{flex:0 0 36px;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:var(--soft);font-size:18px;line-height:1}
+.spot-text{flex:1;min-width:0}
+.spot-text b,.spot-text small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.spot-text b{font:700 15px/1.25 var(--body)}
+.spot-text small{margin-top:2px;font:500 12px/1.3 var(--body);color:var(--muted)}
+.spot-enter{flex:0 0 auto;font-size:14px;color:var(--muted);opacity:0}
+#spot-results button[aria-selected="true"] .spot-enter{opacity:1}
+.spot-empty{margin:14px 10px;font-size:13px;color:var(--muted)}
+.spot-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 16px;border-top:1px solid var(--line);font:600 11.5px var(--body);color:var(--muted)}
+#spot-status{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#spot-status[role="alert"]{color:var(--rose)}
+@media (hover:none){ .spot-keys,.spot-enter{display:none} }
+.spot-back{display:inline-flex;align-items:center;height:32px;margin:-4px 0 10px;padding:0 12px;border-radius:999px;background:var(--soft);color:var(--ink);font:700 12.5px var(--body)}
+.spot-target,.spot-selected{display:flex;align-items:center;gap:12px;margin-top:12px;padding:10px 10px 10px 12px;border-radius:16px;border:1px solid var(--line);background:color-mix(in srgb,var(--c) 6%,var(--surface))}
+.spot-target>span{flex:1;min-width:0;font:700 14px/1.3 var(--body)}
+.spot-selected>span:not(.spot-icon){flex:1;min-width:0}
+.spot-selected b{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;font:700 15px/1.25 var(--body);overflow:hidden}
+.spot-selected small{display:block;margin-top:2px;font:500 12px/1.3 var(--body);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.spot-target .cbtn,.spot-selected .cbtn{flex:0 0 auto}
+.spot-details{margin-top:12px;border-radius:14px;background:var(--soft);padding:0 12px}
+.spot-details[open]{padding-bottom:12px}
+.spot-details summary{display:flex;align-items:center;justify-content:space-between;min-height:44px;cursor:pointer;list-style:none;font:700 13.5px var(--body)}
+.spot-details summary::-webkit-details-marker{display:none}
+.spot-details summary::after{content:"▾";color:var(--muted);transition:transform .2s}
+.spot-details[open] summary::after{transform:rotate(180deg)}
+.spot-details summary small{margin-left:auto;margin-right:8px;font:500 12px var(--body);color:var(--muted)}
+.spot-details .cf-l input,.spot-details .cf-l textarea{background:var(--surface)}
+.spot-shared{margin:14px 0 0;font-size:12.5px;line-height:1.45;color:var(--muted)}
+/* scout report */
+.scout{margin:16px 0 0;padding:16px 14px 14px;border-radius:20px;background:linear-gradient(160deg,color-mix(in srgb,var(--c) 7%,var(--surface)),var(--surface) 60%);border:1px solid color-mix(in srgb,var(--c) 16%,var(--line))}
+.sc-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+.sc-h h4,.sc-alts-h h4{margin:0;font:700 12px/1 var(--body);letter-spacing:.16em;text-transform:uppercase;color:var(--c)}
+.sc-h span{font:500 11px var(--body);color:var(--muted);text-align:right}
+.sc-warn{margin:0 0 10px;padding:9px 11px;border-radius:12px;background:color-mix(in srgb,var(--rose) 12%,var(--surface));color:var(--ink);font:600 12.5px/1.4 var(--body)}
+.sc-chips{display:flex;flex-wrap:wrap;gap:6px}
+.sc-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 10px 6px 8px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font:600 12.5px/1.2 var(--body);color:var(--ink)}
+.sc-chip i{font-style:normal;font-size:13px}
+.sc-sub{margin:14px 0 7px;font:700 11px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.sc-near{min-height:40px}
+.sc-wait{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:14px 0 0;font:500 12.5px var(--body);color:var(--muted)}
+.sc-wait i{width:14px;height:14px;border-radius:50%;border:2px solid color-mix(in srgb,var(--c) 30%,transparent);border-top-color:var(--c);animation:scspin .9s linear infinite}
+@keyframes scspin{to{transform:rotate(360deg)}}
+.sc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.sc-grid>div{display:flex;flex-direction:column;gap:1px;padding:9px 9px 8px;border-radius:13px;background:var(--soft);min-width:0;animation:scin .45s var(--ease) both}
+.sc-grid>div:nth-child(2){animation-delay:.05s}.sc-grid>div:nth-child(3){animation-delay:.1s}.sc-grid>div:nth-child(4){animation-delay:.15s}.sc-grid>div:nth-child(5){animation-delay:.2s}.sc-grid>div:nth-child(6){animation-delay:.25s}
+@keyframes scin{from{opacity:0;transform:translateY(6px)}}
+.sc-grid i{font-style:normal;font-size:16px;line-height:1.2}
+.sc-grid b{font:700 12.5px/1.25 var(--body);overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow-wrap:anywhere;hyphens:auto}
+.sc-grid small{font:500 11px/1.25 var(--body);color:var(--muted)}
+@media (max-width:370px){ .sc-grid{grid-template-columns:1fr 1fr} }
+.sc-extra{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:8px;font:600 12px/1.4 var(--body);color:var(--ink)}
+.sc-extra a{color:var(--c)}
+.sc-osm{margin:8px 0 0;font:500 10.5px var(--body);color:var(--muted)}
+.sc-rates{display:flex;flex-wrap:wrap;gap:6px}
+.sc-r{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 11px;border-radius:11px;background:var(--surface);border:1px solid var(--line);color:var(--ink);font:700 12.5px var(--body);text-decoration:none}
+.sc-r i{width:8px;height:8px;border-radius:50%;background:#999}
+.sc-r::after{content:"↗";font-weight:500;color:var(--muted)}
+.sc-r.g i{background:conic-gradient(#4285f4 0 25%,#34a853 0 50%,#fbbc05 0 75%,#ea4335 0)}.sc-r.ta i{background:#34e0a1}.sc-r.nv i{background:#03c75a}.sc-r.kk i{background:#fee500;box-shadow:0 0 0 1px rgba(0,0,0,.15)}.sc-r.mi i{background:#c6102e}.sc-r.bl i{background:linear-gradient(135deg,#03c75a,#1ec8ff)}
+.sc-alts-h{display:flex;align-items:center;justify-content:space-between;margin:18px 0 8px}
+.sc-dice{height:32px;padding:0 12px;border-radius:999px;background:var(--ink);color:var(--bg);font:700 12.5px var(--body)}
+.sc-dice:active{transform:scale(.95)}
+.sc-alts{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -14px;padding:2px 14px 6px;scrollbar-width:none;overscroll-behavior-x:contain}
+.sc-alts::-webkit-scrollbar{display:none}
+.sc-alt{flex:0 0 min(78%,250px);scroll-snap-align:start;display:flex;flex-direction:column;gap:7px;padding:12px;border-radius:16px;background:var(--surface);border:1px solid var(--line);box-shadow:0 10px 24px -18px rgba(17,22,40,.35);animation:scin .5s var(--ease) both;animation-delay:calc(var(--i)*.05s)}
+.sc-alt.lucky{border-color:var(--c);animation:sclucky .7s var(--ease)}
+@keyframes sclucky{0%{transform:scale(1)}30%{transform:scale(1.04) rotate(-1.2deg)}60%{transform:scale(.99) rotate(.8deg)}100%{transform:none}}
+.sc-alt-top{display:flex;align-items:center;gap:8px;min-width:0}
+.sc-alt-ic{flex:0 0 30px;height:30px;border-radius:10px;display:grid;place-items:center;background:var(--soft);font-size:16px}
+.sc-alt-top b{font:700 14px/1.25 var(--body);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.sc-why{display:flex;flex-wrap:wrap;gap:4px}
+.sc-why span{padding:4px 7px;border-radius:8px;background:color-mix(in srgb,var(--c) 10%,var(--surface));color:var(--ink);font:700 11px/1.2 var(--body)}
+.sc-alt small{font:500 11.5px/1.3 var(--body);color:var(--muted);min-height:15px}
+.sc-alt-act{display:flex;align-items:center;gap:6px;margin-top:auto}
+.sc-swap{flex:1;height:36px;border-radius:11px;background:var(--c);color:#fff;font:700 13px var(--body)}
+.sc-add{flex:0 0 36px;height:36px;border-radius:11px;background:var(--soft);color:var(--ink);font:700 18px/1 var(--body)}
+.sc-alt-act a{font:700 12px var(--body);color:var(--c);text-decoration:none;padding:0 4px}
+.sc-none{margin:0;font:500 12.5px var(--body);color:var(--muted)}
+.scout-mini{margin-top:10px}
+.scout-mini .sc-sub{margin-top:10px}
+@media (prefers-reduced-motion:reduce){ .sc-grid>div,.sc-alt,.sc-alt.lucky{animation:none} .sc-wait i{animation-duration:3s} }
 /* reload bar */
 .reloadbar{position:fixed;left:50%;bottom:calc(var(--bar-h) + var(--sab) + 84px);transform:translate(-50%,20px);z-index:85;display:flex;align-items:center;gap:12px;padding:10px 10px 10px 16px;border-radius:999px;background:var(--ink);color:var(--bg);font:700 14px var(--body);box-shadow:0 18px 40px -16px rgba(17,22,40,.55);opacity:0;pointer-events:none;transition:opacity .4s var(--ease),transform .5s var(--ease)}
 .reloadbar.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
@@ -1458,12 +1546,13 @@ function renderStop(i,k){
       ${changesHtml(it,i,k)}
       ${facts.length?`<div class="facts">${facts.map(f=>`<div class="fact">${f[1]}<div><small>${f[0]}</small><span>${esc(f[2])}</span></div></div>`).join("")}</div>`:""}
       ${quizBtnHtml(it)}
+      ${scoutHtml(it,i,k)}
       ${(p.tips||it.tips)&&(p.tips||it.tips).length?`<div class="tips"><h4>Good to know</h4><ul>${(p.tips||it.tips).map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>`:""}
       ${p.warn?`<p class="warn">${esc(p.warn)}</p>`:""}
       ${extract?`<p class="about" id="about">${esc(extract)} <a href="${esc(w.url)}" target="_blank" rel="noopener">Wikipedia ↗</a></p>`:(p.wiki?`<p class="about" id="about"></p>`:"")}
       <div class="acts">${acts}</div>
     </div>${reviewBar(it,opts?opts[si]:null,i,k)}`;
-  sheetScroll.scrollTop=0; fillGallery(p); bindChanges(sheetScroll);
+  sheetScroll.scrollTop=0; fillGallery(p); bindChanges(sheetScroll); bindScout(it,i,k);
   const oc=sheetScroll.querySelector(".ocards"); if(oc){ const sel=oc.querySelector('[aria-selected="true"]'); if(sel&&matchMedia("(max-width:899px)").matches) oc.scrollLeft=Math.max(0,sel.offsetLeft-10); }
   sheetScroll.querySelectorAll(".ocards .ocard").forEach(b=>b.onclick=()=>{ const j=+b.dataset.j; if(j===si) return; choice[it.id]=opts[j].id; saveK("sbtrip-choice-v1",choice); const st=sheetScroll.scrollTop; sheet.classList.add("still"); renderStop(i,k); sheetScroll.scrollTop=st; const ph=sheetScroll.querySelector(".photo"); if(ph) ph.animate([{opacity:.35},{opacity:1}],{duration:500,easing:"ease-out"}); renderBar(); APP.emit("choice",{day:i,stop:k}); buzz(4); });
   const sn=sheetScroll.querySelector(".snap"); if(sn) sn.onclick=()=>APP.emit("snap"); const mbt=sheetScroll.querySelector(".mcard button"); if(mbt) mbt.onclick=()=>{ if(PHONE) putDown(); setTimeout(()=>playMoment(i,k,true),PHONE?450:0); }; const qb=$("quiz-open"); if(qb) qb.onclick=()=>openQuiz(i,k); renderPolaroids(); bindReview(sheetScroll,it,i,k,opts?opts[si]:null);
@@ -1660,7 +1749,7 @@ APP.previewSelect=id=>{
 function next(){ const s=APP.state; if(s.mode==="interlude"){ $("i-go").onclick(); return; } if(s.mode==="travel"||s.mode==="start"||s.mode==="finale") return; const d=DAYS[s.day]; if(s.mode==="day"){ let k0=0; while(k0<d.items.length-1&&d.items[k0].removed) k0++; return go(s.day,k0); } let nk=s.stop+1; while(nk<d.items.length&&d.items[nk].removed) nk++; if(nk<d.items.length) return go(s.day,nk); if(s.day<DAYS.length-1){ const nd=s.day+1; if(xpGate(s.day,()=>go(nd,-1))) return; go(nd,-1); } else startFinale(); }
 function prev(){ const s=APP.state; if(s.mode==="interlude"){ interPending=null; go(5,1,"jump"); return; } if(s.mode==="travel"||s.mode==="start") return; if(s.mode==="finale"){ go(DAYS.length-1,DAYS[DAYS.length-1].items.length-1,"jump"); return; } if(s.mode==="day"){ if(s.day>0) go(s.day-1,DAYS[s.day-1].items.length-1,"jump"); return; } let pk=s.stop-1; while(pk>0&&DAYS[s.day].items[pk].removed) pk--; if(pk>=0) go(s.day,pk); else go(s.day,-1); }
 btnNext.onclick=next; btnPrev.onclick=prev;
-addEventListener("keydown",e=>{ if(e.target.matches("textarea,input")) return; if(e.key==="ArrowRight") next(); else if(e.key==="ArrowLeft") prev(); else if(e.key==="Escape"){ document.querySelectorAll("dialog[open]").forEach(d=>d.close()); $("doc").classList.remove("show"); closeQuiz(); } });
+addEventListener("keydown",e=>{ if(e.defaultPrevented||e.target.matches("textarea,input,select")||document.querySelector("dialog[open]")) return; if(e.key==="ArrowRight") next(); else if(e.key==="ArrowLeft") prev(); else if(e.key==="Escape"){ $("doc").classList.remove("show"); closeQuiz(); } });
 let tx=0,ty=0,tt=0;
 addEventListener("touchstart",e=>{ if(APP.state.quiz||!e.target.closest(".sheet,.bar,.daycard")||e.target.closest("dialog,.seg,.ocards,.review,.strip,.grab,.photo")) { tt=0; return; } tx=e.touches[0].clientX; ty=e.touches[0].clientY; tt=Date.now(); },{passive:true});
 addEventListener("touchend",e=>{ if(!tt||e.target.closest("dialog,.seg,.ocards,.review")) return; const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty, el=Date.now()-tt; tt=0; if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.6&&el<800){ if(dx<0) next(); else prev(); } },{passive:true});
@@ -2052,7 +2141,7 @@ function setPickSel(r,silent,dir){ r=r||"her"; const changed=r!==pickSel; pickSe
 function cyclePick(dir){ const i=PICK_ORDER.indexOf(pickSel||"her"); setPickSel(PICK_ORDER[(i+dir+PICK_ORDER.length)%PICK_ORDER.length],false,dir); }
 function openPick(){ startEl.hidden=true; APP.state.mode="pick"; pickEl.hidden=false; requestAnimationFrame(()=>requestAnimationFrame(()=>pickEl.classList.add("show"))); setPickSel(role||"her",true); APP.emit("move",{kind:"pick",day:-1,stop:-1,prev:APP.state}); }
 $("pick-prev").onclick=()=>cyclePick(-1); $("pick-next").onclick=()=>cyclePick(1);
-addEventListener("keydown",e=>{ if(APP.state.mode!=="pick") return; if(e.key==="ArrowLeft") cyclePick(-1); else if(e.key==="ArrowRight") cyclePick(1); else if(e.key==="Enter") $("pick-go").click(); });
+addEventListener("keydown",e=>{ if(e.defaultPrevented||APP.state.mode!=="pick"||document.querySelector("dialog[open]")) return; if(e.key==="ArrowLeft") cyclePick(-1); else if(e.key==="ArrowRight") cyclePick(1); else if(e.key==="Enter") $("pick-go").click(); });
 (function(){ let sx=0,st=0; pickEl.addEventListener("touchstart",e=>{ sx=e.touches[0].clientX; st=Date.now(); },{passive:true}); pickEl.addEventListener("touchend",e=>{ const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>50&&Date.now()-st<700) cyclePick(dx<0?1:-1); },{passive:true}); })();
 APP.pickSelect=r=>setPickSel(r,false,PICK_ORDER.indexOf(r)>PICK_ORDER.indexOf(pickSel||"her")?1:-1);
 $("pick-go").onclick=()=>{ if(!pickSel) return; role=pickSel; saveK("sbtrip-role",role); renderRoles(); toast(role==="her"?"Привіт, Киця 💗":"Hi Mykola"); const u=undecided().length, tot=ALL_ITEMS.length; if(u>0&&u<tot){ if(PHONE){ const [,i,k]=undecided()[0]; go(i,k,"jump"); } else continueReview(); } else go(0,-1); };
@@ -2296,10 +2385,12 @@ function cancelPlaceSearch(){ placeSearchSeq++; if(placeSearchController) placeS
 chgEl.addEventListener("close",cancelPlaceSearch);
 function researchLinks(query,city){ const q=encodeURIComponent((query.trim()||"places to visit")+" "+city+" Korea"); return `<div class="csearch-links"><a href="https://www.google.com/search?q=${q}" target="_blank" rel="noopener">Google research ↗</a><a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">Google Maps ↗</a><a href="https://map.naver.com/p/search/${q}" target="_blank" rel="noopener">Naver Maps ↗</a></div>`; }
 function validPlaceCoordinates(lat,lng){ return Number.isFinite(lat)&&Number.isFinite(lng)&&lat>=33&&lat<=39&&lng>=124&&lng<=132; }
-function localPlaceResults(query,city){ const needle=query.trim().toLocaleLowerCase(); if(needle.length<2) return []; const found=[], seen=new Set();
+function searchText(value){ return String(value||"").normalize("NFD").replace(/\p{M}/gu,"").toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu," ").trim(); }
+function localPlaceResults(query,city){ if(query.trim().length<2) return []; const needle=searchText(query), tokens=needle.split(" ").filter(Boolean); if(!tokens.length) return []; const found=[], seen=new Set();
   const all=DAYS.filter(d=>d.city===city).flatMap(d=>d.items.flatMap(it=>(optionsOf(it)||[it]).map(resolve))).concat(XP.filter(p=>p.city===city));
-  for(const p of all){ if(!p||!validPlaceCoordinates(+p.lat,+p.lng)) continue; const key=(p.name||p.title||"")+"|"+(+p.lat).toFixed(4)+"|"+(+p.lng).toFixed(4); if(seen.has(key)) continue; const text=[p.title,p.name,p.ko,p.type].filter(Boolean).join(" ").toLocaleLowerCase(); if(!text.includes(needle)) continue; seen.add(key);
+  for(const p of all){ if(!p||!validPlaceCoordinates(+p.lat,+p.lng)) continue; const key=(p.name||p.title||"")+"|"+(+p.lat).toFixed(4)+"|"+(+p.lng).toFixed(4); if(seen.has(key)) continue; const text=searchText([p.title,p.name,p.ko,p.type].filter(Boolean).join(" ")); if(!tokens.every(t=>text.includes(t))) continue; seen.add(key);
     found.push({title:p.title||p.name,name:p.name||p.title,ko:p.ko||"",lat:+p.lat,lng:+p.lng,cat:p.cat||(/^shop:cafe/.test(p.landmark||"")?"cafe":/^shop:/.test(p.landmark||"")?"food":"sight"),cool:p.cool||p.about||"",price:p.price||"",hours:p.hours||"",need:p.need||"",wiki:p.wiki||"",img:p.img||"",address:p.address||city,url:p.url||placeUrl(p),source:"Trip & Explore suggestions"}); }
+  found.sort((a,b)=>{ const score=p=>searchText(p.title)===needle?3:searchText(p.title).startsWith(needle)?2:1; return score(b)-score(a); });
   return found.slice(0,8); }
 async function osmSearch(query,city,signal){ const params=new URLSearchParams({format:"jsonv2",limit:"8",countrycodes:"kr","accept-language":"en,ko",addressdetails:"1",namedetails:"1",q:query});
   const bounds=city==="Busan"?"128.7,35.5,129.4,34.8":"126.6,37.85,127.3,37.3"; params.set("viewbox",bounds);
@@ -2307,53 +2398,316 @@ async function osmSearch(query,city,signal){ const params=new URLSearchParams({f
   const data=await r.json(); if(!Array.isArray(data)) throw new Error("Place search returned an unexpected response.");
   return data.filter(p=>validPlaceCoordinates(+p.lat,+p.lon)).map(p=>{ const names=p.namedetails||{}, title=names["name:en"]||p.name||p.display_name.split(",")[0], kind=p.type||"";
     return {title,name:title,ko:names["name:ko"]||(/[가-힣]/.test(names.name||p.name||"")?(names.name||p.name):""),lat:+p.lat,lng:+p.lon,address:p.display_name,cat:/cafe/.test(kind)?"cafe":/restaurant|food|bar/.test(kind)?"food":/park|garden|forest/.test(kind)?"nature":"sight",source:"OpenStreetMap",sourceUrl:`https://www.openstreetmap.org/${p.osm_type}/${p.osm_id}`}; }); }
-function showPlaceResults(results,container,draft){ container.innerHTML=results.map((r,i)=>`<div class="search-result"><button type="button" data-r="${i}"><b>${esc(r.title)}</b><small>${esc(r.address||"")}</small><small>Select this place →</small></button><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.lat+","+r.lng)}" target="_blank" rel="noopener">Map ↗</a><span class="source">${esc(r.source)}${r.source==="OpenStreetMap"?' · © OpenStreetMap contributors':""}</span></div>`).join("");
-  container.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{ if(chgDraft!==draft) return; readDraft(); const r=results[+b.dataset.r]; draft.place=Object.assign({},r,{cat:r.cat||draft.place.cat||"sight"}); renderComposer(); toast("📍 "+r.title+" selected — choose how it fits your plan"); }); }
-function bindPlaceSearch(draft){ const input=$("c-q"), container=$("c-res"), search=$("c-search"); if(!input||!container||!search) return;
-  const links=()=>{ $("c-research").innerHTML=researchLinks(input.value,DAYS[draft.day].city); };
-  input.oninput=()=>{ cancelPlaceSearch(); search.disabled=false; container.setAttribute("aria-busy","false"); draft.searchQuery=input.value; links(); const results=localPlaceResults(input.value,DAYS[draft.day].city); showPlaceResults(results,container,draft); };
-  const submit=async()=>{ if(search.disabled) return; const query=input.value.trim(); if(query.length<2){ toast("Enter at least two characters to search"); input.focus(); return; } cancelPlaceSearch(); const seq=placeSearchSeq, controller=new AbortController(); placeSearchController=controller; draft.searchQuery=query; search.disabled=true; container.setAttribute("aria-busy","true"); container.innerHTML='<p class="muted">Searching places in Korea…</p>';
-    const timeout=setTimeout(()=>controller.abort(),12000);
-    try{ const remote=await osmSearch(query,DAYS[draft.day].city,controller.signal); if(seq!==placeSearchSeq||chgDraft!==draft||!chgEl.open) return; const results=localPlaceResults(query,DAYS[draft.day].city), seen=new Set(results.map(r=>r.title+"|"+r.lat.toFixed(4)+"|"+r.lng.toFixed(4))); for(const r of remote){ const key=r.title+"|"+r.lat.toFixed(4)+"|"+r.lng.toFixed(4); if(!seen.has(key)){ results.push(r); seen.add(key); } } showPlaceResults(results,container,draft); if(!results.length) container.innerHTML='<p class="muted">No matches. Try the Korean name or a neighborhood. You can also research with Google and enter the place manually below.</p>';
-    }catch(e){ if(seq!==placeSearchSeq||chgDraft!==draft||!chgEl.open) return; const msg=e.name==="AbortError"?"Place search timed out. Please try again.":e.message; console.warn("Place search failed",e); container.innerHTML=`<p class="muted" role="alert">${esc(msg)} Google and Naver research links still work.</p>`; toast(msg);
-    }finally{ clearTimeout(timeout); if(seq===placeSearchSeq){ search.disabled=false; container.setAttribute("aria-busy","false"); placeSearchController=null; } } };
-  search.onclick=submit; input.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); submit(); } }; links(); }
+async function expandedPlaceResults(query,city,signal){
+  const remote=await osmSearch(query,city,signal), results=localPlaceResults(query,city);
+  const seen=new Set(results.map(r=>r.title+"|"+r.lat.toFixed(4)+"|"+r.lng.toFixed(4)));
+  for(const r of remote){ const key=r.title+"|"+r.lat.toFixed(4)+"|"+r.lng.toFixed(4); if(!seen.has(key)){ results.push(r); seen.add(key); } }
+  return results;
+}
+async function performPlaceSearch(draft,query,handlers){
+  cancelPlaceSearch(); const seq=placeSearchSeq, controller=new AbortController(); placeSearchController=controller;
+  const current=()=>seq===placeSearchSeq&&chgDraft===draft&&chgEl.open;
+  handlers.loading(); const timeout=setTimeout(()=>controller.abort(),12000);
+  try{ const results=await expandedPlaceResults(query,draft.spotCity||DAYS[draft.day].city,controller.signal); if(current()) handlers.success(results); }
+  catch(e){ if(current()){ console.warn("Place search failed",e); handlers.error(e.name==="AbortError"?"Place search timed out. Please try again.":e.message); } }
+  finally{ clearTimeout(timeout); if(current()){ placeSearchController=null; handlers.complete(); } }
+}
 async function wikiLookup(title){ const q=new URLSearchParams({action:"query",generator:"search",gsrsearch:title,gsrlimit:"1",prop:"pageimages|extracts|info",inprop:"url",pithumbsize:"900",exintro:"1",explaintext:"1",exsentences:"2",format:"json",origin:"*"}); const r=await fetch("https://en.wikipedia.org/w/api.php?"+q); if(!r.ok) throw new Error(`Wikipedia lookup returned HTTP ${r.status}.`); const d=await r.json(); if(d.error) throw new Error(d.error.info||"Wikipedia lookup failed."); const pg=Object.values((d.query&&d.query.pages)||{})[0]; if(!pg) return null; const w={img:pg.thumbnail?pg.thumbnail.source:null,extract:(pg.extract||"").trim(),url:pg.fullurl,title:pg.title}; wiki[pg.title]=w; try{ localStorage.setItem(WK_KEY,JSON.stringify({ts:Date.now(),data:wiki})); }catch(e){} return w; }
+/* ---------- scout: generated place summary, live surroundings, rating links, swap ideas ---------- */
+const SCOUT_KEY="sbtrip-scout-v1", SCOUT_TTL=14*864e5, SCOUT_ENDPOINTS=["https://overpass-api.de/api/interpreter","https://lz4.overpass-api.de/api/interpreter","https://z.overpass-api.de/api/interpreter","https://overpass.private.coffee/api/interpreter"];
+const SCOUT_WD=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], SCOUT_DAY=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const SCOUT_VIBES={heritage:["🏯","Heritage",/palace|hanok|temple|jongmyo|joseon|royal|heritage|folk|city wall|shrine|dynasty/i],views:["🌇","Big views",/view|observatory|tower|skywalk|sunset|cliff|xsky|panorama|lookout|cable ?car/i],nature:["🌿","Green & calm",/park|forest|garden|river|lake|beach|island|pond|trail|mountain|nature|coast/i],night:["🌙","Night life",/night|neon|pocha|pub\b|bar\b|lantern|after dark/i],shopping:["🛍️","Shopping",/market|shopping|mall|boutique|k-beauty/i],culture:["🎨","Art & culture",/museum|gallery|theatre|workshop|pottery|perfume|exhibit|design/i],food:["🍜","Local food",/soup|noodle|bbq|street food|dumpling|seafood|kalguksu|naengmyeon|^shop:/i],cosy:["🫖","Slow & cosy",/tea|caf[eé]|spa|jjimjilbang|bakery|quiet|calm/i]};
+let scoutCache=null; const scoutInflight={};
+function scoutStore(){ return scoutCache||(scoutCache=store(SCOUT_KEY,{})); }
+function scoutKm(a,b){ const r=x=>x*Math.PI/180, dLat=r(b.lat-a.lat), dLng=r(b.lng-a.lng), h=Math.sin(dLat/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLng/2)**2; return 12742*Math.asin(Math.sqrt(h)); }
+function scoutDist(km){ return km>2.5?`${km.toFixed(1)} km away`:`${Math.max(1,Math.round(km*1300/75))} min walk`; }
+function scoutPrice(text){ const s=String(text||"").replace(/,/g,""); if(!s.trim()) return null; const m=/₩\s*(\d+(?:\.\d+)?)(?:\s*[–—-]\s*₩?\s*(\d+(?:\.\d+)?))?\s*(k\b)?/i.exec(s); if(m) return Math.round(+m[1]*(m[3]?1000:1)); return /^\W*free\b/i.test(s)?0:null; }
+function scoutTier(won){ return won===0?"Free":won<10000?"₩ · budget":won<30000?"₩₩ · mid":"₩₩₩ · treat"; }
+function scoutClose(hours){ const s=String(hours||""); if(/24\s*h|24\/7|open 24/i.test(s)) return 1440; const m=/(\d{1,2}):(\d{2})\s*[–—-]\s*(\d{1,2}):(\d{2})/.exec(s); if(!m) return null; const open=+m[1]*60+ +m[2]; let close=+m[3]*60+ +m[4]; if(close<=open) close+=1440; return close; }
+function scoutClock(min){ return min>=1440?"late":String(Math.floor(min/60)%24).padStart(2,"0")+":"+String(min%60).padStart(2,"0"); }
+function scoutClosedDays(p){ const src=[p.closed?"closed "+p.closed:"",p.hours||""].join(" "), out=new Set(), re=/closed\s+((?:(?:mon|tue|wed|thu|fri|sat|sun)[a-z]*\s*(?:,|&|and|\/)?\s*)+)/gi; let m;
+  while((m=re.exec(src))) for(const w of m[1].match(/mon|tue|wed|thu|fri|sat|sun/gi)) out.add(SCOUT_WD.findIndex(x=>x.toLowerCase()===w.toLowerCase()));
+  return [...out].sort(); }
+function scoutWeekday(date){ return new Date(date+"T12:00:00").getDay(); }
+function scoutKind(p,it){ const lm=String(p.landmark||""), type=String(p.type||"");
+  if(/^(hotel|station|airport)$/.test(lm)||it&&(it.kind==="stay"||it.kind==="transit")||/^(High-speed rail|Metro|Rest)\b/.test(type)) return "logistics";
+  if(lm==="shop:cafe"||lm==="teahouse"||p.cat==="cafe"||/bakery|caf[eé]|teahouse|tea house/i.test(type)) return "cafe";
+  if(/^shop:/.test(lm)||p.cat==="food"||it&&it.kind==="food") return "food";
+  return "sight"; }
+function scoutIndoor(p){ const t=[p.landmark,p.type,p.title].filter(Boolean).join(" ");
+  if(/museum|gallery|theatre|workshop|mall|spa|jjimjilbang|foodhall|food hall|dome|observatory|perfume|pottery|^shop:|caf[eé]|restaurant|teahouse|aquarium|library|cinema/i.test(t)) return true;
+  if(/park|river|palace|hanok|village|wall|beach|cliff|island|bridge|skywalk|trail|forest|garden|lake|pond|plaza|square|market|walk|stroll|coast|harbour|waterfront|marina|cruise|sailing|inwangsan|mountain/i.test(t)) return false;
+  return null; }
+function scoutVibes(p){ const match=t=>Object.keys(SCOUT_VIBES).filter(v=>SCOUT_VIBES[v][2].test(t)), kind=scoutKind(p); if(kind==="logistics") return [];
+  const own=match([p.landmark,p.type,p.title].filter(Boolean).join(" ")); return own.length||kind!=="sight"?own:match([p.about,p.cool].filter(Boolean).join(" ")); }
+const SCOUT_DISHES=/gukbap|pork|soup|noodle|naengmyeon|milmyeon|kalguksu|dumpling|mandu|bbq|samgyeopsal|galbi|seafood|shellfish|fish|eomuk|chicken|jokbal|trotter|skewer|lamb|bindaetteok|pancake|bakery|pastr|coffee|tea|ramyeon|kimbap|pocha|bokguk|pufferfish|gomtang|beef|cutlet|donkatsu/gi;
+function scoutDishes(p){ return new Set(([p.landmark,p.type,p.title].filter(Boolean).join(" ").toLowerCase().match(SCOUT_DISHES)||[]).map(x=>x.replace(/s$/,""))); }
+function scoutNeed(need){ const first=String(need||"").split(" · ")[0].trim(); return /^[≈~≥<>]?\s*\d[\d.,–-]*\s*(h|hr|hours?|min)\b/i.test(first)?first:""; }
+function scoutTraits(p,it){ const t=[], won=scoutPrice(p.price), indoor=scoutIndoor(p), text=[p.type,p.about,p.cool,p.catch,p.title].filter(Boolean).join(" "), need=scoutNeed(p.need);
+  if(won!=null) t.push({icon:"💸",label:scoutTier(won),title:p.price});
+  if(need) t.push({icon:"⏱",label:need,title:p.need});
+  if(scoutKind(p,it)==="logistics") return t;
+  if(indoor===true) t.push({icon:"☔",label:"Rain-proof"}); else if(indoor===false) t.push({icon:"🌤",label:"Outdoors"});
+  if(/sunset|golden hour/i.test(text)) t.push({icon:"🌅",label:"Best at sunset"}); else if(/after dark|at night|night view|lights up|illuminat/i.test(text)) t.push({icon:"🌙",label:"Best after dark"});
+  if(p.effort==="half"||/stairs|climb|hike|steep|uphill/i.test(text)) t.push({icon:"🥾",label:"Some climbing"});
+  if(it&&it.book||p.book||/reserv|book ahead|required/i.test(p.booking||"")) t.push({icon:"📅",label:"Book ahead"});
+  scoutVibes(p).slice(0,2).forEach(v=>t.push({icon:SCOUT_VIBES[v][0],label:SCOUT_VIBES[v][1]}));
+  const closed=scoutClosedDays(p); if(closed.length) t.push({icon:"🚫",label:"Closed "+closed.map(n=>SCOUT_WD[n]).join(", ")});
+  return t; }
+function scoutRatingLinks(p,kind,city){ const name=p.name||p.title||"", ko=p.ko||name;
+  const links=[["g","Google",placeUrl({name:p.pid?name:name+" "+city,pid:p.pid})],["ta","Tripadvisor","https://www.tripadvisor.com/Search?q="+encodeURIComponent(name+" "+city)],["nv","Naver",naverUrl({name,ko:p.ko})],["kk","Kakao",kakaoUrl({name,ko:p.ko})]];
+  if(kind==="food"||kind==="cafe") links.push(["mi","Michelin","https://www.google.com/search?q="+encodeURIComponent("site:guide.michelin.com "+name+" "+city)]);
+  links.push(["bl","Blog reviews","https://search.naver.com/search.naver?where=blog&query="+encodeURIComponent(p.ko?ko:name+" "+city)]);
+  return links.map(([c,label,url])=>`<a class="sc-r ${c}" href="${esc(url)}" target="_blank" rel="noopener"><i aria-hidden="true"></i>${label}</a>`).join(""); }
+function scoutQuery(p){ const a=`${(+p.lat).toFixed(5)},${(+p.lng).toFixed(5)}`;
+  return `[out:json][timeout:20];(node(around:900,${a})[railway=station][station=subway];node(around:900,${a})[railway=station][subway=yes];);out 8;node(around:500,${a})[amenity~"^(toilets|atm)$"];out 30;node(around:500,${a})[shop=convenience];out 20;node(around:500,${a})[amenity=cafe];out count;node(around:500,${a})[amenity~"^(restaurant|fast_food)$"];out count;node(around:350,${a})[amenity~"^(cafe|restaurant)$"][name];out 60;nwr(around:1500,${a})[tourism~"^(attraction|museum|viewpoint|gallery)$"][name];out center 40;nwr(around:150,${a})[name][~"^(opening_hours|wheelchair|fee|website)$"~"."];out center 20;`; }
+function scoutSameName(p,tags){ const mine=searchText(p.name||p.title), theirs=[tags.name,tags["name:en"],tags["name:ko"]].filter(Boolean).map(searchText); if(mine&&theirs.some(n=>n.length>=4&&(n.includes(mine)||mine.includes(n)))) return true; const ko=(p.ko||"").replace(/\s/g,""); return !!ko&&[tags.name,tags["name:ko"]].some(n=>n&&(n.replace(/\s/g,"").includes(ko)||ko.includes(n.replace(/\s/g,"")))); }
+function scoutParse(data,p){ const here={lat:+p.lat,lng:+p.lng}, near={}, pois=[], counts=[]; let self=null, selfKm=Infinity;
+  const nearest=(key,km,name)=>{ if(!near[key]||km<near[key].km) near[key]={km,name:name||""}; };
+  for(const e of (data&&data.elements)||[]){ const tags=e.tags||{};
+    if(e.type==="count"){ counts.push(+tags.total||0); continue; }
+    const lat=e.center?e.center.lat:e.lat, lng=e.center?e.center.lon:e.lon; if(!validPlaceCoordinates(lat,lng)) continue;
+    const km=scoutKm(here,{lat,lng}), name=tags["name:en"]||tags.name||"", same=scoutSameName(p,tags);
+    if(tags.railway==="station") nearest("subway",km,name.replace(/\s+station$/i,""));
+    if(tags.amenity==="toilets") nearest("toilet",km); if(tags.amenity==="atm") nearest("atm",km); if(tags.shop==="convenience") nearest("conv",km,tags["brand:en"]||tags.brand||name);
+    if(same&&km<0.2&&km<selfKm&&(tags.opening_hours||tags.wheelchair||tags.fee||tags.website)){ self={hours:tags.opening_hours||"",wheelchair:tags.wheelchair||"",fee:tags.fee||"",website:tags.website||tags["contact:website"]||""}; selfKm=km; }
+    if(!same&&name&&(tags.amenity==="cafe"||tags.amenity==="restaurant"||tags.tourism)&&!pois.some(x=>x.title===name)){ const cat=tags.amenity==="cafe"?"cafe":tags.amenity==="restaurant"?"food":"sight";
+      pois.push({title:name,name:tags.name||name,ko:tags["name:ko"]||(/[가-힣]/.test(tags.name||"")?tags.name:""),lat,lng,cat,type:tags.cuisine?tags.cuisine.split(";").slice(0,2).join(", ").replace(/_/g," "):cat==="sight"?String(tags.tourism).replace(/_/g," "):"",hours:tags.opening_hours||"",source:"OpenStreetMap",from:"On the map nearby"}); } }
+  return {near,count:{cafe:counts[0]||0,food:counts[1]||0},self,pois,ts:Date.now()}; }
+function scoutCacheKey(p){ return (+p.lat).toFixed(4)+","+(+p.lng).toFixed(4)+"|"+(p.name||p.title||""); }
+function scoutCached(p){ const hit=scoutStore()[scoutCacheKey(p)]; return hit&&Date.now()-hit.ts<SCOUT_TTL?hit:null; }
+async function scoutFetch(p){ const key=scoutCacheKey(p), hit=scoutCached(p); if(hit) return hit; if(scoutInflight[key]) return scoutInflight[key];
+  return scoutInflight[key]=(async()=>{ let last;
+    try{ for(const [attempt,url] of SCOUT_ENDPOINTS.entries()){ if(attempt) await new Promise(r=>setTimeout(r,700*attempt)); const controller=new AbortController(), timer=setTimeout(()=>controller.abort(),12000);
+        try{ const r=await fetch(url,{method:"POST",body:new URLSearchParams({data:scoutQuery(p)}),signal:controller.signal}); if(!r.ok) throw new Error(`OpenStreetMap returned HTTP ${r.status}`);
+          const res=scoutParse(await r.json(),p), all=scoutStore(); all[key]=res; const keys=Object.keys(all).sort((a,b)=>all[b].ts-all[a].ts); keys.slice(60).forEach(k=>delete all[k]); saveK(SCOUT_KEY,all); return res; }
+        catch(e){ last=e; } finally{ clearTimeout(timer); } }
+      throw last; }
+    finally{ delete scoutInflight[key]; } })(); }
+function scoutPool(i,k){ const city=DAYS[i].city, out=[], planned=new Set(), keyOf=p=>searchText(p.name||p.title);
+  DAYS.forEach(d=>d.items.forEach(it=>{ if(!it.removed) planned.add(keyOf(placeOf(it))); }));
+  const add=(p,from)=>{ if(!p||!validPlaceCoordinates(+p.lat,+p.lng)||scoutKind(p)==="logistics") return; const key=keyOf(p); if(!key||planned.has(key)) return; planned.add(key); out.push(Object.assign({},p,{from})); };
+  XP.filter(p=>p.city===city).forEach(p=>add(p,"Explore idea"));
+  DAYS.forEach((d,di)=>{ if(d.city===city) d.items.forEach((it,ki)=>{ if(di!==i||ki!==k) (optionsOf(it)||[]).map(resolve).forEach(p=>add(p,`Day ${di+1} alternative`)); }); });
+  return out; }
+function scoutAlternatives(cur,it,date,pool,pois){ const kind=scoutKind(cur,it); if(kind==="logistics"||!validPlaceCoordinates(+cur.lat,+cur.lng)) return [];
+  const here={lat:+cur.lat,lng:+cur.lng}, price=scoutPrice(cur.price), indoor=scoutIndoor(cur), close=scoutClose(cur.hours), vibes=new Set(scoutVibes(cur).filter(v=>kind==="sight"||v!=="food")), dishes=scoutDishes(cur), weekday=date?scoutWeekday(date):-1, mine=searchText(cur.name||cur.title), nearKm=kind==="sight"?1.5:0.6, late=!it||!it.t||+String(it.t).slice(0,2)>=16;
+  const seen=new Set([mine]), cands=[];
+  for(const p of pool.concat(pois||[])){ const key=searchText(p.name||p.title); if(!key||seen.has(key)||scoutKind(p)!==kind) continue; seen.add(key);
+    const km=scoutKm(here,{lat:+p.lat,lng:+p.lng}); if(km>12||scoutClosedDays(p).includes(weekday)) continue;
+    const won=scoutPrice(p.price), pClose=scoutClose(p.hours), shared=scoutVibes(p).filter(v=>vibes.has(v)), sameDish=[...scoutDishes(p)].some(x=>dishes.has(x)), reasons=[];
+    if(km<=nearKm) reasons.push({k:"near",t:"📍 "+scoutDist(km)});
+    if(won!=null&&price!=null&&won<price) reasons.push({k:"cheaper",t:won===0?"💸 Free":"💸 Cheaper"});
+    if(indoor===false&&scoutIndoor(p)===true) reasons.push({k:"indoor",t:"☔ Rain plan"});
+    if(late&&close!=null&&pClose!=null&&pClose>=close+60) reasons.push({k:"later",t:"🌙 Open till "+scoutClock(pClose)});
+    if(sameDish) reasons.push({k:"vibe",t:"✨ Similar dish"}); else if(shared.length) reasons.push({k:"vibe",t:"✨ Same vibe"});
+    if(p.fit>=3) reasons.push({k:"pick",t:"💎 Our pick"});
+    if(!reasons.length) continue;
+    cands.push(Object.assign({},p,{km,reasons,score:reasons.length*2+(km<nearKm?2:km<3?1:0)+shared.length+(sameDish?1.5:0)+(p.fit||0)*.5-Math.min(km,10)*.35-(p.source==="OpenStreetMap"?2.5:0)})); }
+  cands.sort((a,b)=>b.score-a.score||a.km-b.km);
+  const picked=[], used=new Set(), take=c=>{ if(c&&!used.has(c.title)){ picked.push(c); used.add(c.title); } };
+  for(const k of ["near","cheaper","indoor","vibe","later","pick"]) take(cands.find(c=>!used.has(c.title)&&c.reasons.some(r=>r.k===k)));
+  cands.forEach(c=>{ if(picked.length<6) take(c); });
+  return picked.slice(0,6).sort((a,b)=>b.score-a.score); }
+const SCOUT_FIELDS=["title","name","ko","lat","lng","cat","price","hours","closed","need","cool","about","catch","wiki","img","pid","url","type","landmark","icon","address","source","sourceUrl"];
+function scoutClean(p){ const out={}; for(const k of SCOUT_FIELDS) if(p[k]!=null&&p[k]!=="") out[k]=p[k]; const kind=scoutKind(p); out.cat=out.cat||(kind==="cafe"?"cafe":kind==="food"?"food":"sight"); if(!out.cool&&p.about) out.cool=p.about; return out; }
+function scoutIdeasFor(itemId){ const loc=locateItem(itemId); if(!loc) return []; const [i,k]=loc, it=DAYS[i].items[k], p=placeOf(it), hit=scoutCached(p);
+  return scoutAlternatives(p,it,DAYS[i].date,scoutPool(i,k),hit?hit.pois:[]).slice(0,3); }
+function scoutChip(t){ return `<span class="sc-chip"${t.title?` title="${esc(t.title)}"`:""}><i aria-hidden="true">${t.icon}</i>${esc(t.label)}</span>`; }
+function scoutMiniHtml(p,city){ const kind=scoutKind(p), chips=scoutTraits(p,null).slice(0,5);
+  return `<div class="scout-mini">${chips.length?`<div class="sc-chips">${chips.map(scoutChip).join("")}</div>`:""}<p class="sc-sub">Check ratings & reviews</p><div class="sc-rates">${scoutRatingLinks(p,kind,city)}</div></div>`; }
+function scoutAltCards(alts){ if(!alts.length) return '<p class="sc-none">No obvious swaps around here — the 🔎 search can find more.</p>';
+  return alts.map((a,n)=>{ const kind=scoutKind(a); return `<article class="sc-alt" style="--i:${n}"><div class="sc-alt-top"><span class="sc-alt-ic" aria-hidden="true">${a.icon||CAT_EMOJI[kind]||"📍"}</span><b>${esc(a.title)}</b></div>
+    <div class="sc-why">${a.reasons.slice(0,3).map(r=>`<span>${esc(r.t)}</span>`).join("")}</div>
+    <small>${esc([a.price,a.source==="OpenStreetMap"?a.type:"",a.from].filter(Boolean).join(" · "))}</small>
+    <div class="sc-alt-act"><button type="button" class="sc-swap" data-swap="${n}">Swap in</button><button type="button" class="sc-add" data-add="${n}" aria-label="Suggest adding ${esc(a.title)} after this stop">＋</button><a href="${esc(placeUrl({name:a.pid?a.name||a.title:(a.name||a.title)+" Korea",pid:a.pid}))}" target="_blank" rel="noopener" aria-label="${esc(a.title)} on Google Maps">Map ↗</a></div></article>`; }).join(""); }
+function scoutNearHtml(r){ const n=r.near, cells=[], many=x=>x>=100?"100+":String(x);
+  if(n.subway) cells.push(["🚇",n.subway.name||"Subway",scoutDist(n.subway.km)]); else cells.push(["🚇","No subway","within 900 m"]);
+  cells.push(["☕",many(r.count.cafe)+(r.count.cafe===1?" café":" cafés"),"within 500 m"],["🍜",many(r.count.food)+(r.count.food===1?" eatery":" eateries"),"within 500 m"]);
+  if(n.toilet) cells.push(["🚻","Toilet",scoutDist(n.toilet.km)]); if(n.conv) cells.push(["🏪",n.conv.name||"Convenience store",scoutDist(n.conv.km)]); if(n.atm) cells.push(["🏧","ATM",scoutDist(n.atm.km)]);
+  const self=r.self||{}, access={yes:"♿ Step-free access",limited:"♿ Partly step-free",no:"♿ Not step-free"}[self.wheelchair];
+  const extra=[access?`<span>${access}</span>`:"",self.hours?`<span>🕘 Map lists: ${esc(self.hours)}</span>`:"",/^https?:\/\//.test(self.website)?`<a href="${esc(self.website)}" target="_blank" rel="noopener">Official site ↗</a>`:""].filter(Boolean).join("");
+  return `<p class="sc-sub">Around you</p><div class="sc-grid">${cells.map(c=>`<div><i aria-hidden="true">${c[0]}</i><b>${esc(c[1])}</b><small>${esc(c[2])}</small></div>`).join("")}</div>${extra?`<div class="sc-extra">${extra}</div>`:""}<p class="sc-osm">Live from © OpenStreetMap contributors · walk times are estimates</p>`; }
+function scoutHtml(it,i,k){ const p=placeOf(it); if(!p||!(p.name||p.title)) return ""; const d=DAYS[i], kind=scoutKind(p,it), traits=scoutTraits(p,it), closedToday=scoutClosedDays(p).includes(scoutWeekday(d.date)), pinned=validPlaceCoordinates(+p.lat,+p.lng);
+  return `<section class="scout" id="scout" aria-label="Scout report">
+    <div class="sc-h"><h4>Scout report</h4><span>made from our notes & live maps</span></div>
+    ${closedToday?`<p class="sc-warn">⚠️ Usually closed on ${SCOUT_DAY[scoutWeekday(d.date)]}s — that's this day. Double-check or swap it.</p>`:""}
+    ${traits.length?`<div class="sc-chips">${traits.map(scoutChip).join("")}</div>`:""}
+    ${pinned?'<div class="sc-near" id="sc-near" aria-live="polite"><p class="sc-wait"><i></i>Scouting what’s around…</p></div>':""}
+    <p class="sc-sub">Ratings & reviews — check on</p><div class="sc-rates">${scoutRatingLinks(p,kind,d.city)}</div>
+    ${kind==="logistics"||!pinned?"":`<div class="sc-alts-h"><h4>Swap ideas</h4><button type="button" class="sc-dice">🎲 Surprise me</button></div><div class="sc-alts" id="sc-alts"></div>`}
+  </section>`; }
+let scoutToken=null, scoutObserver=null;
+function scoutWhy(a){ return a.reasons.slice(0,2).map(r=>r.t.replace(/^\S+\s/,"")).join(" · "); }
+function scoutPropose(a,i,k,type){ if(!a) return; const why=scoutWhy(a); openComposer({day:i,stop:k,type,place:scoutClean(a),note:why?"💡 "+why:""}); }
+function bindScout(it,i,k){ if(scoutObserver){ scoutObserver.disconnect(); scoutObserver=null; } const root=$("scout"); if(!root) return; const token={}; scoutToken=token;
+  const p=placeOf(it), d=DAYS[i], box=$("sc-alts"), near=$("sc-near"), pool=box?scoutPool(i,k):[];
+  let alts=[]; const paintAlts=pois=>{ if(!box||!box.isConnected) return; alts=scoutAlternatives(p,it,d.date,pool,pois); box.innerHTML=scoutAltCards(alts);
+    box.querySelectorAll("[data-swap]").forEach(b=>b.onclick=()=>scoutPropose(alts[+b.dataset.swap],i,k,"replace"));
+    box.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>scoutPropose(alts[+b.dataset.add],i,k,"add")); };
+  const cached=near?scoutCached(p):null; paintAlts(cached?cached.pois:[]);
+  const dice=root.querySelector(".sc-dice"); if(dice) dice.onclick=()=>{ const cards=[...box.querySelectorAll(".sc-alt")]; if(!cards.length){ toast("No ideas here yet — try 🔎 Search places"); return; }
+    const was=cards.findIndex(c=>c.classList.contains("lucky")); let n=Math.floor(Math.random()*cards.length); if(cards.length>1&&n===was) n=(n+1)%cards.length;
+    cards.forEach(c=>c.classList.remove("lucky")); const c=cards[n]; void c.offsetWidth; c.classList.add("lucky");
+    box.scrollTo({left:Math.max(0,c.offsetLeft-box.offsetLeft-12),behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}); buzz(6); };
+  if(!near) return;
+  if(cached){ near.innerHTML=scoutNearHtml(cached); return; }
+  if(visualPreview){ near.remove(); return; }
+  const load=async()=>{ try{ const res=await scoutFetch(p); if(scoutToken!==token||!near.isConnected) return; near.innerHTML=scoutNearHtml(res); paintAlts(res.pois); }
+    catch(e){ if(scoutToken!==token||!near.isConnected) return; console.warn("Scout lookup failed",e); near.innerHTML='<p class="sc-wait">Live map info is unavailable right now. <button type="button" class="cbtn" id="sc-retry">Try again</button></p>'; $("sc-retry").onclick=()=>{ near.innerHTML='<p class="sc-wait"><i></i>Scouting what’s around…</p>'; load(); }; } };
+  if("IntersectionObserver" in window){ const io=scoutObserver=new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)){ io.disconnect(); if(scoutObserver===io) scoutObserver=null; load(); } },{root:sheetScroll,rootMargin:"0px 0px 320px 0px"}); io.observe(near); } else load(); }
+/* ---------- Spotlight: find first, choose a small action second ---------- */
+function spotlightStopResults(action,query,draft){
+  const tokens=searchText(query).split(" ").filter(Boolean), results=[];
+  DAYS.forEach((day,di)=>day.items.forEach((it,ki)=>{
+    if(it.removed) return;
+    const p=placeOf(it), text=searchText([p.title,it.title,p.ko,`day ${di+1}`,day.city].join(" "));
+    if(!tokens.every(t=>text.includes(t))) return;
+    results.push({kind:"stop",action,itemId:it.id,day:di,stop:ki,label:`${action==="replace"?"Replace":action==="drop"?"Remove":action==="move"?"Move":"Note on"} ${p.title||it.title}`,sub:`Day ${di+1} · ${day.city}${it.t?" · "+it.t:""}`,icon:TYPE_EMOJI[action],priority:it.id===draft.itemId?2:di===draft.day?1:0});
+  }));
+  return results.sort((a,b)=>b.priority-a.priority).slice(0,8);
+}
+function spotlightSuggestions(query,draft){
+  const q=query.trim(), command=/^(replace|swap|change|move|reschedule|remove|drop|delete|note)(?:\s+(.*))?$/i.exec(q);
+  if(draft.spotTask==="target") return spotlightStopResults(draft.type,q,draft);
+  if(command){ const actions={replace:"replace",swap:"replace",change:"replace",move:"move",reschedule:"move",remove:"drop",drop:"drop",delete:"drop",note:"note"}; return spotlightStopResults(actions[command[1].toLowerCase()],command[2]||"",draft); }
+  const results=[];
+  if(!q&&draft.itemId&&draft.spotTask!=="place"){
+    const loc=locateItem(draft.itemId);
+    if(loc) for(const action of ["replace","move","drop","note"]) results.push(spotlightStopResults(action,"",{...draft,day:loc[0]}).find(r=>r.itemId===draft.itemId));
+  }
+  const city=draft.spotCity||DAYS[draft.day].city;
+  let places=q?localPlaceResults(q,city):draft.itemId?scoutIdeasFor(draft.itemId).filter(a=>a.city==null||a.city===city).map(a=>({...scoutClean(a),why:a.reasons.slice(0,2).map(r=>r.t).join(" · "),note:scoutWhy(a)})):[];
+  if(!q&&!places.length) places=XP.filter(p=>p.city===city).slice(0,4).map(p=>({...p,name:p.name||p.title,cat:"sight",source:"Explore suggestions"}));
+  if(draft.spotRemote&&draft.spotRemote.query===q&&draft.spotRemote.city===draft.spotCity) places=draft.spotRemote.places;
+  results.push(...places.map(p=>({kind:"place",place:p,label:p.title,sub:p.why||[p.ko,p.price||p.address||p.source].filter(Boolean).join(" · "),icon:p.why?"💡":CAT_EMOJI[p.cat]||"📍",note:p.note?"💡 "+p.note:""})));
+  if(q.length>=2){
+    results.push({kind:"remote",label:`Search more places for “${q}”`,sub:"Search the map across Korea",icon:"⌕"});
+    results.push({kind:"manual",label:/^https?:\/\//i.test(q)?"Use this research link":`Use “${q}” as a new place`,sub:"Add your own details",icon:"＋"});
+  }else if(!draft.itemId) results.push({kind:"target",label:"Change an existing stop",sub:"Replace, move, remove or leave a note",icon:"↔"});
+  return results.filter(Boolean);
+}
+let spotlightRows=[], spotlightIndex=0;
+function focusSpotlight(){ requestAnimationFrame(()=>{ if(chgEl.open&&chgDraft?.step==="search") $("c-q")?.focus({preventScroll:true}); }); }
+function highlightSpotlight(index){
+  const input=$("c-q"), buttons=[...chgIn.querySelectorAll("[data-spot]")];
+  if(!buttons.length){ input?.removeAttribute("aria-activedescendant"); return; }
+  spotlightIndex=(index+buttons.length)%buttons.length;
+  buttons.forEach((b,i)=>b.setAttribute("aria-selected",String(i===spotlightIndex)));
+  input?.setAttribute("aria-activedescendant",buttons[spotlightIndex].id);
+  const list=$("spot-results"), b=buttons[spotlightIndex];
+  if(b.offsetTop<list.scrollTop) list.scrollTop=b.offsetTop;
+  else if(b.offsetTop+b.offsetHeight>list.scrollTop+list.clientHeight) list.scrollTop=b.offsetTop+b.offsetHeight-list.clientHeight;
+}
+function paintSpotlight(){
+  const d=chgDraft, list=$("spot-results"); if(!list||d.step!=="search") return;
+  spotlightRows=spotlightSuggestions($("c-q").value,d); spotlightIndex=0;
+  list.innerHTML=spotlightRows.map((r,i)=>`<button type="button" role="option" id="spot-option-${i}" data-spot="${i}" aria-selected="${i===0}"><span class="spot-icon" aria-hidden="true">${r.icon}</span><span class="spot-text"><b>${esc(r.label)}</b><small>${esc(r.sub)}</small></span><span class="spot-enter" aria-hidden="true">↵</span></button>`).join("");
+  if(!spotlightRows.length) list.innerHTML='<p class="spot-empty">No matching stops. Try a place name or a day number.</p>';
+  list.setAttribute("aria-busy",String(!!d.spotBusy));
+  $("spot-status").textContent=d.spotMessage||(d.spotTask==="target"?"Choose the stop to change":d.spotBusy?"Searching the map…":`${spotlightRows.length} suggestions`);
+  $("spot-status").setAttribute("role",d.spotError?"alert":"status");
+  list.querySelectorAll("[data-spot]").forEach(b=>b.onclick=()=>chooseSpotlight(+b.dataset.spot));
+  highlightSpotlight(0);
+}
+function spotlightTarget(action){
+  readDraft(); chgDraft.type=action; chgDraft.step="search"; chgDraft.spotTask="target"; chgDraft.searchQuery=""; chgDraft.spotRemote=null; renderComposer();
+}
+function chooseSpotlight(index){
+  const d=chgDraft, row=spotlightRows[index]; if(!row) return;
+  if(row.kind==="remote"){ searchSpotlightMap(); return; }
+  if(row.kind==="target"){ d.spotTask="target"; d.type="replace"; d.searchQuery=""; renderComposer(); return; }
+  if(row.kind==="stop"){
+    const loc=locateItem(row.itemId); if(!loc){ toast("This stop is no longer in the plan"); return; }
+    d.type=row.action; d.itemId=row.itemId; d.day=loc[0]; d.stop=loc[1]; d.toDay=loc[0]; d.toAfter=row.itemId; d.when=DAYS[loc[0]].items[loc[1]].t||"";
+    d.spotTask="place"; d.spotCity=DAYS[d.day].city; d.spotRemote=null;
+    d.step=d.type==="replace"&&!d.place.title?"search":"review"; d.searchQuery="";
+  }else{
+    const query=$("c-q").value.trim();
+    if(row.note&&!d.note) d.note=row.note; if(row.place){ delete row.place.why; delete row.place.note; }
+    d.place=row.kind==="place"?Object.assign({},row.place):/^https?:\/\//i.test(query)?{title:"",name:"",url:query,cat:"sight"}:{title:query,name:query,cat:"sight"};
+    if(d.type==="add"&&!d.itemId&&DAYS[d.day].city!==d.spotCity){ d.day=DAYS.findIndex(day=>day.city===d.spotCity); d.toDay=d.day; d.toAfter=DAYS[d.day].items.at(-1)?.id||"start"; }
+    d.step="review"; d.detailsOpen=!d.place.title; d.searchQuery=query;
+  }
+  renderComposer();
+}
+async function searchSpotlightMap(){
+  const d=chgDraft, query=$("c-q").value.trim(); if(d.spotBusy) return; if(query.length<2){ toast("Type at least two characters to search the map"); return; }
+  await performPlaceSearch(d,query,{
+    loading(){ d.spotBusy=true; d.spotMessage="Searching the map…"; d.spotError=false; paintSpotlight(); },
+    success(places){ d.spotRemote={query,city:d.spotCity,places}; d.spotMessage=places.length?"Choose a place":"No map matches — try a Korean name or add your own details."; paintSpotlight(); },
+    error(msg){ d.spotMessage=msg; d.spotError=true; paintSpotlight(); },
+    complete(){ d.spotBusy=false; paintSpotlight(); }
+  });
+}
+function renderSpotlight(){
+  const d=chgDraft; d.spotBusy=false; chgIn.classList.add("spotlight"); chgEl.setAttribute("aria-label","Search places and changes");
+  const target=d.itemId?itemTitle(d.itemId):"", context=d.spotTask==="target"?"Choose a stop":target&&d.type==="replace"?`Instead of ${target}`:target?`Change ${target}`:`Ideas for Day ${d.day+1}`;
+  chgIn.innerHTML=`<div class="spot-search"><span aria-hidden="true">⌕</span><input id="c-q" role="combobox" aria-label="Search places or changes" aria-controls="spot-results" aria-expanded="true" aria-autocomplete="list" placeholder="${d.spotTask==="target"?"Find a stop or type a day…":"Search a place, or type “move”…"}" value="${esc(d.searchQuery||"")}" autocomplete="off" enterkeyhint="search"><button type="button" id="chg-close" aria-label="Close search">×</button></div>
+    <div class="spot-context"><span>${esc(context)}</span><label class="spot-city">Search in <select id="spot-city" aria-label="Search city">${["Seoul","Busan"].map(c=>`<option${c===d.spotCity?" selected":""}>${c}</option>`).join("")}</select></label></div>
+    <div id="spot-results" role="listbox" aria-label="Suggestions"></div>
+    <div class="spot-footer"><span id="spot-status" aria-live="polite"></span><span class="spot-keys">↑↓ select · ↵ choose · esc close</span></div>`;
+  $("chg-close").onclick=()=>chgEl.close();
+  $("c-q").oninput=()=>{ cancelPlaceSearch(); d.searchQuery=$("c-q").value; d.spotRemote=null; d.spotBusy=false; d.spotMessage=""; d.spotError=false; paintSpotlight(); };
+  $("c-q").onkeydown=e=>{
+    if(e.isComposing) return;
+    if(e.key==="ArrowDown"||e.key==="ArrowUp"){ e.preventDefault(); e.stopPropagation(); highlightSpotlight(spotlightIndex+(e.key==="ArrowDown"?1:-1)); }
+    else if(e.key==="Enter"){ e.preventDefault(); e.stopPropagation(); chooseSpotlight(spotlightIndex); }
+    else if(e.key==="Escape"){ e.preventDefault(); e.stopPropagation(); chgEl.close(); }
+  };
+  $("spot-city").onchange=()=>{ cancelPlaceSearch(); d.spotCity=$("spot-city").value; d.spotRemote=null; d.spotBusy=false; d.spotMessage=""; d.spotError=false; paintSpotlight(); };
+  paintSpotlight(); focusSpotlight();
+}
 function openComposer(ctx){ if(!role){ toast("First tap your name — Киця or Mykola"); openMore(); return; } document.querySelectorAll("dialog[open]").forEach(d=>d.close()); if(PHONE&&sheet.classList.contains("show")) putDown();
   const day=ctx.day!=null&&ctx.day>=0?ctx.day:Math.max(0,APP.state.day), stop=ctx.stop!=null?ctx.stop:-1, it=stop>=0?DAYS[day].items[stop]:null;
-  cancelPlaceSearch(); chgDraft={type:ctx.type||(it?"replace":"add"),day,stop,itemId:it?it.id:null,searchQuery:(ctx.place&&ctx.place.title)||"",place:Object.assign({cat:it&&isFood(it)?"food":"sight"},ctx.place||{}),when:it?(it.t||""):"",toDay:day,toAfter:it?it.id:(DAYS[day].items.length?DAYS[day].items[DAYS[day].items.length-1].id:"start"),note:""};
+  const type=ctx.type||(it?"replace":"add");
+  cancelPlaceSearch(); chgDraft={type,day,stop,itemId:it?it.id:null,step:(type==="add"||type==="replace")&&!ctx.place?.title?"search":"review",spotTask:"any",spotCity:DAYS[day].city,searchQuery:(ctx.place&&ctx.place.title)||"",place:Object.assign({cat:it&&isFood(it)?"food":"sight"},ctx.place||{}),when:it?(it.t||""):"",toDay:day,toAfter:it?it.id:(DAYS[day].items.length?DAYS[day].items[DAYS[day].items.length-1].id:"start"),note:ctx.note||""};
   renderComposer(); chgEl.showModal(); }
-function renderComposer(){ cancelPlaceSearch(); const d=chgDraft, it=d.itemId?findItem(d.itemId):null, pl=d.place; const types=it?["replace","add","move","drop","note"]:["add","replace","drop"];
+function renderComposer(){ cancelPlaceSearch(); if(chgDraft.step==="search"){ renderSpotlight(); return; } chgIn.classList.remove("spotlight"); chgEl.setAttribute("aria-label","Review your change"); const d=chgDraft, it=d.itemId?findItem(d.itemId):null, pl=d.place; const types=d.type==="add"||d.type==="replace"?["add","replace"]:[];
   const needsPlace=d.type==="add"||d.type==="replace", needsSlot=d.type==="add"||d.type==="move";
   const slotOpts=(di)=>`<option value="start"${d.toAfter==="start"?" selected":""}>at the start of the day</option>`+DAYS[di].items.map(x=>`<option value="${x.id}"${d.toAfter===x.id?" selected":""}>after ${esc(placeOf(x).title||x.title)}</option>`).join("");
   chgIn.innerHTML=`<button class="close" id="chg-close" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-    <p class="eyebrow">${it?`Day ${d.day+1} · ${esc(placeOf(it).title||it.title)}`:dayLabel(d.day)}</p><h2>${it?"Suggest a change":"Add a place"}</h2>
+    <button type="button" class="spot-back" id="spot-back">← Back to search</button>
+    <p class="eyebrow">${dayLabel(d.day)}</p><h2>${d.type==="drop"?"Remove this stop?":d.type==="move"?"Move this stop":d.type==="note"?"Leave a note":d.type==="replace"?"Suggest a swap":"Add to the plan"}</h2>
     ${types.length>1?`<div class="ctypes">${types.map(t=>`<button data-t="${t}" aria-pressed="${d.type===t}">${TYPE_EMOJI[t]} ${TYPE_LABEL[t]}</button>`).join("")}</div>`:""}
-    ${!it&&(d.type==="replace"||d.type==="drop")?`<label class="cf-l">Which stop?<select id="c-target"><option value="">Choose a stop to ${d.type}</option>${DAYS.map((day,i)=>`<optgroup label="Day ${i+1} · ${esc(day.city)}">${day.items.filter(x=>!x.removed).map(x=>`<option value="${esc(x.id)}">Day ${i+1} · ${esc(x.t)} · ${esc(placeOf(x).title||x.title)}</option>`).join("")}</optgroup>`).join("")}</select></label>`:""}
-    ${needsPlace?`<label class="cf-l" for="c-q">Search places</label><div class="csearch"><input id="c-q" aria-label="Search places" placeholder="Place, café, restaurant or Korean name" value="${esc(d.searchQuery||"")}" autocomplete="off" enterkeyhint="search"><button type="button" id="c-search">Search</button></div><p class="csearch-help">Search the trip suggestions as you type; press Search or Enter for places across Korea. Location results use OpenStreetMap, not Google Places.</p><div id="c-research"></div><div class="cres" id="c-res" aria-live="polite" aria-busy="false"></div>
-      ${validPlaceCoordinates(+pl.lat,+pl.lng)?`<p class="cpinned">📍 ${esc(pl.name||pl.title)}<small>${esc(pl.address||"")} · ${esc(pl.source||"Selected location")}</small></p>`:'<p class="csearch-help">No location selected yet. A manually entered place uses the hotel area for the 3D illustration; its name/link is used for real directions.</p>'}
+    ${d.type!=="add"?`<div class="spot-target"><span>${it?esc(itemTitle(it.id)):"Choose the stop to change"}</span><button type="button" class="cbtn" id="spot-target">Choose stop</button></div>`:""}
+    ${needsPlace?`<div class="spot-selected"><span class="spot-icon">${CAT_EMOJI[pl.cat]||"📍"}</span><span><b>${esc(pl.title||"Name your place")}</b><small>${esc(pl.ko||pl.address||"")}</small></span><button type="button" class="cbtn" id="spot-another">Change</button></div>
+      ${pl.title?scoutMiniHtml(pl,d.spotCity||DAYS[d.day].city):""}
+      ${!validPlaceCoordinates(+pl.lat,+pl.lng)?'<p class="csearch-help">Not pinned yet: the illustration will use the hotel area. Use your place name or link for directions.</p>':""}
+      <details class="spot-details"${d.detailsOpen?" open":""}><summary>Edit place details <small>optional</small></summary>
       <div class="cgrid"><label class="cf-l">Name<input id="c-title" value="${esc(pl.title||"")}"></label><label class="cf-l">Korean name<input id="c-ko" value="${esc(pl.ko||"")}" placeholder="optional"></label></div>
       <div class="ccats">${Object.keys(CAT_LABEL).map(c=>`<button data-cat="${c}" aria-pressed="${pl.cat===c}">${CAT_EMOJI[c]} ${CAT_LABEL[c]}</button>`).join("")}</div>
       <label class="cf-l">Why it's great<textarea id="c-cool" rows="2" placeholder="What you read about it, why you want to go">${esc(pl.cool||"")}</textarea></label>
       <div class="cgrid3"><label class="cf-l">Price<input id="c-price" value="${esc(pl.price||"")}" placeholder="Free / ≈₩10k"></label><label class="cf-l">Hours<input id="c-hours" value="${esc(pl.hours||"")}" placeholder="10:00–20:00"></label><label class="cf-l">Time needed<input id="c-need" value="${esc(pl.need||"")}" placeholder="1 h"></label></div>
       <label class="cf-l">Link<input id="c-url" value="${esc(pl.url||"")}" placeholder="Naver / Google Maps / Instagram / blog" inputmode="url"></label>
-      <div class="cwiki"><button class="cbtn" id="c-wiki">📷 Find photo & blurb on Wikipedia</button><span id="c-wiki-st">${pl.wiki?`✓ ${esc(pl.wiki)}`:""}</span></div>`:""}
+      <div class="cwiki"><button class="cbtn" id="c-wiki">📷 Find photo & blurb on Wikipedia</button><span id="c-wiki-st">${pl.wiki?`✓ ${esc(pl.wiki)}`:""}</span></div>
+      ${researchLinks(pl.title||pl.name||"",d.spotCity||DAYS[d.day].city)}</details>`:""}
     ${needsSlot?`<div class="cgrid"><label class="cf-l">Day<select id="c-day">${DAYS.map((x,i)=>`<option value="${i}"${i===(d.type==="move"?d.toDay:d.day)?" selected":""}>Day ${i+1} · ${fmtDay(x.date)} · ${esc(x.title)}</option>`).join("")}</select></label><label class="cf-l">Where in the day<select id="c-after">${slotOpts(d.type==="move"?d.toDay:d.day)}</select></label></div>
       <label class="cf-l">Time<input id="c-when" value="${esc(d.when||"")}" placeholder="HH:MM" inputmode="numeric"></label>`:""}
     <label class="cf-l">${d.type==="note"?"Your note":"A word for "+esc(names[other(role)])}<textarea id="c-note" rows="2" placeholder="${d.type==="drop"?"Why skip it?":d.type==="note"?"Anything — a thought, a question, a link":"Optional"}">${esc(d.note||"")}</textarea></label>
-    <div class="row"><button class="btn primary" id="c-send">${d.type==="note"?"Post the note":"Propose to "+esc(names[other(role)])}</button><button class="btn ghost" id="c-cancel">Cancel</button></div>`;
+    <p class="spot-shared">A suggestion for ${esc(names[other(role)])} — the plan changes only after you both agree.</p>
+    <div class="row"><button class="btn primary" id="c-send">${d.type==="note"?"Post note":"Send suggestion"}</button><button class="btn ghost" id="c-cancel">Cancel</button></div>`;
   $("chg-close").onclick=$("c-cancel").onclick=()=>chgEl.close();
+  $("spot-back").onclick=()=>{ readDraft(); d.step="search"; d.spotTask="any"; d.searchQuery=""; d.spotMessage=""; d.spotError=false; renderComposer(); };
+  const another=$("spot-another"); if(another) another.onclick=()=>{ readDraft(); d.step="search"; d.spotTask="place"; d.searchQuery=""; d.spotMessage=""; d.spotError=false; renderComposer(); };
+  const targetButton=$("spot-target"); if(targetButton) targetButton.onclick=()=>spotlightTarget(d.type);
+  const details=chgIn.querySelector(".spot-details"); if(details) details.ontoggle=()=>{ d.detailsOpen=details.open; };
   chgIn.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{ readDraft(); d.type=b.dataset.t; if(d.type==="add"&&d.itemId){ d.toAfter=d.itemId; d.when=""; } if(d.type==="move"){ d.toDay=d.day; } renderComposer(); });
   chgIn.querySelectorAll("[data-cat]").forEach(b=>b.onclick=()=>{ readDraft(); d.place.cat=b.dataset.cat; renderComposer(); });
-  bindPlaceSearch(d);
-  const target=$("c-target"); if(target) target.onchange=()=>{ const loc=locateItem(target.value); if(!loc) return; readDraft(); d.day=loc[0]; d.stop=loc[1]; d.itemId=target.value; d.toDay=d.day; d.toAfter=d.itemId; if(d.type==="replace") d.when=DAYS[d.day].items[d.stop].t||""; renderComposer(); };
   const cw=$("c-wiki"); if(cw) cw.onclick=async()=>{ readDraft(); const pl=d.place, t=(pl.title||"").trim(); if(!t){ toast("Choose a place or enter its name first"); return; } const current=()=>chgDraft===d&&d.place===pl&&pl.title.trim()===t&&chgEl.open&&$("c-wiki")===cw; cw.disabled=true; $("c-wiki-st").textContent="Looking…"; try{ let w=await wikiLookup(t); if(!w&&current()) w=await wikiLookup(t+" Korea"); if(!current()) return; if(w){ pl.wiki=w.title; if(!pl.img&&w.img) pl.img=w.img; if(!pl.about) pl.about=w.extract; $("c-wiki-st").textContent="✓ "+w.title; } else $("c-wiki-st").textContent="Nothing on Wikipedia"; }catch(e){ console.warn("Wikipedia place lookup failed",e); if(current()){ $("c-wiki-st").textContent="Photo lookup failed — try again"; toast(e.message); } }finally{ cw.disabled=false; } };
   const cd=$("c-day"); if(cd) cd.onchange=()=>{ readDraft(); if(d.type==="move") d.toDay=+cd.value; else d.day=+cd.value; d.toAfter="start"; renderComposer(); };
-  $("c-send").onclick=()=>{ readDraft(); if((d.type==="replace"||d.type==="drop")&&!d.itemId){ toast("Choose the stop you want to "+d.type); $("c-target").focus(); return; } if((d.type==="add"||d.type==="replace")&&!(d.place.title||"").trim()){ toast("Give the place a name first"); $("c-title").focus(); return; } if(d.type==="note"&&!d.note.trim()){ toast("Write something first"); return; } if(needsSlot&&d.when&&!/^([01]\d|2[0-3]):[0-5]\d$/.test(d.when)){ toast("Use a valid time, for example 15:30"); $("c-when")?.focus(); return; } if(needsPlace&&d.place.url&&!/^https?:\/\//i.test(d.place.url)){ toast("The research link must start with https:// or http://"); $("c-url")?.focus(); return; }
+  $("c-send").onclick=()=>{ readDraft(); if(d.type!=="add"&&!d.itemId){ toast("Choose the stop you want to change"); spotlightTarget(d.type); return; } if((d.type==="add"||d.type==="replace")&&!(d.place.title||"").trim()){ toast("Give the place a name first"); if(details) details.open=true; $("c-title").focus(); return; } if(d.type==="note"&&!d.note.trim()){ toast("Write something first"); $("c-note").focus(); return; } if(needsSlot&&d.when&&!/^([01]\d|2[0-3]):[0-5]\d$/.test(d.when)){ toast("Use a valid time, for example 15:30"); $("c-when")?.focus(); return; } if(needsPlace&&d.place.url&&!/^https?:\/\//i.test(d.place.url)){ toast("The research link must start with https:// or http://"); if(details) details.open=true; $("c-url")?.focus(); return; }
     const id=pid(), p={id,type:d.type,by:role,ts:Date.now(),status:"open",day:d.day,stop:d.stop,itemId:d.itemId,note:d.note.trim()}; if(d.type==="add"||d.type==="replace") p.place=Object.fromEntries(Object.entries(d.place).filter(([k,v])=>v!==""&&v!=null)); if(d.type==="add"||d.type==="move"){ p.when=d.when.trim(); p.toAfter=d.toAfter; p.toDay=d.type==="move"?d.toDay:d.day; }
     props[id]=p; saveProps(); syncSet(["props",id],p); chgEl.close(); buzz([8,30,10]); toast(d.type==="note"?"Note posted 📝":`💡 Sent to ${names[other(role)]} — it lands in the plan once they agree`); rerenderChanges(); }; }
 function readDraft(){ const d=chgDraft, g=id=>{ const el=$(id); return el?el.value:null; }; const v=(k,id)=>{ const x=g(id); if(x!=null) d.place[k]=x.trim(); }; v("title","c-title"); v("ko","c-ko"); v("cool","c-cool"); v("price","c-price"); v("hours","c-hours"); v("need","c-need"); v("url","c-url"); const n=g("c-note"); if(n!=null) d.note=n; const w=g("c-when"); if(w!=null) d.when=w; const a=g("c-after"); if(a!=null) d.toAfter=a; const dd=g("c-day"); if(dd!=null){ if(d.type==="move") d.toDay=+dd; else d.day=+dd; } }
 APP.openComposer=openComposer;
+addEventListener("keydown",e=>{
+  if(!(e.metaKey||e.ctrlKey)||e.key.toLowerCase()!=="k"||!$("brand").hidden||visualPreview) return;
+  e.preventDefault(); if(chgEl.open) chgEl.close(); else openComposer({day:Math.max(0,APP.state.day),type:"add"});
+});
+function fitSpotlight(){ chgEl.style.setProperty("--spot-height",(window.visualViewport?window.visualViewport.height:innerHeight)+"px"); }
+window.visualViewport?.addEventListener("resize",fitSpotlight);
+addEventListener("resize",fitSpotlight); fitSpotlight();
 /* sync: merge remote props, toast what the other one did */
 function applyProps(remote,local,firstSnap){ const prev=props; props=Object.assign({},remote||{}); saveProps(); if(role&&!firstSnap&&!local){ const o=other(role); Object.values(props).forEach(p=>{ if(!p) return; const was=prev[p.id]; if(!was&&p.by===o&&p.status==="open") toast(`💡 ${names[o]} suggests: ${p.place&&p.place.title?p.place.title:TYPE_LABEL[p.type].toLowerCase()}`); else if(was&&was.status==="open"&&p.status!=="open"&&p.by===role&&p.decided&&p.decided.by===o) toast(p.status==="agreed"?`💞 ${names[o]} agreed: ${p.place&&p.place.title?p.place.title:itemTitle(p.itemId)}`:`${names[o]} passed on ${p.place&&p.place.title?p.place.title:itemTitle(p.itemId)}`); }); } rerenderChanges(); checkReload(); }
 updateChgBadge(); checkReload();

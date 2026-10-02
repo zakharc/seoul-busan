@@ -2,6 +2,8 @@
 
 *Two leaves. One shared adventure.* A single-file trip companion that opens on the roameo brand splash and hands off to the Seoul ⇄ Busan trail.
 
+**Version 1.6** — Spotlight-style change search (⌘K / ⋯ → Search places): one field with live suggestions, commands (`move`, `remove`, `swap`, `note`), ↑↓/↵ and a short review step. New **Scout report** on every stop: generated at-a-glance summary, live surroundings from OpenStreetMap, one-tap rating links (Google, Tripadvisor, Naver, Kakao, Michelin, blogs) and **Swap ideas** with reasons (nearby, cheaper, rain plan, open later, similar dish/vibe, our pick) that turn into a suggestion in one tap.
+
 **Version 1.5** — 40 place-specific scene designs, sheet-aware framing, cache-versioned visuals, fast intro transition fixes and an expanded Before/After gallery. Search and shared itinerary changes are preserved.
 
 **Version 1.4** — Changes to the plan: propose add / replace / move / drop / note from any stop, day or Explore card; search places, Wikipedia photo lookup; agree together; agreed changes become part of the trail on both phones.
@@ -59,9 +61,19 @@ After the last stop (→ at the airport, the ✨ pill, or ♥ → *Roll the cred
 
 Either of you can propose a change from any stop (**💡 Suggest a change** in the sheet), from the **＋** on a day card, from the summary, or from an Explore card (**＋ Plan**): **replace** a stop with another place, **add** a place anywhere in a day (search Korea on OpenStreetMap, paste a link, say why, optionally pull photo/blurb from Wikipedia), **move** a stop to another day/time, **drop** it, or just leave a **note**. The other one gets a badge in ⋯ and a toast, can reply, and taps **💞 Agree** or **Not this one**. Agreed changes are written into both phones' plan (`props` in Firestore, applied at boot): added places become real stops on the 3D trail with their own stage, moment, quiz-less sheet, route links, itinerary entry and My Maps placemark; dropped stops are struck through and skipped by →; replaced stops get the new option pre-selected. A change that lands while the app is open shows a *Reload to see it* pill.
 
-**⋯ → Search places** opens a search-first composer. Typing searches the existing trip and Explore suggestions locally; press **Search** or Enter for OpenStreetMap results across Korea, biased towards the selected day's city. Results show their address, provider and a map link. Selecting a result carries its coordinates and Korean name into the proposal; selecting another clears the previous place's photo, price and description. Choose **Add a place**, **Replace with…** (then select the existing stop), or **Drop this stop**. Google Search, Google Maps and Naver links open in another tab for independent research; this is not a Google Places API integration and needs no Google API key. Online searches run only on submission, not as remote autocomplete. If the search is unavailable, the error is shown and manual entry/research links remain available.
+**⋯ → Search places** (or ⌘K / Ctrl+K on a computer) opens a Spotlight-style panel: one search field, suggestions update while typing (trip places and Explore ideas, matched by English or Korean name), ↑↓ to select, ↵ to choose, Esc to close. Typing a command finds stops across all days: `move …`, `remove …` / `drop …`, `swap …` / `replace …`, `note …` (e.g. `remove day 2`). Opened from a stop, the first rows are that stop's actions, followed by 💡 swap ideas. **Search more places** queries OpenStreetMap (Nominatim) across Korea for the chosen city; **Use "…" as a new place** accepts a name or a research link. Choosing a row opens a short review (who/where/when, a mini scout report and rating links, optional place details) and **Send suggestion**: nothing in the plan changes until the other one agrees.
 
-Search helper regression tests: `node --test tools/test-place-search.cjs`.
+### Scout report & swap ideas
+
+Every stop sheet has a **Scout report**:
+- **At a glance** chips generated from the trip notes: cost tier (Free / ₩ / ₩₩ / ₩₩₩), time needed, rain-proof or outdoors, best at sunset / after dark, some climbing, book ahead, vibe, and closing days. A warning appears if the place is usually closed on that day of the week.
+- **Around you**, live from OpenStreetMap (Overpass API, cached 14 days per place, loaded only when the card scrolls into view): nearest subway station, cafés and eateries within 500 m, nearest toilet, convenience store and ATM, step-free access, the map's listed opening hours and the official website when OSM has them. Walk times are estimates.
+- **Ratings & reviews — check on**: one-tap links to the exact Google Maps place (using the stored place ID when available), Tripadvisor, Naver Map, Kakao Map, Michelin (food) and Naver blog reviews. The app does not show star ratings itself: Tripadvisor has no open API and Google ratings need a paid Places API key, so the links open the live scores on those sites instead of showing copied or invented numbers.
+- **Swap ideas**: up to six alternatives of the same kind (sight ↔ sight, food ↔ food, café ↔ café) from Explore, unused options on other days and nearby OpenStreetMap places, each tagged with why it's suggested: 📍 walking distance, 💸 cheaper/free, ☔ rain plan, 🌙 open later (evening stops), ✨ similar dish / same vibe, 💎 our pick. Places closed that weekday are skipped. **Swap in** or **＋** opens the suggestion with the reason pre-filled; 🎲 **Surprise me** picks one at random.
+
+Hotels, stations and transfers get only the practical parts (cost, time, around you, links).
+
+Search, Spotlight and Scout regression tests: `node --test tools/test-place-search.cjs`.
 
 ### Explore more places (찜)
 
