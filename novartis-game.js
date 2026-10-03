@@ -48,6 +48,9 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
 #nvx-game .nvx-ib svg{width:16px;height:16px}
 #nvx-game .nvx-fx{grid-column:1/-1;display:flex;gap:6px;justify-content:center;min-height:30px}
 #nvx-game .nvx-chip{display:flex;align-items:center;gap:6px;height:28px;padding:0 10px 0 8px;border-radius:999px;background:rgba(255,255,255,.85);font:700 12px var(--body,system-ui);box-shadow:0 3px 10px rgba(17,22,40,.12);animation:nvx-chip .4s cubic-bezier(.34,1.56,.64,1)}
+#nvx-game .nvx-mop em{font-style:normal;letter-spacing:2px;color:#2fb3a0;font-size:11px}
+#nvx-game .nvx-mop{animation:nvx-pop .4s cubic-bezier(.34,1.8,.64,1)}
+@media (max-width:600px){ #nvx-game .nvx-level{top:40%} }
 #nvx-game .nvx-chip b{display:block;width:34px;height:4px;border-radius:9px;background:rgba(17,22,40,.1);overflow:hidden}
 #nvx-game .nvx-chip b i{display:block;height:100%;background:var(--k,#e8557a)}
 @keyframes nvx-chip{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
@@ -137,8 +140,8 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
 @keyframes nvx-rib{0%{transform:skewX(-10deg) translateX(-130vw)}13%{transform:skewX(-10deg) translateX(4vw)}19%,80%{transform:skewX(-10deg) translateX(0)}100%{transform:skewX(-10deg) translateX(130vw)}}
 @keyframes nvx-stripes{to{background-position:34px 0}}
 #nvx-game .nvx-note{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 104px);width:min(380px,calc(100vw - 24px));display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:center;padding:10px 12px;border-radius:18px;background:rgba(255,255,255,.9);backdrop-filter:blur(18px) saturate(1.6);-webkit-backdrop-filter:blur(18px) saturate(1.6);box-shadow:0 14px 36px rgba(17,22,40,.24);transform:translate(-50%,-220%);opacity:0;pointer-events:none;font-family:var(--body,system-ui);color:#111628}
-#nvx-game .nvx-note.show{animation:nvx-note 3.9s cubic-bezier(.34,1.35,.64,1) forwards}
-@keyframes nvx-note{0%{transform:translate(-50%,-220%);opacity:0}11%,86%{transform:translate(-50%,0);opacity:1}100%{transform:translate(-50%,-220%);opacity:0}}
+#nvx-game .nvx-note.show{animation:nvx-note 5.4s cubic-bezier(.34,1.35,.64,1) forwards}
+@keyframes nvx-note{0%{transform:translate(-50%,-220%);opacity:0}8%,90%{transform:translate(-50%,0);opacity:1}100%{transform:translate(-50%,-220%);opacity:0}}
 #nvx-game .nvx-note>i{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-style:normal;font-size:21px;background:linear-gradient(135deg,#eef0f6,#fff);box-shadow:inset 0 0 0 1px rgba(17,22,40,.07)}
 #nvx-game .nvx-note .h{display:flex;justify-content:space-between;font:800 10.5px var(--body,system-ui);color:#6b7392;text-transform:uppercase;letter-spacing:.06em}
 #nvx-game .nvx-note b{display:block;font:800 13.5px/1.25 var(--display,system-ui)}
@@ -153,12 +156,12 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
 @keyframes nvx-stamp{from{opacity:0;transform:scale(2.6) rotate(-6deg)}to{opacity:.9;transform:rotate(14deg)}}
 @media (max-width:600px){ #nvx-game .nvx-note{top:calc(env(safe-area-inset-top,0px) + 136px)} #nvx-game .nvx-card:has(.nvx-stamp) .nvx-eyebrow{padding:0;margin-top:30px} }
 @keyframes nvx-ribfade{0%,100%{opacity:0;transform:skewX(-10deg)}10%,85%{opacity:1;transform:skewX(-10deg)}}
-@keyframes nvx-notefade{0%,100%{opacity:0;transform:translate(-50%,0)}11%,86%{opacity:1;transform:translate(-50%,0)}}
+@keyframes nvx-notefade{0%,100%{opacity:0;transform:translate(-50%,0)}8%,90%{opacity:1;transform:translate(-50%,0)}}
 @keyframes nvx-quipfade{0%,100%{opacity:0;transform:translate(-50%,0)}10%,78%{opacity:1;transform:translate(-50%,0)}}
 /* These durations are reading time, not decorative motion; retain them over the app's reduced-motion reset. */
 @media (prefers-reduced-motion: reduce){
   #nvx-game .nvx-level.show .rib{animation:nvx-ribfade 3.2s linear forwards;animation-duration:3.2s!important}
-  #nvx-game .nvx-note.show{animation:nvx-notefade 3.9s linear forwards;animation-duration:3.9s!important}
+  #nvx-game .nvx-note.show{animation:nvx-notefade 5.4s linear forwards;animation-duration:5.4s!important}
   #nvx-game .nvx-quip.show{animation:nvx-quipfade 2.6s linear forwards;animation-duration:2.6s!important}
   #nvx-game .nvx-level .rib::before{animation:none}
 }
@@ -300,7 +303,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
   /* ---------- the figurine, in 2D: origin at the feet, facing right, ~118 units tall ----------
      mode: run | idle | air | hurt | fall | hug | wave */
   function drawHer(c, ph, mode, t, o) {
-    const run = mode === "run", air = mode === "air", sw = run ? Math.sin(ph) : 0;
+    const ride = mode === "ride", run = mode === "run", air = mode === "air", sw = run ? Math.sin(ph) : 0;
     const bob = run ? -Math.abs(Math.cos(ph)) * 3.2 : mode === "idle" || mode === "hug" ? Math.sin(t * 2.4) * .8 : 0;
     c.save(); c.translate(0, bob);
     if (mode === "fall") { c.translate(-6, 0); c.rotate(-.42); }
@@ -313,13 +316,14 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     c.bezierCurveTo(-23 - flow * .8, -70 + lift * .4, -22 - flow * 1.3, -60 + lift, -20 - flow * 1.6, -50 + lift);
     c.lineTo(-11 - flow * .8, -52 + lift * .6); c.bezierCurveTo(-8, -64, -6, -74, -4, -80); c.closePath(); c.fill();
     // back arm + back leg
-    let aB = run ? .95 * sw : air ? 2.3 : mode === "fall" ? 2.6 : mode === "hug" ? 1.45 : mode === "wave" ? .2 : .12;
-    limb(c, -1, -71, aB, 11, aB + (run ? 1.1 : air ? .3 : mode === "hug" ? .25 : .1), 11, 6.4, 5, P.dressB, P.skinB);
+    let aB = ride ? 1.2 : run ? .95 * sw : air ? 2.3 : mode === "fall" ? 2.6 : mode === "hug" ? 1.45 : mode === "wave" ? .2 : .12;
+    limb(c, -1, -71, aB, 11, aB + (ride ? .35 : run ? 1.1 : air ? .3 : mode === "hug" ? .25 : .1), 11, 6.4, 5, P.dressB, P.skinB);
     const legs = (side) => {
       const phase = ph + (side ? 0 : Math.PI), s = Math.sin(phase);
       let a1, a2;
       if (run) { a1 = .78 * s; a2 = a1 - (.18 + .95 * Math.max(0, Math.cos(phase))); }
       else if (air) { a1 = side ? .95 : -.35; a2 = side ? -.15 : -1.35; }
+      else if (ride) { a1 = side ? 1.3 : 1.2; a2 = side ? .18 : .1; }
       else if (mode === "fall") { a1 = side ? 1.3 : 1.1; a2 = side ? 1.2 : .9; }
       else { a1 = side ? .06 : -.06; a2 = a1; }
       const [fx, fy, fa] = limb(c, side ? 2 : -2, -34, a1, 17, a2, 17, 7.4, 6.6, side ? P.skin : P.skinB, side ? P.skin : P.skinB);
@@ -327,7 +331,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     };
     legs(false); legs(true);
     // skirt
-    const fl = run ? -2 - sw * 2.2 : air ? -3 : 0, wide = air ? 3 : run ? 1 : 0;
+    const fl = run ? -2 - sw * 2.2 : air || ride ? -3 : 0, wide = air ? 3 : run || ride ? 1.5 : 0;
     c.fillStyle = P.dress; c.beginPath(); c.moveTo(-11.5, -58); c.lineTo(11.5, -58);
     c.quadraticCurveTo(16 + wide, -46, 19 + wide + fl, -31); c.quadraticCurveTo(0 + fl, -27.5, -19 - wide + fl, -31);
     c.quadraticCurveTo(-16 - wide, -46, -11.5, -58); c.fill();
@@ -357,7 +361,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     c.fillStyle = P.blush; c.beginPath(); c.ellipse(6, -88.5, 3.4, 1.9, 0, 0, Math.PI * 2); c.ellipse(20.5, -88.5, 2.6, 1.8, 0, 0, Math.PI * 2); c.fill();
     c.strokeStyle = P.lip; c.lineWidth = 1.5; c.beginPath();
     if (mode === "fall" || mode === "hurt") { c.fillStyle = P.lip; c.ellipse(14, -84.5, 1.8, 2.2, 0, 0, Math.PI * 2); c.fill(); }
-    else if (air || mode === "hug" || mode === "wave") { c.fillStyle = P.lip; c.arc(14, -86, 3, 0, Math.PI); c.fill(); }
+    else if (air || ride || mode === "hug" || mode === "wave") { c.fillStyle = P.lip; c.arc(14, -86, 3, 0, Math.PI); c.fill(); }
     else { c.arc(14, -87.5, 3, .2 * Math.PI, .8 * Math.PI); c.stroke(); }
     // hair cap + side-parted fringe
     c.fillStyle = P.hair; c.beginPath(); c.moveTo(-17, -80);
@@ -369,8 +373,8 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     c.fillStyle = P.skin; c.beginPath(); c.ellipse(-7.5, -91, 2.6, 3.8, 0, 0, Math.PI * 2); c.fill();
     c.fillStyle = P.gold; c.beginPath(); c.arc(-7.5, -85.6, 1.7, 0, Math.PI * 2); c.fill();
     // front arm
-    let aF = run ? -.95 * sw : air ? 2.65 : mode === "fall" ? 2.9 : mode === "hug" ? 1.6 : mode === "wave" ? 2.7 + Math.sin(t * 9) * .3 : -.12;
-    const [hx, hy] = limb(c, 3, -71, aF, 11, aF + (run ? 1.15 : air ? .25 : mode === "hug" ? .2 : .1), 11, 6.6, 5.2, P.dress, P.skin);
+    let aF = ride ? 1.05 : run ? -.95 * sw : air ? 2.65 : mode === "fall" ? 2.9 : mode === "hug" ? 1.6 : mode === "wave" ? 2.7 + Math.sin(t * 9) * .3 : -.12;
+    const [hx, hy] = limb(c, 3, -71, aF, 11, aF + (ride ? .35 : run ? 1.15 : air ? .25 : mode === "hug" ? .2 : .1), 11, 6.6, 5.2, P.dress, P.skin);
     c.fillStyle = P.skin; c.beginPath(); c.arc(hx, hy, 3.1, 0, Math.PI * 2); c.fill();
     c.restore();
   }
@@ -414,7 +418,25 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
       ok: ["Guests settled on the sofa", "Weekend survived"] },
     truck: { w: 184, h: 90, min: .16, wt: 1.35, label: "Truck waiting for QA sign-off", vars: ["4711", "0815", "1312", "2207"],
       hit: ["The driver has been waiting since 6:00.", "No signature — no release!", "Batch on hold. Driver honks politely."],
-      ok: ["Batch released ✍️", "Truck signed off", "QA approved — off you go"] }
+      ok: ["Batch released ✍️", "Truck signed off", "QA approved — off you go"] },
+    vacation: { w: 96, h: 66, min: 0, label: "Colleague on vacation", vars: ["OOO till 2027", "Back in Q3", "OOO · no signal"],
+      hit: ["Their inbox was forwarded to you. 1,204 unread.", "Handover note: “everything is in the folder.” There is no folder.", "Auto-reply: “For urgent matters please contact… you.”"],
+      ok: ["Handover survived", "Out-of-office dodged", "Not your inbox (today)"] },
+    meeting: { w: 62, h: 86, min: 0, label: "All-day “quick sync”", vars: ["Quick sync", "Alignment", "Pre-meeting", "Sync on sync"],
+      hit: ["This meeting could have been an email.", "“Can everyone see my screen?” Nobody can.", "You've been on mute for 40 minutes."],
+      ok: ["Declined politely", "Left early", "Sent regrets"] },
+    sap: { w: 62, h: 74, min: 0, label: "System loading…", vars: ["99%", "Please wait…", "Session expired"],
+      hit: ["Session expired. Please log in again. Again.", "Transaction is locked by user… you.", "Loading… 99%… 99%… 99%…"],
+      ok: ["Transaction posted", "Logged in on the first try", "Saved before the crash"] },
+    training: { w: 60, h: 78, min: 0, label: "Overdue trainings", vars: ["47", "112", "9001"],
+      hit: ["Mandatory training on how to complete mandatory trainings.", "Read & Understand: 214 pages. Quiz: 1 question.", "Certificate expired yesterday."],
+      ok: ["Training completed (skimmed)", "Certified!", "Read & understood (mostly)"] },
+    cow: { w: 84, h: 56, min: 0, label: "Cow on the road", vars: [""],
+      hit: ["The cow had right of way. The cow always has right of way.", "Muuuh. (Translation: this is my road.)", "Cow 1 – Moped 0."],
+      ok: ["Moo-ved on", "Udderly avoided", "Cow politely ignored"] },
+    rock: { w: 62, h: 46, min: 0, label: "Landslide (again)", vars: [""],
+      hit: ["Road closed due to landslide. Detour: also closed.", "Volcanic rock. Very authentic. Very hard.", "Rental insurance does not cover rocks."],
+      ok: ["Rock hopped", "Boulder dodged", "Lava-ly jump"] }
   };
   function drawObstacle(c, o, t) {
     const w = o.w;
@@ -465,7 +487,98 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
       c.save(); c.translate(150, -84 - pop * 3); c.fillStyle = "#fff"; rr(c, -24, -11, 50, 20, 8); c.fill(); c.beginPath(); c.moveTo(-2, 8); c.lineTo(6, 8); c.lineTo(4, 15); c.fill();
       text(c, "Sign pls? ✍️", 1, -1, 7.6, "#111628", 800); c.restore();
       for (let i = 0; i < 3; i++) { const k = (t * .8 + i / 3) % 1; c.fillStyle = `rgba(160,166,186,${.5 * (1 - k)})`; c.beginPath(); c.arc(140 - k * 18, -72 - k * 26, 3 + k * 6, 0, Math.PI * 2); c.fill(); }
+    } else if (o.type === "vacation") {
+      c.fillStyle = "rgba(17,22,40,.12)"; c.beginPath(); c.ellipse(w / 2, 0, w / 2, 4, 0, 0, Math.PI * 2); c.fill();
+      c.strokeStyle = "#8a5a3c"; c.lineWidth = 2.4; c.beginPath(); c.moveTo(16, 0); c.lineTo(16, -60); c.stroke();
+      ["#ff6b6b", "#ffd166", "#ff6b6b", "#ffd166"].forEach((col, i) => { c.fillStyle = col; c.beginPath(); c.moveTo(16, -64); c.arc(16, -60, 34, Math.PI + i * Math.PI / 4, Math.PI + (i + 1) * Math.PI / 4); c.closePath(); c.fill(); });
+      c.fillStyle = "#3fb3a9"; c.save(); c.translate(52, -12); c.rotate(-.35); rr(c, -22, -6, 44, 7, 2); c.fill(); c.restore();
+      c.strokeStyle = "#6b4a33"; c.lineWidth = 2; c.beginPath(); c.moveTo(34, 0); c.lineTo(44, -12); c.moveTo(70, 0); c.lineTo(62, -18); c.stroke();
+      c.fillStyle = P.skin; c.beginPath(); c.arc(66, -34, 8, 0, Math.PI * 2); c.fill();
+      c.fillStyle = "#2f3650"; rr(c, 59, -36, 14, 4, 2); c.fill();
+      c.fillStyle = "#e8557a"; rr(c, 48, -27, 18, 12, 4); c.fill();
+      c.strokeStyle = P.skin; c.lineWidth = 3.4; c.lineCap = "round"; c.beginPath(); c.moveTo(50, -18); c.lineTo(36, -12); c.stroke();
+      c.fillStyle = "#ffd166"; c.beginPath(); c.arc(78, -40, 4, 0, Math.PI * 2); c.fill(); c.strokeStyle = "#e8557a"; c.lineWidth = 1; c.beginPath(); c.moveTo(78, -44); c.lineTo(82, -52); c.stroke();
+      c.fillStyle = "#fff"; rr(c, 30, -82 + Math.sin(t * 2) * 1.5, 64, 18, 4); c.fill(); c.strokeStyle = "rgba(17,22,40,.18)"; c.lineWidth = 1; c.stroke();
+      text(c, "🏝️ " + o.v, 62, -73 + Math.sin(t * 2) * 1.5, 7, "#e8557a", 900);
+      const z = (t * .7 + o.seed) % 1; c.globalAlpha = 1 - z; text(c, "z", 80 + z * 8, -50 - z * 14, 7 + z * 4, "#4b5270", 900); c.globalAlpha = 1;
+    } else if (o.type === "meeting") {
+      c.fillStyle = "#fff"; rr(c, 2, -84, w - 4, 82, 6); c.fill(); c.strokeStyle = "rgba(17,22,40,.16)"; c.lineWidth = 1.2; c.stroke();
+      c.fillStyle = "#3b62d8"; rr(c, 2, -84, w - 4, 18, 6); c.fill(); c.fillRect(2, -72, w - 4, 6);
+      text(c, "MEETING", w / 2, -75, 8, "#fff", 900);
+      c.fillStyle = "#c9cfe0"; [14, w / 2, w - 14].forEach(x => { c.beginPath(); c.arc(x, -86, 3, 0, Math.PI * 2); c.fill(); });
+      for (let i = 0; i < 6; i++) { c.fillStyle = i % 2 ? "#eef1f8" : "#dfe6fb"; c.fillRect(6, -62 + i * 9.6, w - 12, 9.6); }
+      c.fillStyle = "#7c95ef"; rr(c, 8, -60, w - 16, 54, 4); c.fill();
+      text(c, o.v, w / 2, -44, o.v.length > 10 ? 6.4 : 7.6, "#fff", 900); text(c, "09:00–17:00", w / 2, -32, 6.4, "#eef1ff", 700);
+      text(c, "🔇 you're muted", w / 2, -16, 5.8, "#ffe08a", 800);
+      const blink = Math.floor(t * 2 + o.seed * 4) % 2; c.fillStyle = blink ? "#e23b4e" : "#ff8fa0"; c.beginPath(); c.arc(w - 10, -10, 3, 0, Math.PI * 2); c.fill();
+    } else if (o.type === "sap") {
+      c.fillStyle = "#8d93a6"; c.fillRect(w / 2 - 4, -16, 8, 14); c.fillStyle = "#5b6178"; rr(c, w / 2 - 16, -4, 32, 4, 2); c.fill();
+      c.fillStyle = "#2a2f45"; rr(c, 0, -74, w, 58, 5); c.fill();
+      c.fillStyle = "#e9eef7"; rr(c, 4, -70, w - 8, 50, 3); c.fill();
+      c.fillStyle = "#0a6ed1"; c.fillRect(4, -70, w - 8, 10); text(c, "SAP", 14, -65, 6.6, "#fff", 900, "left");
+      c.save(); c.translate(w / 2, -46); c.rotate(t * 5); for (let i = 0; i < 8; i++) { c.rotate(Math.PI / 4); c.fillStyle = `rgba(10,110,209,${(i + 1) / 8})`; c.beginPath(); c.arc(0, -8, 1.8, 0, Math.PI * 2); c.fill(); } c.restore();
+      text(c, o.v, w / 2, -29, o.v.length > 8 ? 5.6 : 6.6, "#2a2f45", 800);
+      c.fillStyle = "rgba(10,110,209,.2)"; c.fillRect(8, -25, w - 16, 3); c.fillStyle = "#0a6ed1"; c.fillRect(8, -25, (w - 16) * .99, 3);
+    } else if (o.type === "training") {
+      ["#7fb3e6", "#f2c14e", "#b9d98a", "#f19a8f"].forEach((col, i) => { c.fillStyle = col; rr(c, 4 + (i % 2) * 2, -10 - i * 9, w - 10, 9, 2); c.fill(); c.strokeStyle = "rgba(17,22,40,.12)"; c.lineWidth = 1; c.stroke(); });
+      c.fillStyle = "#2a2f45"; c.save(); c.translate(6, -46); c.fillRect(0, 0, w - 12, 4); c.beginPath(); c.moveTo(4, 0); c.lineTo(10, -30); c.lineTo(w - 22, -30); c.lineTo(w - 16, 0); c.fill();
+      c.fillStyle = "#fff"; c.beginPath(); c.moveTo(8, -2); c.lineTo(12.6, -27); c.lineTo(w - 24.6, -27); c.lineTo(w - 20, -2); c.fill();
+      text(c, "Read &", (w - 12) / 2, -20, 5.6, "#2a2f45", 900); text(c, "Understand", (w - 12) / 2, -13, 5.6, "#2a2f45", 900);
+      c.fillStyle = "#e8557a"; c.fillRect(14, -7, (w - 40) * .17, 2.4); c.fillStyle = "rgba(17,22,40,.12)"; c.fillRect(14 + (w - 40) * .17, -7, (w - 40) * .83, 2.4);
+      c.restore();
+      const bob = Math.sin(t * 4 + o.seed * 7) * 1.6; c.fillStyle = "#e23b4e"; c.beginPath(); c.arc(w - 10, -76 + bob, 10, 0, Math.PI * 2); c.fill();
+      text(c, o.v, w - 10, -76 + bob, o.v.length > 3 ? 5.6 : 7.4, "#fff", 900); text(c, "OVERDUE", w / 2 - 6, -64, 6.6, "#e23b4e", 900);
+    } else if (o.type === "cow") {
+      c.fillStyle = "rgba(17,22,40,.12)"; c.beginPath(); c.ellipse(w / 2, 0, w / 2, 4, 0, 0, Math.PI * 2); c.fill();
+      c.fillStyle = "#2b2b2b"; [12, 22, 58, 68].forEach(x => c.fillRect(x, -18, 5, 18));
+      c.fillStyle = "#fbfbf6"; rr(c, 6, -46, 68, 30, 12); c.fill();
+      c.fillStyle = "#2b2b2b"; c.beginPath(); c.ellipse(26, -34, 10, 8, .4, 0, Math.PI * 2); c.ellipse(52, -28, 8, 6, 0, 0, Math.PI * 2); c.ellipse(60, -42, 6, 4, 0, 0, Math.PI * 2); c.fill();
+      c.fillStyle = "#f1a7b0"; c.beginPath(); c.ellipse(40, -15, 7, 4, 0, 0, Math.PI * 2); c.fill();
+      c.strokeStyle = "#fbfbf6"; c.lineWidth = 2; c.beginPath(); c.moveTo(6, -40); c.quadraticCurveTo(-4, -30 + Math.sin(t * 6) * 4, 0, -20); c.stroke();
+      c.save(); c.translate(-2, -42 + Math.sin(t * 3 + o.seed) * 1.5); c.rotate(-.15);
+      c.fillStyle = "#fbfbf6"; rr(c, -12, -10, 22, 22, 8); c.fill(); c.fillStyle = "#f1a7b0"; rr(c, -14, 2, 16, 10, 4); c.fill();
+      c.fillStyle = "#2b2b2b"; c.beginPath(); c.arc(-9, 7, 1.3, 0, Math.PI * 2); c.arc(-4, 7, 1.3, 0, Math.PI * 2); c.fill();
+      c.fillStyle = "#fff"; c.beginPath(); c.arc(-6, -3, 3.4, 0, Math.PI * 2); c.fill(); c.fillStyle = "#2b2b2b"; c.beginPath(); c.arc(-7, -3, 1.8, 0, Math.PI * 2); c.fill();
+      c.fillStyle = "#c9b28a"; c.beginPath(); c.moveTo(-6, -10); c.lineTo(-10, -18); c.lineTo(-2, -11); c.fill(); c.beginPath(); c.moveTo(4, -10); c.lineTo(8, -18); c.lineTo(8, -9); c.fill();
+      c.restore();
+      c.fillStyle = "#c9a227"; c.beginPath(); c.arc(4, -26, 3.4, 0, Math.PI * 2); c.fill();
+      const say = (t * .6 + o.seed * 3) % 2.4; if (say < 1.4) { c.fillStyle = "rgba(255,255,255,.96)"; rr(c, -30, -82, 46, 16, 8); c.fill(); text(c, "MUUUH!", -7, -74, 7.4, "#111628", 900); }
+    } else if (o.type === "rock") {
+      c.fillStyle = "rgba(17,22,40,.14)"; c.beginPath(); c.ellipse(w / 2, 0, w / 2, 4, 0, 0, Math.PI * 2); c.fill();
+      [[18, -12, 18, 13, "#4a4a52"], [44, -14, 17, 15, "#3d3d45"], [30, -30, 16, 14, "#55555f"], [8, -6, 9, 7, "#5f5f69"], [56, -5, 9, 6, "#4a4a52"]].forEach(([x, y, rx, ry, col]) => { c.fillStyle = col; c.beginPath(); c.ellipse(x, y, rx, ry, .2, 0, Math.PI * 2); c.fill(); });
+      c.fillStyle = "rgba(255,255,255,.12)"; c.beginPath(); c.ellipse(26, -36, 7, 3, -.3, 0, Math.PI * 2); c.fill();
+      c.fillStyle = "#c7332f"; c.globalAlpha = .55 + .45 * Math.sin(t * 6 + o.seed * 3); c.beginPath(); c.arc(38, -18, 2, 0, Math.PI * 2); c.arc(22, -10, 1.6, 0, Math.PI * 2); c.fill(); c.globalAlpha = 1;
+      c.save(); c.translate(w - 2, -2); c.fillStyle = "#8d93a6"; c.fillRect(-1.5, -40, 3, 40);
+      c.fillStyle = "#ffcc00"; c.beginPath(); c.moveTo(0, -60); c.lineTo(12, -40); c.lineTo(-12, -40); c.closePath(); c.fill(); c.strokeStyle = "#c7332f"; c.lineWidth = 2; c.stroke(); text(c, "!", 0, -46, 10, "#111628", 900); c.restore();
+      for (let i = 0; i < 3; i++) { const k = (t * 1.2 + i / 3 + o.seed) % 1; c.fillStyle = `rgba(120,110,100,${.4 * (1 - k)})`; c.beginPath(); c.arc(30 + (i - 1) * 14, -40 - k * 30, 3 + k * 5, 0, Math.PI * 2); c.fill(); }
     }
+  }
+
+  /* the rental moped, wheels on the ground at y = 0, facing right */
+  function drawMoped(c, t, spin, on) {
+    c.save();
+    const wheel = x => { c.save(); c.translate(x, -9); c.fillStyle = "#1d2133"; c.beginPath(); c.arc(0, 0, 9.5, 0, Math.PI * 2); c.fill(); c.fillStyle = "#9aa1b8"; c.beginPath(); c.arc(0, 0, 4.6, 0, Math.PI * 2); c.fill();
+      c.rotate(spin); c.strokeStyle = "#5b6178"; c.lineWidth = 1.2; for (let i = 0; i < 3; i++) { c.rotate(Math.PI / 3); c.beginPath(); c.moveTo(-4.6, 0); c.lineTo(4.6, 0); c.stroke(); } c.restore(); };
+    wheel(-24); wheel(26);
+    c.fillStyle = "#2fb3a0"; c.beginPath(); c.moveTo(-40, -16); c.quadraticCurveTo(-42, -40, -18, -38); c.lineTo(-4, -36); c.lineTo(-4, -18); c.quadraticCurveTo(-20, -12, -40, -16); c.fill();
+    c.fillStyle = "#24907f"; c.beginPath(); c.moveTo(-36, -18); c.quadraticCurveTo(-24, -24, -8, -20); c.lineTo(-8, -17); c.quadraticCurveTo(-24, -14, -36, -16); c.fill();
+    c.fillStyle = "#6b3f2a"; rr(c, -34, -44, 30, 7, 3.5); c.fill();
+    c.fillStyle = "#3a3f5c"; rr(c, -6, -19, 24, 5, 2); c.fill();
+    c.fillStyle = "#2fb3a0"; c.beginPath(); c.moveTo(14, -16); c.lineTo(20, -16); c.quadraticCurveTo(30, -36, 18, -56); c.lineTo(12, -56); c.quadraticCurveTo(22, -36, 14, -16); c.fill();
+    c.fillStyle = "#2fb3a0"; c.beginPath(); c.arc(26, -12, 11, Math.PI * 1.05, Math.PI * 1.95); c.fill();
+    c.strokeStyle = "#3a3f5c"; c.lineWidth = 3; c.lineCap = "round"; c.beginPath(); c.moveTo(14, -56); c.lineTo(10, -64); c.lineTo(4, -64); c.stroke();
+    c.fillStyle = "#fff7c2"; c.beginPath(); c.arc(19, -56, 4.4, 0, Math.PI * 2); c.fill();
+    if (on) { const g = c.createRadialGradient(24, -56, 2, 40, -52, 60); g.addColorStop(0, "rgba(255,247,194,.5)"); g.addColorStop(1, "rgba(255,247,194,0)"); c.fillStyle = g; c.beginPath(); c.moveTo(22, -58); c.lineTo(90, -76); c.lineTo(90, -34); c.closePath(); c.fill(); }
+    c.fillStyle = "#c7332f"; c.beginPath(); c.arc(-40, -26, 2.4, 0, Math.PI * 2); c.fill();
+    c.fillStyle = "#8d93a6"; rr(c, -44, -10, 12, 3.4, 1.7); c.fill();
+    c.fillStyle = "#fff"; rr(c, -36, -32, 22, 8, 2); c.fill(); text(c, "RENT·A·🛵", -25, -28, 4.2, "#24907f", 900);
+    c.restore();
+  }
+  function drawMopedToken(c, t, seed) {
+    const bob = Math.sin(t * 4 + seed * 6) * .1;
+    const g = c.createRadialGradient(0, 0, 3, 0, 0, 26); g.addColorStop(0, "rgba(94,224,200,.65)"); g.addColorStop(1, "rgba(94,224,200,0)"); c.fillStyle = g; c.beginPath(); c.arc(0, 0, 26, 0, Math.PI * 2); c.fill();
+    c.fillStyle = "#fff"; c.beginPath(); c.arc(0, 0, 15, 0, Math.PI * 2); c.fill(); c.strokeStyle = "#2fb3a0"; c.lineWidth = 2.4; c.stroke();
+    c.save(); c.rotate(bob); c.translate(1, 8); c.scale(.36, .36); drawMoped(c, t, t * 8, false); c.restore();
   }
 
   /* ---------- bonuses (centred) ---------- */
@@ -476,6 +589,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     wine: { col: "240,120,160", label: "The wine box", quip: "Wine box opened 🍷 Problems look smaller · points ×2", wt: 1 }
   };
   function drawBonus(c, b, t) {
+    if (b.type === "moped") { drawMopedToken(c, t, b.seed); return; }
     if (b.type === "heart") { c.fillStyle = "#e8557a"; heart(c, 0, 2, 9); c.fill(); c.fillStyle = "rgba(255,255,255,.55)"; c.beginPath(); c.arc(-3, -2, 1.8, 0, Math.PI * 2); c.fill(); return; }
     const pulse = .75 + .25 * Math.sin(t * 5 + b.seed * 6), g = c.createRadialGradient(0, 0, 4, 0, 0, 34 * pulse);
     g.addColorStop(0, `rgba(${BONUS[b.type].col},.75)`); g.addColorStop(1, `rgba(${BONUS[b.type].col},0)`); c.fillStyle = g; c.beginPath(); c.arc(0, 0, 36, 0, Math.PI * 2); c.fill();
@@ -514,33 +628,37 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
   const LEVELS = [
     { at: 0, tag: "Level 1", name: "Monday in Innsbruck", sub: "Inbox: 214 unread · Coffee: not enough",
       sky: ["#4fa6ec", "#9fd3f4", "#eaf6fc"], far: "#a9bcd8", near: "#7f99bd", hill: "#93cf7a", hill2: "#64ad58", ground: "#86c072", path: "#efe3c6", sun: "#fff3c4",
-      props: ["fir", "fir", "birch", "chalet"], amb: "snow", gag: "glider", weights: { esc: 3.4, paper: 1.4, friends: 1, truck: .5 } },
-    { at: .2, tag: "Level 2", name: "Audit Week", sub: "The auditor would like to see the logbook. From 2019.",
+      props: ["fir", "fir", "birch", "chalet"], amb: "snow", gag: "glider", weights: { esc: 3, paper: 1.2, friends: .8, truck: .4, vacation: 1.4, meeting: 1.4, sap: .7, training: .6 } },
+    { at: .16, tag: "Level 2", name: "Audit Week", sub: "The auditor would like to see the logbook. From 2019.",
       sky: ["#3f8fd0", "#94cbe6", "#e0f3f1"], far: "#9fb3cc", near: "#7189ab", hill: "#7fc28e", hill2: "#58a370", ground: "#78b879", path: "#e4ddcb", sun: "#f4fbff",
-      props: ["tank", "fir", "pipe", "round"], amb: "motes", gag: "blimp", weights: { esc: 4.2, paper: 1.6, friends: .7, truck: 1.4 } },
-    { at: .4, tag: "Level 3", name: "Kufstein Golden Hour", sub: "The truck is still waiting. The driver made friends with the forklift.",
+      props: ["tank", "fir", "pipe", "round"], amb: "motes", gag: "blimp", weights: { esc: 3.4, paper: 1.4, friends: .5, truck: 1.2, vacation: .8, meeting: 1, sap: 1.2, training: 1.8 } },
+    { at: .32, tag: "Level 3", name: "Kufstein Golden Hour", sub: "The truck is still waiting. The driver made friends with the forklift.",
       sky: ["#6a86dc", "#f2a988", "#ffdca6"], far: "#c3a3bd", near: "#9a7fa6", hill: "#bcc26a", hill2: "#94a24f", ground: "#a6bd62", path: "#f2dcb0", sun: "#ffcf73",
-      props: ["autumn", "autumn", "fir", "round"], amb: "leaves", gag: "balloon", weights: { esc: 2, paper: 1.3, friends: 1.4, truck: 2.4 } },
-    { at: .6, tag: "Level 4", name: "Bavarian Weekend", sub: "Friends arriving in 3… 2… 1… (they brought Kevin)",
+      props: ["autumn", "autumn", "fir", "round"], amb: "leaves", gag: "balloon", weights: { esc: 1.6, paper: 1, friends: 1.2, truck: 2.2, vacation: 1, meeting: .8, sap: 1.4, training: .6 } },
+    { at: .48, tag: "Level 4", name: "Horrors of Azores", sub: "Wrong turn at Kufstein. Rental moped, steep hills, four seasons per hour.", azores: 1,
+      sky: ["#5b6c7c", "#93a6ac", "#d6e0da"], far: "#58706c", near: "#3f5c55", hill: "#4f9a58", hill2: "#357843", ground: "#5aa955", path: "#b3ada2", sun: "#eef3ee",
+      props: ["hydrangea", "hydrangea", "cow", "lighthouse", "hydrangea", "round"], amb: "rain", gag: "sata", weights: { cow: 3, rock: 2.2, vacation: .7, sap: .6, esc: .7 } },
+    { at: .64, tag: "Level 5", name: "Bavarian Weekend", sub: "Friends arriving in 3… 2… 1… (they brought Kevin)",
       sky: ["#3796e8", "#9ad0f6", "#fbf1cf"], far: "#bfcbe0", near: "#9fb2d0", hill: "#b6d85e", hill2: "#8fbd45", ground: "#9fcd5b", path: "#f1e3bd", sun: "#fff6c8",
-      props: ["cow", "maypole", "round", "sunflower", "chapel", "cow"], amb: "petals", gag: "plane", weights: { esc: 1.4, paper: 1.3, friends: 3.4, truck: 1 } },
+      props: ["cow", "maypole", "round", "sunflower", "chapel", "cow"], amb: "petals", gag: "plane", weights: { esc: 1.2, paper: 1.1, friends: 3.2, truck: .9, vacation: 1.2, meeting: .6 } },
     { at: .8, tag: "Final level", name: "München by Night", sub: "Mama called. Bring the Vollmacht. The ORIGINAL.", fade: .05,
       sky: ["#10163f", "#33296a", "#9c5389"], far: "#3a3b6a", near: "#2b2d58", hill: "#2c5658", hill2: "#22464a", ground: "#35624e", path: "#8a8198", sun: "#fff6d8", night: 1,
-      props: ["lamp", "building", "lamp", "building", "round"], amb: "fireflies", gag: "banner", weights: { esc: 1.6, paper: 3.2, friends: 1.3, truck: 1.2 } }
+      props: ["lamp", "building", "lamp", "building", "round"], amb: "fireflies", gag: "banner", weights: { esc: 1.4, paper: 3, friends: 1.1, truck: 1, meeting: 1, training: .8, sap: .6 } }
   ];
+  const AZ = LEVELS.findIndex(L => L.azores), AZ0 = LEVELS[AZ].at, AZ1 = LEVELS[AZ + 1].at;
   const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
   const PKEYS = ["far", "near", "hill", "hill2", "ground", "path", "sun"];
   LEVELS.forEach(L => { L.rgb = { sky: L.sky.map(hex) }; PKEYS.forEach(k => { L.rgb[k] = hex(L[k]); }); });
   const rgb = (c, a = 1) => `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
   const levelAt = p => { let i = 0; while (i < LEVELS.length - 1 && p >= LEVELS[i + 1].at) i++; return i; };
   function palette(p) {
-    const o = { sky: LEVELS[0].rgb.sky.map(c => c.slice()), n: 0 };
+    const o = { sky: LEVELS[0].rgb.sky.map(c => c.slice()), n: 0, az: 0 };
     PKEYS.forEach(k => { o[k] = LEVELS[0].rgb[k].slice(); });
     for (let j = 1; j < LEVELS.length; j++) {
       const L = LEVELS[j], w = L.fade || .02, k = smooth(L.at - w, L.at + w, p); if (k <= 0) break;
       o.sky.forEach((c, i) => c.forEach((v, m) => { c[m] = lerp(v, L.rgb.sky[i][m], k); }));
       PKEYS.forEach(key => o[key].forEach((v, m) => { o[key][m] = lerp(v, L.rgb[key][m], k); }));
-      o.n = lerp(o.n, L.night || 0, k);
+      o.n = lerp(o.n, L.night || 0, k); o.az = lerp(o.az, L.azores || 0, k);
     }
     return o;
   }
@@ -556,7 +674,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     }
   }
   function sunMoon(c, VWv, p, pal, t) {
-    const sx = VWv * .8, sy = lerp(62, 150, smooth(.28, .58, p)) - 30 * smooth(.58, .7, p), day = 1 - pal.n;
+    const sx = VWv * .8, sy = lerp(62, 150, smooth(.28, .58, p)) - 30 * smooth(.58, .7, p), day = (1 - pal.n) * (1 - .8 * (pal.az || 0));
     if (day > .02) {
       c.save(); c.globalCompositeOperation = "lighter";
       const glow = c.createRadialGradient(sx, sy, 10, sx, sy, 150); glow.addColorStop(0, rgb(pal.sun, .55 * day)); glow.addColorStop(1, rgb(pal.sun, 0)); c.fillStyle = glow; c.fillRect(sx - 150, sy - 150, 300, 300);
@@ -589,10 +707,10 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     layer(.12, 96, 52, 4.1, pal.near, 132);
     const hz2 = c.createLinearGradient(0, GYv - 60, 0, GYv); hz2.addColorStop(0, rgb(pal.sky[2], 0)); hz2.addColorStop(1, rgb(pal.sky[2], .3)); c.fillStyle = hz2; c.fillRect(-40, GYv - 60, VWv + 80, 64);
   }
-  function clouds(c, VWv, d, t, pal) {
+  function clouds(c, VWv, d, t, pal, high = 0) {
     const n = pal ? pal.n : 0, warm = pal ? pal.sky[2] : [255, 255, 255];
-    for (let i = 0; i < 7; i++) {
-      const span = VWv + 360, x = ((i * 241 - d * .05 - t * (5 + i)) % span + span) % span - 180, y = 34 + hash(i) * 100, s = .65 + hash(i + 2) * .8;
+    for (let i = 0, count = Math.round(7 * Math.max(1, Math.sqrt(VWv / 720))); i < count; i++) {
+      const span = VWv + 360, x = ((i * 241 - d * .05 - t * (5 + i)) % span + span) % span - 180, y = 34 + hash(i) * 100 - (high ? hash(i + 9) * high * .8 : 0), s = (high ? 1 + hash(i + 9) * .9 : 1) * (.65 + hash(i + 2) * .8);
       c.fillStyle = n > .5 ? `rgba(120,110,170,${.35 + .2 * hash(i)})` : rgb([255, 255, 255].map((v, k) => lerp(v, warm[k], .25)), .9);
       c.beginPath(); c.ellipse(x, y, 40 * s, 12 * s, 0, 0, Math.PI * 2); c.ellipse(x - 17 * s, y - 6 * s, 19 * s, 14 * s, 0, 0, Math.PI * 2); c.ellipse(x + 13 * s, y - 10 * s, 21 * s, 16 * s, 0, 0, Math.PI * 2); c.fill();
       c.fillStyle = "rgba(255,255,255,.35)"; c.beginPath(); c.ellipse(x + 8 * s, y - 16 * s, 12 * s, 5 * s, 0, 0, Math.PI * 2); c.fill();
@@ -654,6 +772,17 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     } else if (type === "lamp") {
       c.fillStyle = "#3a3f5c"; c.fillRect(-1.6, -58, 3.2, 58); c.beginPath(); c.moveTo(-1.6, -58); c.quadraticCurveTo(0, -66, 10, -64); c.lineTo(10, -61); c.quadraticCurveTo(2, -62, 1.6, -56); c.fill();
       c.fillStyle = "#ffe9a8"; c.beginPath(); c.ellipse(10, -60, 4, 2.4, 0, 0, Math.PI * 2); c.fill(); lights.push([x + 10, y - 58, 34, "255,220,140"]);
+    } else if (type === "hydrangea") {
+      c.fillStyle = "#3f7d4a"; c.beginPath(); c.ellipse(0, -10, 22, 13, 0, 0, Math.PI * 2); c.fill();
+      const cols = [["#7aa7ff", "#a9c4ff"], ["#c08bff", "#dcb9ff"], ["#ff9bc6", "#ffc4dd"]];
+      for (let j = 0; j < 5; j++) { const [a, b] = cols[(i + j) % 3], fx = -15 + j * 7.5, fy = -18 - (j % 2) * 5;
+        c.fillStyle = a; c.beginPath(); c.arc(fx, fy, 6.5, 0, Math.PI * 2); c.fill(); c.fillStyle = b; c.beginPath(); c.arc(fx - 1.6, fy - 1.6, 3, 0, Math.PI * 2); c.fill(); }
+    } else if (type === "lighthouse") {
+      c.fillStyle = "#f4f1ea"; c.beginPath(); c.moveTo(-9, 0); c.lineTo(-6, -62); c.lineTo(6, -62); c.lineTo(9, 0); c.fill();
+      c.fillStyle = "#c7332f"; [[-8.4, -14], [-7.4, -34], [-6.5, -52]].forEach(([x, y]) => c.fillRect(x, y, -x * 2, 7));
+      c.fillStyle = "#2a2f45"; c.fillRect(-7, -70, 14, 8); c.fillStyle = "#c7332f"; c.beginPath(); c.moveTo(-8, -70); c.lineTo(0, -78); c.lineTo(8, -70); c.fill();
+      c.fillStyle = "#fff7c2"; c.fillRect(-4, -69, 8, 6);
+      c.save(); c.globalAlpha = .28; c.fillStyle = "#fff7c2"; c.translate(0, -66); c.rotate(Math.sin(t * .9 + i) * .6); c.beginPath(); c.moveTo(0, 0); c.lineTo(120, -18); c.lineTo(120, 18); c.closePath(); c.fill(); c.restore();
     } else if (type === "building") {
       const h = 46 + k * 40, w = 34 + hash(i + 4) * 16;
       c.fillStyle = ["#e6cdb4", "#d8b9a4", "#cfd6e2", "#e9d8b6"][Math.floor(k * 4)]; c.fillRect(-w / 2, -h, w, h); c.fillStyle = "#9c5a44"; c.fillRect(-w / 2 - 2, -h - 5, w + 4, 5);
@@ -677,15 +806,38 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     }
     return lights;
   }
-  function ground(c, VWv, GYv, d, p, pal, yBot = 900) {
+  function ground(c, VWv, GYv, d, p, pal, yBot = 900, tf = null) {
     pal = pal || palette(p);
-    const g = c.createLinearGradient(0, GYv, 0, GYv + 200); g.addColorStop(0, rgb(pal.ground)); g.addColorStop(1, rgb(pal.ground.map(v => v * .82))); c.fillStyle = g; c.fillRect(-60, GYv, VWv + 120, yBot - GYv + 200);
-    c.fillStyle = rgb(pal.path); c.fillRect(-60, GYv - 2, VWv + 120, 18);
-    c.fillStyle = "rgba(255,255,255,.35)"; c.fillRect(-60, GYv - 2, VWv + 120, 2);
-    c.fillStyle = rgb(pal.path.map(v => v * .86)); c.fillRect(-60, GYv + 14, VWv + 120, 3);
-    c.fillStyle = "rgba(255,255,255,.75)"; const o = d % 46; for (let x = -o - 46; x < VWv + 60; x += 46) c.fillRect(x, GYv + 6, 22, 2.4);
-    c.fillStyle = rgb(pal.ground.map(v => v * .85)); const o2 = d % 31; for (let x = -o2 - 31; x < VWv + 60; x += 31) { const k = hash(Math.floor((x + d) / 31)); c.beginPath(); c.moveTo(x, GYv + 30 + k * 30); c.lineTo(x + 3, GYv + 22 + k * 30); c.lineTo(x + 6, GYv + 30 + k * 30); c.fill(); }
-    const o3 = d % 157; for (let x = -o3 - 157; x < VWv + 160; x += 157) { const k = hash(Math.floor((x + d) / 157) + 50); if (k < .5) continue; c.fillStyle = ["#ff8fab", "#ffd166", "#ffffff", "#b39cff"][Math.floor(k * 8) % 4]; for (let j = 0; j < 3; j++) { c.beginPath(); c.arc(x + j * 6, GYv + 40 + k * 26 + (j % 2) * 3, 2.2, 0, Math.PI * 2); c.fill(); } }
+    const hill = tf && [-60, VWv * .25, VWv * .5, VWv * .75, VWv + 60].some(x => tf(x) > .1);
+    if (!hill) tf = () => 0;
+    const STEP = 8, xs = []; for (let x = -64; x <= VWv + 72; x += STEP) xs.push(x);
+    const ys = xs.map(x => GYv - tf(x));
+    const g = c.createLinearGradient(0, GYv - 80, 0, GYv + 200); g.addColorStop(0, rgb(pal.ground)); g.addColorStop(1, rgb(pal.ground.map(v => v * .82))); c.fillStyle = g;
+    if (!hill) c.fillRect(-60, GYv, VWv + 120, yBot - GYv + 200);
+    else { c.beginPath(); c.moveTo(xs[0], yBot + 200); xs.forEach((x, k) => c.lineTo(x, ys[k] + 8)); c.lineTo(xs[xs.length - 1], yBot + 200); c.closePath(); c.fill(); }
+    const band = (dy, w, col) => { if (!hill) { c.fillStyle = col; c.fillRect(-60, GYv + dy - w / 2, VWv + 120, w); return; }
+      c.strokeStyle = col; c.lineWidth = w; c.lineCap = "butt"; c.lineJoin = "round"; c.beginPath(); xs.forEach((x, k) => k ? c.lineTo(x, ys[k] + dy) : c.moveTo(x, ys[k] + dy)); c.stroke(); };
+    band(7, 18, rgb(pal.path)); band(-1, 2, "rgba(255,255,255,.35)"); band(15.5, 3, rgb(pal.path.map(v => v * .86)));
+    const o = d % 46;
+    if (!hill) { c.fillStyle = "rgba(255,255,255,.75)"; for (let x = -o - 46; x < VWv + 60; x += 46) c.fillRect(x, GYv + 6, 22, 2.4); }
+    else { c.strokeStyle = "rgba(255,255,255,.75)"; c.lineWidth = 2.4; for (let x = -o - 46; x < VWv + 60; x += 46) { c.beginPath(); c.moveTo(x, GYv - tf(x) + 7); c.lineTo(x + 22, GYv - tf(x + 22) + 7); c.stroke(); } }
+    c.fillStyle = rgb(pal.ground.map(v => v * .85)); const o2 = d % 31; for (let x = -o2 - 31; x < VWv + 60; x += 31) { const k = hash(Math.floor((x + d) / 31)), yy = GYv - tf(x) * .5; c.beginPath(); c.moveTo(x, yy + 30 + k * 30); c.lineTo(x + 3, yy + 22 + k * 30); c.lineTo(x + 6, yy + 30 + k * 30); c.fill(); }
+    const o3 = d % 157; for (let x = -o3 - 157; x < VWv + 160; x += 157) { const k = hash(Math.floor((x + d) / 157) + 50); if (k < .5) continue; const yy = GYv - tf(x) * .5; c.fillStyle = ["#ff8fab", "#ffd166", "#ffffff", "#b39cff"][Math.floor(k * 8) % 4]; for (let j = 0; j < 3; j++) { c.beginPath(); c.arc(x + j * 6, yy + 40 + k * 26 + (j % 2) * 3, 2.2, 0, Math.PI * 2); c.fill(); } }
+  }
+
+  /* Azores backdrop: the Atlantic, volcanic islands and drifting fog, faded in by k */
+  function azoresBack(c, VWv, GYv, d, t, k) {
+    if (k <= .01) return;
+    c.save(); c.globalAlpha = k;
+    const sea = c.createLinearGradient(0, GYv - 70, 0, GYv); sea.addColorStop(0, "#5f8a96"); sea.addColorStop(1, "#2f5d6b"); c.fillStyle = sea; c.fillRect(-60, GYv - 70, VWv + 120, 74);
+    c.strokeStyle = "rgba(255,255,255,.35)"; c.lineWidth = 1.2; for (let r = 0; r < 4; r++) { const yy = GYv - 62 + r * 15, off = (d * (.02 + r * .01) + t * 6) % 40; c.beginPath(); for (let x = -off; x < VWv + 40; x += 40) { c.moveTo(x, yy); c.quadraticCurveTo(x + 6, yy - 2, x + 12, yy); } c.stroke(); }
+    const isle = (cx, w, h, col, crater) => { c.fillStyle = col; c.beginPath(); c.moveTo(cx - w, GYv - 56); c.quadraticCurveTo(cx - w * .35, GYv - 56 - h, cx - w * .14, GYv - 56 - h); c.lineTo(cx + w * .14, GYv - 56 - h); c.quadraticCurveTo(cx + w * .35, GYv - 56 - h, cx + w, GYv - 56); c.fill();
+      if (crater) { c.fillStyle = "rgba(255,255,255,.75)"; c.beginPath(); c.ellipse(cx, GYv - 58 - h, w * .2, 6, 0, 0, Math.PI * 2); c.fill(); } };
+    const span = VWv + 900, ox = (x0, f) => ((x0 - d * f) % span + span) % span - 300;
+    isle(ox(200, .05), 230, 130, "#4d6b63", true); isle(ox(760, .05), 170, 90, "#57766c", false); isle(ox(1250, .05), 280, 150, "#46625b", true);
+    for (let i = 0; i < 4; i++) { const fx = ((i * 380 - d * .12 - t * 14) % (VWv + 600) + VWv + 600) % (VWv + 600) - 300, fy = GYv - 110 + i * 22;
+      const g = c.createRadialGradient(fx, fy, 10, fx, fy, 220); g.addColorStop(0, "rgba(235,240,238,.55)"); g.addColorStop(1, "rgba(235,240,238,0)"); c.fillStyle = g; c.fillRect(fx - 220, fy - 60, 440, 120); }
+    c.restore();
   }
 
   /* one sky gag per level, drifting across while that level plays */
@@ -703,6 +855,15 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
       const y = 96 + Math.sin(t * .7) * 10; ["#e8557a", "#ffd166", "#e8557a", "#ffd166", "#e8557a"].forEach((col, j) => { c.fillStyle = col; c.beginPath(); c.ellipse(0, y - 30, 26 - j * 5.2, 30, 0, 0, Math.PI * 2); c.fill(); });
       c.strokeStyle = "rgba(60,40,30,.6)"; c.lineWidth = .8; c.beginPath(); c.moveTo(-14, y - 4); c.lineTo(-6, y + 12); c.moveTo(14, y - 4); c.lineTo(6, y + 12); c.stroke(); c.fillStyle = "#8a5a3c"; c.fillRect(-7, y + 12, 14, 10);
       c.fillStyle = "#fff"; rr(c, -40, y + 26, 80, 14, 3); c.fill(); text(c, "TRUCK STILL WAITING", 0, y + 33, 6.6, "#111628", 900);
+    } else if (kind === "sata") {
+      const y = 78 + Math.sin(t * 1.3) * 5, tilt = Math.sin(t * 2.1) * .08;
+      c.save(); c.translate(0, y); c.rotate(tilt);
+      c.fillStyle = "#f4f6f8"; rr(c, -30, -6, 60, 12, 6); c.fill(); c.fillStyle = "#1e6db5"; c.fillRect(-30, -1, 60, 3);
+      c.fillStyle = "#e9eef4"; c.fillRect(-6, -2, 12, -16); c.fillRect(-6, 2, 12, 14); c.fillStyle = "#1e6db5"; c.beginPath(); c.moveTo(-30, -6); c.lineTo(-38, -18); c.lineTo(-24, -6); c.fill();
+      [[-4, -16], [-4, 14]].forEach(([x, yy]) => { c.fillStyle = "#2a2f45"; c.fillRect(x, yy - 2, 4, 4); const pr = Math.abs(Math.sin(t * 38)) * 6 + 1; c.fillRect(x + 4, yy - pr, 1.4, pr * 2); });
+      c.restore();
+      c.strokeStyle = "rgba(240,244,240,.6)"; c.lineWidth = .8; c.beginPath(); c.moveTo(-30, y); c.lineTo(-50, y); c.stroke();
+      c.fillStyle = "rgba(255,255,255,.95)"; rr(c, -232, y - 9, 182, 18, 3); c.fill(); text(c, "FLIGHT DELAYED · FOG 🌫️ · AGAIN", -141, y, 8.2, "#c7332f", 900);
     } else if (kind === "plane" || kind === "banner") {
       const night = kind === "banner", y = 64 + Math.sin(t * 1.1) * 4, blink = Math.floor(t * 2) % 2;
       c.fillStyle = night ? "#c9cde0" : "#f7f7fb"; rr(c, -22, y - 5, 44, 10, 5); c.fill(); c.fillStyle = night ? "#9aa0bc" : "#e8557a"; c.fillRect(-2, y - 14, 6, 28); c.fillRect(-20, y - 10, 4, 8);
@@ -743,12 +904,17 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
       c.fillStyle = "#e7e1d2"; c.fillRect(-60, -86, 120, 22); c.fillRect(-14, -118, 30, 54); c.beginPath(); c.arc(1, -118, 15, Math.PI, 0); c.fill();
       c.fillStyle = "#b9b2a0"; for (let i = 0; i < 8; i++) c.fillRect(-60 + i * 16, -92, 8, 6);
       text(c, "Festung Kufstein", 0, -136, 9, "rgba(40,46,70,.7)", 700); } },
-    { p: .5, f: 1, off: 0, draw(c) {
+    { p: .474, f: 1, off: 0, draw(c) { post(c, 58); signBoard(c, 112, 38, -98, "#fff", "#1d6b3a", [["AÇORES 🌋", 15, 12, "#1d6b3a"], ["wrong turn · welcome!", 28, 7, "#4b5270"]]); } },
+    { p: .56, f: .42, off: 0, draw(c) {
+      c.fillStyle = "#3f6f57"; c.beginPath(); c.moveTo(-170, 0); c.quadraticCurveTo(-120, -96, -60, -104); c.lineTo(60, -104); c.quadraticCurveTo(120, -96, 170, 0); c.fill();
+      c.fillStyle = "#2f8fa3"; c.beginPath(); c.ellipse(-28, -98, 30, 5, 0, 0, Math.PI * 2); c.fill(); c.fillStyle = "#4f9a6a"; c.beginPath(); c.ellipse(28, -98, 30, 5, 0, 0, Math.PI * 2); c.fill();
+      text(c, "Sete Cidades · one lake blue, one green", 0, -122, 9, "rgba(240,244,240,.85)", 700); } },
+    { p: .642, f: 1, off: 0, draw(c) {
       post(c, 58); c.fillStyle = "#1f49b6"; rr(c, -46, -102, 92, 46, 5); c.fill();
       c.fillStyle = "#ffcc00"; for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; c.beginPath(); c.arc(Math.cos(a) * 11, -86 + Math.sin(a) * 11, 1.6, 0, Math.PI * 2); c.fill(); }
       text(c, "DEUTSCHLAND", 0, -66, 9, "#fff", 900); text(c, "Freistaat Bayern", 0, -48, 7, "#2f3650", 700); } },
-    { p: .64, f: 1, off: 0, draw(c) { post(c, 60); c.fillStyle = "#8d93a6"; c.fillRect(-40, -60, 4, 60); signBoard(c, 104, 36, -96, "#2457c5", "#fff", [["München", 15, 12, "#fff"], ["60 km", 27, 9, "#fff"]]); } },
-    { p: .73, f: 1, off: 0, draw(c) { post(c, 50); signBoard(c, 98, 34, -84, "#ffd400", "#111628", [["Rosenheim", 14, 11.5, "#111628"], ["Landkreis Rosenheim", 25, 6, "#111628"]]); } },
+    { p: .7, f: 1, off: 0, draw(c) { post(c, 60); c.fillStyle = "#8d93a6"; c.fillRect(-40, -60, 4, 60); signBoard(c, 104, 36, -96, "#2457c5", "#fff", [["München", 15, 12, "#fff"], ["60 km", 27, 9, "#fff"]]); } },
+    { p: .76, f: 1, off: 0, draw(c) { post(c, 50); signBoard(c, 98, 34, -84, "#ffd400", "#111628", [["Rosenheim", 14, 11.5, "#111628"], ["Landkreis Rosenheim", 25, 6, "#111628"]]); } },
     { p: .9, f: 1, off: 0, draw(c) { post(c, 60); c.fillStyle = "#8d93a6"; c.fillRect(-40, -60, 4, 60); signBoard(c, 104, 36, -96, "#2457c5", "#fff", [["München", 15, 12, "#fff"], ["16 km", 27, 9, "#fff"]]); } },
     { p: 1, f: .45, off: 170, draw(c) {
       [["#e7cfb6", -150, 54], ["#efe2c8", -110, 64], ["#e2c3a8", 80, 58], ["#f3d9a6", 116, 48]].forEach(([col, x, h]) => { c.fillStyle = col; c.fillRect(x, -h, 38, h); c.fillStyle = "#b5674d"; c.fillRect(x - 2, -h - 6, 42, 6); });
@@ -761,9 +927,20 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
 
   /* ---------- the game ---------- */
   const TOTAL = 34000, KM = 165, GRAV = 2300, JUMP = 780, DJUMP = 690, VH = 380, GY = 300;
-  const FX_LIFE = { massage: 6, yog: 6.5, wine: 8, shield: 6 };
-  const FX_ICON = { massage: ["💆‍♀️", "#8a7be0"], yog: ["🥛", "#4f8fe6"], wine: ["🍷", "#e8557a"], shield: ["🛡️", "#2fb3a0"] };
-  const HIT_WORD = { esc: ["ESCALATED!", "P1!!", "RE: RE: RE:"], paper: ["FORM 27B?!", "WRONG STAMP!", "NOTARY!"], friends: ["SURPRISE!!", "KEVIN?!", "SLEEPOVER!"], truck: ["HOOONK!", "SIGN IT!", "BEEP BEEP!"] };
+  const FX_LIFE = { massage: 6, yog: 6.5, wine: 8, shield: 6, moped: 8 };
+  const READ_T = 5, AZD0 = AZ0 * TOTAL, AZD1 = AZ1 * TOTAL;
+  /* Azores hills: road height above the flat road line at world distance d (0 everywhere else) */
+  function terrain(d) {
+    if (d <= AZD0 || d >= AZD1) return 0;
+    const env = smooth(AZD0, AZD0 + 900, d) * (1 - smooth(AZD1 - 900, AZD1, d));
+    return env * 38 * (1 + .55 * Math.sin(d * .0052) + .3 * Math.sin(d * .0121 + 1.7) + .15 * Math.sin(d * .027 + .4));
+  }
+  const slopeAt = d => (terrain(d + 4) - terrain(d - 4)) / 8;
+  const inAz = d => d >= AZD0 && d < AZD1;
+  const FX_ICON = { massage: ["💆‍♀️", "#8a7be0"], yog: ["🥛", "#4f8fe6"], wine: ["🍷", "#e8557a"], shield: ["🛡️", "#2fb3a0"], moped: ["🛵", "#e8a317"] };
+  const HIT_WORD = { esc: ["ESCALATED!", "P1!!", "RE: RE: RE:"], paper: ["FORM 27B?!", "WRONG STAMP!", "NOTARY!"], friends: ["SURPRISE!!", "KEVIN?!", "SLEEPOVER!"], truck: ["HOOONK!", "SIGN IT!", "BEEP BEEP!"],
+    vacation: ["OOO!", "HANDOVER?!", "BEACH!?"], meeting: ["MEETING!", "ON MUTE!", "SYNC!!"], sap: ["LOADING…", "ERROR!", "RE-LOGIN!"],
+    training: ["OVERDUE!", "QUIZ!", "R&U!"], cow: ["MUUUH!", "VACA!", "MOOO!"], rock: ["CRUNCH!", "BONK!", "OUCH!"] };
   const SMASH_WORD = ["POW!", "KABOOM!", "BONK!", "YEET!", "SMASH!", "DELETED!"];
   const BONUS_FX = {
     cake: { txt: "CHEESECAKE!", col: "#ffd166", flash: "255,214,140" }, massage: { txt: "AHHHHH…", col: "#c9b4f0", flash: "200,180,255" },
@@ -772,13 +949,17 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
   const COMBO_WORDS = { 5: "COMBO ×2!", 10: "×3 · ON FIRE!", 15: "×4 · QA LEGEND!", 25: "UNSTOPPABLE!", 40: "CEO MATERIAL!" };
   const NOTES = [
     { p: .05, ic: "📧", app: "Outlook", title: "RE: RE: RE: FW: URGENT", text: "Please see below. And below that. And below that." },
-    { p: .13, ic: "💬", app: "Teams", title: "Boss: “got a sec?”", text: "Status automatically set to: 🏃‍♀️ Running away" },
-    { p: .245, ic: "📋", app: "Audit", title: "Auditor on site", text: "Could you print the logbook from 2019? In colour, please." },
-    { p: .33, ic: "🤖", app: "Outlook", title: "Automatic reply", text: "I'm running to München. For escalations, please contact the void." },
-    { p: .445, ic: "🚚", app: "Hans (truck)", title: "Still here 🙂", text: "Brought sandwiches. Made friends with the forklift." },
-    { p: .535, ic: "🥨", app: "Bayern", title: "Willkommen in Bayern!", text: "Weißwurst must be eaten before noon. It's the law (probably)." },
-    { p: .645, ic: "🎉", app: "WhatsApp", title: "WEEKEND!!! (47 new)", text: "Can we bring the dog? And Kevin? Kevin is coming." },
-    { p: .725, ic: "🍰", app: "Reminders", title: "Cheesecake for 12", text: "Due: tomorrow. Status: optimistic." },
+    { p: .12, ic: "💬", app: "Teams", title: "Boss: “got a sec?”", text: "Status automatically set to: 🏃‍♀️ Running away" },
+    { p: .2, ic: "📋", app: "Audit", title: "Auditor on site", text: "Could you print the logbook from 2019? In colour, please." },
+    { p: .27, ic: "🏖️", app: "Outlook", title: "Colleague: Out of office", text: "Back in 3 weeks. Your deputy for everything: you." },
+    { p: .36, ic: "🤖", app: "Outlook", title: "Automatic reply", text: "I'm running to München. For escalations, please contact the void." },
+    { p: .43, ic: "🚚", app: "Hans (truck)", title: "Still here 🙂", text: "Brought sandwiches. Made friends with the forklift." },
+    { p: .5, ic: "🌦️", app: "Weather · Azores", title: "Next 10 minutes", text: "Sun, rain, fog, hail, rainbow. Then all of it again." },
+    { p: .565, ic: "🛵", app: "Rent-a-Moped", title: "Booking confirmed", text: "Brakes are included at no extra charge. Mostly." },
+    { p: .615, ic: "🐄", app: "Translate", title: "Cow → English", text: "“Muuuh” means: this is my road and you are late." },
+    { p: .67, ic: "🥨", app: "Bayern", title: "Willkommen in Bayern!", text: "Weißwurst must be eaten before noon. It's the law (probably)." },
+    { p: .72, ic: "🎉", app: "WhatsApp", title: "WEEKEND!!! (47 new)", text: "Can we bring the dog? And Kevin? Kevin is coming." },
+    { p: .765, ic: "🍰", app: "Reminders", title: "Cheesecake for 12", text: "Due: tomorrow. Status: optimistic." },
     { p: .835, ic: "📞", app: "Mama", title: "Missed calls (3)", text: "Did you bring the Vollmacht? The ORIGINAL?" },
     { p: .925, ic: "💗", app: "{me}", title: "I can see you on the map 👀", text: "Wine is chilled. Run, {her}, run!" }
   ];
@@ -792,11 +973,15 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
       { ic: "✍️", t: "Sign it right now", hint: "+300 points", fx: "points", v: 300, reply: "Batch released! Hans honks happily. +300" },
       { ic: "🥪", t: "Share his sandwich", hint: "💆‍♀️ slow motion", fx: "massage", reply: "Lunch break with Hans. Everything slows down…" },
       { ic: "🙊", t: "“QA? Never heard of her.”", hint: "🛡️ shield · 6 s", fx: "shield", reply: "Incognito mode on. Shield for 6 seconds." }] },
-    3: { who: "🎉", name: "WhatsApp · WEEKEND!!!", line: "Can we come Friday? And bring Kevin? And the dog? 🐶", opts: [
+    3: { who: "🌫️", name: "SATA · Azores Airlines", line: "Your flight to München is delayed due to fog. New departure time: whenever.", opts: [
+      { ic: "🛵", t: "Rent a moped and ride", hint: "+300 points", fx: "points", v: 300, reply: "Moped acquired. Brakes: optimistic. +300" },
+      { ic: "🥖", t: "Eat a bolo lêvedo", hint: "+1 ❤️", fx: "life", reply: "Sweet Azorean bread. Morale restored. +1 ❤️" },
+      { ic: "🐄", t: "Ask a cow for directions", hint: "🛡️ shield · 6 s", fx: "shield", reply: "The cow escorts you. Nothing dares to touch you for 6 seconds." }] },
+    4: { who: "🎉", name: "WhatsApp · WEEKEND!!!", line: "Can we come Friday? And bring Kevin? And the dog? 🐶", opts: [
       { ic: "🍷", t: "Yes! Open the wine box", hint: "🍷 points ×2", fx: "wine", reply: "PROST! Problems shrink, points double." },
       { ic: "🤔", t: "Who is Kevin?", hint: "+200 points", fx: "points", v: 200, reply: "Nobody knows. Kevin is coming anyway. +200" },
       { ic: "🔕", t: "Phone on silent", hint: "🛡️ shield · 6 s", fx: "shield", reply: "Do not disturb: ON. Shield for 6 seconds." }] },
-    4: { who: "📞", name: "Mama", line: "Did you bring the Vollmacht? The ORIGINAL? With the stamp?", opts: [
+    5: { who: "📞", name: "Mama", line: "Did you bring the Vollmacht? The ORIGINAL? With the stamp?", opts: [
       { ic: "📜", t: "Yes, the ORIGINAL", hint: "+350 points", fx: "points", v: 350, reply: "Mama is proud. The notary is speechless. +350" },
       { ic: "😬", t: "…define “original”", hint: "🥛 panic strength", fx: "yog", reply: "Panic strength unlocked! Smash everything." },
       { ic: "💗", t: "Ask {me} to bring it", hint: "+1 ❤️", fx: "life", reply: "{me}: “Already in my bag, together with the wine.” +1 ❤️" }] }
@@ -861,6 +1046,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     { bpm: 116, style: "pop", prog: [[60, 64, 67], [55, 59, 62], [57, 60, 64], [53, 57, 60]], lead: [72, 74, 76, 79, 81] },
     { bpm: 126, style: "drive", prog: [[57, 60, 64], [53, 57, 60], [60, 64, 67], [55, 59, 62]], lead: [69, 72, 74, 76, 79] },
     { bpm: 120, style: "pop", prog: [[62, 66, 69], [57, 61, 64], [59, 62, 66], [55, 59, 62]], lead: [74, 76, 78, 81, 83] },
+    { bpm: 98, style: "fado", prog: [[57, 60, 64], [50, 53, 57], [52, 56, 59], [57, 60, 64]], lead: [69, 71, 72, 76, 77] },
     { bpm: 138, style: "oompah", prog: [[53, 57, 60], [60, 64, 67], [60, 64, 67], [53, 57, 60]], lead: [77, 79, 81, 84, 86] },
     { bpm: 88, style: "lofi", prog: [[63, 67, 70, 74], [60, 63, 67, 70], [56, 60, 63, 67], [58, 62, 65, 68]], lead: [75, 77, 79, 82, 84] }
   ];
@@ -890,6 +1076,14 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
       if (s === 4 || s === 12) { snare(t, .08); ch.forEach(n => note(midi(n), t, spb * 1.2, { ...M(), type: "square", vol: .03, lp: 2000 })); }
       if (s % 2 === 0 && leadRnd > .3) note(midi(song.lead[Math.floor(leadRnd * 5)]), t, spb * 1.8, { ...M(), type: "square", vol: .04, lp: 3000, detune: 8 });
       if (s % 2 === 0 && leadRnd > .3) note(midi(song.lead[Math.floor(leadRnd * 5)]), t, spb * 1.8, { ...M(), type: "square", vol: .03, lp: 3000, detune: -8 });
+    } else if (song.style === "fado") {
+      if (s === 0 || s === 10) kick(t, .32);
+      if (s === 8) snare(t, .06);
+      note(midi(ch[[0, 1, 2, 1][s % 4]] + 12), t, spb * 2.4, { ...M(), type: "triangle", vol: .05, lp: 2400 });
+      if (s % 2 === 0) note(midi(ch[[0, 1, 2, 1][s % 4]] + 12), t + spb * .5, spb * 1.2, { ...M(), type: "triangle", vol: .025, lp: 2400 });
+      if (s === 0 || s === 8) note(midi(root + 12), t, spb * 7, { ...M(), type: "sine", vol: .15 });
+      if ([0, 6, 12].includes(s) && leadRnd > .35) note(midi(song.lead[Math.floor(leadRnd * 5)]), t, spb * 5, { ...M(), type: "sawtooth", vol: .028, lp: 1500, vib: 6, vibRate: 5, attack: .06 });
+      if (s === 0 && bar % 4 === 3) hiss(t, 1.8, { ...M(), lp: 260, vol: .16 });
     } else if (song.style === "lofi") {
       if (s === 0 || s === 10) kick(t, .4);
       if (s === 8) snare(t, .07);
@@ -923,6 +1117,19 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     else { audio(); if (SND.master) SND.master.gain.setTargetAtTime(.9, SND.ctx.currentTime, .05); if (G && (G.state === "run" || G.state === "finish")) musicStart(G.level); }
   }
 
+  /* a small two-stroke hum while she rides */
+  function engine(on, rate) {
+    const a = SND.ctx; if (!a || !SND.sfx) return;
+    if (!SND.eng) {
+      if (!on) return;
+      const o = a.createOscillator(), o2 = a.createOscillator(), lp = a.createBiquadFilter(), g = a.createGain();
+      o.type = "sawtooth"; o2.type = "square"; lp.type = "lowpass"; lp.frequency.value = 600; g.gain.value = 0;
+      o.connect(lp); o2.connect(lp); lp.connect(g).connect(SND.sfx); o.start(); o2.start(); SND.eng = { o, o2, lp, g, on: false };
+    }
+    const e = SND.eng, now = a.currentTime, want = on && SND.on;
+    if (want !== e.on) { e.on = want; e.g.gain.setTargetAtTime(want ? .04 : 0, now, .08); }
+    if (want) { const f = 52 + clamp(rate, 0, 2) * 40; e.o.frequency.setTargetAtTime(f, now, .12); e.o2.frequency.setTargetAtTime(f * .505, now, .12); e.lp.frequency.setTargetAtTime(480 + rate * 520, now, .12); }
+  }
   const SFX = {
     jump: () => play(t => { const p = 1 + Math.random() * .08; note(520 * p, t, .16, { type: "square", f2: 900 * p, vol: .045, lp: 2600 }); }),
     dbl: () => play(t => { [76, 79, 84].forEach((m, i) => note(midi(m), t + i * .045, .14, { type: "triangle", vol: .05 })); hiss(t, .18, { hp: 2500, vol: .05 }); }),
@@ -953,17 +1160,21 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     blocked: () => play(t => { note(midi(88), t, .18, { type: "triangle", vol: .06 }); note(midi(95), t + .05, .28, { type: "sine", vol: .05 }); hiss(t, .15, { hp: 3000, vol: .05 }); }),
     choose: () => play(t => [79, 84, 88, 91].forEach((m, i) => note(midi(m), t + i * .05, .28, { type: "triangle", vol: .05 }))),
     reel: () => play(t => note(1500 + Math.random() * 300, t, .03, { type: "square", vol: .02, lp: 5000 })),
+    vroom: () => play(t => { note(80, t, 1, { type: "sawtooth", f2: 300, glide: .7, vol: .08, lp: 1100 }); note(160, t, .9, { type: "square", f2: 420, glide: .6, vol: .03, lp: 900 }); hiss(t, .5, { lp: 800, vol: .08 }); }),
+    thunder: () => play(t => { hiss(t, 2.4, { lp: 160, vol: .55 }); hiss(t + .04, .6, { lp: 900, vol: .16 }); }),
+    mopedTok: n => play(t => { note(midi(76 + n * 3), t, .09, { type: "square", vol: .035, lp: 3500 }); note(midi(76 + n * 3), t + .12, .12, { type: "square", vol: .035, lp: 3500 }); }),
     sad: () => play(t => { note(midi(67), t, .25, { type: "triangle", vol: .05, f2: midi(63), glide: .25 }); note(midi(62), t + .22, .45, { type: "triangle", vol: .05, f2: midi(58), glide: .45, vib: 6 }); })
   };
-  let G = null, cv, ctx, W = 0, H = 0, dpr = 1, VW = 720, S = 1, TOP = 0, PX = 300, VK = 1, raf = 0, last = 0;
+  let G = null, cv, ctx, W = 0, H = 0, dpr = 1, VW = 720, S = 1, TOP = 0, PX = 300, VK = 1, ZOOM = 1, TS = 1, raf = 0, last = 0;
   const bag = [];
   function reset() {
     G = { state: "title", t: 0, dist: 0, lives: 3, score: 0, y: 0, vy: 0, jumps: 0, buffer: 0, inv: 0, shake: 0, v: 0, v0: 0,
-      fx: { massage: 0, yog: 0, wine: 0, shield: 0 }, slow: 1, giant: 1, shrink: 1, ph: 0, obs: [], bon: [], parts: [], pops: [], spl: [], lines: [], rockets: [], amb: [],
+      fx: { massage: 0, yog: 0, wine: 0, shield: 0, moped: 0 }, slow: 1, giant: 1, shrink: 1, ph: 0, obs: [], bon: [], parts: [], pops: [], spl: [], lines: [], rockets: [], amb: [],
       nextObs: 560, nextBonus: 1500, lastType: "", seen: {}, endT: 0, hug: 0, cleared: 0, smashed: 0, picked: 0, closeCalls: 0,
       combo: 0, bestCombo: 0, level: 0, levelT: 0, noteIdx: 0, coinN: 0, coinT: -9, freeze: 0, flash: 0, flashCol: "255,255,255",
       sq: 1, sqv: 0, lean: 0, hair: 2, hlift: 0, camY: 0, zoom: 1, punch: 0, fwT: 0, her: names().her, me: names().me,
       count: 0, countStep: .6, countWords: [], countN: -1, ramp: 0, pendingBanner: -1, blocked: 0, sips: 0, coffeeDone: false,
+      air: false, boost: 1, mopeds: 0, rides: 0, nextMoped: 1300, ts: 1, readT: 0, lightT: 4, bolt: null,
       best: read(KEY.best, 0), newBest: false, cardShown: false };
     bag.length = 0;
   }
@@ -971,30 +1182,42 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
   const mult = () => 1 + Math.min(3, Math.floor(G.combo / 5));
 
   function layout() {
-    W = dlg.clientWidth || innerWidth; H = dlg.clientHeight || innerHeight; dpr = Math.min(2, devicePixelRatio || 1);
+    W = dlg.clientWidth || innerWidth; H = dlg.clientHeight || innerHeight; dpr = Math.min(2, devicePixelRatio || 1, Math.sqrt(2.6e6 / Math.max(1, W * H)));
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
-    VW = clamp(VH * W / H, W > H ? 720 : 500, 1200); S = W / VW; TOP = (H - VH * S) * .6; PX = VW * (W > H ? .45 : .34);
+    // big screens show the world at half scale (zoomed out), phones keep the close-up framing
+    // monitors (mouse) show her about 40% smaller than touch tablets, so the world reads as a wide landscape
+    const monitor = matchMedia("(hover: hover) and (pointer: fine)").matches;
+    ZOOM = W >= 1100 && H >= 640 ? (monitor ? 2 / .6 : 2) : W >= 900 && H >= 560 ? (monitor ? 1.5 / .6 : 1.5) : 1;
+    VW = clamp(VH * W / H, W > H ? 720 : 500, 1200) * ZOOM; S = W / VW; TOP = (H - VH * S) * (ZOOM > 2.4 ? .8 : ZOOM > 1 ? .72 : .6); PX = VW * (W > H ? .45 : .34);
+    TS = clamp(1 / S, 1, 1.8); // labels, score pops and splashes keep a readable on-screen size when zoomed out
     VK = clamp((VW - PX) / 396, .8, 1); // narrow screens see less road ahead: run a little slower so reaction time stays the same
   }
 
   function weighted(list) { const sum = list.reduce((a, [, w]) => a + w, 0); let r = Math.random() * sum; for (const [k, w] of list) { r -= w; if (r <= 0) return k; } return list[0][0]; }
   function spawnObstacle(p, v) {
     const wts = LEVELS[G.level].weights;
-    const type = weighted(Object.keys(OBST).filter(k => p >= OBST[k].min && !(k === "truck" && G.lastType === "truck")).map(k => [k, wts[k]]));
+    const type = weighted(Object.keys(OBST).filter(k => (wts[k] || 0) > 0 && p >= OBST[k].min && !(k === "truck" && G.lastType === "truck")).map(k => [k, wts[k]]));
     const d = OBST[type], o = { type, x: VW + 40, w: d.w, h: d.h, v: pick(d.vars), seed: Math.random(), k: G.shrink, gap: 999 };
+    o.wd = G.dist + o.x + o.w / 2 - PX; o.base = terrain(o.wd);
     if (!G.seen[type]) { G.seen[type] = 1; o.label = d.label; }
     G.obs.push(o); G.lastType = type;
-    if (!o.label && Math.random() < .5) [[-34, 26], [d.w / 2, 46], [d.w + 34, 26]].forEach(([dx, dy]) => G.bon.push({ type: "heart", x: o.x + dx, h: d.h * G.shrink + dy, seed: Math.random() }));
+    if (!o.label && Math.random() < .5) [[-34, 26], [d.w / 2, 46], [d.w + 34, 26]].forEach(([dx, dy]) => G.bon.push({ type: "heart", x: o.x + dx, h: d.h * G.shrink + dy, base: (o.base || 0), seed: Math.random() }));
     G.nextObs = G.dist + d.w + v * rand(1.12, 1.95) * (1 - .18 * p) + (type === "truck" ? v * .35 : 0);
   }
   function spawnBonus() {
     if (!bag.length) bag.push(...["cake", "massage", "yog", "wine"].sort(() => Math.random() - .5));
     const type = bag.pop(); let x = VW + 60;
     while (G.obs.some(o => x > o.x - 90 && x < o.x + o.w + 90)) x += 120;
-    const b = { type, x, h: rand(118, 170), seed: Math.random() };
+    const b = { type, x, h: rand(118, 170), base: terrain(G.dist + x - PX), seed: Math.random() };
     if (!G.seen[type]) { G.seen[type] = 1; b.label = BONUS[type].label; }
     G.bon.push(b); G.nextBonus = G.dist + rand(2500, 3900);
   }
+  function spawnMoped() {
+    let x = VW + 80; while (G.obs.some(o => x > o.x - 80 && x < o.x + o.w + 80) || G.bon.some(b => Math.abs(b.x - x) < 60)) x += 90;
+    G.bon.push({ type: "moped", x, h: rand(60, 150), base: terrain(G.dist + x - PX), seed: Math.random() });
+    G.nextMoped = G.dist + rand(1000, 1700);
+  }
+  const riding = () => G.fx.moped > 0 || inAz(G.dist);
 
   /* ---------- juice: particles, splashes, flashes ---------- */
   function burst(x, y, n, cols, kind = "dot", spread = 1) {
@@ -1013,7 +1236,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
   const easeBack = k => 1 + 2.7 * Math.pow(k - 1, 3) + 1.7 * Math.pow(k - 1, 2);
   function drawSplash(c, s) {
     const k = s.t / s.life, a = clamp(k > .72 ? 1 - (k - .72) / .28 : 1, 0, 1), sc = easeBack(Math.min(1, s.t / .22)) * (1 + Math.max(0, k - .72) * .5);
-    c.save(); c.globalAlpha = a; c.translate(s.x, s.y + s.vy * s.t); c.rotate(s.rot); c.scale(sc, sc);
+    c.save(); c.globalAlpha = a; c.translate(s.x, s.y + s.vy * s.t); c.rotate(s.rot); c.scale(sc * TS, sc * TS);
     c.font = `italic 900 ${s.size}px Outfit, Manrope, system-ui, sans-serif`; c.textAlign = "center"; c.textBaseline = "middle";
     const R = Math.max(c.measureText(s.txt).width * .66, s.size * 1.3);
     if (s.rays) { c.save(); c.rotate(s.t * .9); for (let i = 0; i < 16; i++) { c.rotate(Math.PI / 8); c.globalAlpha = a * .17; c.fillStyle = i % 2 ? s.col : "#fff"; c.beginPath(); c.moveTo(0, 0); c.lineTo(R * 1.9, -R * .26); c.lineTo(R * 1.9, R * .26); c.fill(); } c.restore(); c.globalAlpha = a; }
@@ -1037,7 +1260,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
   }
   function tryJump() {
     if (G.buffer <= 0) return;
-    if (G.y <= 0) { G.vy = JUMP; G.jumps = 1; G.buffer = 0; G.sq = 1.24; G.sqv = 0; SFX.jump(); burst(PX, GY, 7, ["#d6c49e", "#e9dcbf", "#fff"], "dot", .4); }
+    if (!G.air) { G.vy = JUMP; G.air = true; G.jumps = 1; G.buffer = 0; G.sq = 1.24; G.sqv = 0; SFX.jump(); burst(PX, GY - G.y, 7, ["#d6c49e", "#e9dcbf", "#fff"], "dot", .4); }
     else if (G.jumps < 2) {
       G.vy = DJUMP; G.jumps = 2; G.buffer = 0; G.sq = 1.28; G.sqv = 0; SFX.dbl();
       for (let i = 0; i < 14; i++) { const a = i / 14 * Math.PI * 2; G.parts.push({ x: PX, y: GY - G.y, vx: Math.cos(a) * 180, vy: Math.sin(a) * 60, life: .45, max: .45, col: "#fff", size: 2.6, kind: "dot" }); }
@@ -1046,17 +1269,28 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
   }
   function land(vy) {
     G.sq = clamp(.9 + vy / 6000, .72, .92); G.sqv = 0; if (vy < -600) SFX.land();
-    burst(PX, GY, 6, ["#d6c49e", "#e9dcbf"], "dot", .35);
+    burst(PX, GY - G.y, 6, ["#d6c49e", "#e9dcbf"], "dot", .35);
   }
   function clearObstacle(o, cx, hw) {
     o.cleared = true; G.cleared++; G.combo++; G.bestCombo = Math.max(G.bestCombo, G.combo);
     const m = mult(), nth = G.seen[o.type] = (G.seen[o.type] || 1) + 1;
-    addScore(25 * m, nth <= 3 ? `+${25 * m} ${pick(OBST[o.type].ok)}` : `+${25 * m}`, cx, GY - o.h * o.k - 24, "#2f9b8f");
+    addScore(25 * m, nth <= 3 ? `+${25 * m} ${pick(OBST[o.type].ok)}` : `+${25 * m}`, cx, GY - (o.base || 0) - o.h * o.k - 24, "#2f9b8f");
     SFX.clear(G.combo);
-    if (o.gap < 14) { G.closeCalls++; addScore(15, null); splash(pick(["CLOSE ONE!", "PHEW!", "NAILED IT!"]), cx, GY - o.h * o.k - 70, { size: 15, col: "#8be38b", life: .8 }); SFX.close(); }
+    if (o.gap < 14) { G.closeCalls++; addScore(15, null); splash(pick(["CLOSE ONE!", "PHEW!", "NAILED IT!"]), cx, GY - (o.base || 0) - o.h * o.k - 70, { size: 15, col: "#8be38b", life: .8 }); SFX.close(); }
     const word = COMBO_WORDS[G.combo];
     if (word) { splash(word, PX + 140, GY - 200, { size: 22, col: "#ff9f43", rays: true, life: 1.2 }); SFX.combo(); comboPop(); confetti(PX + 140, GY - 200, 24); }
     updateCombo();
+  }
+  function crashMoped(o) {
+    o.hit = true; G.fx.moped = 0; G.inv = 1.3; G.freeze = .08; shake(.35); flash("255,200,80", .3); SFX.hit(); SFX.sad(); vibrate(60);
+    splash("MOPED IN THE SHOP!", PX + 20, GY - G.y - 150, { size: 18, col: "#ffb347", life: 1.1 });
+    burst(PX + 10, GY - G.y - 20, 18, ["#2fb3a0", "#1d2133", "#fff"], "conf", 1.2);
+    G.combo = 0; updateCombo(); updateFx(true); quip("The moped is in the shop 🔧 Running again — no hearts lost.");
+  }
+  function startMoped() {
+    G.fx.moped = FX_LIFE.moped; G.rides++; G.punch = .06; flash("255,230,150", .35); SFX.vroom(); vibrate([20, 40, 20]);
+    splash("VROOOM! 🛵", Math.min(VW - 140, PX + 200), GY - 210, { size: 28, col: "#ffd166", rays: true, life: 1.3, vy: -6 });
+    confetti(PX, GY - G.y - 60, 30); updateFx(true); quip("Rental moped unlocked! Faster for 8 seconds — still jump the obstacles 🛵", true);
   }
   function hurt(o) {
     o.hit = true; G.lives--; G.inv = 1.6; G.freeze = .09; shake(.4); flash("255,60,80", .28); SFX.hit(); vibrate(70); updateLives(-1);
@@ -1067,27 +1301,33 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
   }
   function smash(o) {
     o.smashed = true; G.smashed++; G.freeze = .05; shake(.25); G.punch = .05; SFX.smash(); vibrate(30);
-    burst(o.x + o.w / 2, GY - o.h / 2, 30, o.type === "truck" ? ["#3b62d8", "#fff", "#1d2133"] : o.type === "paper" ? ["#f2c14e", "#7fb3e6", "#fff", "#f19a8f"] : ["#e23b4e", "#fff", "#f2a25c"], "conf", 1.5);
-    splash(pick(SMASH_WORD), o.x + o.w / 2, GY - o.h - 30, { size: 22, col: "#7cc4ff", life: .8 });
-    addScore(50, "+50", o.x + o.w / 2, GY - o.h - 10, "#4f8fe6");
+    burst(o.x + o.w / 2, GY - (o.base || 0) - o.h / 2, 30, o.type === "truck" ? ["#3b62d8", "#fff", "#1d2133"] : o.type === "paper" ? ["#f2c14e", "#7fb3e6", "#fff", "#f19a8f"] : ["#e23b4e", "#fff", "#f2a25c"], "conf", 1.5);
+    splash(pick(SMASH_WORD), o.x + o.w / 2, GY - (o.base || 0) - o.h - 30, { size: 22, col: "#7cc4ff", life: .8 });
+    addScore(50, "+50", o.x + o.w / 2, GY - (o.base || 0) - o.h - 10, "#4f8fe6");
   }
   function block(o) {
     o.smashed = true; G.blocked++; SFX.blocked(); G.punch = .03; vibrate(20);
-    burst(o.x + o.w / 2, GY - o.h / 2, 22, ["#5ee0c8", "#fff", "#b8fff1"], "spark", 1.1);
-    splash(pick(["NOPE!", "BLOCKED!", "NOT TODAY!", "DENIED!"]), o.x + o.w / 2, GY - o.h - 30, { size: 18, col: "#5ee0c8", life: .8 });
-    addScore(25, "+25", o.x + o.w / 2, GY - o.h - 10, "#2fb3a0");
+    burst(o.x + o.w / 2, GY - (o.base || 0) - o.h / 2, 22, ["#5ee0c8", "#fff", "#b8fff1"], "spark", 1.1);
+    splash(pick(["NOPE!", "BLOCKED!", "NOT TODAY!", "DENIED!"]), o.x + o.w / 2, GY - (o.base || 0) - o.h - 30, { size: 18, col: "#5ee0c8", life: .8 });
+    addScore(25, "+25", o.x + o.w / 2, GY - (o.base || 0) - o.h - 10, "#2fb3a0");
   }
   function collect(b) {
     b.taken = true;
+    if (b.type === "moped") {
+      G.mopeds = Math.min(3, G.mopeds + 1); SFX.mopedTok(G.mopeds); burst(b.x, GY - (b.base || 0) - b.h, 12, ["#5ee0c8", "#fff", "#ffd166"], "spark", .7);
+      if (G.mopeds >= 3 && G.fx.moped <= 0) { G.mopeds = 0; startMoped(); }
+      else splash(`🛵 ${G.mopeds}/3`, b.x, GY - (b.base || 0) - b.h - 30, { size: 15, col: "#5ee0c8", life: .8 });
+      updateFx(true); return;
+    }
     if (b.type === "heart") {
       G.coinN = G.t - G.coinT < 1.2 ? G.coinN + 1 : 0; G.coinT = G.t; SFX.coin(G.coinN);
-      addScore(10, "+10", b.x, GY - b.h - 14, "#e8557a"); burst(b.x, GY - b.h, 8, ["#e8557a", "#ffd1dc", "#fff"], "spark", .5); return;
+      addScore(10, "+10", b.x, GY - (b.base || 0) - b.h - 14, "#e8557a"); burst(b.x, GY - (b.base || 0) - b.h, 8, ["#e8557a", "#ffd1dc", "#fff"], "spark", .5); return;
     }
     const f = BONUS_FX[b.type]; G.picked++; SFX[b.type](); vibrate([15, 30, 15]); G.punch = .06; flash(f.flash, .4);
     splash(f.txt, Math.min(VW - 120, PX + 190), 92, { size: 28, col: f.col, rays: true, life: 1.4, vy: -6, rot: rand(-.06, .06) });
-    confetti(b.x, GY - b.h, 40);
-    if (b.type === "cake") { if (G.lives < 5) { G.lives++; updateLives(1); addScore(100, "+1 ❤️", b.x, GY - b.h - 20, "#e8557a"); } else addScore(300, "+300", b.x, GY - b.h - 20, "#d59a17"); }
-    else { G.fx[b.type] = FX_LIFE[b.type]; addScore(100, "+100", b.x, GY - b.h - 20, "#d59a17"); updateFx(true); }
+    confetti(b.x, GY - (b.base || 0) - b.h, 40);
+    if (b.type === "cake") { if (G.lives < 5) { G.lives++; updateLives(1); addScore(100, "+1 ❤️", b.x, GY - (b.base || 0) - b.h - 20, "#e8557a"); } else addScore(300, "+300", b.x, GY - (b.base || 0) - b.h - 20, "#d59a17"); }
+    else { G.fx[b.type] = FX_LIFE[b.type]; addScore(100, "+100", b.x, GY - (b.base || 0) - b.h - 20, "#d59a17"); updateFx(true); }
     quip(BONUS[b.type].quip, true);
   }
   function showLevel(li) {
@@ -1109,7 +1349,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     if (G.count > 0) return;
     G.state = "run"; G.countN = -1; musicDuck(false);
     splash("GO!", PX + 70, GY - 185, { size: 44, col: "#8be38b", rays: true, life: .85, vy: -14, rot: -.06 }); SFX.go();
-    if (G.pendingBanner >= 0) { showLevel(G.pendingBanner); G.pendingBanner = -1; }
+    if (G.pendingBanner >= 0) { showLevel(G.pendingBanner); G.pendingBanner = -1; G.levelT = 0; }
   }
   function start() {
     const best = G.best; reset(); G.best = best; hideCard(); dlg.focus({ preventScroll: true });
@@ -1170,37 +1410,42 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     G.shrink = lerp(G.shrink, G.fx.wine > 0 ? .58 : 1, e4);
     G.inv = Math.max(0, G.inv - h); G.buffer = Math.max(0, G.buffer - h);
     let v = 0;
-    if (G.state === "run") { G.ramp = Math.min(1, G.ramp + h * 1.6); v = (300 + 170 * p) * VK * G.slow * (.25 + .75 * G.ramp * G.ramp * (3 - 2 * G.ramp)); const rem = TOTAL - G.dist; if (rem < 560) v = Math.min(v, 28 + rem * .85); }
+    G.boost = lerp(G.boost, G.fx.moped > 0 ? 1.45 : inAz(G.dist) ? 1.1 : 1, 1 - Math.exp(-h * 3));
+    if (G.state === "run") { G.ramp = Math.min(1, G.ramp + h * 1.6); v = (300 + 170 * p) * VK * G.slow * G.boost * (.25 + .75 * G.ramp * G.ramp * (3 - 2 * G.ramp)); const rem = TOTAL - G.dist; if (rem < 560) v = Math.min(v, 28 + rem * .85); }
     else if (G.state === "over") v = G.v0 * Math.max(0, 1 - G.endT * 2.4);
     G.v = v; const dx = v * h; G.dist = Math.min(TOTAL, G.dist + dx);
     G.ph += h * (v > 0 ? 9 + v / 300 * 5 : 0);
     if (G.state === "run") tryJump();
-    const wasAir = G.y > 0, vyBefore = G.vy;
-    G.vy -= GRAV * h; G.y += G.vy * h;
-    if (G.y <= 0) { if (wasAir && G.state !== "over") land(vyBefore); G.y = 0; G.vy = 0; G.jumps = 0; }
+    const gh = terrain(G.dist);
+    if (G.air) {
+      const vyBefore = G.vy; G.vy -= GRAV * h; G.y += G.vy * h;
+      if (G.y <= gh) { G.y = gh; G.air = false; G.vy = 0; G.jumps = 0; if (G.state !== "over") land(vyBefore); }
+    } else { G.y = gh; G.vy = 0; G.jumps = 0; }
     if (G.state === "run") {
       if (G.dist >= G.nextObs && G.dist < TOTAL - 1400) spawnObstacle(p, v / G.slow);
       if (G.dist >= G.nextBonus && G.dist < TOTAL - 1400) spawnBonus();
+      if (G.dist >= G.nextMoped && G.dist < TOTAL - 1400) { if (G.fx.moped > 0 || inAz(G.dist + VW) || inAz(G.dist)) G.nextMoped = G.dist + 400; else spawnMoped(); }
       const li = levelAt(p); if (li !== G.level) enterLevel(li);
-      while (G.noteIdx < NOTES.length && p >= NOTES[G.noteIdx].p) showNote(NOTES[G.noteIdx++]);
+      // notes wait while a level pop-up is open, so they are never hidden behind it
+      while (G.state === "run" && G.levelT > 3.3 && G.noteIdx < NOTES.length && p >= NOTES[G.noteIdx].p) showNote(NOTES[G.noteIdx++]);
     }
     G.obs.forEach(o => { o.x -= dx; o.k = G.shrink; }); G.bon.forEach(b => { b.x -= dx; });
     G.parts.forEach(q => { q.x -= dx * .9; }); G.lines.forEach(l => { l.x -= dx * 2.2; });
     G.obs = G.obs.filter(o => o.x + o.w > -160); G.bon = G.bon.filter(b => !b.taken && b.x > -80);
     if (G.state === "run") {
-      const gs = G.giant, pl = PX - 12 * gs, pr = PX + 12 * gs, pb = G.y, cy = G.y + 55 * gs;
+      const gs = G.giant, ride = riding(), pl = PX - (ride ? 24 : 12) * gs, pr = PX + (ride ? 30 : 12) * gs, cy = G.y + 55 * gs;
       for (const o of G.obs) {
         if (o.hit || o.smashed) continue;
-        const cx = o.x + o.w / 2, hw = o.w * o.k / 2 - 7, top = o.h * o.k - 5;
+        const cx = o.x + o.w / 2, hw = o.w * o.k / 2 - 7, top = o.h * o.k - 5, pb = G.y - (o.base || 0);
         if (pr > cx - hw && pl < cx + hw) {
-          if (pb < top) { if (G.fx.yog > 0) smash(o); else if (G.fx.shield > 0) block(o); else if (G.inv <= 0) hurt(o); if (G.state !== "run") break; continue; }
+          if (pb < top) { if (G.fx.yog > 0) smash(o); else if (G.fx.shield > 0) block(o); else if (G.inv <= 0) { if (G.fx.moped > 0) crashMoped(o); else hurt(o); } if (G.state !== "run") break; continue; }
           o.gap = Math.min(o.gap, pb - top);
         }
         if (!o.cleared && cx + hw < pl) clearObstacle(o, cx, hw);
       }
-      for (const b of G.bon) { if (b.taken) continue; const r = 34 * gs + (b.type === "heart" ? 10 : 20); if (Math.hypot(b.x - PX, b.h - cy) < r) collect(b); }
+      for (const b of G.bon) { if (b.taken) continue; const r = 34 * gs + (b.type === "heart" ? 10 : b.type === "moped" ? 16 : 20); if (Math.hypot(b.x - PX, b.h + (b.base || 0) - cy) < r) collect(b); }
       G.score += dx * .02 * (G.fx.wine > 0 ? 2 : 1);
-      if ((v > 400 || G.fx.yog > 0) && Math.random() < h * 30) G.lines.push({ x: VW + 20, y: rand(GY - 230, GY - 8), len: rand(40, 110), a: rand(.25, .5) });
+      if ((v > 400 || G.fx.yog > 0 || G.fx.moped > 0) && Math.random() < h * 30) G.lines.push({ x: VW + 20, y: rand(GY - 230, GY - 8), len: rand(40, 110), a: rand(.25, .5) });
       if (TOTAL - G.dist < 1) { G.dist = TOTAL; finish(); }
     }
     G.lines = G.lines.filter(l => l.x + l.len > -20);
@@ -1213,6 +1458,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
   function ambSpawn(q, init) {
     const type = ambType(), yTop = -TOP / S; q.type = type; q.ph = rand(0, 6); q.life = rand(4, 9);
     q.x = rand(-20, VW + 60);
+    if (type === "rain") { q.y = init ? rand(yTop, GY) : yTop - 10; q.vx = rand(-170, -120); q.vy = rand(560, 680); q.s = rand(8, 16); q.col = "205,218,232"; q.x = rand(-20, VW + 200); return; }
     if (type === "fireflies") { q.y = rand(GY - 150, GY - 10); q.vx = rand(-20, 10); q.vy = rand(-8, 8); q.s = rand(1.4, 2.6); q.col = "255,230,120"; }
     else if (type === "motes") { q.y = init ? rand(yTop, GY) : GY + 10; q.vx = rand(-40, -10); q.vy = rand(-14, -6); q.s = rand(1, 2.2); q.col = "255,255,255"; }
     else { q.y = init ? rand(yTop, GY) : yTop - 10; q.vx = type === "snow" ? rand(-30, -8) : rand(-70, -30); q.vy = type === "snow" ? rand(16, 36) : rand(24, 48); q.s = type === "snow" ? rand(1.4, 3) : rand(2.4, 4);
@@ -1221,19 +1467,23 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
   function visuals(dt) {
     const run = G.state === "run";
     G.sqv += ((1 - G.sq) * 260 - G.sqv * 16) * dt; G.sq += G.sqv * dt;
-    const leanT = G.state === "over" ? 0 : G.y > 0 ? clamp(.08 - G.vy / 6000, -.08, .22) : run ? .04 + (G.v - 300) / 5000 : 0;
+    const ride = riding(), gh = terrain(G.dist);
+    const leanT = G.state === "over" ? 0 : G.air ? clamp(.08 - G.vy / 6000, -.08, .22) * (ride ? .6 : 1) : ride ? -Math.atan(slopeAt(G.dist)) * .9 + .02 : run ? .04 + (G.v - 300) / 5000 : 0;
     G.lean = lerp(G.lean, leanT, 1 - Math.exp(-dt * 8));
-    G.hair = lerp(G.hair, G.y > 0 ? 10 : run ? 5 + G.v / 110 : 1.5, 1 - Math.exp(-dt * 5));
-    G.hlift = lerp(G.hlift, G.y > 0 ? clamp(G.vy / 60, -12, 4) : run ? -2 : 0, 1 - Math.exp(-dt * 7));
-    G.camY = lerp(G.camY, clamp(G.y * .22, 0, 60), 1 - Math.exp(-dt * 6));
-    G.zoom = lerp(G.zoom, G.state === "finish" ? 1.28 : 1, 1 - Math.exp(-dt * (G.state === "finish" ? 1.4 : 5)));
+    G.hair = lerp(G.hair, G.air ? 10 : ride && run ? 12 : run ? 5 + G.v / 110 : 1.5, 1 - Math.exp(-dt * 5));
+    G.hlift = lerp(G.hlift, G.air ? clamp(G.vy / 60, -12, 4) : ride && run ? -4 : run ? -2 : 0, 1 - Math.exp(-dt * 7));
+    G.camY = lerp(G.camY, clamp(gh * .6 + (G.y - gh) * .22, 0, 80), 1 - Math.exp(-dt * 6));
+    G.zoom = lerp(G.zoom, G.state === "finish" ? (ZOOM > 2.4 ? 1.8 : 1.28) : 1, 1 - Math.exp(-dt * (G.state === "finish" ? 1.4 : 5)));
     G.punch = Math.max(0, G.punch - dt * .25); G.flash = Math.max(0, G.flash - dt * 2.6); G.shake = Math.max(0, G.shake - dt);
     if (run) G.levelT += dt;
-    if (G.amb.length < (W < 600 ? 22 : 36)) { const q = {}; ambSpawn(q, true); G.amb.push(q); }
+    if (run && inAz(G.dist)) { G.lightT -= dt; if (G.lightT <= 0) { G.lightT = rand(5, 10); flash("235,240,255", .5); G.bolt = { x: rand(VW * .15, VW * .9), t: .22, seed: Math.random() }; setTimeout(SFX.thunder, 220); } }
+    if (G.bolt) { G.bolt.t -= dt; if (G.bolt.t <= 0) G.bolt = null; }
+    const ambMax = Math.round((W < 600 ? 22 : 36) * VW / (W < 600 ? 500 : 720) * (ambType() === "rain" ? 1.8 : 1));
+    if (G.amb.length < ambMax) { const q = {}; ambSpawn(q, true); G.amb.push(q); } else if (G.amb.length > ambMax + 8) G.amb.length = ambMax;
     const yTop = -TOP / S - 20;
     G.amb.forEach(q => {
       q.ph += dt; q.life -= dt;
-      q.x += (q.vx + Math.sin(q.ph * 1.7) * 14) * dt - G.v * dt * .25; q.y += (q.vy + (q.type === "fireflies" ? Math.sin(q.ph * 2.3) * 12 : 0)) * dt;
+      q.x += (q.vx + (q.type === "rain" ? 0 : Math.sin(q.ph * 1.7) * 14)) * dt - G.v * dt * .25; q.y += (q.vy + (q.type === "fireflies" ? Math.sin(q.ph * 2.3) * 12 : 0)) * dt;
       if (q.x < -30 || q.y > GY + 60 || q.y < yTop - 20 || (q.type === "fireflies" && q.life < 0) || (q.type !== ambType() && Math.random() < dt * .8)) ambSpawn(q, false);
     });
     G.spl.forEach(s => { s.t += dt; }); G.spl = G.spl.filter(s => s.t < s.life);
@@ -1252,10 +1502,14 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
 
   function update(dt) {
     G.t += dt; visuals(dt); cardTick(dt);
+    engine(G.state === "run" && riding(), G.v / 400);
     if (G.state === "count") { countTick(dt); if (G.state === "count") return; }
     if (G.state === "title" || G.state === "pause" || G.state === "event") return;
     if (G.freeze > 0) { G.freeze -= dt; return; }
-    let acc = dt; while (acc > 1e-6 && G.state !== "event") { const h = Math.min(acc, 1 / 120); step(h); acc -= h; }
+    // a phone notification is on screen: the world slows right down so it can be read
+    if (G.state === "run") G.readT = Math.max(0, G.readT - dt);
+    G.ts = lerp(G.ts, G.readT > 0 && G.state === "run" ? .3 : 1, 1 - Math.exp(-dt * (G.readT > 0 ? 8 : 2.5)));
+    let acc = dt * G.ts; while (acc > 1e-6 && G.state !== "event") { const h = Math.min(acc, 1 / 120); step(h); acc -= h; }
     updateHud();
   }
 
@@ -1275,8 +1529,12 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     sunMoon(c, VW, p, pal, t);
     const L = LEVELS[G.level], gx = G.state === "title" ? VW + 200 - (t * 30) % (VW + 700) : VW + 140 - G.levelT * 44;
     if (gx > -420) skyGag(c, L.gag, gx, t, G.her);
-    clouds(c, VW, G.dist, t, pal);
+    clouds(c, VW, G.dist, t, pal, ZOOM > 1 ? TOP / S : 0);
+    if (G.bolt) { const b = G.bolt; c.save(); c.globalAlpha = clamp(b.t / .22, 0, 1); c.strokeStyle = "#f4f7ff"; c.lineWidth = 3; c.lineJoin = "round"; c.shadowColor = "#bcd2ff"; c.shadowBlur = 14;
+      c.beginPath(); let bx = b.x, by = yTop; c.moveTo(bx, by); for (let i = 1; i <= 7; i++) { bx += (hash(b.seed * 99 + i) - .5) * 60; by += (GY - 90 - yTop) / 7; c.lineTo(bx, by); } c.stroke(); c.restore(); }
     mountains(c, VW, GY, G.dist, p, pal);
+    const azK = smooth(AZ0 - .012, AZ0 + .012, p) * (1 - smooth(AZ1 - .012, AZ1 + .012, p)), terr = x => terrain(G.dist + x - PX);
+    azoresBack(c, VW, GY, G.dist, t, azK);
     const lights = hills(c, VW, GY, G.dist, p, pal, t);
     const lmX = l => PX + (l.p * TOTAL - G.dist) * l.f + l.off, covers = [];
     LANDMARKS.forEach(l => { if (l.f >= 1) return; const x = lmX(l); if (x < -320 || x > VW + 320) return; covers.push(x); c.save(); c.translate(x, GY - 8); l.draw(c, t); c.restore(); });
@@ -1287,35 +1545,45 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
       c.restore();
     }
     G.rockets.forEach(r => { c.fillStyle = r.col; c.fillRect(r.x - 1.2, r.y, 2.4, 9); c.fillStyle = "rgba(255,220,160,.5)"; c.fillRect(r.x - .6, r.y + 9, 1.2, 14); });
-    ground(c, VW, GY, G.dist, p, pal, yBot + 80);
-    LANDMARKS.forEach(l => { if (l.f < 1) return; const x = lmX(l); if (x < -120 || x > VW + 120) return; c.save(); c.translate(x, GY - 1); l.draw(c, t); c.restore(); });
+    ground(c, VW, GY, G.dist, p, pal, yBot + 80, terr);
+    LANDMARKS.forEach(l => { if (l.f < 1) return; const x = lmX(l); if (x < -120 || x > VW + 120) return; c.save(); c.translate(x, GY - 1 - terr(x)); l.draw(c, t); c.restore(); });
     G.lines.forEach(l => { const g = c.createLinearGradient(l.x, 0, l.x + l.len, 0); g.addColorStop(0, `rgba(255,255,255,${l.a * (1 - .6 * pal.n)})`); g.addColorStop(1, "rgba(255,255,255,0)"); c.fillStyle = g; c.fillRect(l.x, l.y, l.len, 1.6); });
     G.obs.forEach(o => {
       if (o.smashed) return;
-      c.save(); c.translate(o.x + o.w / 2, GY + 1); c.scale(o.k, o.k * (1 + Math.sin(t * 6 + o.seed * 9) * .015)); c.translate(-o.w / 2, 0); if (o.hit) c.globalAlpha = .55; drawObstacle(c, o, t); c.restore();
-      if (o.label && o.x < VW) { const lx = o.x + o.w / 2, ly = GY - o.h * o.k - 30 + Math.sin(t * 4) * 2; c.font = "800 11px Outfit, Manrope, system-ui"; const tw = c.measureText(o.label).width + 18;
-        c.fillStyle = "rgba(17,22,40,.88)"; rr(c, lx - tw / 2, ly - 11, tw, 22, 11); c.fill(); text(c, o.label, lx, ly, 11, "#fff", 800); }
+      c.save(); c.translate(o.x + o.w / 2, GY + 1 - (o.base || 0)); if (o.base) c.rotate(-Math.atan(slopeAt(o.wd)) * .7); c.scale(o.k, o.k * (1 + Math.sin(t * 6 + o.seed * 9) * .015)); c.translate(-o.w / 2, 0); if (o.hit) c.globalAlpha = .55; drawObstacle(c, o, t); c.restore();
+      if (o.label && o.x < VW) { const lx = o.x + o.w / 2, ly = GY - (o.base || 0) - o.h * o.k - 20 - 11 * TS + Math.sin(t * 4) * 2; c.save(); c.translate(lx, ly); c.scale(TS, TS); c.font = "800 11px Outfit, Manrope, system-ui"; const tw = c.measureText(o.label).width + 18;
+        c.fillStyle = "rgba(17,22,40,.88)"; rr(c, -tw / 2, -11, tw, 22, 11); c.fill(); text(c, o.label, 0, 0, 11, "#fff", 800); c.restore(); }
     });
     G.bon.forEach(b => {
-      const by = GY - b.h + Math.sin(t * 3 + b.seed * 6) * 4; c.save(); c.translate(b.x, by); if (b.type !== "heart") c.scale(1 + Math.sin(t * 5 + b.seed) * .05, 1 + Math.sin(t * 5 + b.seed) * .05); drawBonus(c, b, t); c.restore();
-      if (b.type !== "heart") for (let i = 0; i < 3; i++) { const a = t * 2 + i * 2.1 + b.seed * 6, r = 26 + Math.sin(t * 3 + i) * 4, tw = .5 + .5 * Math.sin(t * 7 + i * 3); c.fillStyle = `rgba(255,255,255,${.9 * tw})`; c.save(); c.translate(b.x + Math.cos(a) * r, by + Math.sin(a) * r); c.rotate(Math.PI / 4); c.fillRect(-1.6, -1.6, 3.2, 3.2); c.restore(); }
-      if (b.label) { c.font = "800 11px Outfit, Manrope, system-ui"; const tw = c.measureText(b.label).width + 18; c.fillStyle = "rgba(232,85,122,.94)"; rr(c, b.x - tw / 2, by - 52, tw, 22, 11); c.fill(); text(c, b.label, b.x, by - 41, 11, "#fff", 800); }
+      const by = GY - (b.base || 0) - b.h + Math.sin(t * 3 + b.seed * 6) * 4; c.save(); c.translate(b.x, by); if (b.type !== "heart") c.scale(1 + Math.sin(t * 5 + b.seed) * .05, 1 + Math.sin(t * 5 + b.seed) * .05); drawBonus(c, b, t); c.restore();
+      if (b.type !== "heart" && b.type !== "moped") for (let i = 0; i < 3; i++) { const a = t * 2 + i * 2.1 + b.seed * 6, r = 26 + Math.sin(t * 3 + i) * 4, tw = .5 + .5 * Math.sin(t * 7 + i * 3); c.fillStyle = `rgba(255,255,255,${.9 * tw})`; c.save(); c.translate(b.x + Math.cos(a) * r, by + Math.sin(a) * r); c.rotate(Math.PI / 4); c.fillRect(-1.6, -1.6, 3.2, 3.2); c.restore(); }
+      if (b.label) { c.save(); c.translate(b.x, by - 30 - 11 * TS); c.scale(TS, TS); c.font = "800 11px Outfit, Manrope, system-ui"; const tw = c.measureText(b.label).width + 18; c.fillStyle = "rgba(232,85,122,.94)"; rr(c, -tw / 2, -11, tw, 22, 11); c.fill(); text(c, b.label, 0, 0, 11, "#fff", 800); c.restore(); }
     });
     const hx = PX + (TOTAL - G.dist) + 74;
     if (hx < VW + 80) { c.save(); c.translate(hx, GY); c.fillStyle = "rgba(17,22,40,.14)"; c.beginPath(); c.ellipse(0, 1, 18, 4, 0, 0, Math.PI * 2); c.fill(); drawHim(c, t, G.state === "finish" && G.hug > .85 ? "hug" : "wave"); c.restore(); }
     // her
     const gs = G.giant, ox = G.state === "finish" ? G.hug * 34 : 0, sy = G.sq, sx = 1 + (1 - G.sq) * .7;
-    c.fillStyle = "rgba(17,22,40,.16)"; c.beginPath(); c.ellipse(PX + ox, GY + 1, 16 * gs * (1 - Math.min(.6, G.y / 300)) * sx, 4, 0, 0, Math.PI * 2); c.fill();
+    const ride = riding() && G.state !== "finish" && G.state !== "title", ghH = terrain(G.dist);
+    c.fillStyle = "rgba(17,22,40,.16)"; c.beginPath(); c.ellipse(PX + ox, GY + 1 - ghH, (ride ? 34 : 16) * gs * (1 - Math.min(.6, (G.y - ghH) / 300)) * sx, 4, 0, 0, Math.PI * 2); c.fill();
     c.save(); c.translate(PX + ox, GY - G.y); c.rotate(G.lean); c.scale(gs * sx, gs * sy);
     if (G.fx.yog > 0) { const g = c.createRadialGradient(0, -60, 10, 0, -60, 84); g.addColorStop(0, "rgba(150,200,255,.6)"); g.addColorStop(1, "rgba(150,200,255,0)"); c.fillStyle = g; c.beginPath(); c.arc(0, -60, 84, 0, Math.PI * 2); c.fill(); }
     if (G.inv > 0 && G.state === "run" && Math.floor(t * 14) % 2) c.globalAlpha = .4;
     let mode = "idle";
-    if (G.state === "run" || G.state === "pause") mode = G.y > 0 ? "air" : G.inv > 1.25 ? "hurt" : "run";
-    else if (G.state === "count" || G.state === "event") mode = G.y > 0 ? "air" : G.state === "event" ? "wave" : "idle";
+    if (G.state === "run" || G.state === "pause") mode = G.air ? "air" : G.inv > 1.25 ? "hurt" : "run";
+    else if (G.state === "count" || G.state === "event") mode = G.air ? "air" : G.state === "event" ? "wave" : "idle";
     else if (G.state === "over") mode = "fall";
     else if (G.state === "finish") mode = G.hug < .95 ? "run" : "hug";
     else if (G.state === "title") mode = t % 5 < 1.4 ? "wave" : "idle";
-    drawHer(c, G.ph, mode, t, { flow: G.hair, lift: G.hlift }); c.restore();
+    if (ride && mode !== "fall") {
+      if (G.fx.moped > 0 && G.fx.moped < 1.6 && Math.floor(t * 8) % 2) c.globalAlpha = .55;
+      drawMoped(c, t, G.dist / 9.5, pal.n > .3 || azK > .3);
+      c.save(); c.translate(-14, -8); drawHer(c, G.ph, "ride", t, { flow: G.hair, lift: G.hlift }); c.restore();
+      if (G.state === "run" && !G.air) for (let i = 0; i < 2; i++) { const k = (t * 3 + i * .5) % 1; c.fillStyle = `rgba(170,176,190,${.45 * (1 - k)})`; c.beginPath(); c.arc(-48 - k * 26, -10 - k * 8, 3 + k * 6, 0, Math.PI * 2); c.fill(); }
+    } else {
+      if (ride && mode === "fall") { c.save(); c.translate(40, 0); c.rotate(.45); drawMoped(c, t, 0, false); c.restore(); }
+      drawHer(c, G.ph, mode, t, { flow: G.hair, lift: G.hlift });
+    }
+    c.restore();
     if (G.fx.shield > 0) {
       const sx0 = PX + ox, sy0 = GY - G.y - 58 * gs, R = 66 * gs, fade = G.fx.shield < 1.5 ? (Math.floor(t * 10) % 2 ? .35 : 1) : 1;
       c.save(); c.globalAlpha = fade;
@@ -1329,6 +1597,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     c.save(); c.globalCompositeOperation = "source-over";
     G.amb.forEach(q => {
       if (q.type === "fireflies") { const b = .5 + .5 * Math.sin(q.ph * 4); c.save(); c.globalCompositeOperation = "lighter"; const g = c.createRadialGradient(q.x, q.y, 0, q.x, q.y, 9); g.addColorStop(0, `rgba(${q.col},${.85 * b})`); g.addColorStop(1, `rgba(${q.col},0)`); c.fillStyle = g; c.fillRect(q.x - 9, q.y - 9, 18, 18); c.restore(); }
+      else if (q.type === "rain") { c.strokeStyle = `rgba(${q.col},.55)`; c.lineWidth = 1.2; c.beginPath(); c.moveTo(q.x, q.y); c.lineTo(q.x - q.vx * q.s / 600, q.y - q.s); c.stroke(); }
       else if (q.type === "leaves" || q.type === "petals") { c.save(); c.translate(q.x, q.y); c.rotate(q.ph * 2.2); c.fillStyle = `rgba(${q.col},.9)`; c.beginPath(); c.ellipse(0, 0, q.s, q.s * .5, 0, 0, Math.PI * 2); c.fill(); c.restore(); }
       else { c.fillStyle = `rgba(${q.col},${q.type === "motes" ? .45 : .85})`; c.beginPath(); c.arc(q.x, q.y, q.s, 0, Math.PI * 2); c.fill(); }
     });
@@ -1341,7 +1610,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
       else { c.beginPath(); c.arc(q.x, q.y, q.size, 0, Math.PI * 2); c.fill(); }
     });
     c.globalAlpha = 1;
-    G.pops.forEach(q => { c.globalAlpha = clamp(q.life * 1.6, 0, 1); c.font = "900 14px Outfit, Manrope, system-ui"; c.lineWidth = 4; c.strokeStyle = "rgba(255,255,255,.9)"; c.textAlign = "center"; c.strokeText(q.txt, q.x, q.y); text(c, q.txt, q.x, q.y, 14, q.col, 900); });
+    G.pops.forEach(q => { c.globalAlpha = clamp(q.life * 1.6, 0, 1); c.save(); c.translate(q.x, q.y); c.scale(TS, TS); c.font = "900 14px Outfit, Manrope, system-ui"; c.lineWidth = 4; c.strokeStyle = "rgba(255,255,255,.9)"; c.textAlign = "center"; c.strokeText(q.txt, 0, 0); text(c, q.txt, 0, 0, 14, q.col, 900); c.restore(); });
     c.globalAlpha = 1;
     G.spl.forEach(s => drawSplash(c, s));
     c.restore();
@@ -1352,6 +1621,10 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     if (wineK > .01) { const g = c.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .3, W / 2, H / 2, Math.max(W, H) * .75); g.addColorStop(0, "rgba(200,40,90,0)"); g.addColorStop(1, `rgba(200,40,90,${.3 * wineK})`); c.fillStyle = g; c.fillRect(0, 0, W, H); }
     const vg = c.createRadialGradient(W / 2, H * .55, Math.min(W, H) * .45, W / 2, H * .55, Math.max(W, H) * .8); vg.addColorStop(0, "rgba(10,12,30,0)"); vg.addColorStop(1, `rgba(10,12,30,${.16 + .14 * pal.n})`); c.fillStyle = vg; c.fillRect(0, 0, W, H);
     if (G.state === "over") { c.fillStyle = `rgba(30,24,52,${Math.min(.28, G.endT * .35)})`; c.fillRect(0, 0, W, H); }
+    if (azK > .01) { for (let i = 0; i < 3; i++) { const fx = ((i * W * .55 - G.dist * .35 * S - t * 20) % (W * 1.6) + W * 1.6) % (W * 1.6) - W * .3, fy = TOP + (GY - 30 + i * 18) * S;
+      const g = c.createRadialGradient(fx, fy, 10, fx, fy, W * .35); g.addColorStop(0, `rgba(235,240,238,${.22 * azK})`); g.addColorStop(1, "rgba(235,240,238,0)"); c.fillStyle = g; c.fillRect(fx - W * .35, fy - 120 * S, W * .7, 240 * S); } }
+    const readK = clamp((1 - G.ts) / .7, 0, 1);
+    if (readK > .01) { const g = c.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .35, W / 2, H / 2, Math.max(W, H) * .8); g.addColorStop(0, "rgba(40,50,110,0)"); g.addColorStop(1, `rgba(40,50,110,${.22 * readK})`); c.fillStyle = g; c.fillRect(0, 0, W, H); }
     if (G.flash > .01) { c.fillStyle = `rgba(${G.flashCol},${G.flash})`; c.fillRect(0, 0, W, H); }
     if (G.state === "run" && G.t < 9 && touchFirst()) { const yy = (TOP + (GY + 70) * S + H) / 2; c.globalAlpha = smooth(9, 6, G.t) * .8; const hc = pal.n > .5 ? "#f4f1ff" : "#1f4d2a"; text(c, "Tap anywhere to jump", W / 2, yy, 15, hc, 800); text(c, "tap again in the air for a double jump", W / 2, yy + 22, 12, hc, 600); c.globalAlpha = 1; }
   }
@@ -1401,9 +1674,13 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
   function comboPop() { restart(hud.combo, "pop"); }
   let fxKey = "", hudScore = -1, hudShown = 0, hudP = -1, lvlShown = -1;
   function updateFx(force) {
-    const on = Object.keys(G.fx).filter(k => G.fx[k] > 0), key = on.join();
-    if (force || key !== fxKey) { fxKey = key; hud.chips.innerHTML = on.map(k => `<span class="nvx-chip" style="--k:${FX_ICON[k][1]}" data-k="${k}">${FX_ICON[k][0]}<b><i></i></b></span>`).join(""); }
-    hud.chips.querySelectorAll(".nvx-chip").forEach(ch => { ch.querySelector("i").style.width = (G.fx[ch.dataset.k] / FX_LIFE[ch.dataset.k] * 100).toFixed(1) + "%"; });
+    const on = Object.keys(G.fx).filter(k => G.fx[k] > 0), key = on.join() + "|" + G.mopeds;
+    if (force || key !== fxKey) {
+      fxKey = key;
+      hud.chips.innerHTML = on.map(k => `<span class="nvx-chip" style="--k:${FX_ICON[k][1]}" data-k="${k}">${FX_ICON[k][0]}<b><i></i></b></span>`).join("") +
+        (G.mopeds > 0 && G.fx.moped <= 0 ? `<span class="nvx-chip nvx-mop" aria-label="${G.mopeds} of 3 mopeds">🛵<em>${"●".repeat(G.mopeds)}${"○".repeat(3 - G.mopeds)}</em></span>` : "");
+    }
+    hud.chips.querySelectorAll(".nvx-chip[data-k]").forEach(ch => { ch.querySelector("i").style.width = (G.fx[ch.dataset.k] / FX_LIFE[ch.dataset.k] * 100).toFixed(1) + "%"; });
   }
   function updateHud() {
     const s = Math.round(G.score); if (s !== hudScore) { if (s - hudScore >= 25 && hudScore >= 0) restart(hud.score, "bump"); hudScore = s; }
@@ -1428,11 +1705,11 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     const n = noteQueue.shift(); if (!n) { noteBusy = false; return; } noteBusy = true;
     const fill = s => esc(s.replace("{me}", G.me).replace("{her}", G.her));
     hud.note.innerHTML = `<i>${n.ic}</i><div><div class="h"><span>${fill(n.app)}</span><span>now</span></div><b>${fill(n.title)}</b><p>${fill(n.text)}</p></div>`;
-    restart(hud.note, "show"); SFX.ding(); setTimeout(nextNote, 4000);
+    restart(hud.note, "show"); SFX.ding(); if (G) G.readT = READ_T; setTimeout(nextNote, 5500);
   }
   /* ---------- pop-up cards: spring in/out, staggered content, little toys inside ---------- */
   const stat = (label, n, pre = "", cls = "") => `<span class="${cls}"><b data-n="${n}" data-pre="${esc(pre)}">${esc(pre)}${n}</b>${label}</span>`;
-  const levelStrip = () => `<div class="nvx-levels">${LEVELS.map((L, i) => `<span style="--a:${L.sky[0]};--b:${L.sky[2]}"><b>${i + 1}</b>${esc(L.name.replace("Kufstein ", "").replace(" in Innsbruck", ""))}</span>`).join("")}</div>`;
+  const levelStrip = () => `<div class="nvx-levels">${LEVELS.map((L, i) => `<span style="--a:${L.sky[0]};--b:${L.sky[2]}"><b>${i + 1}</b>${esc(L.name.replace("Kufstein ", "").replace(" in Innsbruck", "").replace("Horrors of ", "😱 "))}</span>`).join("")}</div>`;
   const fillNames = t => t.replace(/\{me\}/g, G.me).replace(/\{her\}/g, G.her);
   let timers = [], hideTok = 0, cardKind = "", cardT0 = 0;
   const later = (fn, ms) => { const id = setTimeout(fn, ms); timers.push(id); return id; };
@@ -1476,7 +1753,7 @@ dialog#nvx-game::backdrop{background:rgba(15,19,32,.55)}
     clearLater(); hideTok++; cardKind = kind; cardT0 = performance.now();
     let h = "";
     if (kind === "title") {
-      h = `<p class="nvx-eyebrow">A satirical runner in five levels</p><h2>Chronicles of Novartis</h2>
+      h = `<p class="nvx-eyebrow">A satirical runner in six levels</p><h2>Chronicles of Novartis</h2>
 <div class="nvx-hero"><canvas width="${96 * dpr}" height="${120 * dpr}" aria-label="Tap ${her} to say hi" role="button" tabindex="0"></canvas><p class="nvx-bubble">Psst… tap me! 👋</p></div>
 <p class="nvx-sub">${her} has to get from <b>Innsbruck</b> to <b>München</b> — ${me} is waiting there. Jump over the QA life, grab the good stuff, keep the combo alive.</p>
 ${levelStrip()}
@@ -1484,12 +1761,14 @@ ${levelStrip()}
 <li><span>🚨</span><span>Escalations<small>P1, CAPA, audits, RE: RE:</small></span></li>
 <li><span>🚚</span><span>Truck waiting for sign-off<small>A big one — jump twice</small></span></li>
 <li><span>🧳</span><span>Friends for the weekend<small>…staying till Monday</small></span></li>
-<li><span>📑</span><span>Parents' legal paperwork<small>Bring the original. And a copy.</small></span></li></ul></div>
+<li><span>📑</span><span>Parents' legal paperwork<small>Bring the original. And a copy.</small></span></li>
+<li><span>🏖️</span><span>More work stuff<small>Colleague on vacation, all-day “quick sync”, SAP loading, overdue trainings</small></span></li></ul></div>
 <div><h3>Grab</h3><ul>
 <li><span>🍰</span><span>Her cheesecake<small>+1 ❤️ morale</small></span></li>
 <li><span>💆‍♀️</span><span>Massage<small>The world slows down</small></span></li>
 <li><span>🥛</span><span>Giant yoghurt<small>Strength — smash everything</small></span></li>
-<li><span>🍷</span><span>The wine box<small>Problems shrink · points ×2</small></span></li></ul></div></div>
+<li><span>🍷</span><span>The wine box<small>Problems shrink · points ×2</small></span></li>
+<li><span>🛵</span><span>Moped ×3<small>Collect three — ride faster for 8 s</small></span></li></ul></div></div>
 <p class="nvx-keys">${touchFirst() ? "Tap anywhere to jump · tap again in the air for a double jump" : "<kbd>Space</kbd> to jump · again in the air for a double jump · <kbd>P</kbd> pause · <kbd>M</kbd> sound"}</p>
 <div class="nvx-actions"><button type="button" class="nvx-btn go" data-a="start">Start running ▸</button></div>
 ${G.best ? `<p class="nvx-keys">Best so far: ★ ${G.best}</p>` : ""}`;
@@ -1694,7 +1973,7 @@ ${G.best ? `<p class="nvx-keys">Best so far: ★ ${G.best}</p>` : ""}`;
     else if (G.state === "event") { e.preventDefault(); if (evDone) endEvent(); else chooseEvent(-1); }
   });
   dlg.addEventListener("close", () => {
-    cancelAnimationFrame(raf); raf = 0; musicStop(.2); noteQueue.length = 0; noteBusy = false; clearLater(); hud.scrim.classList.remove("on");
+    cancelAnimationFrame(raf); raf = 0; musicStop(.2); engine(false, 0); noteQueue.length = 0; noteBusy = false; clearLater(); hud.scrim.classList.remove("on");
     if (window.APP) window.APP.renderPaused = false;
     if (G && (G.state === "run" || G.state === "pause" || G.state === "count" || G.state === "event")) saveBest();
   });
@@ -1706,7 +1985,7 @@ ${G.best ? `<p class="nvx-keys">Best so far: ★ ${G.best}</p>` : ""}`;
 
   function openGame() {
     if (dlg.open) return;
-    closeInvite(false);
+    closeInvite(false); resetSteps();
     document.querySelectorAll("dialog[open]").forEach(d => { if (d !== dlg) d.close(); });
     try { dlg.showModal(); } catch (e) { dlg.setAttribute("open", ""); }
     if (window.APP) window.APP.renderPaused = true;
@@ -1717,7 +1996,8 @@ ${G.best ? `<p class="nvx-keys">Best so far: ★ ${G.best}</p>` : ""}`;
   }
 
   /* ---------- the occasional invite ---------- */
-  const INVITE = { first: 150, repeat: 900, perSession: 2, cooldown: 30 * 60e3, afterPlay: 2 * 3600e3, life: 28 };
+  const INVITE = { minSteps: 3, maxSteps: 7, quietMs: 1200, life: 28 };
+  const nextNeed = () => INVITE.minSteps + Math.floor(Math.random() * (INVITE.maxSteps - INVITE.minSteps + 1));
   const INV_TITLES = ["Chill for two minutes?", "Escalation-free break?", "A tiny run to München?"];
   const INV_LINES = [
     "the escalations can wait. Run from Innsbruck to München — cheesecake and a wine box on the way.",
@@ -1732,7 +2012,6 @@ ${G.best ? `<p class="nvx-keys">Best so far: ★ ${G.best}</p>` : ""}`;
     if (!inv) return;
     const el = inv; inv = null; clearTimeout(invTimer); cancelAnimationFrame(invRaf);
     el.classList.remove("in"); el.classList.add("out"); setTimeout(() => el.remove(), 420);
-    if (later) sess.next = Math.max(sess.next, sess.active + INVITE.repeat);
   }
   function showInvite() {
     if (inv || dlg.open) return;
@@ -1779,12 +2058,11 @@ ${G.best ? `<p class="nvx-keys">Best so far: ★ ${G.best}</p>` : ""}`;
     invRaf = requestAnimationFrame(frame);
   }
 
-  const sess = { active: 0, next: INVITE.first, shown: 0 };
+  /* the invite pops up on its own after a random 3–7 steps through the trip (never for Mykola's role) */
+  const sess = { steps: 0, need: nextNeed(), shown: 0, pending: false };
+  const resetSteps = () => { sess.steps = 0; sess.need = nextNeed(); sess.pending = false; };
   const brandUp = () => { const b = document.getElementById("brand"); return !!(b && !b.hidden); };
-  function autoAllowed() {
-    const now = Date.now();
-    return read("sbtrip-role", null) !== "me" && now - read(KEY.invite, 0) >= INVITE.cooldown && now - read(KEY.played, 0) >= INVITE.afterPlay;
-  }
+  function autoAllowed() { return read("sbtrip-role", null) !== "me"; }
   function quietMoment() {
     const a = document.activeElement, mode = window.APP && window.APP.state && window.APP.state.mode;
     if (document.querySelector("dialog[open]")) return false;
@@ -1793,16 +2071,18 @@ ${G.best ? `<p class="nvx-keys">Best so far: ★ ${G.best}</p>` : ""}`;
     if (window.APP && window.APP.state && window.APP.state.quiz) return false;
     if (a && (a.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))) return false;
     if (mode === "start" || mode === "pick") return false;
-    return Date.now() - lastInput > 2500;
+    return Date.now() - lastInput > INVITE.quietMs;
   }
+  if (window.APP && typeof window.APP.on === "function") window.APP.on("move", m => {
+    if (!m || m.kind === "start" || m.kind === "pick" || dlg.open || inv) return;
+    if (++sess.steps >= sess.need) sess.pending = true;
+  });
   setInterval(() => {
-    if (document.hidden || brandUp()) return;
-    sess.active++;
-    if (sess.active < sess.next || sess.shown >= INVITE.perSession || inv || dlg.open) return;
-    if (!autoAllowed()) { sess.next = sess.active + 60; return; }
+    if (!sess.pending || inv || dlg.open || document.hidden || brandUp()) return;
+    if (!autoAllowed()) { resetSteps(); return; }
     if (!quietMoment()) return;
-    sess.shown++; sess.next = sess.active + INVITE.repeat; showInvite();
-  }, 1000);
+    resetSteps(); sess.shown++; showInvite();
+  }, 400);
 
   /* ---------- More menu entry + deep links ---------- */
   let menuBtn = null;

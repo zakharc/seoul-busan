@@ -2,6 +2,8 @@
 
 *Two leaves. One shared adventure.* A single-file trip companion that opens on the roameo brand splash and hands off to the Seoul ⇄ Busan trail.
 
+**Version 1.18** — Integrates game v4: six levels including the Azores, moped pickups, more work obstacles, readable slow-motion notifications and step-based invites. Monitor framing is another 40% smaller than the first v4 view; phone and touch-tablet framing is unchanged. Retains the sandbox, Discover, map smoothness and cinematic integrations.
+
 **Version 1.17** — Smoother map and 3D world: map open/close and day "unfold" animations, the 3D world rests while the map covers it; flick inertia, rubber-band tilt/zoom, trackpad pinch and double-tap reset in the 3D scene; idle shader/stage warm-up for the next stop.
 
 **Version 1.16** — Trip map Discover: scored places around any stop from OpenStreetMap, Wikipedia and Wikidata (estimated "worth visiting" 0–100 with reasons), shadow marks on the map, and ♡ saves that sync between both phones (`saved` in the trip doc).
@@ -70,15 +72,23 @@ Site: `https://<your-github-user>.github.io/seoul-busan/` · her link adds `?as=
 - Phone flow is staged: pick a character → the 3D scene fills the screen with a **Start the day** pill → the couple walks → an arrival pill pulls up the info sheet. Swipe the sheet down (big handle) or tap the scene to put it away; tap the pill or the title in the bottom bar to bring it back. `?debug=1` shows an on-screen diagnostics overlay.
 - Android (Samsung Internet / Chrome): open the link → menu → **Add to Home screen** — the page ships a web manifest and icons, so it installs as a standalone app with its own icon. iPhone: Share → **Add to Home Screen**.
 - **Trip map:** the map icon in the top bar (also **See it on the map** in the trip overview, **Map** on each day card and ⋯ → **Trip map**) shows the plan on a street map. The day list sits in a bottom sheet that follows your finger: drag or flick its handle, or tap it. Swipe the day title left or right, or use ‹ ›, to change the day. Tap a stop to fly to it with its actions in the list, or tap a pin for a card. Long-press anywhere on the map to suggest that spot. 🔍 finds any stop, option, idea or hotel. **✨ Discover** scores what's around the stop you're looking at; ♡ saves a place for both of you.
-- **Chronicles of Novartis** (`novartis-game.js`, self-contained): a two-minute satirical 2D runner in five levels. Her figurine (a 2D port of the 3D one, same palette) runs from Innsbruck to München, where Mykola waits.
+- **Chronicles of Novartis** (`novartis-game.js`, self-contained): a two-minute satirical 2D runner in six levels. Her figurine (a 2D port of the 3D one, same palette) runs from Innsbruck to München, where Mykola waits.
+  - **Levels:** Monday in Innsbruck → Audit Week → Kufstein Golden Hour → **Horrors of Azores** → Bavarian Weekend → München by Night.
+    - The Azores level has her on a rental moped on rolling hills, with the Atlantic, volcanic islands, fog, rain and lightning, and a fado-style tune.
+    - Obstacles there are cows on the road and landslides.
+  - **Obstacles:** escalations, the truck waiting for sign-off, weekend guests and the parents' paperwork, plus more work life: a colleague on vacation, an all-day "quick sync", the system stuck at loading 99%, and overdue trainings.
+  - **Moped power-up:** collect 3 🛵 tokens (HUD shows ●●○) to ride faster for 8 s. Hitting something while riding costs the moped, not a heart.
+  - **Phone notifications:** they wait until the level banner has gone, then the game slows to 30% while the message is on screen (about 5 s) so it can be read comfortably.
+  - **Big screens:** mouse/trackpad monitors show characters another 40% smaller than the first v4 framing: 30% of the original scale at ≥1100×640, 40% at ≥900×560. Touch tablets keep the half/two-thirds framing, and phones keep the original close-up view. World labels remain readable and the canvas backing store stays near 2.6 MP.
+  - **Invite:** pops up automatically after a random 3–7 steps through the trip (counted from the app's navigation events), only in her role and never over dialogs, overlays or typing.
 - **Game pop-ups and interactions:** cards spring in and out over a dimmed scrim, their content appears in a staggered sequence, and on desktop they tilt toward the pointer with a soft glare. Buttons ripple, and the main button shimmers.
   - **Start and resume:** a 3-2-1 / READY? countdown, then GO, after which she eases back up to speed.
   - **Title card:** tap her to make her jump and talk.
-  - **Level events:** at levels 2–5 a typewriter pop-up appears (the Auditor, Hans the truck driver, WhatsApp about Kevin, Mama about the Vollmacht) with three choices: points, a 🛡️ shield, +1 ❤️, slow motion, wine or yoghurt. Use keys 1–3 or tap; Esc means "left on read".
+  - **Level events:** at levels 2–6 a typewriter pop-up appears (the Auditor, Hans the truck driver, SATA in the Azores, WhatsApp about Kevin, Mama about the Vollmacht) with three choices: points, a 🛡️ shield, +1 ❤️, slow motion, wine or yoghurt. Use keys 1–3 or tap; Esc means "left on read".
   - **Pause card:** a coffee cup you can sip (+100 when fully caffeinated) and an excuse-for-the-boss generator.
   - **Game over:** a root-cause-analysis slot machine.
   - **Win:** sign the release on a signature pad, or tap "Sign for me", and the RELEASED stamp slams down while the stats count up.
-  - **Invite:** "Maybe later" gets a playful sad goodbye.
+  - **Invite card:** "Maybe later" gets a playful sad goodbye.
   - **Reduced motion:** cards fade, and text appears without the typewriter effect.
 - Game sound, pause and close controls have 44px touch targets; the compact HUD keeps five hearts and a four-digit score visible even at 320px. Level ribbons fit narrow phones; reduced-motion mode fades timed messages without shortening their reading time.
 - Regression checks use Node's built-in test runner; browser QA also walks the app in a phone-emulated browser (360×780 Galaxy profile) and checks framing, overflow, touch targets and console errors.
